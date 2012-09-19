@@ -83,7 +83,7 @@ $(document).ready(function(){initNavTree('classlwpp_1_1com_ring_communicator.htm
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classlwpp_1_1com_ring_communicator__inherit__graph.png" border="0" usemap="#lwpp_1_1com_ring_communicator_inherit__map" alt="Inheritance graph"/></div>
 <map name="lwpp_1_1com_ring_communicator_inherit__map" id="lwpp_1_1com_ring_communicator_inherit__map">
-<area shape="rect" id="node2" href="classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWComRing \&gt;" alt="" coords="5,96,240,123"/><area shape="rect" id="node4" href="classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="37,5,208,32"/></map>
+<area shape="rect" id="node7" href="classlwpp_1_1_limbo_com_ring.html" title="Simple helper class for the limbo state." alt="" coords="45,251,200,277"/><area shape="rect" id="node2" href="classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWComRing \&gt;" alt="" coords="5,96,240,123"/><area shape="rect" id="node4" href="classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="37,5,208,32"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for lwpp::comRingCommunicator:</div>
@@ -118,8 +118,8 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a8a30c253ae7c3dae4760dbd4f7f5a1ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_global_base.html#a8a30c253ae7c3dae4760dbd4f7f5a1ca">_acquireGlobal</a> ()</td></tr>
-<tr class="memitem:ae7db6d87611329e114dd1202e7c98843"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1com_ring_communicator.html#ae7db6d87611329e114dd1202e7c98843">RingEvent</a> (void *, int, void *)</td></tr>
-<tr class="memdesc:ae7db6d87611329e114dd1202e7c98843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive an event in the ComRing.  <a href="#ae7db6d87611329e114dd1202e7c98843"></a><br/></td></tr>
+<tr class="memitem:aced675acefa9ac6ace98b99f26124913"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1com_ring_communicator.html#aced675acefa9ac6ace98b99f26124913">RingEvent</a> (void *portData, int eventCode, void *eventData)</td></tr>
+<tr class="memdesc:aced675acefa9ac6ace98b99f26124913"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive an event in the ComRing.  <a href="#aced675acefa9ac6ace98b99f26124913"></a><br/></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -361,7 +361,7 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae7db6d87611329e114dd1202e7c98843"></a>
+<a class="anchor" id="aced675acefa9ac6ace98b99f26124913"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -372,19 +372,19 @@ Static Protected Attributes</h2></td></tr>
           <td class="memname">virtual void lwpp::comRingCommunicator::RingEvent </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>portData</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>eventCode</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>eventData</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -526,7 +526,7 @@ Static Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelwpp.html">lwpp</a></li><li class="navelem"><a class="el" href="classlwpp_1_1com_ring_communicator.html">comRingCommunicator</a></li>
-    <li class="footer">Generated on Tue Jun 19 2012 12:04:54 for LightWrap++ by
+    <li class="footer">Generated on Wed Sep 19 2012 18:30:24 for LightWrap++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

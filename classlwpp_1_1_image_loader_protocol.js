@@ -8,5 +8,6 @@ var classlwpp_1_1_image_loader_protocol =
     [ "SendLine", "classlwpp_1_1_image_loader_protocol.html#ac2b14fbb5ee0076d3f0963d410b6fc2c", null ],
     [ "SetMap", "classlwpp_1_1_image_loader_protocol.html#ad66651427e6e20c584815c2a914c8bca", null ],
     [ "SetParam", "classlwpp_1_1_image_loader_protocol.html#afd80d8290acb59e948114e4a7407a420", null ],
+    [ "SetParam", "classlwpp_1_1_image_loader_protocol.html#a7647d95cd4eaf7b1367c8856952551f6", null ],
     [ "SetSize", "classlwpp_1_1_image_loader_protocol.html#a4595de98e6cd5c0d080c50f9c6b40e3f", null ]
 ];

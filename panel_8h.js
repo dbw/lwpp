@@ -14,6 +14,8 @@ var panel_8h =
     [ "PanelControl", "classlwpp_1_1_panel_control.html", "classlwpp_1_1_panel_control" ],
     [ "PanelControlAdaptor", "classlwpp_1_1_panel_control_adaptor.html", "classlwpp_1_1_panel_control_adaptor" ],
     [ "PanelTreeNode", "classlwpp_1_1_panel_tree_node.html", "classlwpp_1_1_panel_tree_node" ],
+    [ "Qualifier", "classlwpp_1_1_qualifier.html", "classlwpp_1_1_qualifier" ],
+    [ "LWRGB", "panel_8h.html#a769e2c22d2a2635df7a55415226a2d5e", null ],
     [ "PAN_SETCONFIGTAG", "panel_8h.html#ab4989f1398ac04d0896869c316f6310d", null ],
     [ "LWPanResizeHook", "panel_8h.html#a5ba7f9eff129f26dd274da088d1bf497", null ],
     [ "cTag", "panel_8h.html#ac258be7c394ba41669cea1ca10fee3cf", [

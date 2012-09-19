@@ -50,6 +50,7 @@ var classlwpp_1_1_panel_control =
     [ "RangeMin", "classlwpp_1_1_panel_control.html#a56816941dc9737accc9e1a4d3b437fab", null ],
     [ "RangeMin", "classlwpp_1_1_panel_control.html#ac78d0b35ce64240fa6e096b37b357805", null ],
     [ "Redraw", "classlwpp_1_1_panel_control.html#a8b6dd09b2c8a29a8f96703fc1c9beafd", null ],
+    [ "Refresh", "classlwpp_1_1_panel_control.html#a97a899beb56875bbd49e793f66e0ecd4", null ],
     [ "Render", "classlwpp_1_1_panel_control.html#a8bd381151c2f01995f9424dc172cfc00", null ],
     [ "RightAlign", "classlwpp_1_1_panel_control.html#a2fed448d7b5a629072309eded3da454f", null ],
     [ "set", "classlwpp_1_1_panel_control.html#a5702b6f557c5342b69bcaac2cbd79952", null ],

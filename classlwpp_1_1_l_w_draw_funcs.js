@@ -11,6 +11,7 @@ var classlwpp_1_1_l_w_draw_funcs =
     [ "drawPixel", "classlwpp_1_1_l_w_draw_funcs.html#a703fe3766fa6befc4e91ee6be3fcb38d", null ],
     [ "drawText", "classlwpp_1_1_l_w_draw_funcs.html#a1df9b7f543facb192c42293b4e7f14fd", null ],
     [ "drawText", "classlwpp_1_1_l_w_draw_funcs.html#a9eb6d1f2ee5917da9b046246ae2fd426", null ],
+    [ "drawWireBox", "classlwpp_1_1_l_w_draw_funcs.html#ad8e246feff813ae2635d619cf7223e9a", null ],
     [ "textWidth", "classlwpp_1_1_l_w_draw_funcs.html#a9c0f8067e787821ac6667690658cb152", null ],
     [ "textWidth", "classlwpp_1_1_l_w_draw_funcs.html#a6b4361d7fd9fea330144712b72bcbcfc", null ]
 ];

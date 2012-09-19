@@ -4,5 +4,6 @@ var xpanel_8h =
     [ "XPanelFuncs", "classlwpp_1_1_x_panel_funcs.html", "classlwpp_1_1_x_panel_funcs" ],
     [ "XPanelView", "classlwpp_1_1_x_panel_view.html", "classlwpp_1_1_x_panel_view" ],
     [ "XPDrawArea", "classlwpp_1_1_x_p_draw_area.html", "classlwpp_1_1_x_p_draw_area" ],
+    [ "LW_COLOUR", "xpanel_8h.html#a677eef6ed8eae2868184e84bd6756726", null ],
     [ "LWXPanelBtnClickFunc", "xpanel_8h.html#ad2a86f44f3583405cd3ece7746ca398a", null ]
 ];

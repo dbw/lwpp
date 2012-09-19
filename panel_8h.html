@@ -117,6 +117,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_control_adaptor.html">lwpp::PanelControlAdaptor&lt; T &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to adapt callbacks for Panel controls on a LW Panel.  <a href="classlwpp_1_1_panel_control_adaptor.html#details">More...</a><br/></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_tree_node.html">lwpp::PanelTreeNode</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_qualifier.html">lwpp::Qualifier</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to extract information from an input qualifier.  <a href="classlwpp_1_1_qualifier.html#details">More...</a><br/></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -126,6 +128,8 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a769e2c22d2a2635df7a55415226a2d5e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="panel_8h.html#a769e2c22d2a2635df7a55415226a2d5e">LWRGB</a>(red, green, blue)&#160;&#160;&#160;(0x01000000 | (red&lt;&lt;16) | (blue&lt;&lt;8) | green)</td></tr>
+<tr class="memdesc:a769e2c22d2a2635df7a55415226a2d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">C++ Wrapper implementation for LightWave Panels.  <a href="#a769e2c22d2a2635df7a55415226a2d5e"></a><br/></td></tr>
 <tr class="memitem:ab4989f1398ac04d0896869c316f6310d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="panel_8h.html#ab4989f1398ac04d0896869c316f6310d">PAN_SETCONFIGTAG</a>(pfunc, pan, tag)&#160;&#160;&#160;( ival.intv.value=tag, (*pfunc-&gt;set)(pan, PAN_CONFIGTAG, (void *)&amp;ival.intv.value) )</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="typedef-members"></a>
@@ -218,6 +222,41 @@ Functions</h2></td></tr>
 <tr class="memdesc:acf849109330396360b23e63f09ff39c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function for callbacks.  <a href="#acf849109330396360b23e63f09ff39c8"></a><br/></td></tr>
 </table>
 <hr/><h2>Macro Definition Documentation</h2>
+<a class="anchor" id="a769e2c22d2a2635df7a55415226a2d5e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LWRGB</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">red, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">green, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">blue&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;(0x01000000 | (red&lt;&lt;16) | (blue&lt;&lt;8) | green)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>C++ Wrapper implementation for LightWave Panels. </p>
+<p>sussed out by Greg Malick </p>
+
+</div>
+</div>
 <a class="anchor" id="ab4989f1398ac04d0896869c316f6310d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -256,7 +295,7 @@ Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_f07c067d74865995e7e90999399aa050.html">lwpp</a></li><li class="navelem"><a class="el" href="panel_8h.html">panel.h</a></li>
-    <li class="footer">Generated on Tue Jun 19 2012 12:04:53 for LightWrap++ by
+    <li class="footer">Generated on Wed Sep 19 2012 18:30:23 for LightWrap++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

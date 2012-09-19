@@ -13,6 +13,7 @@ var math_8h =
     [ "Degrees", "math_8h.html#a987adff64cd0dbb4505f5833d2102de6", null ],
     [ "Double2Int", "math_8h.html#a13dead476eb6df1654bfc5d9363990ac", null ],
     [ "Floor", "math_8h.html#a7fd6906acab7f5b68c8dd1abd9f27361", null ],
+    [ "inRange", "math_8h.html#af62cc317dc81165e297e1ce19ae94f5b", null ],
     [ "Lerp", "math_8h.html#a86e5b857c394da27c4ada4aae563f84a", null ],
     [ "log2", "math_8h.html#a41a0305f4ff2d71aadbf2013bac7a362", null ],
     [ "Max", "math_8h.html#adbbad1dca5a62c7d932b720836b42b82", null ],

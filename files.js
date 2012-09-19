@@ -23,9 +23,7 @@ var files =
       [ "ColourPicker", "classlwpp_1_1_colour_picker.html", "classlwpp_1_1_colour_picker" ]
     ] ],
     [ "command.h", "command_8h.html", "command_8h" ],
-    [ "comring.h", "comring_8h.html", [
-      [ "comRingCommunicator", "classlwpp_1_1com_ring_communicator.html", "classlwpp_1_1com_ring_communicator" ]
-    ] ],
+    [ "comring.h", "comring_8h.html", "comring_8h" ],
     [ "contextmenu.cpp", "contextmenu_8cpp.html", null ],
     [ "contextmenu.h", "contextmenu_8h.html", [
       [ "ContextMenu", "classlwpp_1_1_context_menu.html", "classlwpp_1_1_context_menu" ],

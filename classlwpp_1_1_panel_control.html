@@ -137,6 +137,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac78d0b35ce64240fa6e096b37b357805"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_control.html#ac78d0b35ce64240fa6e096b37b357805">RangeMin</a> (int m)</td></tr>
 <tr class="memitem:a8b6dd09b2c8a29a8f96703fc1c9beafd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_control.html#a8b6dd09b2c8a29a8f96703fc1c9beafd">Redraw</a> ()</td></tr>
 <tr class="memdesc:a8b6dd09b2c8a29a8f96703fc1c9beafd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redraws the control in the panel.  <a href="#a8b6dd09b2c8a29a8f96703fc1c9beafd"></a><br/></td></tr>
+<tr class="memitem:a97a899beb56875bbd49e793f66e0ecd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_control.html#a97a899beb56875bbd49e793f66e0ecd4">Refresh</a> ()</td></tr>
 <tr class="memitem:a8bd381151c2f01995f9424dc172cfc00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_control.html#a8bd381151c2f01995f9424dc172cfc00">Render</a> ()</td></tr>
 <tr class="memdesc:a8bd381151c2f01995f9424dc172cfc00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the control in the panel.  <a href="#a8bd381151c2f01995f9424dc172cfc00"></a><br/></td></tr>
 <tr class="memitem:a2fed448d7b5a629072309eded3da454f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_panel_control.html#a2fed448d7b5a629072309eded3da454f">RightAlign</a> (<a class="el" href="classlwpp_1_1_panel_control.html">PanelControl</a> &amp;ref, int nudge=0)</td></tr>
@@ -267,7 +268,7 @@ Protected Member Functions</h2></td></tr>
 <p>Changes the draw mode of the control </p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mode</td><td>Thedraw mode for the control. Render by default. </td></tr>
+    <tr><td class="paramname">mode</td><td>The draw mode for the control. Render by default. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1609,6 +1610,29 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a97a899beb56875bbd49e793f66e0ecd4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void lwpp::PanelControl::Refresh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8bd381151c2f01995f9424dc172cfc00"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1814,7 +1838,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Template version of the CON_SETEVENT macro???. Sets the <a class="el" href="classlwpp_1_1_panel_control_adaptor.html#a6e115072ff72bf91be22a670d392b280" title="Draw Control.">PanelControlAdaptor&lt;T&gt;::cb_Draw</a> callback for the control draw </p>
+<p>Template version of the CON_SETUSERDRAW macro. Sets the <a class="el" href="classlwpp_1_1_panel_control_adaptor.html#a6e115072ff72bf91be22a670d392b280" title="Draw Control.">PanelControlAdaptor&lt;T&gt;::cb_Draw</a> callback for the control draw </p>
 
 </div>
 </div>
@@ -1941,7 +1965,7 @@ template&lt;typename T &gt; </div>
 <p>Sets a pointer to your data for this control. This data pointer is passed as the second argument to the control callbacks. Note: For some control types, calling set with this tag has important side effects. Even if your userdata is NULL for those controls, you'll want to explicitly set it before opening the panel. </p>
 <dl class="params"><dt>Parameters:</dt><dd>
   <table class="params">
-    <tr><td class="paramname">*d</td><td>Pinter to your data </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*d</td><td>Pointer to your data </td></tr>
   </table>
   </dd>
 </dl>
@@ -2118,7 +2142,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelwpp.html">lwpp</a></li><li class="navelem"><a class="el" href="classlwpp_1_1_panel_control.html">PanelControl</a></li>
-    <li class="footer">Generated on Tue Jun 19 2012 12:04:55 for LightWrap++ by
+    <li class="footer">Generated on Wed Sep 19 2012 18:30:26 for LightWrap++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

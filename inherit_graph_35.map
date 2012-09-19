@@ -1,4 +1,5 @@
 <map id="G" name="G">
 <area shape="rect" id="node1" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWComRing \&gt;" alt="" coords="5,5,240,32"/>
 <area shape="rect" id="node3" href="$classlwpp_1_1com_ring_communicator.html" title="lwpp::comRingCommunicator" alt="" coords="288,5,496,32"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_limbo_com_ring.html" title="Simple helper class for the limbo state." alt="" coords="544,5,699,32"/>
 </map>

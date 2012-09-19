@@ -103,6 +103,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a23a8fb4f886b1111bc4956525871f34e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#a23a8fb4f886b1111bc4956525871f34e">ImageUtil</a> (LWPixmapID _pixmap=0)</td></tr>
 <tr class="memitem:aee4f27223f6ca17b4d73d8ab633d297b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#aee4f27223f6ca17b4d73d8ab633d297b">ImageUtil</a> (int w, int h, LWImageType type)</td></tr>
 <tr class="memdesc:aee4f27223f6ca17b4d73d8ab633d297b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional Constructor.  <a href="#aee4f27223f6ca17b4d73d8ab633d297b"></a><br/></td></tr>
+<tr class="memitem:ad2eada16038964f3ef2cf388f22e8c38"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#ad2eada16038964f3ef2cf388f22e8c38">ImageUtil</a> (const <a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a> &amp;iu)</td></tr>
 <tr class="memitem:a5797383b64544d8a0fad2bac1856ad05"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#a5797383b64544d8a0fad2bac1856ad05">~ImageUtil</a> ()</td></tr>
 <tr class="memdesc:a5797383b64544d8a0fad2bac1856ad05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys associated pixmap as well.  <a href="#a5797383b64544d8a0fad2bac1856ad05"></a><br/></td></tr>
 <tr class="memitem:a506fc8fb72d213bf1a0a6dd2fdd969ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#a506fc8fb72d213bf1a0a6dd2fdd969ed">create</a> (int w, int h, LWImageType type)</td></tr>
@@ -123,6 +124,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a067dba762cd4d74a9a3eea0456fef577"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if we have a valid pixmap  <a href="#a067dba762cd4d74a9a3eea0456fef577"></a><br/></td></tr>
 <tr class="memitem:a0580c9da89100c44170c447f00f8a251"><td class="memItemLeft" align="right" valign="top">virtual LWError&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_storeable.html#a0580c9da89100c44170c447f00f8a251">Load</a> (const <a class="el" href="classlwpp_1_1_load_state.html">LoadState</a> &amp;ls)</td></tr>
 <tr class="memdesc:a0580c9da89100c44170c447f00f8a251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load data from a LWLoadState.  <a href="#a0580c9da89100c44170c447f00f8a251"></a><br/></td></tr>
+<tr class="memitem:aaf7c8fa9439048966e7bd6d8d7969bc5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#aaf7c8fa9439048966e7bd6d8d7969bc5">operator=</a> (const <a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a> &amp;iu)</td></tr>
 <tr class="memitem:acafb8b2899c71bc3857061317d0c69b3"><td class="memItemLeft" align="right" valign="top">LWPixmapID&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_image_util.html#acafb8b2899c71bc3857061317d0c69b3">resample</a> (int w, int h, int mode)</td></tr>
 <tr class="memitem:a94013c12ec3483db0ef74b1b7a5de0b2"><td class="memItemLeft" align="right" valign="top">virtual LWError&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classlwpp_1_1_storeable.html#a94013c12ec3483db0ef74b1b7a5de0b2">Save</a> (const <a class="el" href="classlwpp_1_1_save_state.html">SaveState</a> &amp;ss)</td></tr>
 <tr class="memdesc:a94013c12ec3483db0ef74b1b7a5de0b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save data to a LWSaveState.  <a href="#a94013c12ec3483db0ef74b1b7a5de0b2"></a><br/></td></tr>
@@ -269,6 +271,30 @@ Static Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Destroys associated pixmap as well. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad2eada16038964f3ef2cf388f22e8c38"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">lwpp::ImageUtil::ImageUtil </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a> &amp;&#160;</td>
+          <td class="paramname"><em>iu</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -861,6 +887,30 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aaf7c8fa9439048966e7bd6d8d7969bc5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a>&amp; lwpp::ImageUtil::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a> &amp;&#160;</td>
+          <td class="paramname"><em>iu</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5700de9a4fa880fb3dce4743abb4e173"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1331,7 +1381,7 @@ Static Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacelwpp.html">lwpp</a></li><li class="navelem"><a class="el" href="classlwpp_1_1_image_util.html">ImageUtil</a></li>
-    <li class="footer">Generated on Tue Jun 19 2012 12:04:54 for LightWrap++ by
+    <li class="footer">Generated on Wed Sep 19 2012 18:30:24 for LightWrap++ by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.1.1 </li>
   </ul>

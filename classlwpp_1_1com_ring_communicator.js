@@ -9,7 +9,7 @@ var classlwpp_1_1com_ring_communicator =
     [ "operator->", "classlwpp_1_1com_ring_communicator.html#a2f9a3e7e0781c72f4d2652f466b218c7", null ],
     [ "ringAttach", "classlwpp_1_1com_ring_communicator.html#a4cf5168bcc3abd8e66e70453ac255641", null ],
     [ "ringDetach", "classlwpp_1_1com_ring_communicator.html#ab501a74216bb587ad2872b9bf340d0aa", null ],
-    [ "RingEvent", "classlwpp_1_1com_ring_communicator.html#ae7db6d87611329e114dd1202e7c98843", null ],
+    [ "RingEvent", "classlwpp_1_1com_ring_communicator.html#aced675acefa9ac6ace98b99f26124913", null ],
     [ "RingEventCB", "classlwpp_1_1com_ring_communicator.html#a54199d33929204e950f6ce66c3f42e60", null ],
     [ "ringMessage", "classlwpp_1_1com_ring_communicator.html#a4c7d1c6d0aec1e34b0f8aa1f1d9cd8ab", null ],
     [ "globPtr", "classlwpp_1_1com_ring_communicator.html#aa12b977991d656afe446c5ed69345e2f", null ]

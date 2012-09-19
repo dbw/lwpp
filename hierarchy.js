@@ -29,7 +29,9 @@ var hierarchy =
       [ "lwpp::ColourManager", "classlwpp_1_1_colour_manager.html", null ]
     ] ],
     [ "lwpp::GlobalBase< LWComRing >", "classlwpp_1_1_global_base.html", [
-      [ "lwpp::comRingCommunicator", "classlwpp_1_1com_ring_communicator.html", null ]
+      [ "lwpp::comRingCommunicator", "classlwpp_1_1com_ring_communicator.html", [
+        [ "lwpp::LimboComRing", "classlwpp_1_1_limbo_com_ring.html", null ]
+      ] ]
     ] ],
     [ "lwpp::GlobalBase< LWDirInfoFunc >", "classlwpp_1_1_global_base.html", [
       [ "lwpp::DirInfo", "classlwpp_1_1_dir_info.html", [
@@ -237,7 +239,7 @@ var hierarchy =
         [ "lwpp::XPanelLightAdaptor", "classlwpp_1_1_x_panel_light_adaptor.html", null ]
       ] ],
       [ "lwpp::MasterAdaptor< T, maxVersion, minVersion, plugType, noIO >", "classlwpp_1_1_master_adaptor.html", null ],
-      [ "lwpp::NodeAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_node_adaptor.html", [
+      [ "lwpp::NodeAdaptor< T, minVersion, maxVersion >", "classlwpp_1_1_node_adaptor.html", [
         [ "lwpp::XPanelNodeAdaptor", "classlwpp_1_1_x_panel_node_adaptor.html", null ]
       ] ],
       [ "lwpp::PixelFilterAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_pixel_filter_adaptor.html", [
@@ -271,7 +273,7 @@ var hierarchy =
       [ "lwpp::ItemMotionAdaptor< T, min, max >", "classlwpp_1_1_item_motion_adaptor.html", null ],
       [ "lwpp::LightAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_light_adaptor.html", null ],
       [ "lwpp::MasterAdaptor< T, maxVersion, minVersion, plugType, noIO >", "classlwpp_1_1_master_adaptor.html", null ],
-      [ "lwpp::NodeAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_node_adaptor.html", null ],
+      [ "lwpp::NodeAdaptor< T, minVersion, maxVersion >", "classlwpp_1_1_node_adaptor.html", null ],
       [ "lwpp::PixelFilterAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_pixel_filter_adaptor.html", null ],
       [ "lwpp::ShaderAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_shader_adaptor.html", null ],
       [ "lwpp::TextureAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_texture_adaptor.html", null ],
@@ -418,6 +420,7 @@ var hierarchy =
     [ "lwpp::PresetEntry", "classlwpp_1_1_preset_entry.html", null ],
     [ "lwpp::PresetHandler", "classlwpp_1_1_preset_handler.html", null ],
     [ "lwpp::PreviewCallbacks", "classlwpp_1_1_preview_callbacks.html", null ],
+    [ "lwpp::Qualifier", "classlwpp_1_1_qualifier.html", null ],
     [ "lwpp::Reference< T >", "classlwpp_1_1_reference.html", null ],
     [ "lwpp::ReferenceCounted", "classlwpp_1_1_reference_counted.html", null ],
     [ "lwpp::RenderAdaptor< T >", "classlwpp_1_1_render_adaptor.html", [
@@ -426,7 +429,7 @@ var hierarchy =
       [ "lwpp::DisplacementAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_displacement_adaptor.html", null ],
       [ "lwpp::EnvironmentAdaptor< T >", "classlwpp_1_1_environment_adaptor.html", null ],
       [ "lwpp::LightAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_light_adaptor.html", null ],
-      [ "lwpp::NodeAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_node_adaptor.html", null ],
+      [ "lwpp::NodeAdaptor< T, minVersion, maxVersion >", "classlwpp_1_1_node_adaptor.html", null ],
       [ "lwpp::PixelFilterAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_pixel_filter_adaptor.html", null ],
       [ "lwpp::ShaderAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_shader_adaptor.html", null ],
       [ "lwpp::TextureAdaptor< T, maxVersion, minVersion >", "classlwpp_1_1_texture_adaptor.html", null ],
