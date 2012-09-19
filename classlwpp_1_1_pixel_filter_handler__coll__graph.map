@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="185,384,348,411"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="5,293,125,320"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="150,293,308,320"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="107,187,293,229"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="115,96,285,123"/>
+<area shape="rect" id="node14" title="STL class." alt="" coords="333,293,419,320"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="318,187,455,229"/>
+<area shape="rect" id="node18" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="425,384,561,411"/>
+<area shape="rect" id="node20" href="$classlwpp_1_1_l_w_item_tracker.html" title="This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks." alt="" coords="444,293,596,320"/>
+<area shape="rect" id="node22" href="$classlwpp_1_1_render_handler.html" title="lwpp::RenderHandler" alt="" coords="586,384,739,411"/>
+<area shape="rect" id="node26" title="STL class." alt="" coords="767,293,875,320"/>
+</map>

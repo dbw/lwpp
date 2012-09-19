@@ -1,0 +1,17 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_custom_obj_handler.html" title="Base class for CustomObject plugins." alt="" coords="1272,195,1451,221"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="1056,164,1219,191"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="764,164,884,191"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="745,113,903,140"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="495,109,681,150"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,81,315,108"/>
+<area shape="rect" id="node32" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWPanel\lFuncs \&gt;" alt="" coords="489,43,687,85"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="781,215,867,241"/>
+<area shape="rect" id="node18" title="STL class." alt="" coords="519,207,657,249"/>
+<area shape="rect" id="node20" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="1069,265,1206,292"/>
+<area shape="rect" id="node22" href="$classlwpp_1_1_l_w_item_tracker.html" title="This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks." alt="" coords="748,265,900,292"/>
+<area shape="rect" id="node24" href="$classlwpp_1_1_render_handler.html" title="lwpp::RenderHandler" alt="" coords="1061,215,1214,241"/>
+<area shape="rect" id="node26" href="$classlwpp_1_1_l_w_panel_interface.html" title="lwpp::LWPanelInterface" alt="" coords="1054,56,1221,83"/>
+<area shape="rect" id="node28" href="$classlwpp_1_1_l_w_panel_callbacks.html" title="lwpp::LWPanelCallbacks" alt="" coords="739,5,909,32"/>
+<area shape="rect" id="node30" href="$classlwpp_1_1_l_w_panel.html" title="lwpp::LWPanel" alt="" coords="769,56,879,83"/>
+</map>

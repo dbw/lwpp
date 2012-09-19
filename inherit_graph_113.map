@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classlwpp_1_1_sizer.html" title="Virtual base class for all Sizers." alt="" coords="5,31,96,57"/>
+<area shape="rect" id="node3" href="$classlwpp_1_1_control_sizer.html" title="a sizer containing a single PanelControl" alt="" coords="149,5,285,32"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_dynamic_sizer.html" title="lwpp::DynamicSizer" alt="" coords="144,56,291,83"/>
+<area shape="rect" id="node7" href="$classlwpp_1_1_horizontal_sizer.html" title="A sizer with components lined up horizontally." alt="" coords="339,31,493,57"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_vertical_sizer.html" title="A sizer with components lined up vertically." alt="" coords="347,81,485,108"/>
+</map>

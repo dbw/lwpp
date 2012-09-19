@@ -1,0 +1,17 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_image_filter_handler.html" title="Class for Imagefilters." alt="" coords="1387,209,1565,236"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="1088,180,1251,207"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="796,208,916,235"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="777,157,935,184"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="495,150,681,191"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,75,315,101"/>
+<area shape="rect" id="node36" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWPanel\lFuncs \&gt;" alt="" coords="489,9,687,50"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="813,107,899,133"/>
+<area shape="rect" id="node18" title="STL class." alt="" coords="519,85,657,126"/>
+<area shape="rect" id="node20" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="1101,301,1238,328"/>
+<area shape="rect" id="node22" href="$classlwpp_1_1_l_w_item_tracker.html" title="This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks." alt="" coords="780,309,932,336"/>
+<area shape="rect" id="node26" title="STL class." alt="" coords="802,259,910,285"/>
+<area shape="rect" id="node30" href="$classlwpp_1_1_l_w_panel_interface.html" title="lwpp::LWPanelInterface" alt="" coords="1086,56,1253,83"/>
+<area shape="rect" id="node32" href="$classlwpp_1_1_l_w_panel_callbacks.html" title="lwpp::LWPanelCallbacks" alt="" coords="771,56,941,83"/>
+<area shape="rect" id="node34" href="$classlwpp_1_1_l_w_panel.html" title="lwpp::LWPanel" alt="" coords="801,5,911,32"/>
+</map>

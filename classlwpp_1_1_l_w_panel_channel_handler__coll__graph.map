@@ -1,0 +1,17 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_channel_handler.html" title="lwpp::ChannelHandler" alt="" coords="1325,168,1485,195"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="1056,168,1219,195"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="764,139,884,165"/>
+<area shape="rect" id="node20" href="$classlwpp_1_1_l_w_item.html" title="lwpp::LWItem" alt="" coords="1085,81,1190,108"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="745,196,903,223"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="495,189,681,230"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,196,315,223"/>
+<area shape="rect" id="node25" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWItem\lInfo \&gt;" alt="" coords="492,10,684,51"/>
+<area shape="rect" id="node35" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWPanel\lFuncs \&gt;" alt="" coords="489,271,687,313"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="781,87,867,113"/>
+<area shape="rect" id="node18" title="STL class." alt="" coords="519,79,657,121"/>
+<area shape="rect" id="node23" href="$classlwpp_1_1_item_info.html" title="lwpp::ItemInfo" alt="" coords="769,5,879,32"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_l_w_panel_interface.html" title="lwpp::LWPanelInterface" alt="" coords="1054,247,1221,273"/>
+<area shape="rect" id="node31" href="$classlwpp_1_1_l_w_panel_callbacks.html" title="lwpp::LWPanelCallbacks" alt="" coords="739,247,909,273"/>
+<area shape="rect" id="node33" href="$classlwpp_1_1_l_w_panel.html" title="lwpp::LWPanel" alt="" coords="769,297,879,324"/>
+</map>

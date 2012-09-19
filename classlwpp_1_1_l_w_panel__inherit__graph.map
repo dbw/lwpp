@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node7" href="$classlwpp_1_1_about_panel.html" title="lwpp::AboutPanel" alt="" coords="5,267,136,293"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_log_panel.html" title="lwpp::LogPanel" alt="" coords="161,267,276,293"/>
+<area shape="rect" id="node2" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWPanel\lFuncs \&gt;" alt="" coords="45,97,243,138"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="59,5,229,32"/>
+</map>

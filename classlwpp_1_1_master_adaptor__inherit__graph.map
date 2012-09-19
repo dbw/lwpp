@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node7" href="$classlwpp_1_1_master_adaptor.html" title="lwpp::MasterAdaptor\l\&lt; T, maxVersion, minVersion,\l plugType \&gt;" alt="" coords="713,45,925,101"/>
+<area shape="rect" id="node2" href="$classlwpp_1_1_instance_adaptor.html" title="Wrapper for InstanceHandler." alt="" coords="5,35,205,61"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_item_adaptor.html" title="Wrapper for ItemHandler." alt="" coords="18,85,193,112"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_l_w_panel_master_adaptor.html" title="lwpp::LWPanelMasterAdaptor\l\&lt; T, maxVersion, minVersion,\l plugType \&gt;" alt="" coords="977,5,1189,61"/>
+<area shape="rect" id="node11" href="$classlwpp_1_1_x_panel_master_adaptor.html" title="lwpp::XPanelMasterAdaptor\l\&lt; T, maxVersion, minVersion,\l plugType \&gt;" alt="" coords="977,85,1189,141"/>
+</map>

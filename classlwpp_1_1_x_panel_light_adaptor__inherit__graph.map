@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_light_adaptor.html" title="Wrapper for an LightHandler." alt="" coords="206,81,428,122"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_adaptor.html" title="Wrapper for InstanceHandler." alt="" coords="5,5,205,32"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_item_adaptor.html" title="Wrapper for ItemHandler." alt="" coords="230,5,404,32"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_render_adaptor.html" title="Wrapper for RenderHandler." alt="" coords="429,5,619,32"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_x_panel_adaptor.html" title="lwpp::XPanelAdaptor\&lt; T \&gt;" alt="" coords="453,88,643,115"/>
+</map>

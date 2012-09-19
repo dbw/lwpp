@@ -1,0 +1,17 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlwpp_1_1_layout_generic_x_panel_handler.html" title="lwpp::LayoutGenericXPanel\lHandler" alt="" coords="230,5,423,46"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_x_panel_camera_handler.html" title="lwpp::XPanelCameraHandler" alt="" coords="225,71,428,97"/>
+<area shape="rect" id="node7" href="$classlwpp_1_1_x_panel_channel_handler.html" title="lwpp::XPanelChannelHandler" alt="" coords="225,121,428,148"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_x_panel_custom_obj_handler.html" title="lwpp::XPanelCustomObjHandler" alt="" coords="215,172,438,199"/>
+<area shape="rect" id="node11" href="$classlwpp_1_1_x_panel_displacement_handler.html" title="lwpp::XPanelDisplacement\lHandler" alt="" coords="232,223,421,265"/>
+<area shape="rect" id="node13" href="$classlwpp_1_1_x_panel_environment_handler.html" title="lwpp::XPanelEnvironmentHandler" alt="" coords="211,289,443,316"/>
+<area shape="rect" id="node15" href="$classlwpp_1_1_x_panel_image_filter_handler.html" title="lwpp::XPanelImageFilterHandler" alt="" coords="215,340,438,367"/>
+<area shape="rect" id="node17" href="$classlwpp_1_1_x_panel_item_motion_handler.html" title="lwpp::XPanelItemMotionHandler" alt="" coords="215,391,438,417"/>
+<area shape="rect" id="node19" href="$classlwpp_1_1_x_panel_light_handler.html" title="lwpp::XPanelLightHandler" alt="" coords="235,441,418,468"/>
+<area shape="rect" id="node21" href="$classlwpp_1_1_x_panel_master_handler.html" title="lwpp::XPanelMasterHandler" alt="" coords="229,492,424,519"/>
+<area shape="rect" id="node23" href="$classlwpp_1_1_x_panel_node_handler.html" title="lwpp::XPanelNodeHandler" alt="" coords="234,543,419,569"/>
+<area shape="rect" id="node27" href="$classlwpp_1_1_x_panel_pixel_filter_handler.html" title="lwpp::XPanelPixelFilterHandler" alt="" coords="221,593,432,620"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_x_panel_shader_handler.html" title="lwpp::XPanelShaderHandler" alt="" coords="228,644,425,671"/>
+<area shape="rect" id="node31" href="$classlwpp_1_1_x_panel_texture_handler.html" title="lwpp::XPanelTextureHandler" alt="" coords="227,695,426,721"/>
+<area shape="rect" id="node33" href="$classlwpp_1_1_x_panel_volumetric_handler.html" title="lwpp::XPanelVolumetricHandler" alt="" coords="217,745,437,772"/>
+</map>

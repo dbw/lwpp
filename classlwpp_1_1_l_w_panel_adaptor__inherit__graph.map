@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlwpp_1_1_l_w_panel_camera_adaptor.html" title="lwpp::LWPanelCameraAdaptor\&lt; T \&gt;" alt="" coords="253,5,504,32"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_l_w_panel_channel_adaptor.html" title="lwpp::LWPanelChannelAdaptor" alt="" coords="271,56,486,83"/>
+<area shape="rect" id="node7" href="$classlwpp_1_1_l_w_panel_custom_obj_adaptor.html" title="lwpp::LWPanelCustomObjAdaptor" alt="" coords="262,107,495,133"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_l_w_panel_displacement_adaptor.html" title="lwpp::LWPanelDisplacement\lAdaptor" alt="" coords="279,158,478,199"/>
+<area shape="rect" id="node11" href="$classlwpp_1_1_l_w_panel_environment_adaptor.html" title="lwpp::LWPanelEnvironment\lAdaptor" alt="" coords="283,223,475,265"/>
+<area shape="rect" id="node13" href="$classlwpp_1_1_l_w_panel_image_filter_adaptor.html" title="lwpp::LWPanelImageFilter\lAdaptor" alt="" coords="287,289,470,330"/>
+<area shape="rect" id="node15" href="$classlwpp_1_1_l_w_panel_item_motion_adaptor.html" title="lwpp::LWPanelItemMotionAdaptor" alt="" coords="261,355,496,381"/>
+<area shape="rect" id="node17" href="$classlwpp_1_1_l_w_panel_master_adaptor.html" title="lwpp::LWPanelMasterAdaptor\&lt; T \&gt;" alt="" coords="257,405,500,432"/>
+<area shape="rect" id="node19" href="$classlwpp_1_1_l_w_panel_pixel_filter_adaptor.html" title="lwpp::LWPanelPixelFilter\lAdaptor" alt="" coords="293,457,464,498"/>
+<area shape="rect" id="node21" href="$classlwpp_1_1_l_w_panel_volumetric_adaptor.html" title="Adaptor class for LWPanelVolumetricHandler." alt="" coords="263,523,494,549"/>
+</map>

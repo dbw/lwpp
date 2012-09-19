@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="1032,59,1195,85"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="748,69,868,96"/>
+<area shape="rect" id="node18" href="$classlwpp_1_1_l_w_item.html" title="lwpp::LWItem" alt="" coords="1061,140,1166,167"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="729,5,887,32"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="488,31,675,73"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,144,315,171"/>
+<area shape="rect" id="node23" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWItem\lInfo \&gt;" alt="" coords="485,183,677,225"/>
+<area shape="rect" id="node14" title="STL class." alt="" coords="765,121,851,148"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="513,114,650,155"/>
+<area shape="rect" id="node21" href="$classlwpp_1_1_item_info.html" title="lwpp::ItemInfo" alt="" coords="753,197,863,224"/>
+</map>

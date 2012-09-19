@@ -1,0 +1,37 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$file__request_8cpp.html" title="file_request.cpp" alt="" coords="5,155,128,181"/>
+<area shape="rect" id="node5" href="$global_8cpp.html" title="global.cpp" alt="" coords="991,80,1077,107"/>
+<area shape="rect" id="node7" href="$presets_8cpp.html" title="presets.cpp" alt="" coords="865,229,961,256"/>
+<area shape="rect" id="node9" href="$animloader__handler_8h.html" title="animloader_handler.h" alt="" coords="991,155,1152,181"/>
+<area shape="rect" id="node11" href="$colour__picker_8h.html" title="colour_picker.h" alt="" coords="2305,80,2423,107"/>
+<area shape="rect" id="node13" href="$file__request_8h.html" title="file_request.h" alt="" coords="503,80,611,107"/>
+<area shape="rect" id="node24" href="$presets_8h.html" title="presets.h" alt="" coords="833,155,916,181"/>
+<area shape="rect" id="node27" href="$imageio__handler_8h.html" title="imageio_handler.h" alt="" coords="2447,80,2587,107"/>
+<area shape="rect" id="node29" href="$plugin__handler_8h.html" title="plugin_handler.h" alt="" coords="2154,80,2280,107"/>
+<area shape="rect" id="node16" href="$platform__carbon_8cpp.html" title="platform_carbon.cpp" alt="" coords="655,155,809,181"/>
+<area shape="rect" id="node18" href="$platform__cfm_8cpp.html" title="platform_cfm.cpp" alt="" coords="153,155,287,181"/>
+<area shape="rect" id="node20" href="$platform__cocoa_8cpp.html" title="platform_cocoa.cpp" alt="" coords="311,155,459,181"/>
+<area shape="rect" id="node22" href="$platform__win32_8cpp.html" title="platform_win32.cpp" alt="" coords="484,155,631,181"/>
+<area shape="rect" id="node31" href="$plugin__handler_8cpp.html" title="plugin_handler.cpp" alt="" coords="2647,155,2789,181"/>
+<area shape="rect" id="node34" href="$camera__handler_8h.html" title="camera_handler.h" alt="" coords="2815,155,2953,181"/>
+<area shape="rect" id="node36" href="$channel__handler_8h.html" title="channel_handler.h" alt="" coords="2977,155,3116,181"/>
+<area shape="rect" id="node38" href="$customobject__handler_8h.html" title="customobject_handler.h" alt="" coords="3140,155,3316,181"/>
+<area shape="rect" id="node42" href="$layouttool__handler_8h.html" title="layouttool_handler.h" alt="" coords="3277,229,3429,256"/>
+<area shape="rect" id="node44" href="$displacement__handler_8h.html" title="displacement_handler.h" alt="" coords="3391,155,3565,181"/>
+<area shape="rect" id="node46" href="$environment__handler_8h.html" title="environment_handler.h" alt="" coords="3591,155,3761,181"/>
+<area shape="rect" id="node48" href="$framebuffer__handler_8h.html" title="framebuffer_handler.h" alt="" coords="3786,155,3949,181"/>
+<area shape="rect" id="node50" href="$generic__handler_8h.html" title="generic_handler.h" alt="" coords="1177,155,1313,181"/>
+<area shape="rect" id="node54" href="$imagefilter__handler_8h.html" title="imagefilter_handler.h" alt="" coords="1337,155,1495,181"/>
+<area shape="rect" id="node58" href="$itemmotion__handler_8h.html" title="itemmotion_handler.h" alt="" coords="1519,155,1681,181"/>
+<area shape="rect" id="node61" href="$light__handler_8h.html" title="light_handler.h" alt="" coords="1706,155,1821,181"/>
+<area shape="rect" id="node63" href="$master__handler_8h.html" title="master_handler.h" alt="" coords="1846,155,1980,181"/>
+<area shape="rect" id="node65" href="$node__handler_8h.html" title="node_handler.h" alt="" coords="2005,155,2125,181"/>
+<area shape="rect" id="node71" href="$shader__handler_8h.html" title="shader_handler.h" alt="" coords="2151,155,2284,181"/>
+<area shape="rect" id="node73" href="$texture__handler_8h.html" title="texture_handler.h" alt="" coords="2309,155,2443,181"/>
+<area shape="rect" id="node75" href="$volumetric__handler_8h.html" title="volumetric_handler.h" alt="" coords="2467,155,2623,181"/>
+<area shape="rect" id="node40" href="$gizmo__handler_8h.html" title="gizmo_handler.h" alt="" coords="3125,229,3253,256"/>
+<area shape="rect" id="node52" href="$_hello_world_8cpp.html" title="HelloWorld.cpp" alt="" coords="1187,229,1303,256"/>
+<area shape="rect" id="node56" href="$pixelfilter__handler_8h.html" title="pixelfilter_handler.h" alt="" coords="1343,229,1489,256"/>
+<area shape="rect" id="node67" href="$nodes_8cpp.html" title="nodes.cpp" alt="" coords="2092,229,2180,256"/>
+<area shape="rect" id="node69" href="$_material_blender_8cpp.html" title="MaterialBlender.cpp" alt="" coords="1919,229,2068,256"/>
+</map>

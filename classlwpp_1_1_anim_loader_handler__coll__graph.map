@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="183,371,345,397"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="5,280,125,307"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="150,280,308,307"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="136,187,323,229"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,96,315,123"/>
+<area shape="rect" id="node14" title="STL class." alt="" coords="379,280,465,307"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="354,187,491,229"/>
+</map>

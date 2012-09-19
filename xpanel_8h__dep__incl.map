@@ -1,0 +1,51 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$xpanel_8cpp.html" title="xpanel.cpp" alt="" coords="676,80,767,107"/>
+<area shape="rect" id="node5" href="$message_8h.html" title="message.h" alt="" coords="791,80,884,107"/>
+<area shape="rect" id="node72" href="$wrapper_8h.html" title="Contains miscellanous base classes for LW SDK Wrappers." alt="" coords="1688,80,1773,107"/>
+<area shape="rect" id="node7" href="$file__request_8cpp.html" title="file_request.cpp" alt="" coords="136,229,259,256"/>
+<area shape="rect" id="node9" href="$global_8cpp.html" title="global.cpp" alt="" coords="986,155,1072,181"/>
+<area shape="rect" id="node11" href="$presets_8cpp.html" title="presets.cpp" alt="" coords="5,304,101,331"/>
+<area shape="rect" id="node13" href="$animloader__handler_8h.html" title="animloader_handler.h" alt="" coords="126,304,287,331"/>
+<area shape="rect" id="node15" href="$colour__picker_8h.html" title="colour_picker.h" alt="" coords="627,155,745,181"/>
+<area shape="rect" id="node17" href="$file__request_8h.html" title="file_request.h" alt="" coords="495,155,603,181"/>
+<area shape="rect" id="node28" href="$presets_8h.html" title="presets.h" alt="" coords="964,229,1047,256"/>
+<area shape="rect" id="node31" href="$imageio__handler_8h.html" title="imageio_handler.h" alt="" coords="822,155,961,181"/>
+<area shape="rect" id="node33" href="$plugin__handler_8h.html" title="plugin_handler.h" alt="" coords="1483,229,1609,256"/>
+<area shape="rect" id="node20" href="$platform__carbon_8cpp.html" title="platform_carbon.cpp" alt="" coords="283,229,437,256"/>
+<area shape="rect" id="node22" href="$platform__cfm_8cpp.html" title="platform_cfm.cpp" alt="" coords="462,229,596,256"/>
+<area shape="rect" id="node24" href="$platform__cocoa_8cpp.html" title="platform_cocoa.cpp" alt="" coords="621,229,768,256"/>
+<area shape="rect" id="node26" href="$platform__win32_8cpp.html" title="platform_win32.cpp" alt="" coords="793,229,940,256"/>
+<area shape="rect" id="node35" href="$plugin__handler_8cpp.html" title="plugin_handler.cpp" alt="" coords="2205,304,2347,331"/>
+<area shape="rect" id="node38" href="$camera__handler_8h.html" title="camera_handler.h" alt="" coords="2372,304,2511,331"/>
+<area shape="rect" id="node40" href="$channel__handler_8h.html" title="channel_handler.h" alt="" coords="2535,304,2673,331"/>
+<area shape="rect" id="node42" href="$customobject__handler_8h.html" title="customobject_handler.h" alt="" coords="2697,304,2873,331"/>
+<area shape="rect" id="node44" href="$layouttool__handler_8h.html" title="layouttool_handler.h" alt="" coords="2772,379,2924,405"/>
+<area shape="rect" id="node46" href="$displacement__handler_8h.html" title="displacement_handler.h" alt="" coords="311,304,485,331"/>
+<area shape="rect" id="node48" href="$environment__handler_8h.html" title="environment_handler.h" alt="" coords="511,304,681,331"/>
+<area shape="rect" id="node50" href="$framebuffer__handler_8h.html" title="framebuffer_handler.h" alt="" coords="706,304,869,331"/>
+<area shape="rect" id="node52" href="$generic__handler_8h.html" title="generic_handler.h" alt="" coords="2948,304,3084,331"/>
+<area shape="rect" id="node54" href="$imagefilter__handler_8h.html" title="imagefilter_handler.h" alt="" coords="895,304,1052,331"/>
+<area shape="rect" id="node56" href="$itemmotion__handler_8h.html" title="itemmotion_handler.h" alt="" coords="1076,304,1239,331"/>
+<area shape="rect" id="node59" href="$light__handler_8h.html" title="light_handler.h" alt="" coords="1263,304,1379,331"/>
+<area shape="rect" id="node61" href="$master__handler_8h.html" title="master_handler.h" alt="" coords="1403,304,1537,331"/>
+<area shape="rect" id="node63" href="$node__handler_8h.html" title="node_handler.h" alt="" coords="1562,304,1683,331"/>
+<area shape="rect" id="node65" href="$shader__handler_8h.html" title="shader_handler.h" alt="" coords="1708,304,1841,331"/>
+<area shape="rect" id="node67" href="$texture__handler_8h.html" title="texture_handler.h" alt="" coords="1866,304,2000,331"/>
+<area shape="rect" id="node69" href="$volumetric__handler_8h.html" title="volumetric_handler.h" alt="" coords="2025,304,2180,331"/>
+<area shape="rect" id="node74" href="$wrapper_8cpp.html" title="wrapper.cpp" alt="" coords="1615,155,1715,181"/>
+<area shape="rect" id="node76" href="$backdropinfo_8h.html" title="backdropinfo.h" alt="" coords="1739,155,1855,181"/>
+<area shape="rect" id="node78" href="$colour__management_8h.html" title="colous management functionality as added in LW 10.0" alt="" coords="1230,155,1396,181"/>
+<area shape="rect" id="node82" href="$contextmenu_8h.html" title="Wrapper for ContextMenuFuncs." alt="" coords="1473,155,1591,181"/>
+<area shape="rect" id="node86" href="$image_8h.html" title="Wrapper for LWImageUtil." alt="" coords="1880,155,1955,181"/>
+<area shape="rect" id="node90" href="$item_8h.html" title="item.h" alt="" coords="1979,155,2041,181"/>
+<area shape="rect" id="node100" href="$objectinfo_8h.html" title="objectinfo.h" alt="" coords="2365,155,2461,181"/>
+<area shape="rect" id="node107" href="$surface_8h.html" title="surface.h" alt="" coords="2259,155,2340,181"/>
+<area shape="rect" id="node80" href="$colour__management_8cpp.html" title="colour_management.cpp" alt="" coords="1222,229,1404,256"/>
+<area shape="rect" id="node84" href="$contextmenu_8cpp.html" title="contextmenu.cpp" alt="" coords="1634,229,1768,256"/>
+<area shape="rect" id="node88" href="$image_8cpp.html" title="image.cpp" alt="" coords="1793,229,1881,256"/>
+<area shape="rect" id="node92" href="$interface_8cpp.html" title="interface.cpp" alt="" coords="1958,229,2063,256"/>
+<area shape="rect" id="node94" href="$item_8cpp.html" title="item.cpp" alt="" coords="2087,229,2165,256"/>
+<area shape="rect" id="node98" href="$sceneinfo_8h.html" title="sceneinfo.h" alt="" coords="2190,229,2284,256"/>
+<area shape="rect" id="node102" href="$objectinfo_8cpp.html" title="objectinfo.cpp" alt="" coords="2430,229,2540,256"/>
+<area shape="rect" id="node104" href="$surface_8cpp.html" title="surface.cpp" alt="" coords="2309,229,2405,256"/>
+</map>

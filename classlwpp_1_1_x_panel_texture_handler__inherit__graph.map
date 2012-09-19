@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_texture_handler.html" title="Class for Procedural Textures." alt="" coords="183,155,339,181"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="5,80,168,107"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="27,5,147,32"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="193,80,329,107"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_render_handler.html" title="lwpp::RenderHandler" alt="" coords="354,80,507,107"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_x_panel_interface.html" title="Base class for all plugins that use an XPanels user interface." alt="" coords="364,155,521,181"/>
+</map>

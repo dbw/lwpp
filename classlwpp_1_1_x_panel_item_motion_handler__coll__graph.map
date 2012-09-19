@@ -1,0 +1,19 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_item_motion_handler.html" title="lwpp::ItemMotionHandler" alt="" coords="1345,140,1525,167"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="1059,201,1221,228"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="775,188,895,215"/>
+<area shape="rect" id="node24" href="$classlwpp_1_1_l_w_item.html" title="lwpp::LWItem" alt="" coords="1087,115,1193,141"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="755,244,914,271"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="507,225,693,266"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,232,315,259"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWItem\lInfo \&gt;" alt="" coords="504,57,696,98"/>
+<area shape="rect" id="node39" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWXPanel\lFuncs \&gt;" alt="" coords="497,290,703,331"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="791,131,878,157"/>
+<area shape="rect" id="node18" title="STL class." alt="" coords="531,123,669,165"/>
+<area shape="rect" id="node20" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="1071,27,1209,53"/>
+<area shape="rect" id="node22" href="$classlwpp_1_1_l_w_item_tracker.html" title="This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks." alt="" coords="759,5,911,32"/>
+<area shape="rect" id="node27" href="$classlwpp_1_1_item_info.html" title="lwpp::ItemInfo" alt="" coords="779,60,890,87"/>
+<area shape="rect" id="node33" href="$classlwpp_1_1_x_panel_interface.html" title="Base class for all plugins that use an XPanels user interface." alt="" coords="1356,205,1513,232"/>
+<area shape="rect" id="node35" href="$classlwpp_1_1_x_panel.html" title="Wrapper for a LWXPanel." alt="" coords="1089,265,1191,292"/>
+<area shape="rect" id="node37" href="$classlwpp_1_1_x_panel_funcs.html" title="Wrapper for LWXPanelFuncs." alt="" coords="765,297,904,324"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_base_file_request.html" title="virtual base class for all file requesters" alt="" coords="5,229,168,256"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWFile\lActivateFunc \&gt;" alt="" coords="107,163,291,205"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="200,5,371,32"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWDirInfo\lFunc \&gt;" alt="" coords="253,97,456,138"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_dir_info.html" title="lwpp::DirInfo" alt="" coords="255,229,353,256"/>
+</map>

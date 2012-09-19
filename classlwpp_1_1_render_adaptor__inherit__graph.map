@@ -1,0 +1,28 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlwpp_1_1_camera_adaptor.html" title="lwpp::CameraAdaptor\&lt; T \&gt;" alt="" coords="264,56,461,83"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_custom_obj_adaptor.html" title="Wrapper for an CustomObjectHandler." alt="" coords="254,157,471,184"/>
+<area shape="rect" id="node15" href="$classlwpp_1_1_displacement_adaptor.html" title="Wrapper for an DisplacementHandler." alt="" coords="245,281,480,308"/>
+<area shape="rect" id="node21" href="$classlwpp_1_1_environment_adaptor.html" title="lwpp::EnvironmentAdaptor\&lt; T \&gt;" alt="" coords="249,405,476,432"/>
+<area shape="rect" id="node27" href="$classlwpp_1_1_light_adaptor.html" title="Wrapper for an LightHandler." alt="" coords="274,456,451,483"/>
+<area shape="rect" id="node31" href="$classlwpp_1_1_node_adaptor.html" title="lwpp::NodeAdaptor\&lt; T \&gt;" alt="" coords="273,507,453,533"/>
+<area shape="rect" id="node35" href="$classlwpp_1_1_pixel_filter_adaptor.html" title="lwpp::PixelFilterAdaptor\&lt; T \&gt;" alt="" coords="259,565,466,592"/>
+<area shape="rect" id="node41" href="$classlwpp_1_1_shader_adaptor.html" title="Wrapper for an ImageFilterHandler." alt="" coords="267,631,459,657"/>
+<area shape="rect" id="node45" href="$classlwpp_1_1_texture_adaptor.html" title="Wrapper for an ImageFilterHandler." alt="" coords="265,711,460,737"/>
+<area shape="rect" id="node49" href="$classlwpp_1_1_volumetric_adaptor.html" title="Wrapper for an VolumetricHandler." alt="" coords="255,776,470,803"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_l_w_panel_camera_adaptor.html" title="lwpp::LWPanelCameraAdaptor\&lt; T \&gt;" alt="" coords="528,5,779,32"/>
+<area shape="rect" id="node7" href="$classlwpp_1_1_x_panel_camera_adaptor.html" title="lwpp::XPanelCameraAdaptor" alt="" coords="552,56,755,83"/>
+<area shape="rect" id="node11" href="$classlwpp_1_1_l_w_panel_custom_obj_adaptor.html" title="lwpp::LWPanelCustomObjAdaptor" alt="" coords="537,107,770,133"/>
+<area shape="rect" id="node13" href="$classlwpp_1_1_x_panel_custom_obj_adaptor.html" title="lwpp::XPanelCustomObjAdaptor" alt="" coords="542,157,765,184"/>
+<area shape="rect" id="node17" href="$classlwpp_1_1_l_w_panel_displacement_adaptor.html" title="lwpp::LWPanelDisplacement\lAdaptor" alt="" coords="554,209,753,250"/>
+<area shape="rect" id="node19" href="$classlwpp_1_1_x_panel_displacement_adaptor.html" title="lwpp::XPanelDisplacement\lAdaptor" alt="" coords="559,274,748,315"/>
+<area shape="rect" id="node23" href="$classlwpp_1_1_l_w_panel_environment_adaptor.html" title="lwpp::LWPanelEnvironment\lAdaptor" alt="" coords="557,339,749,381"/>
+<area shape="rect" id="node25" href="$classlwpp_1_1_x_panel_environment_adaptor.html" title="lwpp::XPanelEnvironmentAdaptor" alt="" coords="537,405,770,432"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_x_panel_light_adaptor.html" title="lwpp::XPanelLightAdaptor" alt="" coords="562,456,745,483"/>
+<area shape="rect" id="node33" href="$classlwpp_1_1_x_panel_node_adaptor.html" title="lwpp::XPanelNodeAdaptor" alt="" coords="560,507,747,533"/>
+<area shape="rect" id="node37" href="$classlwpp_1_1_l_w_panel_pixel_filter_adaptor.html" title="lwpp::LWPanelPixelFilter\lAdaptor" alt="" coords="568,558,739,599"/>
+<area shape="rect" id="node39" href="$classlwpp_1_1_x_panel_pixel_filter_adaptor.html" title="lwpp::XPanelPixelFilterAdaptor" alt="" coords="547,624,759,651"/>
+<area shape="rect" id="node43" href="$classlwpp_1_1_x_panel_shader_adaptor.html" title="lwpp::XPanelShaderAdaptor" alt="" coords="554,675,753,701"/>
+<area shape="rect" id="node47" href="$classlwpp_1_1_x_panel_texture_adaptor.html" title="lwpp::XPanelTextureAdaptor" alt="" coords="553,725,753,752"/>
+<area shape="rect" id="node51" href="$classlwpp_1_1_l_w_panel_volumetric_adaptor.html" title="Adaptor class for LWPanelVolumetricHandler." alt="" coords="538,776,769,803"/>
+<area shape="rect" id="node53" href="$classlwpp_1_1_x_panel_volumetric_adaptor.html" title="lwpp::XPanelVolumetricAdaptor" alt="" coords="543,827,764,853"/>
+</map>

@@ -1,0 +1,25 @@
+var classlwpp_1_1_simple_preset =
+[
+    [ "SimplePreset", "classlwpp_1_1_simple_preset.html#afac0953a67dee2e19a73c4cbb936f8ed", null ],
+    [ "doDeletePreset", "classlwpp_1_1_simple_preset.html#a3580a67532afc43d92d70a589c127633", null ],
+    [ "doLoadFromPreset", "classlwpp_1_1_simple_preset.html#a01d321ed7cb4cde5d8587d3a45093442", null ],
+    [ "doLoadPreset", "classlwpp_1_1_simple_preset.html#a3b3023e30870e218d751872a98850a2c", null ],
+    [ "doSaveAsPreset", "classlwpp_1_1_simple_preset.html#a9e9aaa1976523af5c797628a8316fca9", null ],
+    [ "doSavePreset", "classlwpp_1_1_simple_preset.html#a53d75db16d90e2c9e57c7003a172247e", null ],
+    [ "GetSelectedName", "classlwpp_1_1_simple_preset.html#aafe08f6ea785bcdf83c2b81bfb601bce", null ],
+    [ "grabPresetName", "classlwpp_1_1_simple_preset.html#a1b0da045d075aad4736031e5c19bddde", null ],
+    [ "LoadPreset", "classlwpp_1_1_simple_preset.html#a31954fa7d5f9014b0786b97539dd254f", null ],
+    [ "makeFileName", "classlwpp_1_1_simple_preset.html#aed8aa85bf59fdf22730fef0d8164a52c", null ],
+    [ "makeFilePath", "classlwpp_1_1_simple_preset.html#ab798d796b17f790391e70e8d6f10a569", null ],
+    [ "popCommand", "classlwpp_1_1_simple_preset.html#a7c3e0ff838f667915e8e52b2bed03f50", null ],
+    [ "PopCommand", "classlwpp_1_1_simple_preset.html#a4fb94fde55c13532f86855342242b9cf", null ],
+    [ "PopCount", "classlwpp_1_1_simple_preset.html#a5700de9a4fa880fb3dce4743abb4e173", null ],
+    [ "popCount", "classlwpp_1_1_simple_preset.html#a075110613a95697244a149781f4aec6a", null ],
+    [ "PopName", "classlwpp_1_1_simple_preset.html#a2894e051f3529391a9615199bd4d81cf", null ],
+    [ "popName", "classlwpp_1_1_simple_preset.html#a681af58b0c055b902f8d4c850c64d9a6", null ],
+    [ "SavePreset", "classlwpp_1_1_simple_preset.html#a1fbae211565c51483182349d806d55fe", null ],
+    [ "ScanPresets", "classlwpp_1_1_simple_preset.html#a3b70d23b8c68f72c6c04a795ae91e9ab", null ],
+    [ "SetHandler", "classlwpp_1_1_simple_preset.html#a10434899878f25bc1f7b72ba4ad2235e", null ],
+    [ "Setup", "classlwpp_1_1_simple_preset.html#aece527613e55f5305fd167849afa34c9", null ],
+    [ "index", "classlwpp_1_1_simple_preset.html#aed783d34fbd2589a656f47a760d2e16c", null ]
+];

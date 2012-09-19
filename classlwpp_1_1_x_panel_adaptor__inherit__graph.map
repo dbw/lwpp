@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlwpp_1_1_x_panel_camera_adaptor.html" title="lwpp::XPanelCameraAdaptor" alt="" coords="259,5,461,32"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_x_panel_channel_adaptor.html" title="lwpp::XPanelChannelAdaptor" alt="" coords="258,56,462,83"/>
+<area shape="rect" id="node7" href="$classlwpp_1_1_x_panel_custom_obj_adaptor.html" title="lwpp::XPanelCustomObjAdaptor" alt="" coords="249,107,471,133"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_x_panel_displacement_adaptor.html" title="lwpp::XPanelDisplacement\lAdaptor" alt="" coords="265,158,455,199"/>
+<area shape="rect" id="node11" href="$classlwpp_1_1_x_panel_environment_adaptor.html" title="lwpp::XPanelEnvironmentAdaptor" alt="" coords="243,224,477,251"/>
+<area shape="rect" id="node13" href="$classlwpp_1_1_x_panel_image_filter_adaptor.html" title="lwpp::XPanelImageFilterAdaptor" alt="" coords="249,275,471,301"/>
+<area shape="rect" id="node15" href="$classlwpp_1_1_x_panel_item_motion_adaptor.html" title="lwpp::XPanelItemMotionAdaptor" alt="" coords="248,325,472,352"/>
+<area shape="rect" id="node17" href="$classlwpp_1_1_x_panel_light_adaptor.html" title="lwpp::XPanelLightAdaptor" alt="" coords="269,376,451,403"/>
+<area shape="rect" id="node19" href="$classlwpp_1_1_x_panel_master_adaptor.html" title="lwpp::XPanelMasterAdaptor\&lt; T \&gt;" alt="" coords="243,427,477,453"/>
+<area shape="rect" id="node21" href="$classlwpp_1_1_x_panel_node_adaptor.html" title="lwpp::XPanelNodeAdaptor" alt="" coords="267,477,453,504"/>
+<area shape="rect" id="node23" href="$classlwpp_1_1_x_panel_pixel_filter_adaptor.html" title="lwpp::XPanelPixelFilterAdaptor" alt="" coords="254,528,466,555"/>
+<area shape="rect" id="node25" href="$classlwpp_1_1_x_panel_shader_adaptor.html" title="lwpp::XPanelShaderAdaptor" alt="" coords="261,579,459,605"/>
+<area shape="rect" id="node27" href="$classlwpp_1_1_x_panel_texture_adaptor.html" title="lwpp::XPanelTextureAdaptor" alt="" coords="260,629,460,656"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_x_panel_volumetric_adaptor.html" title="lwpp::XPanelVolumetricAdaptor" alt="" coords="249,680,471,707"/>
+</map>

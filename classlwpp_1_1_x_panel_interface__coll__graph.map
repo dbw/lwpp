@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_x_panel.html" title="Wrapper for a LWXPanel." alt="" coords="57,357,159,384"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_x_panel_funcs.html" title="Wrapper for LWXPanelFuncs." alt="" coords="39,280,177,307"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWXPanel\lFuncs \&gt;" alt="" coords="5,187,211,229"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="23,96,193,123"/>
+</map>

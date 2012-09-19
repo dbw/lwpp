@@ -1,0 +1,20 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_displacement_handler.html" title="Base class for Displacement plugins." alt="" coords="1326,172,1522,199"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="1056,109,1219,136"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="764,187,884,213"/>
+<area shape="rect" id="node26" href="$classlwpp_1_1_l_w_item.html" title="lwpp::LWItem" alt="" coords="1085,172,1190,199"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_instance_update.html" title="lwpp::InstanceUpdate" alt="" coords="745,60,903,87"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWInst\lUpdate \&gt;" alt="" coords="495,55,681,97"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_global_base.html" title="Template class base for any kind of global that will be AQUIREd/RELEASEd,." alt="" coords="144,227,315,253"/>
+<area shape="rect" id="node31" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWItem\lInfo \&gt;" alt="" coords="492,219,684,261"/>
+<area shape="rect" id="node41" href="$classlwpp_1_1_global_base.html" title="lwpp::GlobalBase\&lt; LWPanel\lFuncs \&gt;" alt="" coords="489,285,687,326"/>
+<area shape="rect" id="node16" title="STL class." alt="" coords="781,129,867,156"/>
+<area shape="rect" id="node18" title="STL class." alt="" coords="519,122,657,163"/>
+<area shape="rect" id="node20" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="1069,32,1206,59"/>
+<area shape="rect" id="node22" href="$classlwpp_1_1_l_w_item_tracker.html" title="This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks." alt="" coords="748,5,900,32"/>
+<area shape="rect" id="node24" href="$classlwpp_1_1_render_handler.html" title="lwpp::RenderHandler" alt="" coords="1061,223,1214,249"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_item_info.html" title="lwpp::ItemInfo" alt="" coords="769,239,879,265"/>
+<area shape="rect" id="node35" href="$classlwpp_1_1_l_w_panel_interface.html" title="lwpp::LWPanelInterface" alt="" coords="1054,299,1221,325"/>
+<area shape="rect" id="node37" href="$classlwpp_1_1_l_w_panel_callbacks.html" title="lwpp::LWPanelCallbacks" alt="" coords="739,343,909,369"/>
+<area shape="rect" id="node39" href="$classlwpp_1_1_l_w_panel.html" title="lwpp::LWPanel" alt="" coords="769,292,879,319"/>
+</map>

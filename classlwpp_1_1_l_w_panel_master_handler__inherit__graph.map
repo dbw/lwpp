@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classlwpp_1_1_master_handler.html" title="lwpp::MasterHandler" alt="" coords="183,155,335,181"/>
+<area shape="rect" id="node4" href="$classlwpp_1_1_instance_handler.html" title="Base class for (almost) any LW plugin." alt="" coords="5,80,168,107"/>
+<area shape="rect" id="node6" href="$classlwpp_1_1_storeable.html" title="lwpp::Storeable" alt="" coords="27,5,147,32"/>
+<area shape="rect" id="node8" href="$classlwpp_1_1_item_handler.html" title="LW ItemFuncs class extension." alt="" coords="193,80,329,107"/>
+<area shape="rect" id="node10" href="$classlwpp_1_1_l_w_panel_interface.html" title="lwpp::LWPanelInterface" alt="" coords="359,155,525,181"/>
+<area shape="rect" id="node12" href="$classlwpp_1_1_l_w_panel_callbacks.html" title="lwpp::LWPanelCallbacks" alt="" coords="357,80,528,107"/>
+</map>

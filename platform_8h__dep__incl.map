@@ -1,0 +1,51 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$dirent_8cpp.html" title="dirent.cpp" alt="" coords="1727,80,1813,107"/>
+<area shape="rect" id="node5" href="$lw__server_8cpp.html" title="lw_server.cpp" alt="" coords="1838,80,1945,107"/>
+<area shape="rect" id="node7" href="$debug_8h.html" title="debug.h" alt="" coords="1971,80,2045,107"/>
+<area shape="rect" id="node9" href="$global_8h.html" title="global.h" alt="" coords="1207,155,1279,181"/>
+<area shape="rect" id="node105" href="$utility_8h.html" title="utility.h" alt="" coords="1677,304,1744,331"/>
+<area shape="rect" id="node111" href="$math_8h.html" title="math.h" alt="" coords="2149,155,2216,181"/>
+<area shape="rect" id="node124" href="$meshinfo_8h.html" title="meshinfo.h" alt="" coords="2429,155,2523,181"/>
+<area shape="rect" id="node11" href="$global_8cpp.html" title="global.cpp" alt="" coords="1021,379,1107,405"/>
+<area shape="rect" id="node13" href="$nodes_8cpp.html" title="nodes.cpp" alt="" coords="232,379,320,405"/>
+<area shape="rect" id="node15" href="$camerainfo_8h.html" title="camerainfo.h" alt="" coords="2129,229,2236,256"/>
+<area shape="rect" id="node19" href="$command_8h.html" title="command.h" alt="" coords="1553,304,1652,331"/>
+<area shape="rect" id="node23" href="$comring_8h.html" title="comring.h" alt="" coords="539,304,625,331"/>
+<area shape="rect" id="node27" href="$envelope_8h.html" title="envelope.h" alt="" coords="1487,229,1579,256"/>
+<area shape="rect" id="node29" href="$image_8h.html" title="Wrapper for LWImageUtil." alt="" coords="1132,379,1207,405"/>
+<area shape="rect" id="node32" href="$interface_8h.html" title="interface.h" alt="" coords="1655,229,1745,256"/>
+<area shape="rect" id="node58" href="$io_8h.html" title="io.h" alt="" coords="1417,229,1463,256"/>
+<area shape="rect" id="node69" href="$mod__command_8h.html" title="mod_command.h" alt="" coords="5,229,139,256"/>
+<area shape="rect" id="node71" href="$modeler_8h.html" title="modeler.h" alt="" coords="650,304,736,331"/>
+<area shape="rect" id="node73" href="$monitor_8h.html" title="monitor.h" alt="" coords="651,229,735,256"/>
+<area shape="rect" id="node78" href="$nodes_8h.html" title="nodes.h" alt="" coords="383,229,456,256"/>
+<area shape="rect" id="node86" href="$panel_8h.html" title="panel.h" alt="" coords="2036,229,2105,256"/>
+<area shape="rect" id="node90" href="$particle__services_8h.html" title="particle_services.h" alt="" coords="1871,304,2011,331"/>
+<area shape="rect" id="node92" href="$surface_8h.html" title="surface.h" alt="" coords="759,229,840,256"/>
+<area shape="rect" id="node94" href="$texture_8h.html" title="texture.h" alt="" coords="2036,304,2116,331"/>
+<area shape="rect" id="node96" href="$texture__editor_8h.html" title="texture_editor.h" alt="" coords="917,229,1040,256"/>
+<area shape="rect" id="node98" href="$threads_8h.html" title="Threading tools for LightWrap++." alt="" coords="1065,229,1148,256"/>
+<area shape="rect" id="node100" href="$timer_8h.html" title="timer.h" alt="" coords="1173,229,1240,256"/>
+<area shape="rect" id="node102" href="$xpanel_8h.html" title="Wrapper for LWXPanelFuncs." alt="" coords="1317,229,1392,256"/>
+<area shape="rect" id="node17" href="$sceneinfo_8h.html" title="sceneinfo.h" alt="" coords="2049,453,2143,480"/>
+<area shape="rect" id="node21" href="$item_8cpp.html" title="item.cpp" alt="" coords="1657,453,1735,480"/>
+<area shape="rect" id="node25" href="$image_8cpp.html" title="image.cpp" alt="" coords="827,453,916,480"/>
+<area shape="rect" id="node34" href="$interface_8cpp.html" title="interface.cpp" alt="" coords="1826,453,1931,480"/>
+<area shape="rect" id="node36" href="$item_8h.html" title="item.h" alt="" coords="1702,379,1764,405"/>
+<area shape="rect" id="node41" href="$message_8h.html" title="message.h" alt="" coords="1215,304,1308,331"/>
+<area shape="rect" id="node44" href="$presets_8cpp.html" title="presets.cpp" alt="" coords="1297,528,1393,555"/>
+<area shape="rect" id="node46" href="$animloader__handler_8h.html" title="animloader_handler.h" alt="" coords="671,379,832,405"/>
+<area shape="rect" id="node48" href="$file__request_8h.html" title="file_request.h" alt="" coords="1467,379,1575,405"/>
+<area shape="rect" id="node52" href="$presets_8h.html" title="presets.h" alt="" coords="1304,453,1387,480"/>
+<area shape="rect" id="node55" href="$imageio__handler_8h.html" title="imageio_handler.h" alt="" coords="857,379,996,405"/>
+<area shape="rect" id="node50" href="$platform__win32_8cpp.html" title="platform_win32.cpp" alt="" coords="1467,453,1613,480"/>
+<area shape="rect" id="node60" href="$io_8cpp.html" title="io.cpp" alt="" coords="1383,379,1443,405"/>
+<area shape="rect" id="node63" href="$storeable_8h.html" title="storeable.h" alt="" coords="1434,304,1528,331"/>
+<area shape="rect" id="node81" href="$node__handler_8h.html" title="node_handler.h" alt="" coords="215,304,336,331"/>
+<area shape="rect" id="node84" href="$nodeeditor_8h.html" title="nodeeditor.h" alt="" coords="413,304,515,331"/>
+<area shape="rect" id="node88" href="$contextmenu_8h.html" title="Wrapper for ContextMenuFuncs." alt="" coords="1789,379,1907,405"/>
+<area shape="rect" id="node116" href="$platform__osx_8h.html" title="Platform specific defines." alt="" coords="2311,229,2428,256"/>
+<area shape="rect" id="node118" href="$platform__osx64_8h.html" title="Platform specific defines." alt="" coords="2452,229,2585,256"/>
+<area shape="rect" id="node120" href="$vector3d_8h.html" title="Base classes for vectors and vector math." alt="" coords="1871,229,1961,256"/>
+<area shape="rect" id="node126" href="$meshinfo_8cpp.html" title="meshinfo.cpp" alt="" coords="2610,229,2717,256"/>
+</map>

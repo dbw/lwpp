@@ -1,0 +1,40 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classlwpp_1_1_camera_adaptor.html" title="lwpp::CameraAdaptor\&lt; T \&gt;" alt="" coords="251,56,448,83"/>
+<area shape="rect" id="node9" href="$classlwpp_1_1_custom_obj_adaptor.html" title="Wrapper for an CustomObjectHandler." alt="" coords="241,157,458,184"/>
+<area shape="rect" id="node15" href="$classlwpp_1_1_displacement_adaptor.html" title="Wrapper for an DisplacementHandler." alt="" coords="232,281,467,308"/>
+<area shape="rect" id="node21" href="$classlwpp_1_1_environment_adaptor.html" title="lwpp::EnvironmentAdaptor\&lt; T \&gt;" alt="" coords="236,405,463,432"/>
+<area shape="rect" id="node27" href="$classlwpp_1_1_frame_buffer_adaptor.html" title="lwpp::FrameBufferAdaptor\&lt; T \&gt;" alt="" coords="237,497,462,524"/>
+<area shape="rect" id="node29" href="$classlwpp_1_1_image_filter_adaptor.html" title="Wrapper for an ImageFilterHandler." alt="" coords="241,548,458,575"/>
+<area shape="rect" id="node35" href="$classlwpp_1_1_item_motion_adaptor.html" title="lwpp::ItemMotionAdaptor\&lt; T \&gt;" alt="" coords="240,624,459,651"/>
+<area shape="rect" id="node41" href="$classlwpp_1_1_light_adaptor.html" title="Wrapper for an LightHandler." alt="" coords="261,675,438,701"/>
+<area shape="rect" id="node45" href="$classlwpp_1_1_master_adaptor.html" title="Wrapper for an MasterHandler." alt="" coords="254,728,445,755"/>
+<area shape="rect" id="node53" href="$classlwpp_1_1_node_adaptor.html" title="lwpp::NodeAdaptor\&lt; T \&gt;" alt="" coords="259,857,439,884"/>
+<area shape="rect" id="node57" href="$classlwpp_1_1_pixel_filter_adaptor.html" title="lwpp::PixelFilterAdaptor\&lt; T \&gt;" alt="" coords="246,931,453,957"/>
+<area shape="rect" id="node63" href="$classlwpp_1_1_shader_adaptor.html" title="Wrapper for an ImageFilterHandler." alt="" coords="253,996,445,1023"/>
+<area shape="rect" id="node67" href="$classlwpp_1_1_texture_adaptor.html" title="Wrapper for an ImageFilterHandler." alt="" coords="252,1076,447,1103"/>
+<area shape="rect" id="node71" href="$classlwpp_1_1_volumetric_adaptor.html" title="Wrapper for an VolumetricHandler." alt="" coords="242,1141,457,1168"/>
+<area shape="rect" id="node77" href="$classlwpp_1_1_master_adaptor.html" title="MasterAdaptor\&lt; T, maxVersion,\l minVersion, plugType \&gt;" alt="" coords="721,806,948,847"/>
+<area shape="rect" id="node5" href="$classlwpp_1_1_l_w_panel_camera_adaptor.html" title="lwpp::LWPanelCameraAdaptor\&lt; T \&gt;" alt="" coords="709,5,960,32"/>
+<area shape="rect" id="node7" href="$classlwpp_1_1_x_panel_camera_adaptor.html" title="lwpp::XPanelCameraAdaptor" alt="" coords="733,56,936,83"/>
+<area shape="rect" id="node11" href="$classlwpp_1_1_l_w_panel_custom_obj_adaptor.html" title="lwpp::LWPanelCustomObjAdaptor" alt="" coords="718,107,951,133"/>
+<area shape="rect" id="node13" href="$classlwpp_1_1_x_panel_custom_obj_adaptor.html" title="lwpp::XPanelCustomObjAdaptor" alt="" coords="723,157,946,184"/>
+<area shape="rect" id="node17" href="$classlwpp_1_1_l_w_panel_displacement_adaptor.html" title="lwpp::LWPanelDisplacement\lAdaptor" alt="" coords="735,209,934,250"/>
+<area shape="rect" id="node19" href="$classlwpp_1_1_x_panel_displacement_adaptor.html" title="lwpp::XPanelDisplacement\lAdaptor" alt="" coords="740,274,929,315"/>
+<area shape="rect" id="node23" href="$classlwpp_1_1_l_w_panel_environment_adaptor.html" title="lwpp::LWPanelEnvironment\lAdaptor" alt="" coords="739,339,931,381"/>
+<area shape="rect" id="node25" href="$classlwpp_1_1_x_panel_environment_adaptor.html" title="lwpp::XPanelEnvironmentAdaptor" alt="" coords="718,405,951,432"/>
+<area shape="rect" id="node31" href="$classlwpp_1_1_l_w_panel_image_filter_adaptor.html" title="lwpp::LWPanelImageFilter\lAdaptor" alt="" coords="743,457,926,498"/>
+<area shape="rect" id="node33" href="$classlwpp_1_1_x_panel_image_filter_adaptor.html" title="lwpp::XPanelImageFilterAdaptor" alt="" coords="723,523,946,549"/>
+<area shape="rect" id="node37" href="$classlwpp_1_1_l_w_panel_item_motion_adaptor.html" title="lwpp::LWPanelItemMotionAdaptor" alt="" coords="717,573,952,600"/>
+<area shape="rect" id="node39" href="$classlwpp_1_1_x_panel_item_motion_adaptor.html" title="lwpp::XPanelItemMotionAdaptor" alt="" coords="723,624,947,651"/>
+<area shape="rect" id="node43" href="$classlwpp_1_1_x_panel_light_adaptor.html" title="lwpp::XPanelLightAdaptor" alt="" coords="743,675,926,701"/>
+<area shape="rect" id="node47" href="$classlwpp_1_1_master_adaptor.html" title="lwpp::MasterAdaptor\l\&lt; T, maxVersion, minVersion,\l plugType \&gt;" alt="" coords="729,725,941,781"/>
+<area shape="rect" id="node49" href="$classlwpp_1_1_l_w_panel_master_adaptor.html" title="lwpp::LWPanelMasterAdaptor\l\&lt; T, maxVersion, minVersion,\l plugType \&gt;" alt="" coords="1011,717,1223,773"/>
+<area shape="rect" id="node51" href="$classlwpp_1_1_x_panel_master_adaptor.html" title="lwpp::XPanelMasterAdaptor\l\&lt; T, maxVersion, minVersion,\l plugType \&gt;" alt="" coords="1011,803,1223,859"/>
+<area shape="rect" id="node55" href="$classlwpp_1_1_x_panel_node_adaptor.html" title="lwpp::XPanelNodeAdaptor" alt="" coords="741,872,928,899"/>
+<area shape="rect" id="node59" href="$classlwpp_1_1_l_w_panel_pixel_filter_adaptor.html" title="lwpp::LWPanelPixelFilter\lAdaptor" alt="" coords="749,923,920,965"/>
+<area shape="rect" id="node61" href="$classlwpp_1_1_x_panel_pixel_filter_adaptor.html" title="lwpp::XPanelPixelFilterAdaptor" alt="" coords="729,989,941,1016"/>
+<area shape="rect" id="node65" href="$classlwpp_1_1_x_panel_shader_adaptor.html" title="lwpp::XPanelShaderAdaptor" alt="" coords="735,1040,934,1067"/>
+<area shape="rect" id="node69" href="$classlwpp_1_1_x_panel_texture_adaptor.html" title="lwpp::XPanelTextureAdaptor" alt="" coords="735,1091,935,1117"/>
+<area shape="rect" id="node73" href="$classlwpp_1_1_l_w_panel_volumetric_adaptor.html" title="Adaptor class for LWPanelVolumetricHandler." alt="" coords="719,1141,950,1168"/>
+<area shape="rect" id="node75" href="$classlwpp_1_1_x_panel_volumetric_adaptor.html" title="lwpp::XPanelVolumetricAdaptor" alt="" coords="724,1192,945,1219"/>
+</map>
