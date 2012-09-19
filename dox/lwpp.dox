@@ -1,0 +1,275 @@
+/*! @file */
+/*! @mainpage LightWrap++, a C++ SDK wrapper for LightWave3D
+@author Michael Wolf
+@author David Ballesteros
+@author James Willmot
+@version 0.1
+@section Introduction
+LightWrap++ (or lwpp for short) is a C++ wrapper for the SDK of the LightWave 3D by Newtek.
+@par
+lwpp was designed with the following goals in mind:
+- Complete compliance with C++ concepts
+- Easy of use
+- The ability to quickly start writing a plugin, only adding code as needed
+- Use of the STL where appropriated (currently mostly strings and the odd vector/map)
+- Compatibility across a range of LW SDK versions (since commercial plugins usually need to be compatible for a longer time).
+
+@section ToC Table of Contents
+This manual is divided into the following sections:
+
+- @subpage License
+- @subpage get_started
+- @subpage advanced_plugin
+- @subpage design
+- @subpage prerequesites
+- @subpage coding_standards
+
+@htmlonly
+<a href="lwpp_Build89.zip">Download the current release, build 89</a>
+@endhtmlonly
+
+@namespace lwpp
+LightWrap++ is fully contained within the lwpp namespace.
+ */
+
+ /*! @page get_started How to write your first plugin using lwpp
+
+ This is the most basic plugin you can write using lwpp.
+
+ This is a generic plugin that just opens a requestor with displaying "Hello World".
+
+ The first thing that needs to be done is to include the appropriate header.
+ Since this is a simple Generic plugin, all you need is this:
+\dontinclude HelloWorld.cpp
+\until #include
+Next you define that class that will be the plugin.
+The name of the class has no significance (but we advise to name it like your plugin).
+Since this is a Generic plugin, it needs to be derived from the LayoutGenericHandler class.
+\note All of LightWrap++ is contained in the lwpp namespace.
+We advise against a using lwpp;, instead explicitly use the namespace when using LightWrap++ to make your code more explicit.
+
+\until class
+
+Our class only contains one member function, "Activate", which gets called when the user selects the plugin within Lightwave.
+\until {
+\until {
+Here we just display a requester using the lwpp::LWMessage class (which is available at all times during the life cycle of lwpp plugins).
+\until };
+The last thing to do is to register the plugin with Lightwave.
+Every Adaptor class (which are template classes to connect the lwpp classes with Lightwave) has a constructor that makes the plugin available for Lightwave.
+The first paremeter to the constructor is the name of the plugin, the second (optional) parameter are the tags.
+
+The name if the instance (hwInstance in this case) is of no importance.
+\until LayoutGenericAdaptor
+
+That's all there is to it. Here is the complete code again:
+\include HelloWorld.cpp
+ */
+
+/*! @page advanced_plugin A more complex, complete plugin
+This is the source code for a complete shading node.
+
+\note This document covers LightWrap++ and not the LightWave SDK.
+A fairly thorough understanding of the LightWave SDK is required to understand the details of this sample.
+While lwpp wraps the LightWave 3D SDK it does not replace many of the concepts, it only expands upon them.
+
+\dontinclude MaterialBlender.cpp
+First you need to include the appropriate headers:
+\skip #include
+\until #include <lwpp/vparm.h>
+\section Class Plugin class definition
+The next step is to actually define the class.
+
+Since this will be a Node with an XPanel GUI, it will be derived from lwpp::XPanelNodeHandler.
+
+You only need to actually define and implement the member functions you need.
+However, the constructor is essential.
+\note Don't worry about the MaterialComponent, this will be covered later
+
+\skip MaterialMixer
+\until };
+\section Register Registering the plugin
+The next step is to register the plugin with lwpp. This will allow lwpp to create the plugin once the plugin file is loaded into LightWave. (For seasoned developers: This completely replaces the need to create a ServerDesc or _mod_descrip).
+\skip ServerTagInfo
+\until mixerInstance
+\section basic Initializing the plugin, basic member functions
+Let's have a look at the constructor of the plugin.
+\skip MaterialMixer::MaterialMixer
+\until {
+You need to initilize the base classe lwpp::XPanelNodeHandler with the parameters to your plugin.
+These are the same for most kinds of plugins.
+
+The following lines check the version of LW and will return an error message if LightWave is of a version earlier than 9.2 (since this is when Materials got introduced).
+The error message will be returned to LightWave and displayed, initializing the plugin will fail and the destructor will be called.
+\until }
+This is how inputs are added to the node. The variables are member variables.
+\until inTopTransparency
+Attaching outputs to the node is quite similar.
+\until outTransparency
+Here we initialize our MaterialComponent classes - again, more on that later.
+\until }
+The Destructor does nothing in this case.
+\until }
+Things are starting to heat up a little. lwpp uses operator=() to copy instances of the plugin.
+In this case you need to manually copy the MaterialComponent class.
+\until operator=
+\until }
+\until }
+NewTime is called once per pass when rendering, or whenever the current frame changes.
+In this case the NewTime member function of the MaterialComponent member variables are called.
+
+This is usually a good place to update lwpp::VParm for example.
+\until }
+Evaluate is where the magic happens.
+In this case the current values of the inputs are retrieved and used for processing.
+setValue() (a member function of lwpp::Node,  that lwpp::NodeHandler and thus lwpp::XPanelNodeHandler derive from) is used to set the output value for the current output that is evaluated.
+\until }
+\until }
+\until }
+\until }
+\until }
+\until }
+\until }
+\until }
+\until }
+\until }
+Next we'll define an enum for the IDs of the XPanel controls as well as a static array of strings for the pop-up defining the blend mode.
+\until }
+\until }
+\section GUI Creating an XPanels GUI
+Now we're ready to construct our interface, this is done by overriding the Interface() method of the base plugin:
+\until )
+Now we define the LWXPanelControl and LWXPanelDataDesc arrays for XPanel as well as our hints for the GUI. This is identical to using the C SDK for XPanels.
+\until };
+\until };
+\until };
+CreateViewXPanel() creates the panel and the ID is returned to LW so it can handle it if needed.
+\until }
+Now that we have created the XPanel GUI we need to manage the change of user interface controls.
+Again, this is done by overriding member functions of the base class.
+
+DataGet() returns the value of a control to LW to display:
+\until }
+\until }
+DataSet() is LightWave telling the plugin that the value of a control changed. We store the changed value in our member variables.
+\until }
+\until }
+ChangeNotify() again is a member function override. It is set up automatically by lwpp.
+
+In this case we update the node preview (yet another member function provided by lwpp for Nodes) if a value has changed while the user is changing a control.
+Once the user releases the control, we perform a full Update() (as you guessed, yet another member function provided by lwpp).
+\until }
+\until }
+\until }
+This concludes the GUI code and we can proceed with loading and saving our variables.
+\section IO Loading and saving settings
+We start off by defining LWIDs and a LWBlockIdent struct for the LightWave i/o system.
+\until };
+Loading is quite similar to using LWs native system. We advise to use nested blocks. All classes derived from lwpp::Storeable can be passed directly to a lwpp::LoadState or lwpp::SaveState for i/o.
+\until }
+\until }
+\until }
+Saving is even easier, especially since the MaterialComponent class used in this sample is derived from lwpp::Storeable
+\until }
+\until }
+\until }
+\section Additional The MaterialComponent class
+This class is a helper class to manage the components used in the material blender and to reduce the amount of duplicate code:
+\dontinclude MaterialBlender.cpp
+\skip #define
+\until ss.WriteItem
+\until };
+ */
+
+ /*! @page design The design of LightWrap++
+The basic idea behind LightWrap++ is to make it as easy as possible for a C++ savvy programmer to develop for LightWave3D.
+
+ @section LWSDK The LightWave 3D SDK
+ LightWave plugins are shared libraries that get loaded by the main appliaction on demand.
+ In LW SDK terminology, a plugin play the role of a server, while LW itself is the host.
+
+ This basically means that a plugin "serves" functionality to LW.
+
+ @section C2CPP From the C based SDK to LightWrap++
+
+ @subsection LWInstance
+
+ The void * pointer LWInstance that is passed around by LightWave is used to store a pointer to the plugin class.
+ The Adaptor casts the LWInstance to the plugin class and calls the appropriate member function.
+ The member functions are in turn virtual, and may be overrided by the derived class (which is the plugin class written by the user).
+
+ In the case of XPanels and LWPanels, the pointer to the class is stored as userdata, either as userdata for the Panel or for the control itself.
+
+ @section goodies Advantages of using LWPP
+
+ @section internals Internals and technicalities
+ @subsection Exceptions
+ Every Callback from LightWave that is wrapped in the Adaptor classes catches exceptions and displays an error if one has been caught.
+
+ If possible an error code will be returned to LightWave 3D (for example in the Activate() functions).
+
+ @section Versioning
+ lwpp can adapt itself to different versions of the LW SDK. Version 7.5 and 9.3 are currently supported.
+ Plugins written for an older SDK still work with newer version of LightWave 3D, with the exception of CameraHandlers written for LightWave 3D 9.0 - but this is due to a breaking change in the LW SDK.
+
+ The Preprocessor variable LW_SDK can be set to the following values:
+ - 75
+ - 93
+
+ @warning This will not automatically include the right headers.
+ */
+
+ /*! @page prerequesites Prerequesites to using and extending LightWrapp++
+@section user Prerequesites for users of lwpp
+If you just wish to use lwpp for your LightWave 3D projects you will require a fairly good knowledge of the LightWave 3D SDK as well as basic knowledge of C++.
+
+While lwpp uses some more advanced C++ functionality (such as templates), you are usually not directly confronted with it.
+@section developers Prerequesites for developers of lwpp
+To extend lwpp you should have a thorough grasp of the concepts behind C++. Knowledge of templates, exceptions, operator overloading, virtual functions, virtual base classes and inheritance are a great plus.
+
+A thorough understanding of the LightWave 3D SDK and the mechanisms behind it help as well.
+ */
+
+ /*! @page coding_standards Coding standards
+This might seem to be superfluous for such a small project, but there should be a common standard of writing code for lwpp.
+This page tries to explains the most common cases.
+@par Indendation
+lwpp has been written using the Allman style:
+@code
+while (x == y)
+{
+    something();
+    somethingelse();
+}
+finalthing();
+@endcode
+\par Namespaces
+using namespace xxx; is strongly discouraged. This is to reduce the risk of ambiguity (there is plenty of that in life already ;) ).
+We prefer:
+@code
+std::cout >> "Hello World!";
+@endcode
+to
+@code
+using namespace std;
+cout >> "Hello World!";
+@endcode
+or
+@code
+using std::cout;
+cout >> "Hello World!";
+@endcode
+\par Commenting
+Since we (quite obviously if you're reading this) use Doxygen to commend the code, here are a few guidelines
+This is an example of a commented function:
+@verbatim
+//! This will be the brief description for the function
+/*!
+ * This is an optional, more detailed description of that this function does
+ * @param[in,out] *bar - will return a value
+ * @param[in] var - controls what happens in foo
+ * @return true if foo was successful
+ */
+ bool foo (double *bar, int var);
+@endverbatim
+*/

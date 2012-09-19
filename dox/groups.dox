@@ -1,0 +1,50 @@
+/*!
+
+@defgroup Handler Basic LightWave 3D Plugin types
+The classes are the base classes, corresponding with the plugin classes LightWave 3D supports.
+
+@defgroup XPanelHandler Lightwave plugin classes with an XPanel GUI
+Plugins that use XPanels should be derived from these classes.
+
+Each one of them has a matching XPanelAdaptor.
+
+To write a new LightWave 3D plugin, derive your class from any of these (depending on the Lightwave Plugin class you'd like to implement).
+
+Then override the methods as needed.
+
+Finally use something like:
+\code
+lwpp::XPanel____Adaptor<yourPlugin> yourPluginInstance("pluginName", optionalTags);
+\endcode
+To make the plugin visible for LightWave 3D.
+
+The XPanel____Adaptor class should of course match your XPanelHandler class, yourPlugin is the name of your plugin C++ class,
+yourPluginInstance can be any name you choose.
+
+The XPanel____Adaptor class is only instanced to call the constructor, which in turn adds the plugin to a global list
+of plugins before LightWave queries the list of plugins present in the binary upon loading it.
+
+\sa lwpp::XPanelInterface
+
+@defgroup LWPanelHandler Lightwave plugin classes with an LWPanel GUI
+Plugins that use LWPanels should be derived from these classes
+
+@defgroup Globals LightWave 3D globals
+
+@defgroup Entities LightWave 3D "entities"
+
+@defgroup Helper Various helper classes
+
+@defgroup Tools Various tool classes that provide the basics for other classes
+
+@defgroup Adaptor Template based adaptor classes for Handler
+
+@defgroup XPanelAdaptor Template based adaptor for XPanelHandler plugins
+This classes are Adaptors to translate the plugin classes for LW
+
+@defgroup LWPanelAdaptor Template based adaptor for LWPanelHandler plugins
+This classes are Adaptors to translate the plugin classes for LW
+
+@defgroup LWPanels Classes relates to the LWPanels GUI Toolkit
+
+ */
