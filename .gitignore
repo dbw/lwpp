@@ -6,6 +6,16 @@ lib/
 *.zip
 *.rar
 ._*
+*.vsprops
+*.tag
+# XCode
+*.xcodeproj/michaelwolf.*
+*.xcodeproj/mwolf.*
+
+# CodeWarrior
+lwpp Data/*
+
+*.old
 
 #################
 ## Eclipse

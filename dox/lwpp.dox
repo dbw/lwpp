@@ -24,10 +24,6 @@ This manual is divided into the following sections:
 - @subpage prerequesites
 - @subpage coding_standards
 
-@htmlonly
-<a href="lwpp_Build89.zip">Download the current release, build 89</a>
-@endhtmlonly
-
 @namespace lwpp
 LightWrap++ is fully contained within the lwpp namespace.
  */
