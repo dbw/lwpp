@@ -14,6 +14,8 @@ lwpp was designed with the following goals in mind:
 - Use of the STL where appropriated (currently mostly strings and the odd vector/map)
 - Compatibility across a range of LW SDK versions (since commercial plugins usually need to be compatible for a longer time).
 
+The current distribution is available on GitHub: https://github.com/dbw/lwpp/
+
 @section ToC Table of Contents
 This manual is divided into the following sections:
 
