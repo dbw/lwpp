@@ -11,7 +11,8 @@ namespace lwpp
 {
   //! Use any RGB value as a LW pen colour
   #define LW_COLOUR(red, green, blue) (0x01000000 | (red<<16) | (blue<<8) | green)
-
+DEFINE_GLOBAL(LWXPanelFuncs)
+    
 	//! Wrapper for LWXPanelFuncs
 	class XPanelFuncs : public GlobalBase<LWXPanelFuncs>
 	{

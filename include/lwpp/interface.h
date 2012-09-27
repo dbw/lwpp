@@ -12,6 +12,8 @@
 namespace lwpp
 {
 	class LWItem; // Forward declaration
+    
+    DEFINE_GLOBAL(LWInterfaceInfo)
 
 	//! @ingroup Globals
 	//! Use this class to get several information about the state of LightWave's Layout Interface

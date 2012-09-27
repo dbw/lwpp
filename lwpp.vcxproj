@@ -145,7 +145,7 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>include\;..\lwsdk96\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LW_SDK=96;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LW_SDK=96;_DEBUG;%(PreprocessorDefinitions);LW11_COMPAT</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -227,7 +227,7 @@
       <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalIncludeDirectories>include\;..\lwsdk95\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LW_SDK=95;_MSWIN;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LW_SDK=95;_MSWIN;WIN32;LW11_COMPAT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -321,6 +321,8 @@
     <ClInclude Include="include\lwpp\io.h" />
     <ClInclude Include="include\lwpp\item.h" />
     <ClInclude Include="include\lwpp\itemmotion_handler.h" />
+    <ClInclude Include="include\lwpp\light_handler.h" />
+    <ClInclude Include="include\lwpp\LW11Compat.h" />
     <ClInclude Include="include\lwpp\lw_server.h" />
     <ClInclude Include="include\lwpp\lw_version.h" />
     <ClInclude Include="include\lwpp\lwpanel_handler.h" />

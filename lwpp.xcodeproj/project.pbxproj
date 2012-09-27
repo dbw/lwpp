@@ -171,7 +171,7 @@
 		8766711E0FD69E0C00DB9C05 /* surface.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = surface.cpp; path = src/surface.cpp; sourceTree = "<group>"; };
 		877C02480E212F3300CB3C70 /* nodes.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodes.cpp; path = src/nodes.cpp; sourceTree = "<group>"; };
 		878911F10D5A36D0009AB2DD /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = src/texture.cpp; sourceTree = "<group>"; };
-		878B761910E227BD0046A22C /* liblwpp_cocoa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwpp_cocoa.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		878B761910E227BD0046A22C /* liblwpp_cocoad.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwpp_cocoad.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D02D9D0E7FFF490060CD0F /* sceneinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = sceneinfo.cpp; path = src/sceneinfo.cpp; sourceTree = "<group>"; };
 		87E1941E1000D63A006BE4CD /* platform_carbon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platform_carbon.cpp; path = src/platform_carbon.cpp; sourceTree = "<group>"; };
 		87EAD9FE0C7B6EC900139A8B /* plugin_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_handler.cpp; path = src/plugin_handler.cpp; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 		87FA8A440D9D98E6006A8686 /* nodeeditor.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodeeditor.cpp; path = src/nodeeditor.cpp; sourceTree = "<group>"; };
 		87FF08F60B67DF2100FB70FE /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
 		87FF09580B67E62A00FB70FE /* lwpp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.c.h; path = lwpp_Prefix.pch; sourceTree = "<group>"; };
-		D2AAC07E0554694100DB518D /* liblwpp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwpp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC07E0554694100DB518D /* liblwppd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwppd.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E8BE07B2D77200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -215,8 +215,8 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC07E0554694100DB518D /* liblwpp.a */,
-				878B761910E227BD0046A22C /* liblwpp_cocoa.a */,
+				D2AAC07E0554694100DB518D /* liblwppd.a */,
+				878B761910E227BD0046A22C /* liblwpp_cocoad.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -404,7 +404,7 @@
 			);
 			name = lwpp_cocoa;
 			productName = lwpp;
-			productReference = 878B761910E227BD0046A22C /* liblwpp_cocoa.a */;
+			productReference = 878B761910E227BD0046A22C /* liblwpp_cocoad.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		D2AAC07D0554694100DB518D /* lwpp */ = {
@@ -420,7 +420,7 @@
 			);
 			name = lwpp;
 			productName = lwpp;
-			productReference = D2AAC07E0554694100DB518D /* liblwpp.a */;
+			productReference = D2AAC07E0554694100DB518D /* liblwppd.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -428,6 +428,9 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "lwpp" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -530,9 +533,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -551,6 +554,7 @@
 					ppc,
 					"$(ARCHS_STANDARD_32_BIT)",
 				);
+				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -578,7 +582,7 @@
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEAD_CODE_STRIPPING = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
@@ -605,9 +609,8 @@
 				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../lwsdk95/include\"";
 				MACH_O_TYPE = staticlib;
 				ONLY_LINK_ESSENTIAL_SYMBOLS = YES;
-				PREBINDING = NO;
 				PRODUCT_NAME = lwppd;
-				SDKROOT = "";
+				SDKROOT = macosx10.6;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Debug;
@@ -615,11 +618,7 @@
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					ppc64,
-					"$(ARCHS_STANDARD_32_64_BIT)",
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = stabs;
 				GCC_AUTO_VECTORIZATION = YES;
@@ -638,7 +637,6 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_UNROLL_LOOPS = YES;
-				"GCC_VERSION[sdk=macosx10.4][arch=*]" = 4.0;
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_PEDANTIC = NO;
@@ -653,12 +651,9 @@
 				MACH_O_TYPE = staticlib;
 				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx10.5]" = 10.5;
 				ONLY_LINK_ESSENTIAL_SYMBOLS = YES;
-				PREBINDING = NO;
 				PRODUCT_NAME = lwpp;
 				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = macosx10.4;
-				"SDKROOT[arch=ppc64]" = macosx10.5;
-				"SDKROOT[arch=x86_64]" = macosx10.5;
+				SDKROOT = macosx10.6;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
 			};
 			name = Release;
@@ -666,14 +661,18 @@
 		878B761610E227BD0046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = /usr/local/lib;
+				LLVM_LTO = YES;
 				PRODUCT_NAME = lwpp_cocoad;
+				SDKROOT = macosx10.5;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -681,35 +680,35 @@
 		878B761710E227BD0046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OBJC_CALL_CXX_CDTORS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
 				GCC_STRICT_ALIASING = YES;
-				GCC_VERSION = 4.2;
-				"GCC_VERSION[sdk=macosx10.4][arch=*]" = 4.0;
+				GCC_VERSION = "";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = /usr/local/lib;
 				KEEP_PRIVATE_EXTERNS = YES;
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
+				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx10.4]" = 10.4;
 				PRODUCT_NAME = lwpp_cocoa;
 				SDKROOT = macosx10.5;
-				"SDKROOT[arch=i386]" = macosx10.4;
-				"SDKROOT[arch=ppc]" = macosx10.4;
 			};
 			name = Release;
 		};
 		878B762410E228470046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -720,9 +719,9 @@
 		878B762510E228470046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = "Build All";
 				ZERO_LINK = NO;
 			};

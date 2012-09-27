@@ -24,6 +24,16 @@ template<> base * GlobalBase< base >::globPtr = 0; \
 template<> size_t	GlobalBase< base >::usage_count = 0; \
 template<> const char * GlobalBase< base >::m_globalName = name;
 
+// llvm needs this (and apparently it is a C++ requirement) but VC stumbles over it
+#ifdef __llvm__
+#define DEFINE_GLOBAL(base) \
+template<> base * GlobalBase< base >::globPtr; \
+template<> size_t	GlobalBase< base >::usage_count; \
+template<> const char * GlobalBase< base >::m_globalName;
+#else
+#define DEFINE_GLOBAL(base)
+#endif
+
 #define IMPLEMENT_NAMED_GLOBAL(base, name) \
 template<> base * nGlobalBase< base, name>::globPtr = 0; \
 template<> size_t	nGlobalBase< base, name>::usage_count = 0;
@@ -250,6 +260,7 @@ namespace lwpp
     return static_cast<T *> (SuperGlobal(globalName, GFUSE_TRANSIENT));
   }
 
+  DEFINE_GLOBAL(LWGlobalPool)
 
   class GlobalMemory : protected GlobalBase<LWGlobalPool>
   {
@@ -310,6 +321,7 @@ namespace lwpp
     }
   };
 
+    DEFINE_GLOBAL(LWServerInfo)
 
   class ServerInfo : public GlobalBase<LWServerInfo>
   {
@@ -341,6 +353,8 @@ namespace lwpp
     } LWServerInfo;
   }
 
+    DEFINE_GLOBAL(lwsdk10::LWServerInfo)
+    
   class ServerInfo10 : public GlobalBase<lwsdk10::LWServerInfo>
   {
   public:

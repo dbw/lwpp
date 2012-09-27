@@ -2061,8 +2061,7 @@ namespace lwpp
 			desc.listbox.visItems=items;
 			desc.listbox.top = topVisible;
 			control = addControl("ListBoxControl", &desc, 0);
-			control.SetUserData(control.getControl());
-			return control.getControl();
+			control.SetUserData(control.getControl());			
 		}
 		/*! Adds a list of items with a scroll bar.
 		 *  @ingroup LWPanelControls

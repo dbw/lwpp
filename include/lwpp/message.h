@@ -24,6 +24,7 @@ namespace lwpp
 #define CHAR_COLOUR(x) "\03(c:" #x ")"
 
 //! Wrapped LWMessageFuncs
+    DEFINE_GLOBAL(LWMessageFuncs)
 	class LWMessage : protected GlobalBase<LWMessageFuncs>
 	{
 	public:

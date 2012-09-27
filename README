@@ -10,4 +10,4 @@ lwpp was designed with the following goals in mind:
 - Use of the STL where appropriated (currently mostly strings and the odd vector/map)
 - Compatibility across a range of LW SDK versions (since commercial plugins usually need to be compatible for a longer time).
 
-Doxygne documentation is available here: http://dbw.github.com/lwpp/
+Doxygen documentation is available here: http://dbw.github.com/lwpp/
