@@ -82,7 +82,7 @@ namespace lwpp
 		std::string temp_path;
 	};
 
-	OSFileRequest::OSFileRequest (const int reqType, char *title,
+	OSFileRequest::OSFileRequest (const int reqType, const char *title,
 																const char *fileType, const char *ext, const char *baseName,
 																const char *path,	const char *_baseDirType, int bufLen)
 	:	type(reqType),

@@ -75,7 +75,7 @@ namespace lwpp
 		}
 	};
 
-#ifndef LW_PLUGIN_LIMBO_STATES
+#ifndef LW_PLUGIN_LIMBO_STATES // defined starting with the 9.6 SDK, not documented though
 #define LW_PLUGIN_LIMBO_STATES "LW Plugin Limbo States"
 
 #define LW_LIMBO_START 0x00000001

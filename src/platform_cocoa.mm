@@ -19,7 +19,7 @@ std::string cocGetTempPath()
 	return ret;
 }
 
-cocFileRequest::cocFileRequest(const int _reqType, char *_title,
+cocFileRequest::cocFileRequest(const int _reqType, const char *_title,
 							   const char *fileType, const char *ext, const char *baseName,
 							   const char *path, const char *_baseDirType, int bufLen)
 : title(_title),

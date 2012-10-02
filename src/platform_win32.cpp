@@ -59,7 +59,7 @@ namespace lwpp
 	};
 
 //! OS specific file requester
-	OSFileRequest::OSFileRequest (const int reqType, char *title,	const char *fileType, const char *ext,
+	OSFileRequest::OSFileRequest (const int reqType, const char *title,	const char *fileType, const char *ext,
 		                            const char *baseName,	const char *path,	const char *_baseDirType, int bufLen)
 			:	type(reqType), m_data (new Data)
 	{

@@ -6,29 +6,8 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		878B762210E228470046A22C /* Build All */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 878B762C10E229020046A22C /* Build configuration list for PBXAggregateTarget "Build All" */;
-			buildPhases = (
-			);
-			dependencies = (
-				878B762910E2285A0046A22C /* PBXTargetDependency */,
-				878B762710E228580046A22C /* PBXTargetDependency */,
-			);
-			name = "Build All";
-			productName = "Build All";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
-		23B6E7C512D4C6FF00E58EBC /* colour_management.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EE98E712D4BAF30091E67C /* colour_management.cpp */; };
 		23B6E7C812D4C70700E58EBC /* colour_management.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EE98E712D4BAF30091E67C /* colour_management.cpp */; };
-		87375E280FC0829100793C29 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87375E270FC0829100793C29 /* image.cpp */; };
-		874605F10C49312F000941F4 /* lw_server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 874605F00C49312F000941F4 /* lw_server.cpp */; };
-		8766711F0FD69E0C00DB9C05 /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8766711E0FD69E0C00DB9C05 /* surface.cpp */; };
-		877C02490E212F3300CB3C70 /* nodes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877C02480E212F3300CB3C70 /* nodes.cpp */; };
-		878911F20D5A36D0009AB2DD /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 878911F10D5A36D0009AB2DD /* texture.cpp */; };
 		878B75FF10E227BD0046A22C /* contextmenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1D80BFF9E4000061CB6 /* contextmenu.cpp */; };
 		878B760010E227BD0046A22C /* file_request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DA0BFF9E4000061CB6 /* file_request.cpp */; };
 		878B760110E227BD0046A22C /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DB0BFF9E4000061CB6 /* global.cpp */; };
@@ -49,42 +28,9 @@
 		878B761010E227BD0046A22C /* sceneinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87D02D9D0E7FFF490060CD0F /* sceneinfo.cpp */; };
 		878B761110E227BD0046A22C /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87375E270FC0829100793C29 /* image.cpp */; };
 		878B761210E227BD0046A22C /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8766711E0FD69E0C00DB9C05 /* surface.cpp */; };
-		878B761F10E2280F0046A22C /* platform_carbon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87E1941E1000D63A006BE4CD /* platform_carbon.cpp */; };
 		878B762010E228210046A22C /* platform_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8760DBE3107379E400BC9B26 /* platform_cocoa.mm */; };
 		878B762110E228230046A22C /* platform_cocoa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8760DBDA1073656300BC9B26 /* platform_cocoa.cpp */; };
-		87D02D9E0E7FFF490060CD0F /* sceneinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87D02D9D0E7FFF490060CD0F /* sceneinfo.cpp */; };
-		87EAD9FF0C7B6EC900139A8B /* plugin_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87EAD9FE0C7B6EC900139A8B /* plugin_handler.cpp */; };
-		87ECB1E50BFF9E4100061CB6 /* contextmenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1D80BFF9E4000061CB6 /* contextmenu.cpp */; };
-		87ECB1E70BFF9E4100061CB6 /* file_request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DA0BFF9E4000061CB6 /* file_request.cpp */; };
-		87ECB1E80BFF9E4100061CB6 /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DB0BFF9E4000061CB6 /* global.cpp */; };
-		87ECB1E90BFF9E4100061CB6 /* io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DC0BFF9E4000061CB6 /* io.cpp */; };
-		87ECB1EA0BFF9E4100061CB6 /* item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DD0BFF9E4000061CB6 /* item.cpp */; };
-		87ECB1EB0BFF9E4100061CB6 /* meshinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DE0BFF9E4000061CB6 /* meshinfo.cpp */; };
-		87ECB1EC0BFF9E4100061CB6 /* objectinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DF0BFF9E4000061CB6 /* objectinfo.cpp */; };
-		87ECB1ED0BFF9E4100061CB6 /* panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1E00BFF9E4000061CB6 /* panel.cpp */; };
-		87ECB1EE0BFF9E4100061CB6 /* presets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1E10BFF9E4000061CB6 /* presets.cpp */; };
-		87ECB1EF0BFF9E4100061CB6 /* vparm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1E20BFF9E4000061CB6 /* vparm.cpp */; };
-		87ECB1F00BFF9E4100061CB6 /* wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1E30BFF9E4100061CB6 /* wrapper.cpp */; };
-		87ECB1F10BFF9E4100061CB6 /* xpanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1E40BFF9E4100061CB6 /* xpanel.cpp */; };
-		87FA8A450D9D98E6006A8686 /* nodeeditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87FA8A440D9D98E6006A8686 /* nodeeditor.cpp */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		878B762610E228580046A22C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = lwpp;
-		};
-		878B762810E2285A0046A22C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 878B75FD10E227BD0046A22C;
-			remoteInfo = lwpp_cocoa;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -171,7 +117,7 @@
 		8766711E0FD69E0C00DB9C05 /* surface.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = surface.cpp; path = src/surface.cpp; sourceTree = "<group>"; };
 		877C02480E212F3300CB3C70 /* nodes.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodes.cpp; path = src/nodes.cpp; sourceTree = "<group>"; };
 		878911F10D5A36D0009AB2DD /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = src/texture.cpp; sourceTree = "<group>"; };
-		878B761910E227BD0046A22C /* liblwpp_cocoad.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwpp_cocoad.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		878B761910E227BD0046A22C /* liblwppd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwppd.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D02D9D0E7FFF490060CD0F /* sceneinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = sceneinfo.cpp; path = src/sceneinfo.cpp; sourceTree = "<group>"; };
 		87E1941E1000D63A006BE4CD /* platform_carbon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platform_carbon.cpp; path = src/platform_carbon.cpp; sourceTree = "<group>"; };
 		87EAD9FE0C7B6EC900139A8B /* plugin_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_handler.cpp; path = src/plugin_handler.cpp; sourceTree = "<group>"; };
@@ -190,19 +136,11 @@
 		87FA8A440D9D98E6006A8686 /* nodeeditor.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodeeditor.cpp; path = src/nodeeditor.cpp; sourceTree = "<group>"; };
 		87FF08F60B67DF2100FB70FE /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
 		87FF09580B67E62A00FB70FE /* lwpp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.c.h; path = lwpp_Prefix.pch; sourceTree = "<group>"; };
-		D2AAC07E0554694100DB518D /* liblwppd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwppd.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E8BE07B2D77200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		878B761410E227BD0046A22C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D2AAC07C0554694100DB518D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -215,8 +153,7 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC07E0554694100DB518D /* liblwppd.a */,
-				878B761910E227BD0046A22C /* liblwpp_cocoad.a */,
+				878B761910E227BD0046A22C /* liblwppd.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -391,9 +328,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		878B75FD10E227BD0046A22C /* lwpp_cocoa */ = {
+		878B75FD10E227BD0046A22C /* lwpp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 878B761510E227BD0046A22C /* Build configuration list for PBXNativeTarget "lwpp_cocoa" */;
+			buildConfigurationList = 878B761510E227BD0046A22C /* Build configuration list for PBXNativeTarget "lwpp" */;
 			buildPhases = (
 				878B75FE10E227BD0046A22C /* Sources */,
 				878B761410E227BD0046A22C /* Frameworks */,
@@ -402,25 +339,9 @@
 			);
 			dependencies = (
 			);
-			name = lwpp_cocoa;
-			productName = lwpp;
-			productReference = 878B761910E227BD0046A22C /* liblwpp_cocoad.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		D2AAC07D0554694100DB518D /* lwpp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "lwpp" */;
-			buildPhases = (
-				D2AAC07B0554694100DB518D /* Sources */,
-				D2AAC07C0554694100DB518D /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
 			name = lwpp;
 			productName = lwpp;
-			productReference = D2AAC07E0554694100DB518D /* liblwppd.a */;
+			productReference = 878B761910E227BD0046A22C /* liblwppd.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -446,9 +367,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D2AAC07D0554694100DB518D /* lwpp */,
-				878B75FD10E227BD0046A22C /* lwpp_cocoa */,
-				878B762210E228470046A22C /* Build All */,
+				878B75FD10E227BD0046A22C /* lwpp */,
 			);
 		};
 /* End PBXProject section */
@@ -484,109 +403,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2AAC07B0554694100DB518D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				23B6E7C512D4C6FF00E58EBC /* colour_management.cpp in Sources */,
-				87ECB1E50BFF9E4100061CB6 /* contextmenu.cpp in Sources */,
-				87ECB1E70BFF9E4100061CB6 /* file_request.cpp in Sources */,
-				87ECB1E80BFF9E4100061CB6 /* global.cpp in Sources */,
-				87ECB1E90BFF9E4100061CB6 /* io.cpp in Sources */,
-				87ECB1EA0BFF9E4100061CB6 /* item.cpp in Sources */,
-				87ECB1EB0BFF9E4100061CB6 /* meshinfo.cpp in Sources */,
-				87ECB1EC0BFF9E4100061CB6 /* objectinfo.cpp in Sources */,
-				87ECB1ED0BFF9E4100061CB6 /* panel.cpp in Sources */,
-				87ECB1EE0BFF9E4100061CB6 /* presets.cpp in Sources */,
-				87ECB1EF0BFF9E4100061CB6 /* vparm.cpp in Sources */,
-				87ECB1F00BFF9E4100061CB6 /* wrapper.cpp in Sources */,
-				87ECB1F10BFF9E4100061CB6 /* xpanel.cpp in Sources */,
-				874605F10C49312F000941F4 /* lw_server.cpp in Sources */,
-				87EAD9FF0C7B6EC900139A8B /* plugin_handler.cpp in Sources */,
-				878911F20D5A36D0009AB2DD /* texture.cpp in Sources */,
-				87FA8A450D9D98E6006A8686 /* nodeeditor.cpp in Sources */,
-				877C02490E212F3300CB3C70 /* nodes.cpp in Sources */,
-				87D02D9E0E7FFF490060CD0F /* sceneinfo.cpp in Sources */,
-				87375E280FC0829100793C29 /* image.cpp in Sources */,
-				8766711F0FD69E0C00DB9C05 /* surface.cpp in Sources */,
-				878B761F10E2280F0046A22C /* platform_carbon.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		878B762710E228580046A22C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D2AAC07D0554694100DB518D /* lwpp */;
-			targetProxy = 878B762610E228580046A22C /* PBXContainerItemProxy */;
-		};
-		878B762910E2285A0046A22C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 878B75FD10E227BD0046A22C /* lwpp_cocoa */;
-			targetProxy = 878B762810E2285A0046A22C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		1DEB921F08733DC00010E9CD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INSTALL_PATH = /usr/local/lib;
-				PRODUCT_NAME = lwppd;
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		1DEB922008733DC00010E9CD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					"$(ARCHS_STANDARD_32_BIT)",
-				);
-				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
-				GCC_VERSION = 4.0;
-				"GCC_VERSION[sdk=macosx10.4][arch=*]" = 4.0;
-				"GCC_VERSION[sdk=macosx10.5][arch=*]" = 4.2;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				INSTALL_PATH = /usr/local/lib;
-				KEEP_PRIVATE_EXTERNS = YES;
-				LINKER_DISPLAYS_MANGLED_NAMES = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx10.4][arch=i386]" = 10.4;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx10.4][arch=ppc]" = 10.4;
-				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx10.5;
-				"SDKROOT[arch=i386]" = macosx10.4;
-				"SDKROOT[arch=ppc]" = macosx10.4;
-			};
-			name = Release;
-		};
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEAD_CODE_STRIPPING = YES;
-				GCC_AUTO_VECTORIZATION = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LW_SDK=95",
@@ -596,22 +422,16 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_UNROLL_LOOPS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_PEDANTIC = NO;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
+					"\"$(SRCROOT)/../lwsdk96/include\"",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
-				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../lwsdk95/include\"";
 				MACH_O_TYPE = staticlib;
-				ONLY_LINK_ESSENTIAL_SYMBOLS = YES;
-				PRODUCT_NAME = lwppd;
-				SDKROOT = macosx10.6;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				PRODUCT_NAME = lwpp;
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -620,14 +440,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEAD_CODE_STRIPPING = YES;
-				DEBUG_INFORMATION_FORMAT = stabs;
-				GCC_AUTO_VECTORIZATION = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
-				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_OBJC_GC = supported;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"LW_SDK=96",
@@ -637,24 +453,16 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_UNROLL_LOOPS = YES;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_PEDANTIC = NO;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"$(HEADER_SEARCH_PATHS_QUOTED_2)",
+					"\"$(SRCROOT)/../lwsdk96/include\"",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
-				HEADER_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../lwsdk96/include\"";
 				MACH_O_TYPE = staticlib;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx10.5]" = 10.5;
-				ONLY_LINK_ESSENTIAL_SYMBOLS = YES;
 				PRODUCT_NAME = lwpp;
-				RUN_CLANG_STATIC_ANALYZER = YES;
-				SDKROOT = macosx10.6;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};
@@ -670,10 +478,8 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = /usr/local/lib;
+				KEEP_PRIVATE_EXTERNS = NO;
 				LLVM_LTO = YES;
-				PRODUCT_NAME = lwpp_cocoad;
-				SDKROOT = macosx10.5;
-				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
@@ -683,11 +489,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
-				GCC_ENABLE_OBJC_GC = supported;
-				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OBJC_CALL_CXX_CDTORS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
 				GCC_STRICT_ALIASING = YES;
@@ -696,49 +499,15 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INSTALL_PATH = /usr/local/lib;
-				KEEP_PRIVATE_EXTERNS = YES;
+				KEEP_PRIVATE_EXTERNS = NO;
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				PRODUCT_NAME = lwpp_cocoa;
-				SDKROOT = macosx10.5;
-			};
-			name = Release;
-		};
-		878B762410E228470046A22C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = "Build All";
-			};
-			name = Debug;
-		};
-		878B762510E228470046A22C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = "Build All";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "lwpp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1DEB921F08733DC00010E9CD /* Debug */,
-				1DEB922008733DC00010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "lwpp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -748,20 +517,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		878B761510E227BD0046A22C /* Build configuration list for PBXNativeTarget "lwpp_cocoa" */ = {
+		878B761510E227BD0046A22C /* Build configuration list for PBXNativeTarget "lwpp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				878B761610E227BD0046A22C /* Debug */,
 				878B761710E227BD0046A22C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		878B762C10E229020046A22C /* Build configuration list for PBXAggregateTarget "Build All" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				878B762410E228470046A22C /* Debug */,
-				878B762510E228470046A22C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

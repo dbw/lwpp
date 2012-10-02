@@ -417,7 +417,7 @@ namespace lwpp
 	{
 		if (exists())
 		{
-			while (entry = readdir (directory))
+			while ((entry = readdir (directory)))
 			{
 				if (strcmp(entry->d_name, "..") && strcmp(entry->d_name, "." ) )
 				{
@@ -578,7 +578,7 @@ namespace lwpp
    * - \
    * - UNC
    * - based
-   * - path
+   * - pathb
    * - and
 
    * /Volume/On/OSX/and/file.ext
@@ -599,7 +599,7 @@ namespace lwpp
     size_t pos = sourcePath.find_last_of(fSeps);
     while (pos != std::string::npos)
     {
-      if (pos = sourcePath.size()-1)
+      if ((pos = sourcePath.size()-1))
       {
         pos = sourcePath.find_last_of(fSeps);
       }

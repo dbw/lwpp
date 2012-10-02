@@ -101,7 +101,7 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 		struct Data;
 		Data *m_data;
 	public:
-		OSFileRequest (const int reqType = FREQ_LOAD, char *title = "",
+		OSFileRequest (const int reqType = FREQ_LOAD, const char *title = "",
 									 const char *fileType = "", const char *ext = "", const char *baseName = "",
 									const char *path = "",	const char *_baseDirType = 0, int bufLen = 1024);
 

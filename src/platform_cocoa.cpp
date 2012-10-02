@@ -59,10 +59,10 @@ namespace lwpp
 
 	struct OSFileRequest::Data : public cocFileRequest
 	{
-		Data(const int reqType, char *title,
+		Data(const int reqType, const char *title,
 					const char *fileType, const char *ext, const char *baseName,
 					const char *path,	const char *_baseDirType, int bufLen)
-		: cocFileRequest(reqType, title, fileType, ext, baseName, path, _baseDirType,bufLen) 
+		: cocFileRequest(reqType, title, fileType, ext, baseName, path, _baseDirType,bufLen)
 		{
 			;
 		}
@@ -70,7 +70,7 @@ namespace lwpp
 		
 	};
 
-	OSFileRequest::OSFileRequest (const int reqType, char *title,
+	OSFileRequest::OSFileRequest (const int reqType, const char *title,
 																const char *fileType, const char *ext, const char *baseName,
 																const char *path,	const char *_baseDirType, int bufLen)
 	:	type(reqType),

@@ -23,7 +23,7 @@ class cocFileRequest
     const char *savePath;
     const char *fName;
 public:
-	cocFileRequest(const int _reqType, char *_title,
+	cocFileRequest(const int _reqType, const char *_title,
 								 const char *fileType, const char *ext, const char *baseName,
 								 const char *path,	const char *_baseDirType, int bufLen);
 	~cocFileRequest() {;}
