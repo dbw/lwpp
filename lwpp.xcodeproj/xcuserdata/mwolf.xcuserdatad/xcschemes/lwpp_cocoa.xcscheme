@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "878B75FD10E227BD0046A22C"
-               BuildableName = "liblwpp_cocoa.a"
-               BlueprintName = "lwpp_cocoa"
+               BuildableName = "liblwpp.a"
+               BlueprintName = "lwpp"
                ReferencedContainer = "container:lwpp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

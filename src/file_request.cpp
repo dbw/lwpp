@@ -627,7 +627,10 @@ namespace lwpp
 #ifdef _DEBUG		
         dout << "\"" << sourcePath.substr(pos+1) << "\" ->" << sourcePath << "\n";
 #endif 
-        elements.push_front(sourcePath.substr(pos+1));
+        if (!sourcePath.substr(pos+1).empty())
+        {
+          elements.push_front(sourcePath.substr(pos+1));
+        }
         sourcePath.erase(pos);
         pos = sourcePath.find_last_of(fSeps);
       }
