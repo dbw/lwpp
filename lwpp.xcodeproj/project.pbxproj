@@ -117,7 +117,7 @@
 		8766711E0FD69E0C00DB9C05 /* surface.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = surface.cpp; path = src/surface.cpp; sourceTree = "<group>"; };
 		877C02480E212F3300CB3C70 /* nodes.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodes.cpp; path = src/nodes.cpp; sourceTree = "<group>"; };
 		878911F10D5A36D0009AB2DD /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = src/texture.cpp; sourceTree = "<group>"; };
-		878B761910E227BD0046A22C /* liblwppd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwppd.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		878B761910E227BD0046A22C /* liblwpp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwpp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D02D9D0E7FFF490060CD0F /* sceneinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = sceneinfo.cpp; path = src/sceneinfo.cpp; sourceTree = "<group>"; };
 		87E1941E1000D63A006BE4CD /* platform_carbon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platform_carbon.cpp; path = src/platform_carbon.cpp; sourceTree = "<group>"; };
 		87EAD9FE0C7B6EC900139A8B /* plugin_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_handler.cpp; path = src/plugin_handler.cpp; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				878B761910E227BD0046A22C /* liblwppd.a */,
+				878B761910E227BD0046A22C /* liblwpp.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -341,7 +341,7 @@
 			);
 			name = lwpp;
 			productName = lwpp;
-			productReference = 878B761910E227BD0046A22C /* liblwppd.a */;
+			productReference = 878B761910E227BD0046A22C /* liblwpp.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -410,8 +410,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -432,6 +433,8 @@
 				PRODUCT_NAME = lwpp;
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = macosx10.5;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -439,8 +442,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -464,24 +468,20 @@
 				PRODUCT_NAME = lwpp;
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = macosx10.5;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Release;
 		};
 		878B761610E227BD0046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 			};
 			name = Debug;
 		};
 		878B761710E227BD0046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = lwpp_Prefix.pch;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 			};
 			name = Release;
 		};

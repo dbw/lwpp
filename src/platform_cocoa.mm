@@ -39,6 +39,7 @@ bool cocFileRequest::Post()
     NSString *nsfName =  [[NSString alloc] initWithCString: fName];
     // NSURL *dirUrl = [NSURL fileURLWithPath:[[NSString alloc] initWithCString: savePath]];
     NSArray *extensions = [nsExt componentsSeparatedByString:@";"];
+    nsExt = nil;
 	int runResult = 0;
 	switch (reqType)
 	{
@@ -80,6 +81,7 @@ bool cocFileRequest::Post()
             break;
 			
 		default:
+            NSString *nsfName = nil;
 			break;
 			
 	} 
