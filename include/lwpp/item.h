@@ -20,7 +20,7 @@ namespace lwpp
   class ItemInfo : protected GlobalBase<LWItemInfo>
   {
   public:
-    ItemInfo(void)
+    ItemInfo()
     {
       ;
     }
@@ -247,6 +247,74 @@ namespace lwpp
     {
       mItemInfo.param(mId, p, t, v.asLWVector());
     }
+
+    //! @name Param related helper functions
+    ///@{
+    Point3d getPosition(LWTime t)
+    {
+      Point3d pos;
+      Param(LWIP_POSITION, t, pos);
+      return pos;
+    }
+    Point3d getWorldPosition(LWTime t)
+    {
+      Point3d pos;
+      Param(LWIP_W_POSITION, t, pos);
+      return pos;
+    }
+    Vector3d getPivot(LWTime t)
+    {
+      Vector3d pos;
+      Param(LWIP_PIVOT, t, pos);
+      return pos;
+    }
+    Vector3d getScaling(LWTime t)
+    {
+      Vector3d v;
+      Param(LWIP_SCALING, t, v);
+      return v;
+    }
+    Vector3d getRotation(LWTime t)
+    {
+      Vector3d v;
+      Param(LWIP_ROTATION, t, v);
+      return v;
+    }
+    Vector3d getPivotRotation(LWTime t)
+    {
+      Vector3d v;
+      Param(LWIP_PIVOT_ROT, t, v);
+      return v;
+    }
+    Matrix4x4d getItem2World(LWTime t)
+    {
+      Point3d p;
+      Vector3d r,u,f;
+      Param(LWIP_POSITION, t, p);
+      Param(LWIP_RIGHT, t, r);
+      Param(LWIP_UP, t, u);
+      Param(LWIP_FORWARD, t, f);
+      return Matrix4x4d(r, u, f, p);
+    }
+
+    void getItem2World(LWTime t, LWDVector toWorld[3])
+    {
+      Param(LWIP_RIGHT, t, toWorld[0]);
+      Param(LWIP_UP, t, toWorld[1]);
+      Param(LWIP_FORWARD, t, toWorld[2]);
+    }
+
+    Matrix4x4d getWorld2Item(LWTime t)
+    {
+      Point3d p;
+      Vector3d r,u,f;
+      Param(LWIP_W_POSITION, t, p);
+      Param(LWIP_W_RIGHT, t, r);
+      Param(LWIP_W_UP, t, u);
+      Param(LWIP_W_FORWARD, t, f);
+      return Matrix4x4d(r, u, f, p);
+    }
+    ///@} 
 
     void Param (LWItemParam p, LWTime t, Point3d &v)
     {

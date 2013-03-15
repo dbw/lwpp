@@ -165,8 +165,8 @@ namespace lwpp
 	{
 		splitFileName();
 #ifdef _DEBUG		
-		lwpp::dostream dout;
-		dout << "FileName::getFileName() - " << fileName << "\n";
+		//lwpp::dostream dout;
+		//dout << "FileName::getFileName() - " << fileName << "\n";
 #endif       
 		return fileName;
 	}
@@ -592,8 +592,8 @@ namespace lwpp
   pathList splitPath(std::string sourcePath)
   {
 #ifdef _DEBUG		
-		lwpp::dostream dout;
-    dout << "splitPath (" << sourcePath << ");\n";
+		//lwpp::dostream dout;
+    //dout << "splitPath (" << sourcePath << ");\n";
 #endif 
     std::deque<std::string> elements;
     size_t pos = sourcePath.find_last_of(fSeps);
@@ -608,14 +608,14 @@ namespace lwpp
 
 #ifdef LWPP_PLATFORM_OSX_UB
 #ifdef _DEBUG		
-        dout << "\"" << sourcePath.substr(1) << "\" ->" << sourcePath << "\n";
-        dout << "\" \"\n";		
+          //dout << "\"" << sourcePath.substr(1) << "\" ->" << sourcePath << "\n";
+          //dout << "\" \"\n";
 #endif 
         elements.push_front(sourcePath.substr(1));        
         elements.push_front("");
 #else
 #ifdef _DEBUG		
-        dout << "\"" << sourcePath.substr(0,1) << "\" ->" << sourcePath << "\n";		
+        //dout << "\"" << sourcePath.substr(0,1) << "\" ->" << sourcePath << "\n";		
 #endif 
         elements.push_front(sourcePath.substr(0,1));
 #endif
@@ -625,7 +625,7 @@ namespace lwpp
       else if (pos != std::string::npos)
       {
 #ifdef _DEBUG		
-        dout << "\"" << sourcePath.substr(pos+1) << "\" ->" << sourcePath << "\n";
+        //dout << "\"" << sourcePath.substr(pos+1) << "\" ->" << sourcePath << "\n";
 #endif 
         if (!sourcePath.substr(pos+1).empty())
         {
@@ -668,8 +668,8 @@ namespace lwpp
   std::string makeFullPath(const pathList &path)
   {
 #ifdef _DEBUG		
-		lwpp::dostream dout;
-    dout << "makeFullPath ();\n";
+		//lwpp::dostream dout;
+    //dout << "makeFullPath ();\n";
 #endif     
     std::string fullName;
     for (pathCIterator iter = path.begin(); iter != path.end(); ++iter)
@@ -677,11 +677,11 @@ namespace lwpp
       fullName += *iter;
       fullName += fSep;
 #ifdef _DEBUG		
-      dout << ": \"" << *iter << "\" " << fSep << "\n";
+      //dout << ": \"" << *iter << "\" " << fSep << "\n";
 #endif        
     }
 #ifdef _DEBUG		
-    dout << "= \"" << fullName << "\"\n";
+    //dout << "= \"" << fullName << "\"\n";
 #endif  
     return fullName;
   }

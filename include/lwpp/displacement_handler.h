@@ -93,7 +93,7 @@ class DisplacementHandler : public InstanceHandler, public ItemHandler, public R
 			Context.SetID( (LWItemID) context);
 		}
 		virtual ~DisplacementHandler() {;}
-		virtual void Evaluate(LWDisplacementAccess *da)
+		virtual void Evaluate(DisplacementAccess &da)
 		{
 			;
 		}
@@ -145,7 +145,8 @@ class DisplacementAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>, 
 			try
 			{
 				T *plugin = (T *) instance;
-				plugin->Evaluate(DisplacementAccess(da));
+        DisplacementAccess dAcc(da); // required due to C++ standard
+				plugin->Evaluate(dAcc);
 			}
 			catch (std::exception &e)
 			{

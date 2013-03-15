@@ -127,14 +127,13 @@ namespace lwpp
 
   namespace 
   {
-
     class ImageEventComring
     {
       static int usageCount;
       static comRingCommunicator *crc;
 
     public:
-      static void ImageEvent(int eventCode,LWImageID id)
+      static void ImageEvent(int eventCode, LWImageID id)
       {
         crc->ringMessage(IMAGECHANGE_COMRING, eventCode, id);
       }
@@ -170,7 +169,6 @@ namespace lwpp
     int ImageEventComring::usageCount = 0;
     comRingCommunicator *ImageEventComring::crc = 0;
     static ImageEventComring iec;
-
   }
 
   void RegisterImageChangeComRing() {iec.Register();}

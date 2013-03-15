@@ -35,9 +35,11 @@ namespace lwpp
 	 * @endcode
 	 */
 	int IlluminationSampler( void *data, LWItemID light, const LWDVector dir, const LWDVector color );
-
+  
 	extern const char inFuncs[];
 	extern const char inFuncs2[];
+  extern const char inFuncs3[];
+  
 
 	//! Node Input
 	/*!
@@ -47,14 +49,14 @@ namespace lwpp
 	class LWNodeInput // : protected GlobalBase<LWNodeInputFuncs>
 	{
 	private:
-		LWNodeInputFuncs *globPtr;
+		static LWNodeInputFuncs *inF;
 		NodeID node_id;
 		NodeInputID id;
 		bool do_destroy;
 
 		int	evaluate(LWNodalAccess*na, void* value )
 		{
-			return globPtr->evaluate(id, na, value);
+			return inF->evaluate(id, na, value);
 		}
 		void init();
 	public:
@@ -63,7 +65,7 @@ namespace lwpp
 			node_id(_id)
 		{
 			init();
-			id = globPtr->create(node_id, type, name.c_str(), inp_event);
+			id = inF->create(node_id, type, name.c_str(), inp_event);
 		}
 		LWNodeInput(NodeInputID _id, bool _destroy = false)
 		: do_destroy(_destroy),
@@ -75,7 +77,7 @@ namespace lwpp
 
 		~LWNodeInput()
 		{
-			if (do_destroy) globPtr->destroy(node_id, id);
+			if (do_destroy) inF->destroy(node_id, id);
 		}
 
 		NodeInputID getID(void) const {return id;}
@@ -128,26 +130,32 @@ namespace lwpp
 
 		bool check(void)
 		{
-			return (globPtr->check(id) != 0);
+			return (inF->check(id) != 0);
 		}
 		bool isConnected(void) {return check();}
-		NodeID	node(void) {return globPtr->node(id);}
-		void disconnect (NodeID nid) {globPtr->disconnect(nid, id);}
-		NodeInputID next() {return globPtr->next(id);}
-		NodeInputID previous() {return globPtr->previous(id);}
+		NodeID	node(void) {return inF->node(id);}
+		void disconnect (NodeID nid) {inF->disconnect(nid, id);}
+		NodeInputID next() {return inF->next(id);}
+		NodeInputID previous() {return inF->previous(id);}
 
 	};
 
   typedef std::auto_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
 
+	extern const char outFuncs[];
+	extern const char outFuncs2[];
+
 		//! Node Input
 	//! @ingroup Globals
-	class LWNodeOutput: protected GlobalBase<LWNodeOutputFuncs>
+	class LWNodeOutput // : protected GlobalBase<LWNodeOutputFuncs>
 	{
 	private:
+    static LWNodeOutputFuncs *outF;
 		NodeID node_id;
 		NodeOutputID id;
 		bool do_destroy;
+
+    void init();
 
 	public:
 		LWNodeOutput(NodeID _id, ConnectionType type, std::string name, bool _destroy = true)
@@ -155,16 +163,17 @@ namespace lwpp
 			node_id(_id),
 			id(0)
 		{
-			id = globPtr->create(node_id, type, name.c_str());
+      init();
+			id = outF->create(node_id, type, name.c_str());
 		}
 
 		~LWNodeOutput()
 		{
-			if (do_destroy) globPtr->destroy(node_id, id);
+			if (do_destroy) outF->destroy(node_id, id);
 		}
-		NodeID node(void) {return globPtr->node(id);}
-		NodeOutputID next(void) {return globPtr->next(id);}
-		NodeOutputID previous(void) {return globPtr->previous(id);}
+		NodeID node(void) {return outF->node(id);}
+		NodeOutputID next(void) {return outF->next(id);}
+		NodeOutputID previous(void) {return outF->previous(id);}
 		NodeOutputID getID(void) const {return id;}
 		bool isID(const NodeOutputID _id) const {return id == _id;}
 	};
@@ -217,8 +226,8 @@ namespace lwpp
 	{
 	private:
 		NodeID id;
-		LWNodeInputFuncs *inF;
-		GlobalBase<LWNodeOutputFuncs> outF;
+		static LWNodeInputFuncs *inF;
+		static LWNodeOutputFuncs *outF;
 
 		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event)
 		{
@@ -368,7 +377,6 @@ namespace lwpp
 		{
 			setValue(val, &v);
 		}
-
 
 		void setValue(NodeValue val, int *v)
 		{

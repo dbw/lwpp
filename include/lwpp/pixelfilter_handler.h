@@ -62,13 +62,9 @@ namespace lwpp
 		}
 
     virtual void UpdateFlags() {;} // Used by LW 10 and higher, update m_bufferSet
-		int *Flags10()
+		virtual int *Flags10()
 		{
       m_bufferSet.clear(); // clear the set of used buffers
-      //m_bufferSet.insert(LWBUF::RED);
-      //m_bufferSet.insert(LWBUF::GREEN);
-      //m_bufferSet.insert(LWBUF::BLUE);
-      //m_bufferSet.insert(LWBUF::ALPHA);
       UpdateFlags(); // update the set of used buffers
       if (m_bufferReturn) delete[] m_bufferReturn;
       m_bufferReturn = new int[m_bufferSet.size()+1];
@@ -83,7 +79,7 @@ namespace lwpp
 	};
 
 	//! @ingroup Adaptor
-	template <class T, int maxVersion, int minVersion>
+	template <class T, int minVersion, int maxVersion>
 	class PixelFilterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T> , public RenderAdaptor<T>
 	{
 	public:
@@ -117,10 +113,9 @@ namespace lwpp
 				  RenderAdaptor<T>::Activate(plugin->rend);
 
 				  plugin->evaluate = PixelFilterAdaptor::Evaluate;
-          plugin->renderFlags = PixelFilterAdaptor::Flags;
+          plugin->renderFlags = PixelFilterAdaptor::renderFlags;
 				  plugin->flags    = PixelFilterAdaptor::Flags10;
         }
-
 				UNUSED(serverData);
 				return AFUNC_OK;
 			}
@@ -136,7 +131,7 @@ namespace lwpp
 			T* plugin = static_cast<T*>(inst);
 			plugin->Evaluate(ma);
 		}
-		static unsigned int Flags (LWInstance inst)
+		static unsigned int renderFlags (LWInstance inst)
 		{
 			T* plugin = static_cast<T*>(inst);
 			return plugin->Flags();
@@ -148,6 +143,10 @@ namespace lwpp
 		}
 		static int *Flags10 (LWInstance inst)
 		{
+#ifdef _DEBUG
+  lwpp::dostream dout;
+  dout << "PixelFilterAdaptor::Flags10()\n";
+#endif
 			T* plugin = static_cast<T*>(inst);
 			return plugin->Flags10();
 		}

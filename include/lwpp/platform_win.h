@@ -80,19 +80,4 @@ long int       telldir(DIR *);
 
 extern const char *strptime(const char *p, const char *fmt, struct tm *dt);
 
-// define the files to link to automatically for plugins
-#ifdef _WIN64
-  #ifdef _DEBUG
-    #pragma comment(lib, "lwpp64d.lib")
-  #else
-    #pragma comment(lib, "lwpp64.lib")
-  #endif
-#else
-  #ifdef _DEBUG
-    #pragma comment(lib, "lwppd.lib")
-  #else
-    #pragma comment(lib, "lwpp.lib")
-  #endif
-#endif
-
 #endif // LWPP_PLATFORM_WIN_H

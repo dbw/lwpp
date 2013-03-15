@@ -11,6 +11,7 @@ lib/
 # XCode
 *.xcodeproj/michaelwolf.*
 *.xcodeproj/mwolf.*
+xcuserdata
 
 # CodeWarrior
 lwpp Data/*

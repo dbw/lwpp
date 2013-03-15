@@ -21,26 +21,36 @@ namespace lwpp
 
   const char inFuncs[] = "NodeInputFuncs";
 	const char inFuncs2[] = "NodeInputFuncs 2";
+  const char inFuncs3[] = "NodeInputFuncs 3";
 
   IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs)
   IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs2)
+  IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs3)
 
   void LWNodeInput::init()
   {
+    if (lwpp::LightWave::isAtLeast(11, 0))
+    {
+      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs3);
+    }
     if (lwpp::LightWave::isAtLeast(9, 5))
     {
-      globPtr = getTransGlobal<LWNodeInputFuncs>(inFuncs2);
+      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs2);
     }
     else
     {
-      globPtr = getTransGlobal<LWNodeInputFuncs>(inFuncs);
+      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
     }
   }
   
 	LWNode::LWNode(NodeID _id)
 	: id(_id)
 	{
-		if (lwpp::LightWave::isAtLeast(9, 5))
+    if (lwpp::LightWave::isAtLeast(11, 0))
+    {
+      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs3);
+    }
+		else if (lwpp::LightWave::isAtLeast(9, 5))
 		{
 			inF = getTransGlobal<LWNodeInputFuncs>(inFuncs2);
 		}
@@ -48,10 +58,45 @@ namespace lwpp
 		{
 			inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
 		}
+
+    if (lwpp::LightWave::isAtLeast(11, 0))
+    {
+      outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs2);
+    }
+    else
+		{
+			outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
+		}
 	}
 
   LWNode::~LWNode()
   {
     ;
   }
+
+  const char outFuncs[] = "NodeOutputFuncs";
+	const char outFuncs2[] = "NodeOutputFuncs 2";
+
+  IMPLEMENT_NAMED_GLOBAL(LWNodeOutputFuncs, outFuncs)
+  IMPLEMENT_NAMED_GLOBAL(LWNodeOutputFuncs, outFuncs2)
+
+  void LWNodeOutput::init()
+  {
+    if (lwpp::LightWave::isAtLeast(11, 0))
+    {
+      outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs2);
+    }
+    else
+		{
+			outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
+		}
+  }
+
+  LWNodeInputFuncs *LWNodeInput::inF = 0;
+  LWNodeOutputFuncs *LWNodeOutput::outF = 0;
+
+  LWNodeInputFuncs *LWNode::inF = 0;
+  LWNodeOutputFuncs *LWNode::outF = 0;
+
 }
+

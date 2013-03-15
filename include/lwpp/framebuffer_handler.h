@@ -41,6 +41,11 @@ namespace lwpp
 		{
 			;
 		}
+
+    virtual LWPixmapID GetPixelMap()
+    {
+      return 0;
+    }
 	};
 
 	//! @ingroup Adaptor
@@ -67,7 +72,7 @@ namespace lwpp
 			plugin->begin = FrameBufferAdaptor::Begin;
 			plugin->write = FrameBufferAdaptor::Write;
 			plugin->pause = FrameBufferAdaptor::Pause;
-
+      plugin->getPixelMap = FrameBufferAdaptor::GetPixelMap;
 
 			UNUSED(serverData);
 			return AFUNC_OK;
@@ -100,6 +105,11 @@ namespace lwpp
 		{
 			T* plugin = static_cast<T*>(inst);
 			plugin->Pause();
+		}
+		static LWPixmapID GetPixelMap (LWInstance inst)	
+		{
+			T* plugin = static_cast<T*>(inst);
+			return plugin->GetPixelMap();
 		}
 	};
 

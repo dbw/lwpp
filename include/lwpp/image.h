@@ -143,7 +143,6 @@ namespace lwpp
     {
       return globPtr->getMakerNote(pixmap, tag, data);
     }
-
 		//! Save the current pixmap
 		void save(int saver, const std::string name)
 		{

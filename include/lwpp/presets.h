@@ -44,6 +44,16 @@ namespace lwpp
 			const char *GetName(int n) {return popName(n);}
 	};
 
+  /*!
+  * Steps to use the Simple Presets:
+  * # Derive your plugin class from PresetHandler
+  * # Implement PresetHandler::LoadPreset and PresetHandler::SavePreset
+  * # Add a SimplePreset class as a member variable
+  * # Initialise the SimplePreset in the constructor with the plugin type as a string as well as the plugin name
+  * # Call SimplePreset::SetHandler using this in the constructor
+  * # in XPanels, add a vPopCmd control for the preset, i.e. {ID_PRES, "Presets", "vPopCmd"}
+  * # During setup of the XPanel, call SimplePreset.Setup() to register the panel and control id
+  */ 
 	class SimplePreset : public PopUpCallback, public PopCmdCallback<SimplePreset>
 	{
 		const char *plug_name;

@@ -421,7 +421,7 @@
 					_DEBUG,
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
@@ -431,8 +431,7 @@
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
 				PRODUCT_NAME = lwpp;
-				RUN_CLANG_STATIC_ANALYZER = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -466,8 +465,7 @@
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
 				PRODUCT_NAME = lwpp;
-				RUN_CLANG_STATIC_ANALYZER = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -476,12 +474,14 @@
 		878B761610E227BD0046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
 		878B761710E227BD0046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};

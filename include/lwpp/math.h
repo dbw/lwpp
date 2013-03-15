@@ -84,7 +84,7 @@ namespace lwpp {
 	 *
 	 */
 	template<class Type>
-	Type Clamp(const Type value, const Type min, const Type max)
+	Type Clamp(const Type value, const Type min = 0, const Type max = 1)
 	{
 		return (value < min) ? min : (value > max) ? max : value;
 	}

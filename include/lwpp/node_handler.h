@@ -15,7 +15,9 @@ namespace lwpp
 			{
 				UNUSED(type);
 				UNUSED(nid);
+        // always update by default
 				if (nevent == NIE_CONNECT) Update();
+        if (nevent == NIE_DISCONNECT) Update();        
 				if (nevent == NIE_INPUTNODEDESTROY) Update();
 				return 1;
 			}
@@ -123,10 +125,11 @@ namespace lwpp
 	namespace LWSDK95_1
 	{
 		// Node flags. Returned by LWNodeHandler->flags
-#define NF_TRANSP (1<<0) // This flag should be set if a material node might have transparency
+    #define NF_TRANSP (1<<0) // This flag should be set if a material node might have transparency
 
 		// Node handler activation.
-		typedef struct st_LWNodeHandler {
+		typedef struct st_LWNodeHandler
+    {
 			LWInstanceFuncs *inst;
 			LWItemFuncs		*item;
 			LWRenderFuncs   *rend;
@@ -141,6 +144,34 @@ namespace lwpp
 			unsigned int    (*flags)( LWInstance );
 		} LWNodeHandler;
 	}
+
+  namespace LWSDK10_0
+  {
+    typedef struct LWNodeOGLTextureOutput_t {
+        LWImageID   imageID;
+        float       uv_coords[2];
+        LWFVector   val;
+    } LWNodeOGLTextureOutput;
+
+typedef struct st_LWNodeHandler {
+    LWInstanceFuncs *inst;
+    LWItemFuncs     *item;
+    LWRenderFuncs   *rend;
+
+    // Evaluation function receives the LWNodalAccess structure.
+    // NodeOutputID is the output belonging to this node, and which is being currently asked the value from.
+    // NodeValue is the value you need to set with the output functions when setting a value for this evaluation.
+    void            (*evaluate)( LWInstance, LWNodalAccess*, NodeOutputID, NodeValue );
+
+    // customPreview is called when the node has NPT_CUSTOM preview type set.
+    void            (*customPreview)( LWInstance, int width, int height );
+
+    // GLTextureEvaluate is called when OpenGL needs image map information from a node.
+    void            (*GLTextureEvaluate)( LWInstance, LWNodalAccess*, LWNodeOGLTextureOutput* ); //Private
+
+    unsigned int    (*flags)( LWInstance );
+} LWNodeHandler;
+  }
 
 	//! @ingroup Adaptor
 	template <class T, int minVersion, int maxVersion>
@@ -178,6 +209,18 @@ namespace lwpp
 					ItemAdaptor<T>::Activate(plugin->item);
 					plugin->evaluate = NodeAdaptor::evaluate;
 					plugin->customPreview = NodeAdaptor::customPreview;
+					plugin->flags = NodeAdaptor::flags;
+					return AFUNC_OK;
+				}
+				else if (version == 3)
+				{
+					LWSDK10_0::LWNodeHandler *plugin = static_cast<LWSDK10_0::LWNodeHandler *>(inst);
+					InstanceAdaptor<T>::Activate(plugin->inst);
+					RenderAdaptor<T>::Activate(plugin->rend);
+					ItemAdaptor<T>::Activate(plugin->item);
+					plugin->evaluate = NodeAdaptor::evaluate;
+					plugin->customPreview = NodeAdaptor::customPreview;
+          plugin->GLTextureEvaluate = 0;
 					plugin->flags = NodeAdaptor::flags;
 					return AFUNC_OK;
 				}
@@ -259,7 +302,6 @@ namespace lwpp
 					UpdateNodePreview();
 				}
 			}
-
 	};
 
 	//! @ingroup XPanelAdaptor

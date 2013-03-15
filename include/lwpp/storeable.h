@@ -9,16 +9,16 @@ namespace lwpp
 		public:
 			//! Load data from a LWLoadState
 			/*!
-			 * @param *ls LWLoadState to load from
+			 * @param &ls LoadState to load from
 			 * @return An error string if an error occured, 0 otherwise
 			 */
-			virtual LWError Load(const LoadState &ls ) {UNUSED(ls);return 0;}
+			virtual LWError Load(const LoadState & ) {return 0;}
 			//! Save data to a LWSaveState
 			/*!
-			 * @param *ss LWSaveState to save to
+			 * @param &ss SaveState to save to
 			 * @return An error string if an error occured, 0 otherwise
 			 */
-			virtual LWError Save(const SaveState &ss ) {UNUSED(ss);return 0;}
+			virtual LWError Save(const SaveState & ) {return 0;}
 	};
 }
 

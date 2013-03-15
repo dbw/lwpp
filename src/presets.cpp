@@ -494,9 +494,16 @@ namespace lwpp
 					}
 					makeAllDirectories(pres_file.c_str());
 					File out(pres_file.c_str(), File::FILE_SAVE);
-					lwpp::SaveState ss = out.getSaveState();
-					SavePreset(ss, pres_name);
-					LWMessage::Info(std::string("Preset saved: ") + pres_file);
+          if (out.isValid())
+          {
+            lwpp::SaveState ss = out.getSaveState();
+            SavePreset(ss, pres_name);
+            LWMessage::Info(std::string("Preset saved: ") + pres_file);
+          }
+          else
+          {
+            LWMessage::Error(std::string("An error occured saving ") + pres_file);
+          }
 				}
 			}
 		} while (loop);

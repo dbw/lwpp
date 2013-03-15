@@ -12,13 +12,16 @@ namespace lwpp
 	/*!
 	 * You must inherit this class in EVERY plugin where you'd want to use a ComRing
 	 */
-	class comRingCommunicator : public GlobalBase<LWComRing> // needs to be declared as a global properly in global.cpp
+	class comRingCommunicator  // needs to be declared as a global properly in global.cpp
 	{
 		std::string lastTopic;
+    GlobalBase<LWComRing> comRing;
+    
 	protected:
     //! Receive an event in the ComRing
 		/*!
      * This needs to be implemented by the derived class if you want to receive events.
+     * @param void *portData 
      */
 		virtual void RingEvent(void *portData, int eventCode, void *eventData) 
 		{
@@ -39,7 +42,7 @@ namespace lwpp
      */
 		comRingCommunicator(const char *topic) 
 		{
-			if (available())
+			if (comRing.available())
 			{
 				if (ringAttach (topic))
 				{
@@ -53,8 +56,8 @@ namespace lwpp
 		}
 		//! Attach to a ComRing to receive messages
 		bool ringAttach (const char *topic)
-		{
-			if (globPtr->ringAttach(const_cast<char *>(topic), this, RingEventCB))
+		{      
+			if (comRing.getGlobal()->ringAttach(const_cast<char *>(topic), this, RingEventCB))
 			{
 				lastTopic = topic;
 				return true;
@@ -65,13 +68,13 @@ namespace lwpp
 		//! Detach from a comring to stop receiving messages
 		void ringDetach (const char *topic)
 		{
-			globPtr->ringDetach(const_cast<char *>(topic), this);
+			comRing.getGlobal()->ringDetach(const_cast<char *>(topic), this);
 		}
 		
 		//! Send a message to a ComRing
 		void ringMessage (const char *topic,int eventCode,void *eventData = 0)
 		{
-			if (globPtr) globPtr->ringMessage(const_cast<char *>(topic), eventCode, eventData);
+			if (comRing.getGlobal()) comRing.getGlobal()->ringMessage(const_cast<char *>(topic), eventCode, eventData);
 		}
 	};
 
@@ -100,6 +103,11 @@ namespace lwpp
       ringMessage(LW_PLUGIN_LIMBO_STATES, LW_LIMBO_END);
     }
   };
+
+#ifndef LW_PORT_MASTER_EVENT 
+#define LW_PORT_MASTER_EVENT "master-event" // available as of 11.0 - not documented
+#endif
+
 
 } // end namespace
 #endif // COMRING_COMMUNICATOR_H

@@ -29,7 +29,7 @@ namespace lwpp
      * @param interval timeout value expressed in milliseconds
      */
 		template <typename T>
-		void addTimer(T *host, unsigned long interval)
+		void addTimer(T *host, unsigned int interval)
 		{
 			globPtr->timerAdd(CB_TimerProc<T>, host, interval);
 		}
@@ -50,7 +50,7 @@ namespace lwpp
      * @param interval timeout value expressed in milliseconds (same used for timerAdd())
      */
 		template <typename T>
-		void removeTimer(T *host, unsigned long interval = 0)
+		void removeTimer(T *host, unsigned int interval = 0)
 		{
 			globPtr->timerRemove(CB_TimerProc<T>, interval);
 		}

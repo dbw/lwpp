@@ -99,7 +99,7 @@ namespace lwpp
 	{
 		if (this != &from)
 		{
-			if ((vparmID != 0) && (from.vparmID != 0))	(*globPtr->copy) (vparmID, from.vparmID);
+			if ((vparmID != 0) && (from.vparmID != 0))	(*globPtr->copy) (vparmID, from.vparmID);      
 			x = from.x;
 			y = from.y;
 			z = from.z;

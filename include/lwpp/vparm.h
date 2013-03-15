@@ -28,7 +28,7 @@ namespace lwpp
 		bool	create(int type, const std::string name, const std::string plug_name, LWChanGroupID group);
 		VParm(const VParm &from); //! no copy constructor, since it could lead to problems
 		//! Update VParm with the currently cached values
-		void set(void)
+		void set()
 		{
 			(*globPtr->setVal)(vparmID, asLWVector());
 		}

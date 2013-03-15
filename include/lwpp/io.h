@@ -140,7 +140,7 @@ namespace lwpp
 		{
 			ss->writeStr(ss->writeData, data.c_str());
 		}
-		//! Save a value embedded in a block
+		//! Save a single value embedded in a block
 		template <class T> void WriteBlock (const LWBlockIdent &id, T value, bool leaf = true) const
 		{
 			Begin(id, leaf);
@@ -154,6 +154,7 @@ namespace lwpp
 		   End();
 		}
 
+    //! Write a class that implements lwpp::Storeable
 		void WriteItem(const LWBlockIdent &id, Storeable &object, bool leaf = false) const;
 
 		void WriteItem(const LWBlockIdent &id, Storeable *object, bool leaf = false) const;
