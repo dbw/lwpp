@@ -176,6 +176,10 @@ namespace lwpp
 		NodeOutputID previous(void) {return outF->previous(id);}
 		NodeOutputID getID(void) const {return id;}
 		bool isID(const NodeOutputID _id) const {return id == _id;}
+    bool operator == (const NodeOutputID cmp)
+    {
+      return id == cmp;
+    }
 	};
 
   typedef std::auto_ptr<LWNodeOutput> auto_NodeOutput; //!< Helper declaration for node member variables

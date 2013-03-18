@@ -101,7 +101,6 @@ namespace lwpp
 			catch (std::exception &e)
 			{
 				lwpp::LWMessage::Error("An exception occured in Instance::Destroy():", e.what());
-				return;
 			}
 		}
 

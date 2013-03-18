@@ -37,6 +37,25 @@ namespace lwpp
 
    return atoi( name.substr( dStart+1, dEnd-dStart ).c_str() );
   }
+
+  Matrix4x4d LWItem::getWorld2Item(LWTime t)
+  {
+    Point3d p;
+    Vector3d r,u,f;
+    Param(LWIP_W_POSITION, t, p);
+    Param(LWIP_W_RIGHT, t, r);
+    Param(LWIP_W_UP, t, u);
+    Param(LWIP_W_FORWARD, t, f);
+    return Matrix4x4d(r, u, f, p);
+  }
+
+  void LWItem::getItem2World(LWTime t, LWDVector toWorld[3])
+  {
+    Param(LWIP_RIGHT, t, toWorld[0]);
+    Param(LWIP_UP, t, toWorld[1]);
+    Param(LWIP_FORWARD, t, toWorld[2]);
+  }
+
 	Matrix4x4d LWItem::getObjectToWorld(LWTime time)
 	{
 		Point3d pos;
@@ -46,7 +65,6 @@ namespace lwpp
 		Param(LWIP_FORWARD, time, fd);
 		Param(LWIP_POSITION, time, pos);
 		return Matrix4x4d(rt, up, fd, pos);
-		//return Matrix4x4d(rt, up, fd);
 	}
 
 	Matrix4x4d LWItem::getWorldTransform(LWTime time)

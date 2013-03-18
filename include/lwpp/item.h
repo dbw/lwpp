@@ -286,34 +286,13 @@ namespace lwpp
       Param(LWIP_PIVOT_ROT, t, v);
       return v;
     }
-    Matrix4x4d getItem2World(LWTime t)
-    {
-      Point3d p;
-      Vector3d r,u,f;
-      Param(LWIP_POSITION, t, p);
-      Param(LWIP_RIGHT, t, r);
-      Param(LWIP_UP, t, u);
-      Param(LWIP_FORWARD, t, f);
-      return Matrix4x4d(r, u, f, p);
-    }
 
-    void getItem2World(LWTime t, LWDVector toWorld[3])
-    {
-      Param(LWIP_RIGHT, t, toWorld[0]);
-      Param(LWIP_UP, t, toWorld[1]);
-      Param(LWIP_FORWARD, t, toWorld[2]);
-    }
+    void getItem2World(LWTime t, LWDVector toWorld[3]);
 
-    Matrix4x4d getWorld2Item(LWTime t)
-    {
-      Point3d p;
-      Vector3d r,u,f;
-      Param(LWIP_W_POSITION, t, p);
-      Param(LWIP_W_RIGHT, t, r);
-      Param(LWIP_W_UP, t, u);
-      Param(LWIP_W_FORWARD, t, f);
-      return Matrix4x4d(r, u, f, p);
-    }
+    Matrix4x4d getWorld2Item(LWTime t);
+    Matrix4x4d getObjectToWorld(LWTime time);
+    Matrix4x4d getWorldTransform(LWTime time);
+    void transformToWorld(Point3d &pt, LWTime time);
     ///@} 
 
     void Param (LWItemParam p, LWTime t, Point3d &v)
@@ -407,9 +386,6 @@ namespace lwpp
         i += 2;
       }
     }
-    Matrix4x4d getObjectToWorld(LWTime time);
-    Matrix4x4d getWorldTransform(LWTime time);
-    void transformToWorld(Point3d &pt, LWTime time);
     int getExtension();
     //! Load on object, this will store the item ID in the end
     virtual LWError Load(const LoadState &ls );

@@ -3,6 +3,7 @@
 
 #include "lwpp/plugin_handler.h"
 #include "lwpp/nodes.h"
+#include <lwpp/comring.h>
 
 namespace lwpp
 {
@@ -216,6 +217,7 @@ typedef struct st_LWNodeHandler {
 				{
 					LWSDK10_0::LWNodeHandler *plugin = static_cast<LWSDK10_0::LWNodeHandler *>(inst);
 					InstanceAdaptor<T>::Activate(plugin->inst);
+          plugin->inst->destroy = NodeAdaptor::vprSafeDestroy;
 					RenderAdaptor<T>::Activate(plugin->rend);
 					ItemAdaptor<T>::Activate(plugin->item);
 					plugin->evaluate = NodeAdaptor::evaluate;
@@ -234,6 +236,21 @@ typedef struct st_LWNodeHandler {
 		}
 
 		private:
+    //! safe destroy that pauses VPR
+		static void vprSafeDestroy (LWInstance instance)
+		{
+			try
+			{
+        lwpp::LimboComRing lcr;
+				T *plugin = static_cast<T *>(instance);
+				delete plugin;
+			}
+			catch (std::exception &e)
+			{
+				lwpp::LWMessage::Error("An exception occured in NodeAdaptor::vprSafeDestroy():", e.what());
+			}
+		}
+
 		static void evaluate (LWInstance instance, LWNodalAccess* na, NodeOutputID outID, NodeValue value)
 		{
 			try
