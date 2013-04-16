@@ -45,6 +45,14 @@ namespace lwpp
 		size_t scanPoints(LWPntScanFunc *func, void *userData) const {return mesh->scanPoints(mesh, func, userData);}
 		size_t scanPolys(LWPolScanFunc *func, void *userData) const {return mesh->scanPolys(mesh, func, userData);}
 		void pntBasePos(LWPntID pnt, LWFVector pos) const {mesh->pntBasePos(mesh, pnt, pos);}
+		void pntBasePos(LWPntID pnt, LWDVector pos) const
+		{
+			LWFVector tPos;
+			mesh->pntBasePos(mesh, pnt, tPos);
+			pos[0] = (double)tPos[0];
+			pos[1] = (double)tPos[1];
+			pos[2] = (double)tPos[2];
+		}
 		void pntOtherPos(LWPntID pnt, LWFVector pos) const {mesh->pntOtherPos(mesh, pnt, pos);}
 		void pntOtherPos(LWPntID pnt, LWDVector pos) const {
 			LWFVector tPos;

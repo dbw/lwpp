@@ -119,7 +119,7 @@ namespace lwpp
 			ss->writeFP(ss->writeData, data, length);
 		}
 
-#if LW_SDK == 95
+#if LW_SDK >= 95
 		void Write (const double data) const
 		{
 			ss->writeDP(ss->writeData, &data, 1);
@@ -326,11 +326,23 @@ namespace lwpp
 			rc = ls->readFP(ls->readData, &f, 1);
 		}
 
-#if LW_SDK == 95
+#if LW_SDK >= 95
 		
 		void read(double &d) const
 		{
 			rc = ls->readDP(ls->readData, &d, 1);
+		}
+				
+		double readDouble(void) const
+		{
+			double d;
+			rc = ls->readDP(ls->readData, &d, 1);
+			return d;
+		}
+
+		void read(double *d, int length) const
+		{
+			rc = ls->readDP(ls->readData, d, length);
 		}
 
 #endif

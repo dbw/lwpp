@@ -76,6 +76,15 @@ namespace lwpp
 				z += dir.z * distance;
 			}
 			/// operator ///
+			//! Compare a Vector3 
+			inline bool operator== (Vector3 b) const
+            {
+                    return (x == b.x && y == b.y && z == b.z );
+            }
+            inline bool operator!= (Vector3 b) const
+            {
+                    return !(*this==b);
+            }
 			//! Add a Vector3 
 			inline Vector3& operator+= (Vector3 b) {
 				x += b.x;
@@ -146,6 +155,18 @@ namespace lwpp
 			{
 				T ib = 1.0 / b;
 				return Vector3 (x * ib, y * ib, z * ib);
+			}
+			inline T& operator[](unsigned int index)
+			{
+				if(index > 2) 
+					throw std::out_of_range("Index supplied to Vector3::operator[] is out of range.");
+
+				switch(index)
+				{
+				case 0:	return x;
+				case 1:	return y;
+				case 2:	return z;
+				}
 			}
 
       inline T SphericalTheta()
