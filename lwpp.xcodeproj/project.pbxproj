@@ -135,7 +135,6 @@
 		87ECB1E40BFF9E4100061CB6 /* xpanel.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = xpanel.cpp; path = src/xpanel.cpp; sourceTree = "<group>"; };
 		87FA8A440D9D98E6006A8686 /* nodeeditor.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodeeditor.cpp; path = src/nodeeditor.cpp; sourceTree = "<group>"; };
 		87FF08F60B67DF2100FB70FE /* include */ = {isa = PBXFileReference; lastKnownFileType = folder; path = include; sourceTree = "<group>"; };
-		87FF09580B67E62A00FB70FE /* lwpp_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.c.h; path = lwpp_Prefix.pch; sourceTree = "<group>"; };
 		D2F7E8BE07B2D77200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -163,7 +162,6 @@
 			children = (
 				2342FE7C130EB7240043C063 /* include */,
 				87FF08F60B67DF2100FB70FE /* include */,
-				87FF09580B67E62A00FB70FE /* lwpp_Prefix.pch */,
 				87FF08F50B67DEF000FB70FE /* src */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
@@ -350,7 +348,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "lwpp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -410,13 +408,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"LW_SDK=96",
+					"LW_SDK=115",
 					_MACOS,
 					_DEBUG,
 					"$(inherited)",
@@ -425,13 +424,13 @@
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"\"$(SRCROOT)/../lwsdk96/include\"",
+					"\"$(SRCROOT)/../lwsdk11.5/include\"",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
 				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -441,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -450,22 +450,22 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"LW_SDK=96",
-					NDEBUG,
+					"LW_SDK=115",
 					_MACOS,
+					NDEBUG,
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"\"$(SRCROOT)/../lwsdk96/include\"",
+					"\"$(SRCROOT)/../lwsdk11.5/include\"",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
 				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -474,14 +474,18 @@
 		878B761610E227BD0046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = macosx10.6;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		878B761710E227BD0046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = macosx10.6;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				COMBINE_HIDPI_IMAGES = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
