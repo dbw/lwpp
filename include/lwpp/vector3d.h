@@ -19,7 +19,7 @@ namespace lwpp
 #ifndef TWOPI
  #define TWOPI (PI*2.0)
 #endif
-
+/* trying to force a commit*/
 	template <typename T>	class Point3;
 
 	//! Base Class for Vector, will later on be a template, currently uses doubles only
