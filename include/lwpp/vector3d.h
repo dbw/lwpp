@@ -19,7 +19,7 @@ namespace lwpp
 #ifndef TWOPI
  #define TWOPI (PI*2.0)
 #endif
-
+/* trying to force a commit*/
 	template <typename T>	class Point3;
 
 	//! Base Class for Vector, will later on be a template, currently uses doubles only
@@ -109,6 +109,10 @@ namespace lwpp
 			{
 				return Vector3 (x - b.x, y - b.y, z - b.z);
 			}
+            inline Vector3 operator- (const Vector3& b) const
+            {
+                return Vector3 (x - b.x, y - b.y, z - b.z);
+            }
 
 			inline Vector3& operator*= (Vector3 b) {
 				x *= b.x;
