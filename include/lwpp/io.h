@@ -327,24 +327,18 @@ namespace lwpp
 		}
 
 #if LW_SDK >= 95
-		
-		void read(double &d) const
-		{
-			rc = ls->readDP(ls->readData, &d, 1);
-		}
-				
-		double readDouble(void) const
+						
+		double readDouble() const
 		{
 			double d;
 			rc = ls->readDP(ls->readData, &d, 1);
 			return d;
 		}
 
-		void read(double *d, int length) const
+		void read(double *d, int length = 1) const
 		{
 			rc = ls->readDP(ls->readData, d, length);
 		}
-
 #endif
 
 

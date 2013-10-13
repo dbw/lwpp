@@ -28,9 +28,9 @@ namespace lwpp
 			NodeEditorID mId;
 			bool do_destroy;
 
-			LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event)
+			LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) const
 			{
-				NodeInputID id = globPtr->addInput(mId, type, name.c_str(), inp_event);
+			  NodeInputID id = globPtr->addInput(mId, type, name.c_str(), inp_event);
 			  return new LWNodeInput(id);
 			}
 		public:

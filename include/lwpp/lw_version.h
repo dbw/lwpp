@@ -313,7 +313,7 @@
 		#define LWPP_LMONFUNCS_GLOBAL				"LWLMonFuncs"
 		#define LWPP_OBJECTINFO_GLOBAL				"LW Object Info 4"
 		#define LWPP_OBJECTFUNCS_GLOBAL				"Scene Objects 4"
-		#define LWPP_INTERFACEINFO_GLOBAL			"LW Interface Info 5"
+		#define LWPP_INTERFACEINFO_GLOBAL			"LW Interface Info 7"
 
 		#define LWPP_PANEL_SERVICES_NAME			"LWPanelServices"
 		#define LWPP_PANELFUNCS_GLOBAL				"LWPanelServices"

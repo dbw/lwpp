@@ -25,16 +25,25 @@ namespace lwpp
 		}
 		return -1;
 	}
-	std::set <LWSurfaceID> SceneObjects::getSurfaces(int idx)
+  LWSurface::SurfaceSet SceneObjects::getSurfaces(int idx)
 	{
-		std::set <LWSurfaceID> ret;
+		LWSurface::SurfaceSet ret;
 		if (idx != -1)
 		{
 			lwpp::LWSurface surf;
-			std::string name(refName(idx));
+			std::string name;
+      if (lwpp::LightWave::isModeler())
+      {
+        name = (refName(idx));
+      }
+      else
+      {
+        name = filename(idx);
+      }
 			while (surf.exists())
 			{
-				if (name == surf.sceneObject()) ret.insert(surf.getID());
+        std::string so = surf.sceneObject();
+				if (name == so) ret.insert(surf.getID());
 				surf.next();
 			}
 		}

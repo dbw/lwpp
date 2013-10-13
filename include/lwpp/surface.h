@@ -54,7 +54,7 @@ namespace lwpp
 		LWChanGroupID getChannelGroup() const { return globPtr->chanGrp(id);}
 		const char *getColorVMap() const {return globPtr->getColorVMap(id);}
 		void setColorVMap(const char *vmapName, int type) {globPtr->setColorVMap(id, vmapName, type);}
-		NodeEditorID getNodeEditor( )
+		NodeEditorID getNodeEditor( ) const
 		{
 			return globPtr->getNodeEditor(id);
 		}

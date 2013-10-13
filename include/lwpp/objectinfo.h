@@ -1,9 +1,7 @@
 #ifndef LWPP_OBJECTINFO_H
 #define LWPP_OBJECTINFO_H
 
-#include <lwpp/wrapper.h>
-#include <lwsurf.h>
-#include <set>
+#include <lwpp/surface.h>
 
 namespace lwpp
 {
@@ -59,9 +57,9 @@ namespace lwpp
 	class SceneObjects : protected GlobalBase<LWObjectFuncs>
 	{
 	public:
-		SceneObjects(void) {;}
+		SceneObjects() {;}
 
-		int numObjects(void) const {return globPtr->numObjects();}
+		int numObjects() const {return globPtr->numObjects();}
 		const char *filename(int obj) const {return globPtr->filename(obj);}
 		int maxLayers(int obj) const {return globPtr->maxLayers(obj);}
 		int layerExists(int obj, int layer) const {return globPtr->layerExists(obj, layer);}
@@ -85,7 +83,7 @@ namespace lwpp
 			return -1;
 		}
 		int findObject (const std::string &objectName);
-		std::set <LWSurfaceID> getSurfaces(int idx);
+		LWSurface::SurfaceSet getSurfaces(int idx);
 /*
    typedef struct st_LWObjectFuncs {
       void         (*pivotPoint)  (int obj, int lnum, LWFVector pos);

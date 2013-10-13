@@ -35,31 +35,31 @@ namespace lwpp
        * Create nodal inputs
        */
       //! @{
-			LWNodeInput *addColorInput(const std::string name = "Color")
+			LWNodeInput *addColorInput(const std::string name = "Color") const
 			{
 				return LWNode::addColorInput(name, CB_NodeInputEvent);
 			}
-			LWNodeInput *addColourInput(const std::string name = "Colour")
+			LWNodeInput *addColourInput(const std::string name = "Colour") const
 			{
 				return addColorInput(name);
 			}
-			LWNodeInput *addScalarInput(const std::string name = "Scalar")
+			LWNodeInput *addScalarInput(const std::string name = "Scalar") const
 			{
 				return LWNode::addScalarInput(name, CB_NodeInputEvent);
 			}
-			LWNodeInput *addVectorInput(const std::string name = "Vector")
+			LWNodeInput *addVectorInput(const std::string name = "Vector") const
 			{
 				return LWNode::addVectorInput(name, CB_NodeInputEvent);
 			}
-			LWNodeInput *addIntegerInput(const std::string name = "Integer")
+			LWNodeInput *addIntegerInput(const std::string name = "Integer") const
 			{
 				return LWNode::addIntegerInput(name, CB_NodeInputEvent);
 			}
-			LWNodeInput *addFunctionInput(const std::string name = "Function")
+			LWNodeInput *addFunctionInput(const std::string name = "Function") const
 			{
 				return LWNode::addFunctionInput(name, CB_NodeInputEvent);
 			}
-			LWNodeInput *addMaterialInput(const std::string name = "Material") 
+			LWNodeInput *addMaterialInput(const std::string name = "Material") const
 			{
 				return LWNode::addMaterialInput(name, CB_NodeInputEvent);
 			}
@@ -70,31 +70,31 @@ namespace lwpp
        * Create nodal inputs handles by a std::auto_ptr
        */
       //! @{
-			auto_NodeInput autoColorInput(const std::string name = "Color")
+			auto_NodeInput autoColorInput(const std::string name = "Color") const
 			{
 				return auto_NodeInput(LWNode::addColorInput(name, CB_NodeInputEvent));
 			}
-			auto_NodeInput autoColourInput(const std::string name = "Colour")
+			auto_NodeInput autoColourInput(const std::string name = "Colour") const
 			{
 				return auto_NodeInput(addColorInput(name));
 			}
-			auto_NodeInput autoScalarInput(const std::string name = "Scalar")
+			auto_NodeInput autoScalarInput(const std::string name = "Scalar") const
 			{
 				return auto_NodeInput(LWNode::addScalarInput(name, CB_NodeInputEvent));
 			}
-			auto_NodeInput autoVectorInput(const std::string name = "Vector")
+			auto_NodeInput autoVectorInput(const std::string name = "Vector") const
 			{
 				return auto_NodeInput(LWNode::addVectorInput(name, CB_NodeInputEvent));
 			}
-			auto_NodeInput autoIntegerInput(const std::string name = "Integer")
+			auto_NodeInput autoIntegerInput(const std::string name = "Integer") const
 			{
 				return auto_NodeInput(LWNode::addIntegerInput(name, CB_NodeInputEvent));
 			}
-			auto_NodeInput autoFunctionInput(const std::string name = "Function")
+			auto_NodeInput autoFunctionInput(const std::string name = "Function") const
 			{
 				return auto_NodeInput(LWNode::addFunctionInput(name, CB_NodeInputEvent));
 			}
-			auto_NodeInput autoMaterialInput(const std::string name = "Material") 
+			auto_NodeInput autoMaterialInput(const std::string name = "Material") const
 			{
 				return auto_NodeInput(LWNode::addMaterialInput(name, CB_NodeInputEvent));
 			}

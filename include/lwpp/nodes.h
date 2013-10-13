@@ -187,37 +187,37 @@ namespace lwpp
 	class NodeInputHelper
 	{
 
-		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) = 0;
+		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) const = 0;
 	public:
     /*! @name Node Inputs
 		 *  Functions to add node inputs
      */
     //@{
-		LWNodeInput *addColorInput(const std::string name ="Color", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addColorInput(const std::string name ="Color", NodeInputEvent* inp_event = 0) const
 		{
 			return addInput(NOT_COLOR, name, inp_event);
 		}
-		LWNodeInput *addColourInput(const std::string name = "Colour", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addColourInput(const std::string name = "Colour", NodeInputEvent* inp_event = 0) const
 		{
 			return addColorInput(name, inp_event);
 		}
-		LWNodeInput *addScalarInput(const std::string name = "Scalar", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addScalarInput(const std::string name = "Scalar", NodeInputEvent* inp_event = 0) const
 		{
 			return addInput(NOT_SCALAR, name, inp_event);
 		}
-		LWNodeInput *addVectorInput(const std::string name = "Vector", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addVectorInput(const std::string name = "Vector", NodeInputEvent* inp_event = 0) const
 		{
 			return addInput(NOT_VECTOR, name, inp_event);
 		}
-		LWNodeInput *addIntegerInput(const std::string name = "Integer", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addIntegerInput(const std::string name = "Integer", NodeInputEvent* inp_event = 0) const
 		{
 			return addInput(NOT_INTEGER, name, inp_event);
 		}
-		LWNodeInput *addFunctionInput(const std::string name = "Function", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addFunctionInput(const std::string name = "Function", NodeInputEvent* inp_event = 0) const
 		{
 			return addInput(NOT_FUNCTION, name, inp_event);
 		}
-		LWNodeInput *addMaterialInput(const std::string name = "Material", NodeInputEvent* inp_event = 0)
+		LWNodeInput *addMaterialInput(const std::string name = "Material", NodeInputEvent* inp_event = 0) const
 		{
 			return addInput(NOT_MATERIAL, name, inp_event);
 		}
@@ -233,7 +233,7 @@ namespace lwpp
 		static LWNodeInputFuncs *inF;
 		static LWNodeOutputFuncs *outF;
 
-		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event)
+		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) const
 		{
 		 return new LWNodeInput(id, type, name.c_str(), inp_event);
 		}
@@ -252,9 +252,9 @@ namespace lwpp
 		void setID(NodeID _id) {id = _id;}
 		NodeID getID(void) {return id;}
 
-		const char *nodeName() {return globPtr->nodeName(id);}
-		const char *serverUserName() {return globPtr->serverUserName(id);}
-		LWChanGroupID chanGrp() {return globPtr->chanGrp(id);}
+		const char *nodeName() const {return globPtr->nodeName(id);}
+		const char *serverUserName() const {return globPtr->serverUserName(id);}
+		LWChanGroupID chanGrp() const {return globPtr->chanGrp(id);}
 
     //! Set the GUI colours for this node
 		void setNodeColor(int col[3]) {globPtr->setNodeColor(id, col);}

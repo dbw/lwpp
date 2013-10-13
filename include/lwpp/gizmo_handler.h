@@ -30,6 +30,7 @@ namespace lwpp
     virtual LWXPanelID gzPanel (){return 0;}
 
     virtual const LWItemID* gzPickItems (const LWItemID* drawitems){return drawitems;}
+    virtual const LWItemID* gzPickItems96 (const LWItemID* drawitems, const unsigned int* drawparts){return drawitems;}
   };
 
   //! Wrapper for Gizmos
@@ -285,6 +286,7 @@ namespace lwpp
   public:
     virtual void gzDraw    (lwpp::CustomObjAccess &){;}
     virtual const LWItemID* gzPickItems (const LWItemID* drawitems){return drawitems;}
+    virtual const LWItemID* gzPickItems96 (const LWItemID* drawitems, const unsigned int* drawparts){return drawitems;}
   };
 
   //! Wrapper for Gizmos that only perform drawing
@@ -311,7 +313,15 @@ namespace lwpp
 
         LWGizmo *plugin = static_cast<LWGizmo *>(inst);
         //plugin->instance = inst;
-        plugin->pickItems = GizmoDrawAdaptor::PickItems;
+#if (LW_SDK < 96)
+        {
+            plugin->pickItems = GizmoDrawAdaptor::PickItems;
+        }
+#else
+        {
+          plugin->pickItems = GizmoDrawAdaptor::PickItems96;
+        }
+#endif
         if (plugin->gizmo)
         {
           plugin->gizmo->done = 0;
@@ -348,6 +358,20 @@ namespace lwpp
       catch (std::exception &e)
       {
         lwpp::LWMessage::Error("An exception occured in GizmoAdaptor::PickItems():", e.what());
+        return 0;
+      }
+    }
+
+    static const LWItemID* PickItems96 (LWInstance instance, const LWItemID* drawitems, const unsigned int* drawparts)
+    {
+      try
+      {
+        T *plugin = (T *) instance;
+        return plugin->gzPickItems96(drawitems, drawparts);
+      }
+      catch (std::exception &e)
+      {
+        lwpp::LWMessage::Error("An exception occured in GizmoAdaptor::PickItems96():", e.what());
         return 0;
       }
     }
