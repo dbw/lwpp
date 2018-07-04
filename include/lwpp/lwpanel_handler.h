@@ -2,6 +2,8 @@
 #define LWPP_LWPANEL_HANDLER_H
 
 #include "lwpp/panel.h"
+#include "lwpp/message.h"
+
 
 #pragma warning( push )
 #pragma warning( disable : 4100 )
@@ -63,7 +65,7 @@ namespace lwpp
 				}
 				catch (std::exception &e)
 				{
-					lwpp::LWMessage::Error("An exception occured in LWPanel::Activate():", e.what());
+					LWMessage::Error("An exception occured in LWPanel::Activate():", e.what());
 					return AFUNC_BADAPP;
 				}
 			}

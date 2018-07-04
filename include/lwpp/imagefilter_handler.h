@@ -5,92 +5,138 @@
 #include <set>
 
 #include <lwfilter.h>
-
-namespace LWBUF
-{
-  enum
-  {
-      SPECIAL,
-      LUMINOUS,
-      DIFFUSE,
-      SPECULAR,
-      MIRROR,
-      TRANS,
-      RAW_RED,
-      RAW_GREEN,
-      RAW_BLUE,
-      SHADING,
-      SHADOW,
-      GEOMETRY,
-      DEPTH,
-      DIFFSHADE,
-      SPECSHADE,
-      MOTION_X,
-      MOTION_Y,
-      REFL_RED,
-      REFL_GREEN,
-      REFL_BLUE,
-      DIFF_RED,
-      DIFF_GREEN,
-      DIFF_BLUE,
-      SPEC_RED,
-      SPEC_GREEN,
-      SPEC_BLUE,
-      BACKDROP_RED,
-      BACKDROP_GREEN,
-      BACKDROP_BLUE,
-      PREEFFECT_RED,
-      PREEFFECT_GREEN,
-      PREEFFECT_BLUE,
-      RED,
-      GREEN,
-      BLUE,
-      ALPHA,
-      REFR_RED,
-      REFR_GREEN,
-      REFR_BLUE,
-      REFR_ALPHA,
-      NORMAL_X,
-      NORMAL_Y,
-      NORMAL_Z,
-      SURFACEID,
-      OBJECTID,
-      RADIOSITY_RED,
-      RADIOSITY_GREEN,
-      RADIOSITY_BLUE,
-      AMBIENTOCCLUSION_RED,
-      AMBIENTOCCLUSION_GREEN,
-      AMBIENTOCCLUSION_BLUE,
-      UV_TANGENTSPACE_T_X,
-      UV_TANGENTSPACE_T_Y,
-      UV_TANGENTSPACE_T_Z,
-      UV_TANGENTSPACE_B_X,
-      UV_TANGENTSPACE_B_Y,
-      UV_TANGENTSPACE_B_Z,
-      UV_TANGENTSPACE_N_X,
-      UV_TANGENTSPACE_N_Y,
-      UV_TANGENTSPACE_N_Z,
-      CAMERA_TANGENTSPACE_X,
-      CAMERA_TANGENTSPACE_Y,
-      CAMERA_TANGENTSPACE_Z,
-      MAX_CHANNELS
-  };
-}
+#include <lwaovs.h>
 
 namespace lwpp
 {
-  namespace lw10
-  {
-	  struct LWImageFilterHandler
-	  {
-		  LWInstanceFuncs  *inst;
-		  LWItemFuncs      *item;
-		  void            (*process) (LWInstance, const LWFilterAccess *);
-		  int *           (*flags) (LWInstance);
-	  };
-  }
 
-  typedef std::set<int> BufferSet;
+	//typedef std::set<int> BufferSet;
+	typedef std::set<std::string> BufferNameSet;
+
+	class AOVFuncs : protected GlobalBase<LWAOVFuncs>
+	{
+	public:
+		unsigned int numAOVs()
+		{
+			return globPtr->numAOVs();
+		}
+		const char *name(unsigned int i)
+		{
+			return globPtr->name(i);
+		}
+		const LWAOVDefinition* definition(unsigned int i)
+		{
+			return globPtr->definition(i);
+		}
+		int setChangeEvent(LWAOVEventFunc evntFun, void* userData)
+		{
+			return globPtr->setChangeEvent(evntFun, userData);
+		}
+		LWAOVID registerAOV (const char *name, const LWAOVDefinition &def)
+		{
+			return globPtr->registerAOV(name, &def);
+		}
+		void unregisterAOV (LWAOVID id)
+		{
+			return globPtr->unregisterAOV(id);
+		}
+		void addCustomAOV(const char*name)
+		{
+			globPtr->addCustomAOV(name);
+		}
+		void removeCustomAOV(const char*name)
+		{
+			globPtr->removeCustomAOV(name);
+		}
+	};
+
+	template <class T>
+	int AOVEventFunc (void* userData, void* priv, int event, LWAOVEventData* aovEventData)
+	{
+		if ( userData == nullptr ) return 0;
+		T* host = static_cast<T *>(userData);
+		return host->AOVEvent(event, aovEventData);
+	}
+ 
+	class AOVClient
+	{
+	public:
+		AOVFuncs aovFuncs;
+		virtual int AOVEvent(int event, LWAOVEventData* aovEventData) = 0;
+
+		AOVClient()
+		{
+			//register the callback
+			aovFuncs.setChangeEvent(AOVEventFunc<AOVClient>, this);
+		}
+		virtual ~AOVClient()
+		{
+			aovFuncs.setChangeEvent(nullptr, this); // remove the callback
+		}
+	};
+
+	class FilterInfo : protected GlobalBase<LWFilterGlobal>
+	{
+		BufferNameSet m_inUse, m_Available;
+
+		void copyArrayToSet(const char **buffers, BufferNameSet &set)
+		{
+			set.clear();
+			if ( buffers )
+			{
+				int i = 0;
+				while ( buffers[i] )
+				{
+					set.insert(buffers[i]);
+					++i;
+				}
+			}
+		}
+
+	public:
+		BufferNameSet &UpdateAvailable()
+		{
+			const char **buffers = globPtr->buffersAvailable();
+			copyArrayToSet(buffers, m_Available);
+			return m_Available;
+		}
+		BufferNameSet &UpdateInUse()
+		{
+			const char **buffers = globPtr->buffersAvailable();
+			copyArrayToSet(buffers, m_inUse);
+			return m_inUse;
+		}
+		BufferNameSet &GetAvailable()
+		{
+			if ( m_Available.empty() ) return UpdateAvailable();
+			return m_Available;
+		}
+		BufferNameSet &GetUsed()
+		{
+			if ( m_inUse.empty() ) return UpdateInUse();
+			return m_inUse;
+		}
+		bool isBufferInUse(const char *name)
+		{
+			return (globPtr->isBufferInUse(name) != 0);
+		}
+		bool isBufferInUse(const std::string &name)
+		{
+			return (isBufferInUse(name.c_str()));
+		}
+		bool isBufferAvailable(const char *name)
+		{
+			for ( auto i : m_inUse )
+			{
+				if (i == name) return true;
+			}
+			return false;
+		}
+		bool isBufferAvailable(const std::string &name)
+		{
+			return (isBufferAvailable(name.c_str()));
+		}
+	};
 
 //! Class for Imagefilters
 /*!
@@ -100,50 +146,55 @@ namespace lwpp
 class ImageFilterHandler : public InstanceHandler, public ItemHandler
 {
 protected:
-  BufferSet m_bufferSet;
-  int *m_bufferReturn;
+	BufferNameSet m_bufferNameSet;
+	const char **m_bufferNameReturn;
 	public:
-	  ImageFilterHandler(void *g, void *context, LWError *err)
-      : InstanceHandler(g, context, err, LWIMAGEFILTER_HCLASS),
-        m_bufferReturn(0)
+		ImageFilterHandler(void *g, void *context, LWError *err)
+			: InstanceHandler(g, context, err, LWIMAGEFILTER_HCLASS),
+			m_bufferNameReturn(0)
 		{
-      ;
-    }
-		virtual ~ImageFilterHandler() {;}
-		virtual void Process(const LWFilterAccess *fa)
+			;
+		}
+		virtual ~ImageFilterHandler() 
+		{
+			if (m_bufferNameReturn) delete[] m_bufferNameReturn;
+		}
+		virtual LWError Process(const LWFilterAccess *fa)
 		{
 			// default image copy
+			float *rgba[4];
 			for ( int y = 0; y < fa->height; y++ )
 			{
 				/* get each scanline */
-				float *r = fa->getLine( LWBUF::RED, y );
-				float *g = fa->getLine( LWBUF::GREEN, y );
-				float *b = fa->getLine( LWBUF::BLUE, y );
-				float *a = fa->getLine( LWBUF::ALPHA, y );
-
+				for (int c = 0; c < 4; c++ )
+				{
+					rgba[c] = fa->getLine(LWBUFFER_FINAL_RENDER_RGBA, c , y );
+				}
 				for ( int x = 0; x < fa->width; x++ )
 				{
-					float out[] = {r[x], g[x], b[x]};
+					float out[] = {rgba[0][x], rgba[1][x], rgba[2][x]};
 					fa->setRGB( x, y, out );
-					fa->setAlpha( x, y, a[ x ] );
+					if ( rgba[3] != nullptr ) fa->setAlpha( x, y, rgba[3][ x ] );
 				}
 			}
+			return 0;
 		}
-	  virtual unsigned int Flags() {return 0;}
-    virtual void UpdateFlags() {;} // Used by LW 10 and higher, update m_bufferSet
-		int *Flags10()
+
+		virtual void UpdateFlags() {;} // Used by LW 10 and higher, update m_bufferSet
+		// return a null terminated array of buffer names used by this plugin
+		virtual const char **Flags()
 		{
-      m_bufferSet.clear(); // clear the set of used buffers
-      UpdateFlags(); // update the set of used buffers
-      if (m_bufferReturn) delete[] m_bufferReturn;
-      m_bufferReturn = new int[m_bufferSet.size()+1];
-      int *idx = m_bufferReturn;
-      *idx++ = static_cast<int>(m_bufferSet.size()); // store the number of buffers
-      for (BufferSet::iterator iter = m_bufferSet.begin(); iter != m_bufferSet.end(); ++iter)
-      {
-        *idx++ = *iter;
-      }
-			return m_bufferReturn;
+			m_bufferNameSet.clear(); // clear the set of used buffers
+			UpdateFlags(); // update the set of used buffers
+			if ( m_bufferNameReturn ) delete[] m_bufferNameReturn;
+			m_bufferNameReturn = new const char *[m_bufferNameSet.size() + 1];
+			auto idx = m_bufferNameReturn;
+			for ( auto iter = m_bufferNameSet.begin(); iter != m_bufferNameSet.end(); ++iter )
+			{
+				*idx++ = iter->c_str();
+			}
+			*idx = 0;
+			return m_bufferNameReturn;
 		}
 };
 
@@ -151,7 +202,7 @@ protected:
 /*!
  * @ingroup Adaptor
  */
-	template <class T, int maxVersion, int minVersion>
+	template <class T, int Version>
 	class ImageFilterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 	{
 		public:
@@ -162,32 +213,16 @@ protected:
 		//! Set static callbacks for a LightWave ImageFilter
 		static int Activate (int version, GlobalFunc *global, LWInstance inst, void *serverData)
 		{
-			if ( version > maxVersion ) return AFUNC_BADVERSION;
-			if ( version < minVersion ) return AFUNC_BADVERSION;
+			if ( version != Version ) return AFUNC_BADVERSION;
 			try
 			{
 				lwpp::SetSuperGlobal(global);
-
-				if (version < 5)
-				{
-					LWImageFilterHandler *plugin = static_cast<LWImageFilterHandler *>(inst);
-
-					InstanceAdaptor<T>::Activate(plugin->inst);
-					ItemAdaptor<T>::Activate(plugin->item);
-					plugin->process = ImageFilterAdaptor::Process;
-					plugin->flags   = ImageFilterAdaptor::Flags;
-					return AFUNC_OK;
-				}
-				else
-				{
-					lw10::LWImageFilterHandler *plugin = static_cast<lw10::LWImageFilterHandler *>(inst);
-
-					InstanceAdaptor<T>::Activate(plugin->inst);
-					ItemAdaptor<T>::Activate(plugin->item);
-					plugin->process = ImageFilterAdaptor::Process;
-					plugin->flags   = ImageFilterAdaptor::Flags10;
-					return AFUNC_OK;
-				}
+				LWImageFilterHandler *plugin = static_cast<LWImageFilterHandler *>(inst);
+				InstanceAdaptor<T>::Activate(plugin->inst);
+				ItemAdaptor<T>::Activate(plugin->item);
+				plugin->process = ImageFilterAdaptor::Process;
+				plugin->flags = ImageFilterAdaptor::Flags;
+				return AFUNC_OK;				
 			}
 			catch (std::exception &e)
 			{
@@ -196,20 +231,22 @@ protected:
 			}
 		}
 		private:
-		static void Process (LWInstance instance, const LWFilterAccess *fa)
+		static LWError Process (LWInstance instance, const LWFilterAccess *fa)
 		{
 			try
 			{
 				T *plugin = (T *) instance;
-				plugin->Process(fa);
+				return plugin->Process(fa);
 			}
 			catch (std::exception &e)
 			{
 				lwpp::LWMessage::Error("An exception occured in ImageFilter::Process():", e.what());
+				return "An exception occured in ImageFilter::Process()";
 			}
+			return 0;
 		}
 
-		static unsigned int Flags (LWInstance instance)
+		static const char ** Flags (LWInstance instance)
 		{
 			try
 			{
@@ -222,31 +259,17 @@ protected:
 				return 0;
 			}
 		}
-		static int *Flags10 (LWInstance instance)
-		{
-			try
-			{
-				T *plugin = (T *) instance;
-				return plugin->Flags10();
-			}
-			catch (std::exception &e)
-			{
-				lwpp::LWMessage::Error("An exception occured in ImageFilter::Flags10():", e.what());
-				return 0;
-			}
-		}
-
 	};
 
 	//! Class for Imagefilters with an XPanel
 	//! @ingroup XPanelHandler
 	IMPLEMENT_XPANELHANDLER(ImageFilter);
 	//! @ingroup XPanelAdaptor
-	IMPLEMENT_XPANELADAPTOR(ImageFilter, LWPP_IMAGEFILTER_VERSION, LWPP_IMAGEFILTER_VERSION);
+	IMPLEMENT_XPANELADAPTOR(ImageFilter, LWIMAGEFILTER_VERSION);
 	//! @ingroup LWPanelHandler
 	IMPLEMENT_LWPANELHANDLER(ImageFilter);
 	//! @ingroup LWPanelAdaptor
-	IMPLEMENT_LWPANELADAPTOR(ImageFilter, LWPP_IMAGEFILTER_VERSION, LWPP_IMAGEFILTER_VERSION);
+	IMPLEMENT_LWPANELADAPTOR(ImageFilter, LWIMAGEFILTER_VERSION);
 }
 
 #endif // LWPP_IMAGEFILTER_HANDLER_H

@@ -47,4 +47,6 @@ This classes are Adaptors to translate the plugin classes for LW
 
 @defgroup LWPanels Classes relates to the LWPanels GUI Toolkit
 
+@defgroup PanelSizer Layout Sizer for LW Panels
+
  */

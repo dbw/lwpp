@@ -13,42 +13,12 @@
 
 namespace lwpp
 {
-
-
-  namespace lw10
-  {
-    // API 21
-    typedef enum {   /* Tags to get/set panel attributes */
-      PAN_X, PAN_Y, PAN_W, PAN_H, PAN_MOUSEX, PAN_MOUSEY,
-      PAN_FLAGS, PAN_USERDRAW, PAN_USERACTIVATE,
-      PAN_USEROPEN, PAN_USERCLOSE, PAN_TITLE,PAN_USERDATA, PAN_USERKEYS,
-      PAN_LWINSTANCE, PAN_MOUSEBUTTON, PAN_MOUSEMOVE  ,PAN_PANFUN, PAN_VERSION, PAN_RESULT,
-      PAN_HOSTDISPLAY, PAN_USERKEYUPS, PAN_QUALIFIERS, PAN_TO_FRONT,
-      PAN_MOUSEWHEEL, PAN_USERRESIZE, PAN_MIN_W, PAN_MIN_H, PAN_MAX_W, PAN_MAX_H, PAN_CONFIGTAG
-    } pTag;
-    typedef enum {           /* Tags to get/set panel attributes */
-      CTL_X, CTL_Y, CTL_W, CTL_H, CTL_VALUE,
-      CTL_HOTX, CTL_HOTY, CTL_HOTW, CTL_HOTH, CTL_LABELWIDTH,
-      CTL_MOUSEX, CTL_MOUSEY,
-      CTL_FLAGS, CTL_USERDRAW, CTL_USEREVENT, CTL_LABEL, CTL_USERDATA,
-      CTL_PANEL, CTL_PANFUN,  /* use these 2 to get your panelID and functions! */
-      CTL_RANGEMIN, CTL_RANGEMAX,             /* get/set slider range params  API 10 and later */
-      CTL_ACTIVATE,   /*  set only, to actvate/enter string controls   API 10 and later */
-      CTL_MOUSEBUTTON /* get the mouse button pressed, read only API 20 and later */
-    } cTag;
-    typedef enum {           /* Tags to get mouse buttons for controls */
-      CTL_MOUSELEFT=1, CTL_MOUSECENTER, CTL_MOUSERIGHT
-    } mBut;
-    typedef void (*LWPanResizeHook)(LWPanelID, void *, int w, int h);
-    #define PAN_SETCONFIGTAG(pfunc,pan,tag)   ( ival.intv.value=tag, (*pfunc->set)(pan, PAN_CONFIGTAG, (void *)&ival.intv.value) )
-  } // namespace lw10
-
-	  //! Dynamic Values
-	  /*! DynaValues are used as function arguments, with commands  and requesters, 
-	  * for example, when the function must accept values of multiple types. 
-	  * LWValues are a variation on DynaValues used by Panels and defined in lwpanel.h. 
-	  * @ingroup LWPanels
-	  */
+		//! Dynamic Values
+		/*! DynaValues are used as function arguments, with commands  and requesters, 
+		* for example, when the function must accept values of multiple types. 
+		* LWValues are a variation on DynaValues used by Panels and defined in lwpanel.h. 
+		* @ingroup LWPanels
+		*/
 	class LWDynaValue
 	{
 		LWValue val; //!The value stored.
@@ -66,7 +36,7 @@ namespace lwpp
 		{
 			_reset();
 		}
-    LWDynaValue()
+		LWDynaValue()
 		{
 		}
 		/*! @brief Constructor for a LWValString
@@ -115,7 +85,7 @@ namespace lwpp
 		}
 		/*! @brief Constructor for a LWValIVector
 		 *  @param v A vector of three integers
-     */
+		 */
 		LWDynaValue(int v[3])
 		{
 			val.type = LWT_VINT;
@@ -136,7 +106,7 @@ namespace lwpp
 		}
 		/*! @brief Constructor for a LWValFVector
 		 *  @param v vector with three components
-     */
+		 */
 		LWDynaValue(double v[3])
 		{
 			val.type = LWT_VFLOAT;
@@ -146,7 +116,7 @@ namespace lwpp
 		}
 		/*! @brief Constructor for a LWValFVector
 		 *  @param v vector with three components
-     */
+		 */
 		LWDynaValue(float v[3])
 		{
 			val.type = LWT_VFLOAT;
@@ -161,10 +131,10 @@ namespace lwpp
 			val.type = LWT_POINTER;
 			val.ptr.ptr = p;
 		}
-    void setType (int type)
-    {
-      val.type = type;
-    }
+		void setType (int type)
+		{
+			val.type = type;
+		}
 		/*! @brief Get the LWValInt
 		 *  @param i reference of an int variable. */
 		void getValue(int &i) const
@@ -219,8 +189,42 @@ namespace lwpp
 		 *  @return &val The address of the value. */
 		LWValue *get() {return &val;}
 	};
-
-	//! @class LWDrawFuncs panel.h <lwpp/panel.h>
+    
+    /*! @class PanelTreeNode panel.h <lwpp/panel.h>
+     *  @ingroup LWPanels
+     * Encapsulates the information needed by the treeview to display items
+     * This class is the base class for any item displayed in a tree control
+     * All items need to implement getName()
+     * Items with children need to implement getChildCount() and getChild() as well.
+     */
+    class PanelTreeNode
+    {
+        int m_flags;
+    public:
+        PanelTreeNode() : m_flags(NODE_FLAG_EXPND) { ; }
+        virtual ~PanelTreeNode() {;}
+        //! Returns the i'th child of the current item or 0 if there isn't one.
+        virtual PanelTreeNode *getChild(int ) {return 0;}
+        //! Returns the number of children of the current item
+        virtual int getChildCount() {return 0;}
+        //! Returns the name of the current item
+        virtual const char *getName() = 0;
+        //! Handles the flags that LWPanels uses to track the open/close state of a branch in the tree
+        virtual const char *getInfo(int *flags)
+        {
+            if (*flags)
+            {
+                m_flags = *flags;
+            }
+            else
+            {
+                *flags = m_flags;
+            }
+            return getName();
+        }
+    };
+    
+    //! @class LWDrawFuncs panel.h <lwpp/panel.h>
 	//! @ingroup LWPanels
 	class LWDrawFuncs
 	{
@@ -253,14 +257,14 @@ namespace lwpp
 			{
 				df->drawBox(pan, c, x, y, w, h);
 			}
-      void drawWireBox(int c, int x, int y, int w, int h) const
-      {
-        h -= 1; w -= 1;
-        drawLine(c, x  , y  , x+w, y);
-        drawLine(c, x+w, y  , x+w, y+h);
-        drawLine(c, x+w, y+h, x  , y+h);
-        drawLine(c, x  , y+h, x  , y);
-      }
+			void drawWireBox(int c, int x, int y, int w, int h) const
+			{
+				h -= 1; w -= 1;
+				drawLine(c, x  , y  , x+w, y);
+				drawLine(c, x+w, y  , x+w, y+h);
+				drawLine(c, x+w, y+h, x  , y+h);
+				drawLine(c, x  , y+h, x  , y);
+			}
 			//! Draw a box using RGB colours
 			void drawBox(int r, int g, int b, int x, int y, int w, int h) const
 			{
@@ -268,14 +272,19 @@ namespace lwpp
 			}
 
 			//! Returns the width os a string in pixels, as if it was drawn on a panel
+			int textWidth(const char *s) const
+			{
+				return df->textWidth(pan, s);
+			}
+			//! Returns the width os a string in pixels, as if it was drawn on a panel
 			int textWidth(const std::string s) const
 			{
-				return df->textWidth(pan, const_cast<char *>(s.c_str()));
+				return textWidth(const_cast<char *>(s.c_str()));
 			}
 			//! Returns the width os a string in pixels, as if it was drawn on a panel
 			int textWidth(const std::ostringstream &s) const
 			{
-				return df->textWidth(pan, const_cast<char *>(s.str().c_str()));
+				return textWidth(s.str());
 			}
 
 			//! Draw text in a panel
@@ -306,43 +315,144 @@ namespace lwpp
 			}
 	};
 
-	  //! Class to adapt callbacks for Panel controls on a LW Panel.
-	  /*! @ingroup LWPanelAdaptor */
+	//! Helper function for callbacks
+
+	class PanelControl;
+    class LWPanel;
+
+	void *getPanelHandler(LWControlID control);
+	void *getControlHandler(LWControlID control);
+
 	template <typename T>
+	struct GetPanelEventHandler
+	{		
+		static T *getHandler(LWControlID control)
+		{
+			return static_cast<T*>(getPanelHandler(control));
+		}		
+	};
+
+	template <typename T>
+	struct GetControlEventHandler
+	{
+		static T *getHandler(LWControlID control)
+		{
+			return static_cast<T*>(getControlHandler(control));
+		}
+	};
+
+		//! Class to adapt callbacks for Panel controls on a LW Panel.
+		/*! @ingroup LWPanelAdaptor */
+	template <typename T, template <typename U> class F = GetPanelEventHandler>
 	class PanelControlAdaptor
 	{
 	public:
 		//! Control event
-		static void cb_Event(LWControlID id, void *userdata);
+		static void cb_Event(LWControlID id, void *userdata)
+		{
+			if ( T *eventHandler = F<T>::getHandler(id) )
+			{
+				eventHandler->controlEvent(id);
+			}
+		}
 		//! Draw Control
-		static void cb_Draw(LWControlID id, void *userdata, DrMode mode);
+		static void cb_Draw(LWControlID id, void *userdata, DrMode mode)
+		{
+			if ( T *eventHandler = F<T>::getHandler(id) )
+			{
+				eventHandler->controlDraw(id, mode);
+			}
+		}
 		//! Popup Count
-		static int cb_Count(void *userdata);
+		static int cb_Count(void *userdata)
+		{
+      LWControlID control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return static_cast<int>(eventHandler->controlCount(control));
+			}
+			return 0;
+		}
 		//! Popup Name
-		static char *cb_Name(void *userdata, int index);
+		static const char *cb_Name(void *userdata, int index)
+		{
+			LWControlID control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return eventHandler->controlName(control, index);
+			}
+			return "";
+		}
 		//! MultiList Name 
-		static char *cb_MultiListName(void *userdata, int index, int column);
+		static const char *cb_MultiListName(void *userdata, int index, int column)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return eventHandler->controlMultiListName(control, index, column);
+			}
+			return "";
+		}
 		//! MultiList Column width
-		static int cb_MultiListColumnWidth(void *userdata, int index);
+		static int cb_MultiListColumnWidth(void *userdata, int index)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return eventHandler->controlMultiListColumnWidth(control, index);
+			}
+			return 0;
+		}
 		//! Tree Control Child
-		static void *cb_TreeChild(void *userdata, void *node, int i);
+		static void *cb_TreeChild(void *userdata, void *node, int i)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return eventHandler->controlTreeChild(control, (PanelTreeNode *)node, i);
+			}
+			return 0;
+		}
 		//! Tree Count Child
-		static int cb_TreeCount(void *userdata, void *node);
+		static int cb_TreeCount(void *userdata, void *node)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return eventHandler->controlTreeCount(control, (PanelTreeNode *)node);
+			}
+			return 0;
+		}
 		//! Tree Info
-		static char *cb_TreeInfo(void *userdata, void *node, int *flags);
+		static char *cb_TreeInfo(void *userdata, void *node, int *flags)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				return const_cast<char *>(eventHandler->controlTreeInfo(control, (PanelTreeNode *)node, flags));
+			}
+			return const_cast<char *>("");
+		}
 		//! Tree Child Move
-		static void cb_TreeMove(void *userdata, void *node, void *parent, int i);
-	};
-	
+		static void cb_TreeMove(void *userdata, void *node, void *parent, int i)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if ( T *eventHandler = F<T>::getHandler(control) )
+			{
+				eventHandler->controlTreeMove(control, (PanelTreeNode *)node, parent, i);
+			}
+		}
+	};	
+
 	/*! @class PanelControl panel.h <lwpp/panel.h>
-	  * @ingroup LWPanels
-	  * Class to adapt callbacks for Panel controls on a LW Panel.
+		* @ingroup LWPanels
+		* Class to adapt callbacks for Panel controls on a LW Panel.
 	*/
 	class PanelControl
 	{
 	private:
 		LWControl *control; //! Pointer to the control
-    bool ghosted;
+		bool ghosted;
 	protected:
 		/*! Get the control attributes, including it's value.
 		 * @param tag One of the cTag defined in lwpanel.h (line 186).
@@ -356,25 +466,25 @@ namespace lwpp
 		/*! Constructor
 		 *  @param ctl The LWControlID of the control */
 		PanelControl (LWControlID ctl = 0)
-      : ghosted(false)
+			: ghosted(false)
 		{
 			SetControl (ctl);
 		}
-		PanelControl (const PanelControl &ctl)
-      : ghosted(ctl.ghosted)
+        PanelControl (const PanelControl &ctl)
+			: ghosted(ctl.ghosted)
 		{
 			SetControl (ctl.control);
 		}
 		PanelControl &operator=(const PanelControl &from)
 		{
-      if (this != &from)
-      {
-        control = from.control;
-        ghosted = from.ghosted;
-      }
-      return *this;
+			if (this != &from)
+			{
+				control = from.control;
+				ghosted = from.ghosted;
+			}
+			return *this;
 		}
-		/*! Set the id of LWControl managed by this PanelControl
+		/*! Set the mID of LWControl managed by this PanelControl
 		 *  @param ctl The LWControlID of the control */
 		void SetControl(LWControlID ctl)
 		{
@@ -433,44 +543,44 @@ namespace lwpp
 		}
 		//! Erases the control from the panel.
 		void Erase()
-    {
-      Draw(DR_ERASE);
-    }
+		{
+			Draw(DR_ERASE);
+		}
 		//! Redraws the control in the panel.
 		void Redraw() 
-    {
-      Draw (DR_REFRESH);
-    }
+		{
+			Draw (DR_REFRESH);
+		}
 		void Refresh() 
-    {
-      Draw (DR_REFRESH);
-    }
+		{
+			Draw (DR_REFRESH);
+		}
 		//! Ghost the control in the panel.
 		//! How to show to the user a 
 		//! control is deactivated.
 		void Ghost(bool render = true)
-    {
-      ghosted = true;
-      if (render) Render();
-    }
+		{
+			ghosted = true;
+			if (render) Render();
+		}
 		void UnGhost(bool render = true)
-    {
-      ghosted = false;
-      if (render) Render();
-    }
+		{
+			ghosted = false;
+			if (render) Render();
+		}
 		//! Renders the control in the panel.
 		void Render()
-    {      
-      Draw();
-      if (ghosted)
-      {
-        Draw(DR_GHOST);
-      }
-    }
-    bool isGhosted() const
-    {
-      return ghosted;
-    }
+		{      
+			Draw();
+			if (ghosted)
+			{
+				Draw(DR_GHOST);
+			}
+		}
+		bool isGhosted() const
+		{
+			return ghosted;
+		}
 		
 		/*! Template version. Sets the control attributes, including it's value.
 		 * @param val The value for the tag.
@@ -499,25 +609,25 @@ namespace lwpp
 			Get (v, tag);
 			return v;
 		}
-    void GetVec(int &a, int &b, int &c)
-    {
-      LWDynaValue dval;
-      dval.setType(LWT_VINT);
-      get(CTL_VALUE, dval.get());
-      dval.getValue(a,b,c);
-    }
-    void GetVec(int v[])
-    {
-      LWDynaValue dval;
-      dval.setType(LWT_VINT);
-      get(CTL_VALUE, dval.get());
-      dval.getValue(v);
-    }
+		void GetVec(int &a, int &b, int &c)
+		{
+			LWDynaValue dval;
+			dval.setType(LWT_VINT);
+			get(CTL_VALUE, dval.get());
+			dval.getValue(a,b,c);
+		}
+		void GetVec(int v[])
+		{
+			LWDynaValue dval;
+			dval.setType(LWT_VINT);
+			get(CTL_VALUE, dval.get());
+			dval.getValue(v);
+		}
 		/*! Gets an boolean value of a control.
 		 * @param tag One of the TAGS defined in lwpanel.h (line 186). */
 		bool GetBool(cTag tag = CTL_VALUE)
 		{
-      return (GetInt(tag) != 0);
+			return (GetInt(tag) != 0);
 		}
 		//! Gets an pointer value of a control.
 		/*! @param tag One of the TAGS defined in lwpanel.h (line 186). 
@@ -537,18 +647,18 @@ namespace lwpp
 			return fval.flt.value;
 		}
 
-    //! Set the minimum range
-    int RangeMin() {return GetInt(CTL_RANGEMIN);}
-    int RangeMax() {return GetInt(CTL_RANGEMAX);}
+		//! Set the minimum range
+		int RangeMin() {return GetInt(CTL_RANGEMIN);}
+		int RangeMax() {return GetInt(CTL_RANGEMAX);}
 
-    void RangeMin(int m) {return Set(m, CTL_RANGEMIN);}
-    void RangeMax(int m) {return Set(m, CTL_RANGEMAX);}
+		void RangeMin(int m) {return Set(m, CTL_RANGEMIN);}
+		void RangeMax(int m) {return Set(m, CTL_RANGEMAX);}
 
 
 		/*! @name Control Layout
 		 *  Functions to place any layout controls
-     */
-    //@{
+		 */
+		//@{
 
 		// control positioning
 		//! Return the X position of the control
@@ -573,15 +683,37 @@ namespace lwpp
 		int MouseX() {return GetInt(CTL_MOUSEX);}
 		//! Return the mouse Y position on the control for the most recent event
 		int MouseY() {return GetInt(CTL_MOUSEY);}
-#if LWPP_PANELS_API_VERSION > 19
-    //! Return the mouse button that was pressed
-    lw10::mBut getMouseButton()
-    {
-      return static_cast<lw10::mBut>(GetInt(static_cast<cTag>(lw10::CTL_MOUSEBUTTON)));
-    }    
-#endif
+		// @}
+		/*! @name Interactions
+		*  Functions for interaction with the user
+		*/
+		//@{
+		//! Return the mouse button that was pressed
+		mBut getMouseButton()
+		{
+			return static_cast<mBut>(GetInt(CTL_MOUSEBUTTON));
+		}
 
-    // @}
+		int MouseClickCount() { return GetInt(CTL_MOUSECLICKCNT); }
+
+		//! Check if a coordinate is within the hot area of the control
+		bool isInsideHot(int x, int y)
+		{
+			int cx = HotX();
+			int cy = HotY();
+			if ( lwpp::inRange(x, cx, cx + HotW()) || !lwpp::inRange(y, cy, cy + HotH()) ) return true;
+			return false;
+		}
+		//! Check if a coordinate is within the area of the control
+		bool isInside(int x, int y)
+		{
+			int cx = X();
+			int cy = Y();
+			if ( lwpp::inRange(x, cx, cx + W()) || !lwpp::inRange(y, cy, cy + H()) ) return true;
+			return false;
+		}
+
+		// @}
 		//! Returns the LWPanelID of the panel
 		LWPanelID PanelID()
 		{
@@ -596,6 +728,10 @@ namespace lwpp
 		 *  @param x Number of pixels to move the control horizontally
 		 *  @param y Number of pixels to move the control vertically */
 		void Move(int x, int y)	{	Set(x, CTL_X); Set(y, CTL_Y);	}
+		/*! Moves a control by the number of pixels indicated on x, and y.
+		*  @param x Number of pixels to move the control horizontally
+		*  @param y Number of pixels to move the control vertically */
+		void setPosition(int x, int y) { Set(x, CTL_X); Set(y, CTL_Y); }
 		/*! Moves a control to the right side of another control
 		 *  @param &ref reference to the original control used to position this control at is right side
 		 *  @param space Number of pixels to separate the control horizontally */
@@ -672,25 +808,24 @@ namespace lwpp
 		}
 		/*! Template version of the CON_SETEVENT macro.
 		 * Sets the PanelControlAdaptor<T>::cb_Event callback for the control events */
-		template <typename T> void SetEventCallback()
+		template <typename T, template <typename U> class F = GetPanelEventHandler> void SetEventCallback()
 		{
-			Set<void *>((void *)PanelControlAdaptor<T>::cb_Event, CTL_USEREVENT);
+			Set<void *>((void *)PanelControlAdaptor<T, F>::cb_Event, CTL_USEREVENT);
 		}
 		/*! Template version of the CON_SETUSERDRAW macro.
 		 * Sets the PanelControlAdaptor<T>::cb_Draw callback for the control draw */
-		template <typename T> void SetDrawCallback()
+		template <typename T, template <typename U> class F = GetPanelEventHandler> void SetDrawCallback()
 		{
-			Set<void *>((void *)PanelControlAdaptor<T>::cb_Draw, CTL_USERDRAW);
+			Set<void *>((void *)PanelControlAdaptor<T, F>::cb_Draw, CTL_USERDRAW);
 		}
-    void initMultiListBox()
-    {
-      initListBox();
-    }
-    void initListBox()
-    {
-      SetUserData(control);
-    }
-
+		void initMultiListBox()
+		{
+			initListBox();
+		}
+		void initListBox()
+		{
+			SetUserData(control);
+		}
 	};
 
 	/*! @class LWPanelControlCallBacks panel.h <lwpp/panel.h>
@@ -702,11 +837,11 @@ namespace lwpp
 		/*! Control Event Callback
 		 *  
 		 *  @param control reference to the control */
-		virtual void controlEvent(PanelControl& ) {;}
+		virtual void controlEvent(PanelControl control) {;}
 		/*! Control Draw Callback
 		 *  @param control reference to the control
 		 *  @param mode The draw mode of the control */
-		virtual void controlDraw(PanelControl& , DrMode ) {;}
+		virtual void controlDraw(PanelControl control, DrMode ) {;}
 	};
 
 	/*! @class LWPanelListCallBacks panel.h <lwpp/panel.h>
@@ -719,20 +854,20 @@ namespace lwpp
 		/*!
 		 *  @param control reference to the control 
 		 */
-		virtual int controlCount(PanelControl& control) = 0;
+		virtual size_t controlCount(PanelControl control) = 0;
 		//! Return the name of the item showed on the ListBox
 		/*
 		 *  @param control reference to the control 
 		 *  @param index A 0 based integer used to find the name of the item 
 		 */
-		virtual const char* controlName(PanelControl& control, int index) = 0;
+		virtual const char* controlName(PanelControl control, int index) = 0;
 	};
 
 	 //! Callbacks for multi-line list boxes
 	 /*!  Inherit from this and override the virtual functions to handle MultiList Box control events 
-	  *  A MultiList Box is like a List Box, but divided by multiple colums.
-	  *   @ingroup LWPanels
-	  */
+		*  A MultiList Box is like a List Box, but divided by multiple colums.
+		*   @ingroup LWPanels
+		*/
 	class LWPanelMultiListControlCallBacks
 	{
 	public:
@@ -740,51 +875,17 @@ namespace lwpp
 		/*!
 		 * @param control reference to the control 
 		 * @param index A 0 based integer used to find the name of the item 
-     * @param column the column for the string to be returned
+		 * @param column the column for the string to be returned
 		 * @return the label for the indexed item
 		 */
-		virtual const char* controlMultiListName(PanelControl& control, int index, int column) = 0;
+		virtual const char* controlMultiListName(PanelControl control, int index, int column) = 0;
 		//! Return the width of each column in pixels, it can have up to 10 columns.
 		/*!
 		 * @param control reference to the control 
 		 * @param index A 0 based integer indicating the column number 
 		 * @return the width in pixels of the respective column
 		 */
-		virtual int controlMultiListColumnWidth(PanelControl& control, int index) = 0;
-	};
-
-	/*! @class PanelTreeNode panel.h <lwpp/panel.h>
-	 *  @ingroup LWPanels
-	 * Encapsulates the information needed by the treeview to display items
-	 * This class is the base class for any item displayed in a tree control
-	 * All items need to implement getName()
-	 * Items with children need to implement getChildCount() and getChild() as well. 
-	 */ 
-	class PanelTreeNode
-	{
-		int m_flags;
-	public:
-		PanelTreeNode() : m_flags(0) {;}
-		virtual ~PanelTreeNode() {;}
-		//! Returns the i'th child of the current item or 0 if there isn't one.
-		virtual PanelTreeNode *getChild(int ) {return 0;}
-		//! Returns the number of children of the current item
-		virtual int getChildCount() {return 0;}
-		//! Returns the name of the current item
-		virtual const char *getName() = 0;
-		//! Handles the flags that LWPanels uses to track the open/close state of a branch in the tree
-		virtual const char *getInfo(int *flags)
-		{
-			if (*flags)
-			{
-				m_flags = *flags;
-			}
-			else
-			{
-				*flags = m_flags;
-			}
-			return getName();
-		}
+		virtual int controlMultiListColumnWidth(PanelControl control, int index) = 0;
 	};
 
 	/*! @class LWPanelTreeControlCallBacks panel.h <lwpp/panel.h>
@@ -803,13 +904,13 @@ namespace lwpp
 		 * Returns a pointer to the root of the node
 		 *  @param control reference to the tree control 
 		 */
-		virtual PanelTreeNode* controlTreeGetRoot(lwpp::PanelControl& control) = 0;
+		virtual PanelTreeNode* controlTreeGetRoot(PanelControl control) = 0;
 		/*!
 		 * Returns a pointer to the i-th child of the node
 		 *  @param control reference to the control 
 		 *  @param node is a pointer returned by a previous call to this callback, or NULL for the root
 		 *  @param i An integer indicating the i-th child */
-		virtual PanelTreeNode* controlTreeChild(PanelControl& control, PanelTreeNode *node, int i)
+		virtual PanelTreeNode* controlTreeChild(PanelControl control, PanelTreeNode *node, int i)
 		{
 			if (node) return node->getChild(i);
 			return controlTreeGetRoot(control)->getChild(i);
@@ -818,7 +919,7 @@ namespace lwpp
 		 * Returns the number of child nodes for a given node.
 		 *  @param control reference to the control 
 		 *  @param node is a pointer returned by a previous call to this callback, or NULL for the root */
-		virtual int controlTreeCount(PanelControl& control, PanelTreeNode *node)
+		virtual int controlTreeCount(PanelControl control, PanelTreeNode *node)
 		{
 			if (node) return node->getChildCount();
 			return controlTreeGetRoot(control)->getChildCount();
@@ -830,7 +931,7 @@ namespace lwpp
 		 *  @param control reference to the control 
 		 *  @param node is a pointer returned by a previous call to this callback, or NULL for the root
 		 *	@param flags The flags of the node, indicate if it's collapsed or not */
-		virtual const char* controlTreeInfo(PanelControl& control, PanelTreeNode *node, int *flags)
+		virtual const char* controlTreeInfo(PanelControl control, PanelTreeNode *node, int *flags)
 		{
 			if (node) return node->getInfo(flags);
 			return controlTreeGetRoot(control)->getInfo(flags);
@@ -845,7 +946,7 @@ namespace lwpp
 		 *  @param node is a pointer to the moved node
 		 *  @param parent is a pointer to the parent node
 		 *  @param i An integer indicating the i-th child */
-		virtual void controlTreeMove(PanelControl& , PanelTreeNode *, PanelTreeNode *, int ) {;}
+		virtual void controlTreeMove(PanelControl , PanelTreeNode *, PanelTreeNode *, int ) {;}
 	};
 
 	/*! @class LWPanel panel.h <lwpp/panel.h>
@@ -859,30 +960,30 @@ namespace lwpp
 	private:
 		LWPanelID id; //!< ID of the panel
 		bool close_on_destroy; //!< bool value to indicate how to deal with the panel when it's destroyed
-		std::string title; //!< Title of the panel
+		std::string mTitle; //!< Title of the panel
 	protected:
 		//! Get a panel attribute
-    /*
+		/*
 		 * @param tag One of the pTag defined in lwpanel.h (line 175).
 		 * @param *data is the panel attribute cast as a void *
-     */
-    void get (pTag tag, void *data) const	{	globPtr->get(id, tag, data);}
+		 */
+		void get (pTag tag, void *data) const	{	globPtr->get(id, tag, data);}
 
 		//! Set a panel attributes
-    /*!
+		/*!
 		 * @param tag One of the pTag defined in lwpanel.h (line 175).
 		 * @param *data is the panel attribute cast as a void *
-     */
-    void set (pTag tag, void *data)	{	globPtr->set(id, tag, data);}
+		 */
+		void set (pTag tag, void *data)	{	globPtr->set(id, tag, data);}
 
-    //! Add a control to the panel
+		//! Add a control to the panel
 		/*!
-     * It must be called after create the panel
+		 * It must be called after create the panel
 		 * but before opening it. The control is positioned below the previous created
 		 * one. The order of creation of the controls affect it's drawing order.
 		 * The control can be moved after create it. 
 		 * The panel will change it's size automatically to fit all the controls.
-     *
+		 *
 		 * @param *type pointer to a string indicating the type of control.
 		 * @param *desc a pointer to a LWPanControlDesc structure
 		 * @param *label a pointer to a string with the label for the control
@@ -901,18 +1002,18 @@ namespace lwpp
 			;
 		}
 		//! Constructor defining a panel title as well
-    /*!
+		/*!
 		 * @param _title a std:string with the title for the panel
 		 */
 		LWPanel (const std::string _title)
 			: close_on_destroy(true),
-				title(_title)
+				mTitle(_title)
 		{
-      if (!available()) return; // in the case LWPanels aren't available - i.e. LWSN
-			id = globPtr->create(const_cast<char *>(title.c_str()), globPtr);
+			if (!available()) return; // in the case LWPanels aren't available - i.e. LWSN
+			id = globPtr->create(const_cast<char *>(mTitle.c_str()), globPtr);
 		}
 		//! Constructor from an existing LWPanel
-    /*!
+		/*!
 		 * @param pan_id The LWPanelID of an existing panel
 		 */
 		LWPanel (LWPanelID pan_id)
@@ -924,12 +1025,12 @@ namespace lwpp
 		//! Destructor
 		~LWPanel ()
 		{
-      if (!available()) return; // in the case LWPanels aren't available - i.e. LWSN
+			if (!available()) return; // in the case LWPanels aren't available - i.e. LWSN
 			if (close_on_destroy)
-      {
-        globPtr->destroy(id);
-        id = 0;
-      }
+			{
+				globPtr->destroy(id);
+				id = 0;
+			}
 		}
 		//! Copy constructor
 		LWPanel &operator=(const LWPanel &from)
@@ -938,27 +1039,30 @@ namespace lwpp
 			{
 				id = from.id;
 				close_on_destroy = false;
-				title = from.title;
+				mTitle = from.mTitle;
 			}
 			return *this;
 		}
 		//! Creates a panel
-    /*
+		/*
 		 * @param _title a std:string with the title for the panel
 		 * @param _close_on_destroy a bool value indicating if the panel is closed when the plugin is destroyed???
 		 */
 		void Create (const std::string _title, bool _close_on_destroy = true)
 		{
-			title = _title;
+			mTitle = _title;
 			close_on_destroy = _close_on_destroy;
-			id = globPtr->create(const_cast<char *>(title.c_str()), globPtr);
+			id = globPtr->create(const_cast<char *>(mTitle.c_str()), globPtr);
 		}
 
 		//! Returns the ID of the panel as a LWPanelID
 		LWPanelID GetID() const	{	return id; }
 
+		//! return if we have a valid panel
+        bool isValid() const { return id != nullptr; }
+
 		//! Opens and displays the panel
-    /*!
+		/*!
 		 * The panel must be created first, as it's controls created, sized, positioned and initialized as well.
 		 * @param flags an | combination of the PAN_FLAGS defined in lwpanel.h (line 300).
 		 */
@@ -975,8 +1079,8 @@ namespace lwpp
 			return globPtr->open(id, PANF_BLOCKING | PANF_CANCEL | PANF_FRAME | flags);
 		}
 		//! Close the panel
-		void Close() {globPtr->close(id);}
-    void ClearID() {id = 0;}
+		void Close() {if (isValid()) globPtr->close(id); }
+		void ClearID() {id = 0;}
 		//! Recreates the panel
 		void Recreate ()
 		{
@@ -986,7 +1090,7 @@ namespace lwpp
 				globPtr->destroy(id);
 				id = 0;
 			}
-			id = globPtr->create(const_cast<char *>(title.c_str()), globPtr);
+			id = globPtr->create(const_cast<char *>(mTitle.c_str()), globPtr);
 		}
 		/*! Recreates the panel with a new title
 		 * @param _title a std:string with the title for the panel */
@@ -1019,8 +1123,8 @@ namespace lwpp
 		LWControl *nextControl(LWControlID *ctl){ return globPtr->nextControl(id, ctl);}
 		/*! @name Drawing
 		 *  Drawing related functionality
-     */
-    //@{
+		 */
+		//@{
 		//! Returns the draw functions for the panel
 		LWDrawFuncs getDrawFuncs()
 		{
@@ -1033,8 +1137,8 @@ namespace lwpp
 		{
 			globPtr->drawFuncs->drawLine(id, color, x1, y1, x2, y2);
 		}
-    //! Draw a Border
-    void DrawBorder(int indent, int x,int y,int w,int h = 0) const
+		//! Draw a Border
+		void DrawBorder(int indent, int x,int y,int w,int h = 0) const
 		{
 				globPtr->drawFuncs->drawBorder(id, indent, x, y, w, h);
 		}
@@ -1054,7 +1158,7 @@ namespace lwpp
 			DrawLine(LWP_BLACK, width-9, height-2, width-2,height-9 );
 			DrawLine(LWP_BLACK, width-5, height-2, width-2,height-5 );
 		}
-    //@}
+		//@}
 
 		//! Returns a pointer to the userdata
 		void *user_data() {return globPtr->user_data;}
@@ -1063,8 +1167,8 @@ namespace lwpp
 		GlobalFunc *globalFun() {return globPtr->globalFun;}
 		/*! @name Controls
 		 *  Controls that can be created with LWPanels
-     */
-    //@{
+		 */
+		//@{
 		//! Adds a series of mutually exclusive buttons
 		/*!
 		 * @image html panelchoiceh.jpg "A horizontal choice control"
@@ -1072,12 +1176,14 @@ namespace lwpp
 		 * @param *title The label for the control
 		 * @param **items Pointer to a NULL terminated array for the options. i.e: static char *choices[] = { "One", "Two", "Three", NULL };
 		 * @param orientation The orientation for the control
-         * @return a pointer to the created LWControl
+		 * @return a pointer to the created LWControl
 		 *
 		 *  How to add a AddChoice
-			static char *choices[] = { "One", "Two", "Three", NULL };
-			control = Panel.AddChoice("PopUp", choices, true);
-		*/
+		@code
+		 static char *choices[] = { "One", "Two", "Three", NULL };
+		 control = Panel.AddChoice("PopUp", choices, true);
+		 @endcode
+		 */
 		LWControl *AddChoice (const char *title, const char **items, bool orientation)
 		{
 			LWPanControlDesc desc;
@@ -1091,8 +1197,10 @@ namespace lwpp
 		 *  @image html panelpopupc.jpg "A closed pop up"
 		 *  @image html panelpopupo.jpg "The choices when the popup is open"
 		 *  How to add a AddPopUp
+		 @code
 			static char *choices[] = { "One", "Two", "Three", NULL };
 			control = Panel.AddPopUp("PopUp", choices, 50);
+			@endcode
 		 *  @param *title The label for the control
 		 *  @param **items Pointer to a NULL terminated array for the options. 
 		 *  @param orientation The orientation for the control
@@ -1171,7 +1279,7 @@ namespace lwpp
 		}
 		//! Adds a pop up filled up with items present on the scene
 		/*!
-  		 * @image html paneladditem.jpg "The different popups with their options open"
+			 * @image html paneladditem.jpg "The different popups with their options open"
 		 *  @param *title The label for the control
 		 *  @param type The type of items to be listed. Defined on lwrender.h (line 22)
 		 *  @param width The width of the control in pixels
@@ -1219,9 +1327,9 @@ namespace lwpp
 			desc.type=LWT_INTEGER;
 			if (width != 0)
 			{
-			  desc.type=LWT_AREA;
-			  desc.area.width=width;
-			  desc.area.height=0;
+				desc.type=LWT_AREA;
+				desc.area.width=width;
+				desc.area.height=0;
 			}
 			return addControl("ButtonControl", &desc, title);
 		}
@@ -1264,8 +1372,7 @@ namespace lwpp
 		 *  @param *title The label for the control
 		 *  @param width The width of the control in pixels */
 		LWControl *AddInteger (const char *title, int width = 0)
-		{
-			width;
+		{			
 			LWPanControlDesc desc;
 			desc.type= LWT_INTEGER;
 			return addControl("NumControl", &desc, title);
@@ -1279,7 +1386,6 @@ namespace lwpp
 		 *  @param width The width of the control in pixels */
 		LWControl *AddIntegerInfo (const char *title, int width = 0)
 		{
-			width;
 			LWPanControlDesc desc;
 			desc.type= LWT_INTEGER;
 			return addControl("NumInfoControl", &desc, title);
@@ -1545,7 +1651,7 @@ namespace lwpp
 		 *  @param *title The label for the control
 		 *  @param width The width in pixels of the control
 		 *  @param height The height in pixels of the control
-     */
+		 */
 		LWControl *AddCanvas (const char *title, int width, int height)	{return AddArea(title, width, height, "CanvasControl");}
 		/*! Adds a drag button (mini slider) WITHOUT an edit field.
 		 *  @todo This control doesn't resize. So width and height are not neccesary
@@ -1590,6 +1696,7 @@ namespace lwpp
 		 *  @param width The width in pixels of the control
 		 *  @param height The height in pixels of the control */
 		LWControl *AddBorder (const char *title, int width, int height){return AddArea(title, width, height, "BorderControl");}
+		LWControl *AddBorder(int width, int height) { return AddArea(0, width, height, "BorderControl"); }
 		/*! Adds a sized tree with the channels present on the scene.
 		 *  @ingroup LWPanelControls
 		 *  @image html pannelchannels.jpg "A channels tree of 125x300 pixels."
@@ -1673,7 +1780,7 @@ namespace lwpp
 		 *  @param (*count) Pointer to it's own count function. 
 		 *  @param *(*name) Pointer to it's own name function.
 		*/
-		LWControl *AddCustomPopup (const char *title, int width, int (*count)(void *), char *(*name)(void *, int))
+		LWControl *AddCustomPopup (const char *title, int width, int (*count)(void *), const char *(*name)(void *, int))
 		{
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
@@ -1714,8 +1821,8 @@ namespace lwpp
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
 			desc.popup.width=width;
-			desc.popup.nameFn=PanelControlAdaptor<T>::cb_Name;
-			desc.popup.countFn=PanelControlAdaptor<T>::cb_Count;
+			desc.popup.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.popup.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
 			PanelControl control = addControl("CustomPopupControl", &desc, title);
 			control.SetUserData(control.getControl());
 			return control.getControl();
@@ -1870,35 +1977,13 @@ namespace lwpp
 
 		/*! Adds a list of items with a scroll bar.
 		 *  @ingroup LWPanelControls
-		 *  @image html panellistbox.jpg "A List Box for 5 items. 150 pixels width."
-		 *  How to add a AddListbox
-		 *	@code
-			static char *choices[] = { "One", "Two", "Three", NULL };
-
-			static int lboxCount(void *);
-			static char * lboxName(void *data, int index);
-			
-			int yourclass::lboxCount(void *){	return 3; }
-			
-			char * yourclass::lboxName(void *data, int index)
-			{
-				if ( index >= 0 && index < 3 )
-					return choices[ index ];
-				else
-					return NULL;
-			}
-			
-			// On yourclass::Options()
-			control = Panel.AddListbox(std::string("List Box"), 150, &yourclass::lboxCount, &yourclass::lboxName, 5, 0);
-		 
-		 *	@endcode
 		 *  @param *title The label for the control as a std::string
 		 *  @param width The width in pixels of the control
 		 *  @param (*count) Pointer to it's own count function. 
 		 *  @param *(*name) Pointer to it's own name function.
 		 *  @param items Number of visible items. 
 		 *  @param topVisible The index of the item visible as the first item.  */
-		LWControl *AddListbox (const std::string &title, int width, int (*count)(void *), char *(*name)(void *, int), int items, int topVisible = 0)
+		LWControl *AddListbox (const std::string &title, int width, int (*count)(void *), const char *(*name)(void *, int), int items, int topVisible = 0)
 		{
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
@@ -1911,114 +1996,6 @@ namespace lwpp
 		}
 		/*! Adds a list of items with a scroll bar.
 		 *  @ingroup LWPanelControls
-		 *  @image html panellistboxt.jpg "A List Box for 5 items. 150 pixels width."
-		 *  How to add a AddListbox
-		 *	@code
-			// On your header(yourclass.h) file:
-
-			class yourclass: public lwpp::LWPanelMasterHandler,
-							 public lwpp::LWPanelControlCallBacks,
-			{
-			public:
-				// CALLBACKS
-				//! listBox count 
-				int controlCount(lwpp::PanelControl lwcontrol);
-
-				//! control events 
-				virtual void controlEvent(lwpp::PanelControl& lwcontrol);
-
-				//! listBox name 
-				const char * controlName(lwpp::PanelControl lwcontrol, int index);
-				
-
-				// Constructor & Destructor
-				yourclass (void *priv, void *context, LWError *err);
-				~yourclass ();
-			protected:
-				// The member for the List Box control
-				lwpp::PanelControl control;
-			};
-
-			// On your source (yourclass.cpp) file:
-			static char *choices[] = { "One", "Two", "Three", NULL };
-
-			//Constructor
-			yourclass::yourclass( void *priv, void *context, LWError *err) :
-				lwpp::LWPanelMasterHandler(priv, context, err),
-			{
-			}
-			// Destructor
-			yourclass::~yourclass(){ ; }
-
-			// CONTROL COUNT CALLBACK
-			int yourclass::controlCount(lwpp::PanelControl lwcontrol)
-			{ 
-				if (lwcontrol == control)
-				{
-					return 3;
-				}
-				return 0;
-			}
-			
-			// CONTROL NAME CALLBACK
-			const char * yourclass::controlName(lwpp::PanelControl lwcontrol, int index)
-			{
-				if (lwcontrol == control)
-				{
-					if ( index >= 0 && index < 3 )
-						return choices[ index ];
-					else
-						return NULL;
-				}
-				return "";
-			}
-			
-			// CONTROL EVENT CALLBACK
-			void yourclass::controlEvent(lwpp::PanelControl& lwcontrol)
-			{
-				// If it's the list box
-				if (lwcontrol == control)
-				{
-					// Do here what you want when the user clicks the control
-					....
-				}
-			}
-
-			// LWPANEL CREATION
-			LWError yourclass::Options ()
-			{
-				// Creates the panel with title
-				Panel.Create("Your Panel Title Here");
-
-				// ADD THE CONTROLS
-				control = Panel.AddListbox<yourclass>(std::string("List Box Templated"), 150, 5, 0);
-				
-				// SET THE CALLBACKS
-				control.SetEventCallback<yourclass>();
-				
-				// SET THE PANEL USER DATA
-				Panel.SetUserData(this);
-
-				// Opens a NON Modal Panel
-				Panel.Open(PANF_FRAME | PANF_NOBUTT | PANF_RESIZE);
-
-				// Opens a Modal Panel
-				// Panel.Open(PANF_FRAME | PANF_BLOCKING);
-
-				return AFUNC_OK;
-
-			}
-
-			ServerTagInfo yourclass_tags[] =
-			{
-				{ "Your Plugin Name", SRVTAG_USERNAME },
-				{ "Your Plugin Description", SRVTAG_DESCRIPTION },
-				{ NULL }
-			};
-
-			lwpp::LWPanelMasterAdaptor<yourclass, 4, 4, LWMAST_SCENE> Yourclass_Instance("Your Master Plugin Name", yourclass_tags);
-			
-		 *	@endcode
 		 *  @param *title The label for the control as a std::string
 		 *  @param width The width in pixels of the control
 		 *  @param items Number of visible items. 
@@ -2029,8 +2006,8 @@ namespace lwpp
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
 			desc.listbox.width=width;
-			desc.listbox.nameFn=PanelControlAdaptor<T>::cb_Name;
-			desc.listbox.countFn=PanelControlAdaptor<T>::cb_Count;
+			desc.listbox.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.listbox.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
 			desc.listbox.visItems=items;
 			desc.listbox.top = topVisible;
 			PanelControl control = addControl("ListBoxControl", &desc, title.c_str());
@@ -2043,8 +2020,8 @@ namespace lwpp
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
 			desc.listbox.width=width;
-			desc.listbox.nameFn=PanelControlAdaptor<T>::cb_Name;
-			desc.listbox.countFn=PanelControlAdaptor<T>::cb_Count;
+			desc.listbox.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.listbox.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
 			desc.listbox.visItems=items;
 			desc.listbox.top = topVisible;
 			control = addControl("ListBoxControl", &desc, title.c_str());
@@ -2056,8 +2033,8 @@ namespace lwpp
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
 			desc.listbox.width=width;
-			desc.listbox.nameFn=PanelControlAdaptor<T>::cb_Name;
-			desc.listbox.countFn=PanelControlAdaptor<T>::cb_Count;
+			desc.listbox.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.listbox.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
 			desc.listbox.visItems=items;
 			desc.listbox.top = topVisible;
 			control = addControl("ListBoxControl", &desc, 0);
@@ -2077,8 +2054,8 @@ namespace lwpp
 			LWPanControlDesc desc;
 			desc.type = LWT_POPUP;
 			desc.listbox.width=width;
-			desc.listbox.nameFn=PanelControlAdaptor<T>::cb_Name;
-			desc.listbox.countFn=PanelControlAdaptor<T>::cb_Count;
+			desc.listbox.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.listbox.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
 			desc.listbox.visItems=items;
 			desc.listbox.top = topVisible;
 			PanelControl control = addControl("ListBoxControl", &desc, 0);
@@ -2088,181 +2065,7 @@ namespace lwpp
 
 		/*! Adds a multi-column list of items with a scroll bar.
 		 *  @ingroup LWPanelControls
-		 *  @image html panelmultilistbox.jpg "A Multi List Box, 2 columns, for 5 items. 200 pixels width."
-		 *	@code
-			// On your header(yourclass.h) file:
 
-			class yourclass: public lwpp::LWPanelMasterHandler,
-							 public lwpp::LWPanelControlCallBacks,
-							 public lwpp::LWPanelMultiListControlCallBacks,
-			{
-			public:
-				// CALLBACKS
-				//! MultilistBox count 
-				static int mlboxCount(void *);
-
-				//! MultilistBox name 
-				static char * mlboxName(void *userdata, int index, int column);
-				
-				//! MultilistBox Column widths
-				static int mlboxColW(void *userdata, int colindex);
-
-				//! Control Count 
-				int yourclass::controlCount(lwpp::PanelControl lwcontrol);
-
-				//! Control Events 
-				virtual void controlEvent(lwpp::PanelControl& lwcontrol);
-
-				// Constructor & Destructor
-				yourclass (void *priv, void *context, LWError *err);
-				~yourclass ();
-			protected:
-				// The member for the Multi List Box control
-				lwpp::PanelControl control;
-			};
-
-			// On your source (yourclass.cpp) file:
-			// List of items for the control
-			static char *choices[] = { "One", "Two", "Three", NULL };
-			
-			// The checks of each item
-			static bool choicesState[] = { true, false, true, NULL };
-
-			//Constructor
-			yourclass::yourclass( void *priv, void *context, LWError *err) :
-				lwpp::LWPanelMasterHandler(priv, context, err),
-			{ ; }
-			// Destructor
-			yourclass::~yourclass(){ ; }
-
-			// CONTROL COUNT CALLBACK
-			int yourclass::controlCount(lwpp::PanelControl lwcontrol)
-			{ 
-				if (lwcontrol == control)
-				{
-				  return 3;
-				}
-				return 0;
-			}
-
-
-			// MULTILIST BOX COUNT CALLBACK
-			int yourclass::mlboxCount(void *)
-			{	
-				return 3; // The number of items
-			}
-						
-			// MULTILIST BOX NAME CALLBACK
-			char * yourclass::mlboxName(void *userdata, int index, int column)
-			{
-				// LW is asking for the column names
-				if (index == -1) 
-				{
-					switch (column)
-					{
-						case 0:	return "State"; break; // Title of the 1st column
-						case 1: return "Choices"; break; // Title of the 2nd column
-						default: return NULL; break;
-					}
-				}
-
-				// String used to return the check mark
-				static std::string ret;
-				ret.clear();
-
-				// LW is asking for the values
-				if ( index >= 0 && index < 3 )
-				{
-					// Check the column
-					switch (column)
-					{
-						case 0:	
-						{
-							if(choicesState[index])		
-							{	ret = "\03(i:MIMG_CHECKMARK)"; // The check symbol
-							} else
-							{
-								ret = "";
-							}
-							return (char *)ret.c_str(); 
-							break;
-							
-						}
-
-						case 1: return choices[ index ];break;
-
-						default:
-							return NULL;
-							break;
-					}
-				}
-				return (char *)ret.c_str();
-			}
-
-			// MULTILIST BOX COLUMN WIDTH CALLBACK
-			int yourclass::mlboxColW(void *userdata, int colindex)
-			{
-				// Return different widths depending of the colum index
-				switch (colindex)
-				{
-					case 0: return 35; // 15 pixels for the 1st column
-					case 1: return 165; // 185 pixels for the 2nd column
-					case 2: return 0; // Returning 0 for a column with indicates is the last one
-					default: return 0;
-				}
-			}
-
-			// CONTROL EVENT CALLBACK
-			void yourclass::controlEvent(lwpp::PanelControl& lwcontrol)
-			{
-				// If it's the multilist box
-				if (lwcontrol == control)
-				{
-					// Do here what you want when the user clicks the control
-					....
-				}
-			}
-
-			// LWPANEL CREATION
-			LWError yourclass::Options ()
-			{
-				// Creates the panel with title
-				Panel.Create("Your Panel Title Here");
-
-				// ADD THE CONTROLS
-				control = Panel.AddMultiListbox("Multi List Box", 200, 5, 0, &yourclass::mlboxCount, &yourclass::mlboxName,  &yourclass::mlboxColW);
-				
-				// SET THE CALLBACKS
-				control.SetEventCallback<yourclass>();
-				
-				// SET THE CONTROL USER DATA
-				control.SetUserData(this);
-				
-				// SET THE PANEL USER DATA
-				Panel.SetUserData(this);
-
-				// Opens a NON Modal Panel
-				Panel.Open(PANF_FRAME | PANF_NOBUTT | PANF_RESIZE);
-
-				// Opens a Modal Panel
-				// Panel.Open(PANF_FRAME | PANF_BLOCKING);
-
-				return AFUNC_OK;
-
-			}
-
-			ServerTagInfo yourclass_tags[] =
-			{
-				{ "Your Plugin Name", SRVTAG_USERNAME },
-				{ "Your Plugin Description", SRVTAG_DESCRIPTION },
-				{ NULL }
-			};
-
-			lwpp::LWPanelMasterAdaptor<yourclass, 4, 4, LWMAST_SCENE> Yourclass_Instance("Your Master Plugin Name", yourclass_tags);
-			
-		 *	@endcode
-		 *  How to add a AddMultiListbox
-		 *	control = Panel.AddMultiListbox("Multi List Box", 200, 5, 0, &yourclass::mlboxCount, &yourclass::mlboxName,  &yourclass::mlboxColW);
 		 *  @param *title The label for the control
 		 *  @param width The width in pixels of the control
 		 *  @param items Number of visible items. 
@@ -2273,7 +2076,7 @@ namespace lwpp
 		 */
 		LWControl *AddMultiListbox (const char *title, int width, int items, int topVisible,
 																int (*count)(void *),
-																char *(*name)(void *, int, int),
+																const char *(*name)(void *, int, int),
 																int (*colwidth)(void *, int i))
 		{
 			LWPanControlDesc desc;
@@ -2463,11 +2266,11 @@ namespace lwpp
 			desc.multiList.width=width;
 			desc.multiList.visItems=items;
 			desc.multiList.top=topVisible;			
-			desc.multiList.nameFn=PanelControlAdaptor<T>::cb_MultiListName;
-			desc.multiList.countFn=PanelControlAdaptor<T>::cb_Count;
-			desc.multiList.colWidth=PanelControlAdaptor<T>::cb_MultiListColumnWidth;
+			desc.multiList.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiListName;
+			desc.multiList.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
+			desc.multiList.colWidth=PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiListColumnWidth;
 			PanelControl control = addControl("MultiListBoxControl", &desc, title);
-      control.SetUserData(control.getControl());
+			control.SetUserData(control.getControl());
 			return control.getControl();
 		}
 
@@ -2479,13 +2282,12 @@ namespace lwpp
 			desc.multiList.width=width;
 			desc.multiList.visItems=items;
 			desc.multiList.top=topVisible;			
-			desc.multiList.nameFn=PanelControlAdaptor<T>::cb_MultiListName;
-			desc.multiList.countFn=PanelControlAdaptor<T>::cb_Count;
-			desc.multiList.colWidth=PanelControlAdaptor<T>::cb_MultiListColumnWidth;
+			desc.multiList.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiListName;
+			desc.multiList.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
+			desc.multiList.colWidth=PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiListColumnWidth;
 			control = addControl("MultiListBoxControl", &desc, title);
-      control.SetUserData(control.getControl());			
+			control.SetUserData(control.getControl());			
 		}
-
 
 		//! Adds a Tree Control
 		template<typename T>
@@ -2495,9 +2297,9 @@ namespace lwpp
 			desc.type = LWT_TREE;
 			desc.tree.width=width;
 			desc.tree.height=height;
-			desc.tree.infoFn=PanelControlAdaptor<T>::cb_TreeInfo;
-			desc.tree.countFn=PanelControlAdaptor<T>::cb_TreeCount;
-			desc.tree.leafFn=PanelControlAdaptor<T>::cb_TreeChild;
+			desc.tree.infoFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_TreeInfo;
+			desc.tree.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_TreeCount;
+			desc.tree.leafFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_TreeChild;
 			desc.tree.moveFn=0;
 			PanelControl control = addControl("TreeControl", &desc, title);
 			control.SetUserData(control.getControl());
@@ -2507,7 +2309,7 @@ namespace lwpp
 		LWControl *AddTree (const char *title, int width, int height,
 												int   (*count)(void *data, void *node),
 												void *(*leaf)(void *data, void *node, int i),
-												char *(*info)(void *data, void *node, int *nodeFlags),
+												const char *(*info)(void *data, void *node, int *nodeFlags),
 												void  (*move)(void *data, void *node, void *parentNode, int i) = 0
 											 )
 		{
@@ -2558,13 +2360,30 @@ namespace lwpp
 		int GetHeight() const {return GetInt(PAN_H);}
 		//! Set panel height in pixels
 		void SetHeight(int h){Set(h, PAN_H);}
+		//! Get panel width in pixels
+		int GetMinWidth() const { return GetInt(PAN_MIN_W); }
+		//! Set panel width in pixels
+		void SetMinWidth(int w) { Set(w, PAN_MIN_W); }
+		//! Get panel height in pixels
+		int GetMinHeight() const { return GetInt(PAN_MIN_H); }
+		//! Set panel height in pixels
+		void SetMinHeight(int h) { Set(h, PAN_MIN_H); }
+
+		//! Get panel width in pixels
+		int GetMaxWidth() const { return GetInt(PAN_MAX_W); }
+		//! Set panel width in pixels
+		void SetMaxWidth(int w) { Set(w, PAN_MAX_W); }
+		//! Get panel height in pixels
+		int GetMaxHeight() const { return GetInt(PAN_MAX_H); }
+		//! Set panel height in pixels
+		void SetMaxHeight(int h) { Set(h, PAN_MAX_H); }
 		//! Get the panel qualifier keys 
-		int GetQualifiers(){return GetInt(PAN_QUALIFIERS);}
+		int GetQualifiers() const {return GetInt(PAN_QUALIFIERS);}
 		//! Set the panel user data
 		void SetUserData (void *d){set(PAN_USERDATA, d);}
-    //! Bring the panel to the front
-    void ToFront() {Set(1, PAN_TO_FRONT);}
-    void SetTitle(std::string &s) {Set(const_cast<char*>(s.c_str()), PAN_TITLE);}
+		//! Bring the panel to the front
+		void ToFront() {Set(1, PAN_TO_FRONT);}
+		void SetTitle(std::string s) {Set(const_cast<char*>(s.c_str()), PAN_TITLE);}
 		//! Get the panel user data
 		void *GetUserData ()
 		{
@@ -2580,6 +2399,9 @@ namespace lwpp
 		void SetUserClose (LWPanHook d) {set(PAN_USERCLOSE, reinterpret_cast<void*>(d));}
 		void SetUserMouseMove (LWPanMouseHook d) {set(PAN_MOUSEMOVE, reinterpret_cast<void*>(d));}
 		void SetUserMouseButton (LWPanMouseHook d) {set(PAN_MOUSEBUTTON, reinterpret_cast<void*>(d));}
+		void SetUserMousewheel(LWPanMouseHook d) { set(PAN_MOUSEWHEEL, reinterpret_cast<void*>(d)); }
+		void SetUserResize(LWPanResizeHook d) { set(PAN_USERRESIZE, reinterpret_cast<void*>(d)); }
+		void SetConfigTag(unsigned int tag) { Set(tag, PAN_CONFIGTAG); }
 
 		template <typename T>
 		void SetCallbacks(T *host)
@@ -2593,6 +2415,8 @@ namespace lwpp
 			SetUserClose(cb_PanClose<T>);
 			SetUserKeys(cb_PanKeyDown<T>);
 			SetUserKeyUp(cb_PanKeyUp<T>);
+			SetUserResize(cb_PanResize<T>);
+			SetUserMousewheel(cb_PanMousewheel<T>);
 		}
 
 		// static callbacks
@@ -2625,15 +2449,17 @@ namespace lwpp
 
 		//! Static callback for mouse move
 		template<typename T>	static void cb_PanMouseMove (LWPanelID id, void *userdata, int qualifiers, int x, int y);
-    
-    template<typename T>  static void cb_PanResize (LWPanelID id,  void *userdata, int w, int h);
+
+		template<typename T>	static void cb_PanMousewheel(LWPanelID id, void *userdata, int qualifiers, int x, int y);
+		
+		template<typename T>  static void cb_PanResize (LWPanelID id,  void *userdata, int w, int h);
 	};
 
 	//! @ingroup Globals
 	class LWRaster : public GlobalBase<LWRasterFuncs>
 	{
 		LWRasterID id;
-    int lastX, lastY;
+		int lastX, lastY;
 	public:
 		LWRaster(int w, int h, int flags = 0) : id(0)
 		{
@@ -2664,15 +2490,15 @@ namespace lwpp
 		{
 			globPtr->drawRGBPixel(id, r, g, b, x, y);
 		}
-    void moveTo(int x, int y)
-    {
-      lastX = x; lastY = y;
-    }
-    void drawTo(int c, int x, int y)
-    {
-      drawLine(c, lastX, lastY, x, y);
-      moveTo(x,y);
-    }
+		void moveTo(int x, int y)
+		{
+			lastX = x; lastY = y;
+		}
+		void drawTo(int c, int x, int y)
+		{
+			drawLine(c, lastX, lastY, x, y);
+			moveTo(x,y);
+		}
 		void drawLine(int c, int x1, int y1, int x2, int y2)
 		{
 			globPtr->drawLine(id, c, x1, y1, x2, y2);
@@ -2688,7 +2514,7 @@ namespace lwpp
 
 		void drawRoundBox(int c, int x, int y, int w, int h, int bevel = 2);
 		void drawBoxOutline(int c, int x, int y, int w, int h);
-    void fillRoundBox(int c, int x, int y, int w, int h, int bevel = 2);
+		void fillRoundBox(int c, int x, int y, int w, int h, int bevel = 2);
 
 		void eraseBox(int x, int y, int w, int h)
 		{
@@ -2742,133 +2568,15 @@ namespace lwpp
 			virtual void panelMouseButton(const LWPanel&, int , int, int) {;}
 			//! Called when the mouse has been moved
 			virtual void panelMouseMove(const LWPanel&, int , int, int) {;}
+			//! Called when a panel is resized
+			virtual void panelResize(const LWPanel&, int w, int h) { ; }
+			//! Called when the mouse wheel is rotated
+			virtual void panelMousewheel(const LWPanel&, int, int, int) { ; }
 	};
-
-	//! Helper function for callbacks
-	template<typename T>
-	T *getEventHandler(PanelControl &control)
-	{
-		if (control.isValid())
-		{
-			LWPanel panel(control.PanelID());
-			return static_cast<T *>(panel.GetUserData());
-		}
-		return 0;
-	}
-
-	// Callbacks for Panel controls
-	//! Event
-	template <typename T>
-	void PanelControlAdaptor<T>::cb_Event(LWControlID id, void *)
-	{
-		PanelControl control(id);
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			eventHandler->controlEvent(control);
-		}
-	}
-	//! Draw
-	template <typename T>
-	void PanelControlAdaptor<T>::cb_Draw(LWControlID id, void *, DrMode mode)
-	{
-		PanelControl control(id);
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			eventHandler->controlDraw(control, mode);
-		}
-	}
-	//! Popup Count
-	template <typename T>
-	int PanelControlAdaptor<T>::cb_Count(void *userdata)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return eventHandler->controlCount(control);
-		}
-		return 0;
-	}
-	//! Popup Name
-	template <typename T>
-	char *PanelControlAdaptor<T>::cb_Name(void *userdata, int index)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return const_cast<char *>(eventHandler->controlName(control, index));
-		}
-		return const_cast<char *>("");
-	}
-	//! Multilist name
-		template <typename T>
-	char *PanelControlAdaptor<T>::cb_MultiListName(void *userdata, int index, int column)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return const_cast<char *>(eventHandler->controlMultiListName(control, index, column));
-		}
-		return const_cast<char *>("");
-	}
-	//! Multilist column width
-	template <typename T>
-	int PanelControlAdaptor<T>::cb_MultiListColumnWidth(void *userdata, int index)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return eventHandler->controlMultiListColumnWidth(control, index);
-		}
-		return 0;
-	}
-	//! Tree child
-	template <typename T>
-	void *PanelControlAdaptor<T>::cb_TreeChild(void *userdata, void *node, int i)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return eventHandler->controlTreeChild(control, (PanelTreeNode *)node, i);
-		}
-		return 0;
-	}
-	//! Tree count
-	template <typename T>
-	int PanelControlAdaptor<T>::cb_TreeCount(void *userdata, void *node)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return eventHandler->controlTreeCount(control, (PanelTreeNode *)node);
-		}
-		return 0;
-	}
-	//! Tree info
-	template <typename T>
-	char *PanelControlAdaptor<T>::cb_TreeInfo(void *userdata, void *node, int *flags)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			return const_cast<char *>(eventHandler->controlTreeInfo(control, (PanelTreeNode *)node, flags));
-		}
-		return const_cast<char *>("");
-	}
-	//! Tree move
-	template <typename T>
-	void PanelControlAdaptor<T>::cb_TreeMove(void *userdata, void *node, void *parent, int i)
-	{
-		PanelControl control(static_cast<LWControlID>(userdata));
-		if (T *eventHandler = getEventHandler<T>(control))
-		{
-			eventHandler->controlTreeMove(control, (PanelTreeNode *)node, parent, i);
-		}
-	}
 
 	/*
 	 * Panel Callbacks
 	 */
-
 
 	//! Callback for panel activation
 	template<typename T>
@@ -2892,6 +2600,7 @@ namespace lwpp
 	template<typename T>
 	void LWPanel::cb_PanClose(LWPanelID id, void *userdata)
 	{
+		if ( !userdata ) return;
 		if (T *instance = static_cast<T *>(userdata))
 		{
 			instance->panelClose(LWPanel(id));
@@ -2917,7 +2626,7 @@ namespace lwpp
 			}
 			return 0; // The keypress has not been processed
 	}
-  
+	
 	//! Callback for panel mouse button
 	template<typename T>
 	void LWPanel::cb_PanMouseButton (LWPanelID id, void *userdata, int qualifiers, int x, int y)
@@ -2936,7 +2645,6 @@ namespace lwpp
 				instance->panelMouseMove(LWPanel(id), qualifiers, x, y);
 			}
 	}
-
 	//! Callback for panel resize
 	template<typename T>
 	void LWPanel::cb_PanResize (LWPanelID id,  void *userdata, int w, int h)
@@ -2946,63 +2654,16 @@ namespace lwpp
 				instance->panelResize(LWPanel(id), w, h);
 			}
 	}
-   
-
-	/*!
-	 * Different Pre-fab panels
-	 */
-	//! @ingroup LWPanels
-	//! An About panel
-	class AboutPanel : private LWPanel
+	//! Callback for mouse wheel
+	template<typename T>
+	void LWPanel::cb_PanMousewheel(LWPanelID id, void *userdata, int qualifiers, int x, int y)
 	{
-	private:
-		const unsigned char *image;
-		int width;
-		int height;
-    LWRaster mRaster;
-		PanelControl canvas;
-		void draw(LWControlID control, DrMode drawmode);
-	public:
-		AboutPanel(const std::string title, const char**message, const unsigned char *_image = 0, int w = 0, int h = 0);
-    ~AboutPanel();
-		void Open();
-		static void UserDraw( LWControlID control, void *userdata, DrMode drawmode );
-	};
+		if(T *instance = static_cast<T *>(userdata))
+		{
+			instance->panelMousewheel(LWPanel(id), qualifiers, x, y);
+		}
+	}
 
-	//! @ingroup LWPanels
-	//! A Log panel
-	class LogPanel : private LWPanel, protected LWPanelListCallBacks, public std::vector<std::string>
-	{
-		PanelControl listbox;
-		int w, h;
-	public:
-		virtual int controlCount(PanelControl&);
-		virtual const char* controlName(PanelControl&, int index);
-	public:
-		LogPanel(const std::string &title, int width = 600, int height = 20)
-			: LWPanel (title), w(width), h(height)
-		{;}
-		void Open(const std::string &name);
-	};
-
-  //! Used to extract information from an input qualifier
-  class Qualifier
-  {
-    int mQualifier;
-  public:
-    Qualifier(const int qual)
-      : mQualifier(qual)
-    {}
-    bool isRightClick() const {return RCLICK(mQualifier);}
-    bool isLeftClick() const {return LCLICK(mQualifier);}
-    bool isMiddleClick() const {return MCLICK(mQualifier);}
-    bool isMouseDown() const {return (mQualifier & MOUSE_DOWN) == MOUSE_DOWN;}
-    bool isCtrl() const {return (mQualifier & IQ_CTRL) == IQ_CTRL;}
-    bool isShift() const {return (mQualifier & IQ_SHIFT) == IQ_SHIFT;}
-    bool isAlt() const {return (mQualifier & IQ_ALT) == IQ_ALT;}
-    bool isConstrain() const {return (mQualifier & IQ_CONSTRAIN) == IQ_CONSTRAIN;}
-    bool isAdjust() const {return (mQualifier & IQ_ADJUST) == IQ_ADJUST;}
-  };
 
 } // namespace lwpp
 

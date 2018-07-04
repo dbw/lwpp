@@ -12,7 +12,8 @@ namespace lwpp
 	class CameraHandler : public InstanceHandler, public ItemHandler, public RenderHandler
 	{
 	public:
-		CameraHandler(void* g, void* context, LWError* err) : InstanceHandler(g,context,err)
+		CameraHandler(void* g, void* context, LWError* err)
+      : InstanceHandler (g, context, err, LWCAMERA_HCLASS)
 		{
 			;
 		}

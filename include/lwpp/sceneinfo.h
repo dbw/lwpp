@@ -95,6 +95,7 @@ namespace lwpp
     LWFrame frameStep() const {return globPtr->frameStep;}
 
     //! Returns the playback speed of the scene in frames / second.
+
     double framesPerSecond() const {return globPtr->framesPerSecond;}
 
     //! Returns the width of the image to render in pixels.
@@ -231,7 +232,7 @@ namespace lwpp
     // Returns a boolean value indicating if the area lights are double sided or not
     //bool dblSidedAreaLights(void) const {return globPtr->dblSidedAreaLights ? true : false;}
 
-#if (LW_SDK >= 96)
+
     double getCausticsIntensity() const  { return globPtr->causticsIntensity; }
     int getCausticsAccuracy() const { return globPtr->causticsAccuracy; }
     int getCausticsSoftness() const { return globPtr->causticsSoftness; }
@@ -249,13 +250,13 @@ namespace lwpp
     double      zmax;
     int         calculateallnormals;  
     */
-#endif
+
   };
 
   // Supporting functions
   //! Generate a world to screen transformation matrix
   /*!
-   * @param[in] id LWItem of the camera
+   * @param[in] mID LWItem of the camera
    * @param[in] time The time at which to generate the matrix
    * @return A 4x4 transformation matrix
    */

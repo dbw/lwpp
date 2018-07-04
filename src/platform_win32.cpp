@@ -51,7 +51,7 @@ namespace lwpp
 		}
 
 		return std::string(tempPath.begin(), tempPath.begin() + static_cast<std::size_t>(result));
-  }
+	}
 
 	struct OSFileRequest::Data
 	{
@@ -60,7 +60,7 @@ namespace lwpp
 
 //! OS specific file requester
 	OSFileRequest::OSFileRequest (const int reqType, const char *title,	const char *fileType, const char *ext,
-		                            const char *baseName,	const char *path,	const char *_baseDirType, int bufLen)
+																const char *baseName,	const char *path,	const char *_baseDirType, int bufLen)
 			:	type(reqType), m_data (new Data)
 	{
 		_baseDirType;

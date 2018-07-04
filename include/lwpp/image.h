@@ -23,7 +23,7 @@ namespace lwpp
 	{
 	private:
 		LWPixmapID pixmap;
-    bool doDestroy;
+		bool doDestroy;
 	public:
 		ImageUtil(LWPixmapID _pixmap = 0) 
 			: pixmap(_pixmap), doDestroy(false)
@@ -48,41 +48,41 @@ namespace lwpp
 		ImageUtil(const ImageUtil &iu)
 		{
 			pixmap = iu.pixmap;
-      doDestroy = iu.doDestroy;
+			doDestroy = iu.doDestroy;
 		}
 
 		ImageUtil &operator=(const ImageUtil &iu)
 		{
-      if (&iu != this)
-      {
-			  if ((pixmap != 0) && doDestroy) globPtr->destroy(pixmap);
-        pixmap = iu.pixmap;
-      }
-      return *this;
+			if (&iu != this)
+			{
+				if ((pixmap != 0) && doDestroy) globPtr->destroy(pixmap);
+				pixmap = iu.pixmap;
+			}
+			return *this;
 		}
 
-    //! Returns the specific stride size in bytes for a pixel type
-    static size_t GetStride(int type);
-    //! Returns the specific stride size in bytes for a pixel type
-    size_t GetStride()
-    {
-      int w,h,type;
-      getInfo(&w,&h,&type);
-      return GetStride(type);
-    }
-    void setDestroy(bool destroy = true)
-    {
-      doDestroy = destroy;
-    }
+		//! Returns the specific stride size in bytes for a pixel type
+		static size_t GetStride(int type);
+		//! Returns the specific stride size in bytes for a pixel type
+		size_t GetStride()
+		{
+			int w,h,type;
+			getInfo(&w,&h,&type);
+			return GetStride(type);
+		}
+		void setDestroy(bool destroy = true)
+		{
+			doDestroy = destroy;
+		}
 		//! check if we have a valid pixmap
 		bool isValid()
 		{
 			return pixmap != 0;
 		}
-    void create(int w, int h, LWImageType type) 
-    {
-      pixmap = globPtr->create(w, h, type);
-    }
+		void create(int w, int h, LWImageType type) 
+		{
+			pixmap = globPtr->create(w, h, type);
+		}
 		//! Set a pixel in the pixmap
 		/*!
 		 * @param x X coordinate
@@ -118,31 +118,31 @@ namespace lwpp
 			globPtr->getInfo(id, w, h, type);
 		}
 
-    LWPixmapID  resample(int w, int h, int mode )
-    {
-      return globPtr->resample(pixmap, w, h, mode);
-    }
+		LWPixmapID  resample(int w, int h, int mode )
+		{
+			return globPtr->resample(pixmap, w, h, mode);
+		}
 
-    void setPixelTyped(int x, int y, int type, void *pix )
-    {
-      globPtr->setPixelTyped(pixmap, x, y, type, pix);
-    }
-    void getPixelTyped ( int x, int y, int type, void *pix )
-    {
-      globPtr->getPixelTyped(pixmap, x, y, type, pix);
-    }
-    int  getIndex8Map( LWPixelRGB24 *map )
-    {
-      return globPtr->getIndex8Map(pixmap, map);
-    }
-    int  getAttr ( LWImageParam tag, void* data )
-    {
-      return globPtr->getAttr(pixmap, tag, data);
-    }
-    int  getMakerNote ( LWMakerNote tag, void* data )
-    {
-      return globPtr->getMakerNote(pixmap, tag, data);
-    }
+		void setPixelTyped(int x, int y, int type, void *pix )
+		{
+			globPtr->setPixelTyped(pixmap, x, y, type, pix);
+		}
+		void getPixelTyped ( int x, int y, int type, void *pix )
+		{
+			globPtr->getPixelTyped(pixmap, x, y, type, pix);
+		}
+		int  getIndex8Map( LWPixelRGB24 *map )
+		{
+			return globPtr->getIndex8Map(pixmap, map);
+		}
+		int  getAttr ( LWImageParam tag, void* data )
+		{
+			return globPtr->getAttr(pixmap, tag, data);
+		}
+		int  getMakerNote ( LWMakerNote tag, void* data )
+		{
+			return globPtr->getMakerNote(pixmap, tag, data);
+		}
 		//! Save the current pixmap
 		void save(int saver, const std::string name)
 		{
@@ -191,6 +191,7 @@ namespace lwpp
 	{
 	private:
 		LWImageID id;
+		bool mKeepAspect = false;
 	public:
 		virtual const char *popName(int n);
 
@@ -198,15 +199,16 @@ namespace lwpp
 
 		Image(LWImageID _id = 0) : id(_id) {;}
 
-    Image &operator= (const Image &from)
-    {
-      if (this != &from)
-      {
-        id = from.id;
-      }
-      return *this;
-    }
-
+		Image &operator= (const Image &from)
+		{
+			if (this != &from)
+			{
+				id = from.id;
+			}
+			return *this;
+		}
+		//! Use the image aspect ratio when drawing a xpanel preview. Fit to view otherwise 
+		void PreviewKeepAspect(const bool keep = true) { mKeepAspect = keep; }
 		void SetID(LWImageID _id) {id = _id;}
 		LWImageID getID() const {return id;}
 		//! Get the value returned from a pop-up 
@@ -221,10 +223,10 @@ namespace lwpp
 		void load(const char *filename) {id = globPtr->load(filename);}
 		const char *name() const {return globPtr->name(id);}
 		const char *filename(LWFrame frame = 0) const {return globPtr->filename(id, frame);}
-    bool replace (const std::string &newFile)
-    {
-      return globPtr->replace(id, newFile.c_str()) != 0;
-    }
+		bool replace (const std::string &newFile)
+		{
+			return globPtr->replace(id, newFile.c_str()) != 0;
+		}
 
 		LWImageID getNumImage(int n);
 
@@ -240,6 +242,10 @@ namespace lwpp
 		}
 		
 		void size (int &w, int &h) const 
+		{
+			globPtr->size(id, &w, &h);
+		}
+		void GetSize(int &w, int &h) const
 		{
 			globPtr->size(id, &w, &h);
 		}
@@ -266,27 +272,27 @@ namespace lwpp
 		{
 			globPtr->RGB(id, x, y, val);
 		}
-    void needAA ()
-    {
-      if (id) globPtr->needAA(id);
-    }
+		void needAA ()
+		{
+			if (id) globPtr->needAA(id);
+		}
 
-    void  GetRGBSpot (double x, double y, double spotSize, bool blend, double rgb[3])
-    {
-      if (id) globPtr->RGBSpot(id, x, y, spotSize, blend ? 1 : 0, rgb);
-    }
+		void GetRGBSpot (double x, double y, double spotSize, bool blend, double rgb[3])
+		{
+			if (id) globPtr->RGBSpot(id, x, y, spotSize, blend ? 1 : 0, rgb);
+		}
 
-    double  GetAlphaSpot (double x, double y, double spotSize, bool blend)
-    {
-      if (id) return globPtr->alphaSpot(id, x, y, spotSize, blend ? 1 : 0);
-      return 0.0;
-    }
+		double GetAlphaSpot (double x, double y, double spotSize, bool blend)
+		{
+			if (id) return globPtr->alphaSpot(id, x, y, spotSize, blend ? 1 : 0);
+			return 0.0;
+		}
 
-    double  GetLumaSpot (double x, double y, double spotSize, bool blend)
-    {
-      if (id) return globPtr->lumaSpot(id, x, y, spotSize, blend ? 1 : 0);
-      return 0.0;
-    }
+		double GetLumaSpot (double x, double y, double spotSize, bool blend)
+		{
+			if (id) return globPtr->lumaSpot(id, x, y, spotSize, blend ? 1 : 0);
+			return 0.0;
+		}
 
 		LWBufferValue alpha (int x, int y) const 
 		{
@@ -298,10 +304,10 @@ namespace lwpp
 			return globPtr->luma(id, x, y);
 		}
 
-    LWPixmapID evaluate (LWTime t)
-    {
-      return globPtr->evaluate(id, t);
-    }
+		LWPixmapID evaluate (LWTime t)
+		{
+			return globPtr->evaluate(id, t);
+		}
 
 		virtual LWError Load(const LoadState &ls )
 		{
@@ -316,18 +322,23 @@ namespace lwpp
 			globPtr->sceneSave(ss.getState(), id);
 			return err;
 		}
+		//! 
+		static void DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h);
+		//! Draws the image into an XPanel control
+		void drawXpanel(LWXPDrAreaID reg, int w, int h);
+
 	};
-  
-  #define IMAGECHANGE_COMRING "lwppImageChange"
-  
-  // register a comRing for image changes
-  /*
-   * The Comring is called "lwppImageChange".
-   * The eventCode is an image change eventCode.
-   * The data payload is the imageID.
-   */
-  void RegisterImageChangeComRing();
-  // unregister the Comring
-  void UnregisterImageChangeComRing();
+	
+	#define IMAGECHANGE_COMRING "lwppImageChange"
+	
+	// register a comRing for image changes
+	/*
+	 * The Comring is called "lwppImageChange".
+	 * The eventCode is an image change eventCode.
+	 * The data payload is the imageID.
+	 */
+	void RegisterImageChangeComRing();
+	// unregister the Comring
+	void UnregisterImageChangeComRing();
 }
 #endif // LWPP_IMAGE_H

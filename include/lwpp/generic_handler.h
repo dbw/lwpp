@@ -47,11 +47,9 @@ namespace lwpp
 			int index = ii.findServer(type, name, id);
 			if (index == 0)
 			{
-				std::ostringstream cmd;
-				cmd << "ApplyServer " << type << " " << name;
-				evaluate(cmd.str());
-			}
-			index = ii.findServer(type, name, id);
+				addServer(type, name);
+				index = ii.findServer(type, name, id);
+			}			
 			std::ostringstream cmd;
 			cmd << "EditServer " << type << " " << index;
 			evaluate(cmd.str());

@@ -152,7 +152,7 @@ namespace lwpp
 		return -1;
 	}
 
-	/*!
+		/*!
 	 * Count all LW Items in a scene
 	 */
 	int ItemInfo::CountItems(LWItemType type)
@@ -174,6 +174,19 @@ namespace lwpp
 		return new LWItem();
 	}
 
+	int ItemInfo::countServer(const char *type, const char *name, LWItemID id)
+	{
+		int index = 1;
+		int count = 0;
+		while (const char *srv = server(id, type, index))
+		{
+			if (strcmp(srv, name) == 0) ++count;
+			index++;
+		}
+		return count;
+	}
+
+
 	int ItemInfo::findServer(const char *type, const char *name, LWItemID id)
 	{
 		int index = 1;
@@ -183,6 +196,36 @@ namespace lwpp
 			index++;
 		}
 		return 0;
+	}
+
+	void ItemInfo::editServer(const char *type, const char *name, LWItemID id)
+	{
+		int index = findServer(type, name, id);
+		if (index == 0)
+		{
+			addUniqueServer(type, name, id);
+			index = findServer(type, name, id);
+		}
+		std::ostringstream cmd;
+		cmd << "EditServer " << type << " " << index;
+		lwpp::SendCommand(cmd.str());
+	}
+
+	void ItemInfo::addUniqueServer(const char *type, const char *name, LWItemID id)
+	{
+		if (findServer(type, name, id) > 0) return;
+		std::ostringstream cmd;
+		cmd << "ApplyServer " << type << " " << name;
+		lwpp::SendCommand(cmd.str());
+	}
+
+	void ItemInfo::removeServer(const char *type, const char *name, LWItemID id)
+	{
+		auto idx = findServer(type, name, id);
+		if (idx == 0) return;
+		std::ostringstream cmd;
+		cmd << "RemoveServer " << type << " " << idx;
+		lwpp::SendCommand(cmd.str());
 	}
 
 	/** LWItemCallback **/
@@ -238,9 +281,9 @@ namespace lwpp
 	/*!
 	 * Loading an item is safe in Modeler as well.
 	 * In Layout, lwpp will first try to find an item with a matching name. If that fails
-	 * it will use the id that was stored to reference the item.
+	 * it will use the mID that was stored to reference the item.
 	 *
-	 * In Modeler, lwpp will just store the item name and id and the use that for the next save.
+	 * In Modeler, lwpp will just store the item name and mID and the use that for the next save.
 	 */
 	LWError LWItem::Load(const LoadState &ls )
 	{
@@ -255,7 +298,7 @@ namespace lwpp
 					break;
 				case IO_ITID: //! - Item ID
 						ls.read(l);
-						mId = (LWItemID) l;
+						mId = INT2LWITEMID(l);
 					break;
 				case IO_ITTY: //! - Item type
 						ls.read(l);
@@ -270,7 +313,7 @@ namespace lwpp
 		if (!lwpp::LightWave::isModeler())
 		{
 			LWItemID _id = mItemInfo.FindItemID(m_itemName, mType); // find matching item if possible
-			if (_id != LWITEM_NULL) mId = _id; // only use the loaded id if the object has not been found
+			if (_id != LWITEM_NULL) mId = _id; // only use the loaded mID if the object has not been found
 		}
 		return err;
 	}
@@ -364,13 +407,13 @@ namespace lwpp
 	}
 	void LWItemTracker::trackItem (LWItem &item)
 	{
-		if (&item == 0) return;
+		if (!item.exists()) return;
 		mTrackedItems.push_back(&item);
 	}
 
 	void LWItemTracker::unTrackItem (LWItem &item)
 	{
-		if (&item == 0) return;
+		if (!item.exists()) return;
 		std::vector<LWItem *>::iterator iter = find(mTrackedItems.begin(), mTrackedItems.end(), &item);
 		if (iter != mTrackedItems.end())
 		{

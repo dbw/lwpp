@@ -42,6 +42,9 @@
   #define new DEBUG_NEW
 #endif
 
+#ifndef DIRENT_H
+#define DIRENT_H
+
 /******************************************************************************
 * MODULE     : dirent.h
 * DESCRIPTION: Windows version of POSIX dirent.h
@@ -77,6 +80,7 @@ int            readdir_r(DIR *, struct dirent *, struct dirent **);
 void           rewinddir(DIR *);
 void           seekdir(DIR *, long int);
 long int       telldir(DIR *);
+#endif DIRENT_H
 
 extern const char *strptime(const char *p, const char *fmt, struct tm *dt);
 

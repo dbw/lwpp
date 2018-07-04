@@ -325,23 +325,6 @@ namespace lwpp
 		{
 			rc = ls->readFP(ls->readData, &f, 1);
 		}
-
-#if LW_SDK >= 95
-						
-		double readDouble() const
-		{
-			double d;
-			rc = ls->readDP(ls->readData, &d, 1);
-			return d;
-		}
-
-		void read(double *d, int length = 1) const
-		{
-			rc = ls->readDP(ls->readData, d, length);
-		}
-#endif
-
-
 		void read(std::string &str) const
 		{
 			char buffer[1024];

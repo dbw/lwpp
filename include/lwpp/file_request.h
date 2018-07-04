@@ -335,6 +335,10 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 	};
 
 	std::string stripExtension(const char *source);
+	inline void stripExtension(std::string &source)
+	{
+		source = stripExtension(source.c_str());
+	}
 
 	std::string trim(const std::string& s, const char *ws=" \t\r");
 

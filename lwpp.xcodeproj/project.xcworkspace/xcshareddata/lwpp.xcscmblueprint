@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2445cbd5-bded-6745-8e79-4a543d1c5e0d",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "2445cbd5-bded-6745-8e79-4a543d1c5e0d" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2445cbd5-bded-6745-8e79-4a543d1c5e0d" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3F100AAF-3083-437D-98A4-155170616152",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2445cbd5-bded-6745-8e79-4a543d1c5e0d" : "lwpp\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "lwpp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "lwpp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/dbw\/lwpp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2445cbd5-bded-6745-8e79-4a543d1c5e0d"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/hq.dbw.local:8443\/svn\/lwpp",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2445cbd5-bded-6745-8e79-4a543d1c5e0d"
+    }
+  ]
+}

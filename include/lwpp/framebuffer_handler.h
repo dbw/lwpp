@@ -37,7 +37,7 @@ namespace lwpp
 			return 0;
 		}
 
-		virtual void Pause ()	
+		virtual void Pause (const char *message)	
 		{
 			;
 		}
@@ -101,10 +101,10 @@ namespace lwpp
 			T* plugin = static_cast<T*>(inst);
 			return plugin->Write(R,G,B,alpha);
 		}
-		static void Pause (LWInstance inst)	
+		static void Pause (LWInstance inst, const char *message)	
 		{
 			T* plugin = static_cast<T*>(inst);
-			plugin->Pause();
+			plugin->Pause(message);
 		}
 		static LWPixmapID GetPixelMap (LWInstance inst)	
 		{

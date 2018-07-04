@@ -3,7 +3,6 @@
 
 namespace lwpp
 {
-
 	void SaveState::WriteItem(const LWBlockIdent &id, Storeable &object, bool leaf) const
 	{
 		Begin(id, leaf);

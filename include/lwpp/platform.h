@@ -37,11 +37,11 @@ __BIG_ENDIAN__ __LITTLE_ENDIAN__
 		#define LWPP_PLATFORM LWPP_OSX_UB
 		#define LWPP_PLATFORM_OSX_UB  
 		#if __ppc64__
-			#define LWPP_PLATFORM_NAME "OSX-PPC-64"
+			#define LWPP_PLATFORM_NAME "MacOS-PPC-64"
 		#elif __x86_64__
-			#define LWPP_PLATFORM_NAME "OSX-x86-64"
+			#define LWPP_PLATFORM_NAME "MacOS-x86_64"
 		#elif __ppc__
-			#define LWPP_PLATFORM_NAME "OSX-PPC"
+			#define LWPP_PLATFORM_NAME "MacOS-PPC"
 		#elif __i386__
 			#define LWPP_PLATFORM_NAME "OSX-x86"
 		#else

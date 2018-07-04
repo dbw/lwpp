@@ -27,7 +27,7 @@ void		(*ambient)      (LWTime, LWDVector color);
   public:
     //! Constructor
     /*!
-    * @param _item the LWItemID of the item to retrieve information from.
+    * @param item the LWItemID of the item to retrieve information from.
     */
     LWLight(LWItemID item = 0)
       : LWItem (item, LWI_LIGHT)

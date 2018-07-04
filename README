@@ -1,6 +1,6 @@
-# LightWrap++ V0.1
+# LightWrap++ 2018
 
-LightWrap++ (or lwpp for short) is a C++ wrapper for the SDK of LightWave 3D by Newtek.
+LightWrap++ (or lwpp for short) is a C++ wrapper for the SDK of LightWave 3D by Newtek - https://www.lightwave3d.com/
 
 lwpp was designed with the following goals in mind:
 
@@ -9,5 +9,6 @@ lwpp was designed with the following goals in mind:
 - The ability to quickly start writing a plugin, only adding code as needed
 - Use of the STL where appropriated (currently mostly strings and the odd vector/map)
 - Compatibility across a range of LW SDK versions (since commercial plugins usually need to be compatible for a longer time).
+- This version is explicitly designed for version 2018 of LightWave 3D
 
 Doxygen documentation is available here: http://dbw.github.com/lwpp/

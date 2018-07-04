@@ -85,7 +85,7 @@ namespace lwpp
 class DisplacementHandler : public InstanceHandler, public ItemHandler, public RenderHandler
 {
 	protected:
-		//! Stores the id of the object wich the plugin is applied to
+		//! Stores the mID of the object wich the plugin is applied to
 		LWItem Context;
 	public:
 	  DisplacementHandler(void *g, void *context, LWError *err) : InstanceHandler(g, context, err, LWDISPLACEMENT_HCLASS )
@@ -104,7 +104,7 @@ class DisplacementHandler : public InstanceHandler, public ItemHandler, public R
 /*!
  * @ingroup Adaptor
  */
-template <class T, int maxVersion, int minVersion>
+template <class T, int Version>
 class DisplacementAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>, public RenderAdaptor <T>
 {
 	public:
@@ -115,8 +115,7 @@ class DisplacementAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>, 
 		//! Set static callbacks for a LightWave ImageFilter
 		static int Activate (int version, GlobalFunc *global, LWInstance inst, void *serverData)
 		{
-			if ( version > maxVersion ) return AFUNC_BADVERSION;
-			if ( version < minVersion ) return AFUNC_BADVERSION;
+			if ( version != Version ) return AFUNC_BADVERSION;
 			try
 			{
 				UNUSED(serverData);
@@ -173,12 +172,12 @@ class DisplacementAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>, 
 //! @ingroup XPanelHandler
 IMPLEMENT_XPANELHANDLER(Displacement);
 //! @ingroup XPanelAdaptor
-IMPLEMENT_XPANELADAPTOR(Displacement, LWPP_DISPLACEMENT_VERSION, LWPP_DISPLACEMENT_VERSION );
+IMPLEMENT_XPANELADAPTOR(Displacement, LWDISPLACEMENT_VERSION);
 
 //! @ingroup LWPanelHandler
 IMPLEMENT_LWPANELHANDLER(Displacement);
 //! @ingroup LWPanelAdaptor
-IMPLEMENT_LWPANELADAPTOR(Displacement, LWPP_DISPLACEMENT_VERSION, LWPP_DISPLACEMENT_VERSION );
+IMPLEMENT_LWPANELADAPTOR(Displacement, LWDISPLACEMENT_VERSION);
 
 } // end namespace
 

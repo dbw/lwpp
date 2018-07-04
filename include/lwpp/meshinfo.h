@@ -81,7 +81,7 @@ namespace lwpp
 		LWPntID iterateMeshPnt(LWMeshIteratorID mid){ return (LWPntID)(mesh->iterateMesh(mesh, mid)); }
 		void resetMeshIterator(LWMeshIteratorID mid){ mesh->resetMeshIterator(mesh, mid); }
 
-		int scanPolys(MeshPolygonScan *scanner);
+		size_t scanPolys(MeshPolygonScan *scanner);
 		bool isValid(void) const {return (mesh != 0);}
 	};
 
@@ -129,7 +129,7 @@ namespace lwpp
 		//! Wrapper to prepare the virtual evaluate member function
 		/*!
 		 * Stores the polygon ID in the designated member variable and calls evaluate.
-		 * @param id LWPolID of the currenty polygon, stored in the polygon member variable
+		 * @param mID LWPolID of the currenty polygon, stored in the polygon member variable
 		 * @return true to abort the scan
 		 */
 		bool scanFunc(LWPolID id) {polygon = id; return evaluate();}

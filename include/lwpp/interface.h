@@ -492,9 +492,9 @@ namespace lwpp
 //			bool showInfo() {return (alertLevel() <= LWALERT_BEGINNER);}
 //			bool showWarning() {return (alertLevel() <= LWALERT_INTERMEDIATE);}
 //			bool showError() {return (alertLevel() <= LWALERT_EXPERT);}
-//			int  itemColor  (LWItemID id)
+//			int  itemColor  (LWItemID mID)
 //			{
-//				return globPtr->itemColor(id);
+//				return globPtr->itemColor(mID);
 //			}
 //	};
 //

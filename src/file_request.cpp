@@ -16,21 +16,21 @@
 namespace lwpp
 {
 
-  typedef pathList::iterator pathIterator;
-  typedef pathList::const_iterator pathCIterator;
+	typedef pathList::iterator pathIterator;
+	typedef pathList::const_iterator pathCIterator;
 
 	void trimTrail(std::string &path)
 	{
 		
 		while (!path.empty()) 
-        /*
-         &&
-         (
-         path[path.size() - 1] == '\\' ||
-         path[path.size() - 1] == '/' ||
-         path[path.size() - 1] == ':'
-         ))
-         */
+				/*
+				 &&
+				 (
+				 path[path.size() - 1] == '\\' ||
+				 path[path.size() - 1] == '/' ||
+				 path[path.size() - 1] == ':'
+				 ))
+				 */
 		{ 
 			std::string::size_type i = path.find_last_of(fSeps);
 			if (i != path.size() - 1) return;
@@ -50,7 +50,7 @@ namespace lwpp
 		{
 			temp = const_cast<char *>(globPtr(dirType));
 		}
-        
+				
 		if (temp) 
 		{
 			return_dir += temp;
@@ -63,7 +63,7 @@ namespace lwpp
 		}
 		return "";
 	}
-    
+		
 	const char *DirInfo::stripPath(const char *fileName)
 	{
 		if (dirType == 0) return fileName;
@@ -73,31 +73,31 @@ namespace lwpp
 		if (fileName[l] == fSep) return (fileName + l + 1); // remove trailing slash if present
 		return fileName + l;
 	}
-    
+		
 	void FileName::buildFullName() 
 	{
 		//fullName.clear();
 		splitFileName();
 		fullName = "";
-        
+				
 		if (useBase) 
 		{
 			DirInfo di(baseDir);
 			fullName += di.GetDirectory();
 			trimTrail(fullName);
-      fullName += fSep;
+			fullName += fSep;
 			// fullName += fSep; di.Getdirectory always returns a proper file separator
 		}
 		if (!relativePath.empty())
 		{
 			//if(useBase) fullName += fSep;
 			fullName += relativePath;
-      fullName += fSep;
+			fullName += fSep;
 		}		
 		fullName += fileName;
 		valid = true;
 	}
-    
+		
 	std::string FileName::extractImageExtension(const char *source)
 	{
 		std::string src(source);
@@ -111,11 +111,10 @@ namespace lwpp
 		}
 		return ext;
 	}
-    
+		
 	std::string FileName::extractExtension(const char *source)
 	{
 		std::string src(source);
-		//std::string::iterator iter = src.find_last_of(".");
 		size_t pos = src.find_last_of(".");
 		if (pos != std::string::npos)
 		{
@@ -123,7 +122,7 @@ namespace lwpp
 		}
 		return std::string("");
 	}
-    
+		
 	/*!
 	 * Replace the file name extension
 	 * @param *ext new extension, including the "." - may be an empty string to remove the extension.
@@ -139,7 +138,7 @@ namespace lwpp
 			fileName.erase(i - 1, fileName.size() + 1);
 		}
 		fileName.append(ext);
-        
+				
 		i = fullName.find_last_of(".");
 		if (i != std::string::npos)
 		{
@@ -150,7 +149,7 @@ namespace lwpp
 		fullName.append(ext);
 		valid = false;
 	}
-    
+		
 	void FileName::stripNumberTrail()
 	{
 		std::string::size_type i = fileName.find_last_not_of("0123456789");
@@ -160,7 +159,7 @@ namespace lwpp
 			fileName.erase(i + 1);
 		}
 	}
-    
+		
 	std::string FileName::getFileName()
 	{
 		splitFileName();
@@ -179,7 +178,7 @@ namespace lwpp
 	{
 		splitFileName();
 		std::string fullPath = "";
-        
+				
 		if (useBase) 
 		{
 			DirInfo di(baseDir);
@@ -198,7 +197,7 @@ namespace lwpp
 #endif         
 		return fullPath;
 	}
-    
+		
 	void FileName::splitFileName()
 	{
 #ifdef _DEBUG		
@@ -211,7 +210,7 @@ namespace lwpp
 		// clear all paths
 		fileName = "";
 		relativePath = "";
-        
+				
 		// find last file separator
 		i = file.find_last_of(fSeps);
 		// extract the file name
@@ -229,7 +228,7 @@ namespace lwpp
 			fileName = file;
 			file.erase();
 		}
-        
+				
 		// first check if the content path is contained at the start of the full name
 #ifdef _DEBUG		
 		//std::hex(dout);
@@ -263,21 +262,21 @@ namespace lwpp
 			}
 		}
 		trimTrail(relativePath); // trailing file separator
-        
+				
 #ifdef _DEBUG
 		//dout << "FileNameSplit: " << fullName << "\n";
 		//dout << "basePath: " << di.GetDirectory() << (useBase ? " (used)\n" : " (not used)\n");
 		//dout << "relativePath: " << relativePath << "\n";
-    //dout << "fileName: " << fileName << "\n";
+		//dout << "fileName: " << fileName << "\n";
 #endif 
 	}
-    
+		
 	std::string FileName::getRelativeName()
 	{
 #ifdef _DEBUG
 		lwpp::dostream dout;        
 		dout << "getRelativeName (before): " << relName << "\n";
-    dout << "getRelativeName (Path): " << relativePath << "\n";
+		dout << "getRelativeName (Path): " << relativePath << "\n";
 		dout << "getRelativeName (filename): " << fileName << "\n";		
 #endif
 		relName.clear();
@@ -287,19 +286,19 @@ namespace lwpp
 			relName += fSep;
 		}
 		relName += fileName;
-        
+				
 #ifdef _DEBUG
 		dout << "getRelativeName: " << relName << "\n";
 #endif 
 		return relName;
 	}
-    
+		
 	const char *FileName::getRelativeNameC()
 	{
 		getRelativeName();
 		return relName.c_str();
 	}
-	  
+		
 	/*!
 	 * This function will check if the file actually exists and build the full name accordingly.
 	 * @param *relName a relative or absolute file name
@@ -313,13 +312,13 @@ namespace lwpp
 			setFullName(rel);
 			return true;
 		}
-        
+				
 		// build a file name assuming relName is relative
 		DirInfo di(baseDir);
 		std::string full;
 		full = di.GetDirectory();
 		full += fSep;
-        full += rel;
+				full += rel;
 		// attempt to open the file
 		if (Exists(full))
 		{
@@ -330,20 +329,20 @@ namespace lwpp
 		// all attempts failed
 		return false;
 	}
-    
+		
 	//! Read Instance data
 	LWError FileName::Load(const LoadState &ls )
 	{
 		LWError err = 0;
-		char relName[1024];
-		LWLOAD_STR(ls.getState(), relName, 1024);
+		char loadName[1024];
+		LWLOAD_STR(ls.getState(), loadName, 1024);
 #ifdef _DEBUG
 		lwpp::dostream dout;
-		dout << "FileName::Load: " << relName << "\n";
+		dout << "FileName::Load: " << loadName << "\n";
 #endif 
-		if (relName[0] != '\0') // we have a valid filename
+		if (loadName[0] != '\0') // we have a valid filename
 		{
-			if (!setRelativeName(relName))
+			if (!setRelativeName(loadName))
 			{
 #ifdef _DEBUG
 				dout << "FileName::Load: File not found" << getRelativeName() << "\n";
@@ -352,7 +351,7 @@ namespace lwpp
 		}
 		return err;
 	}
-    
+		
 	//! Write Instance data
 	LWError FileName::Save(const SaveState &ss )
 	{
@@ -364,40 +363,40 @@ namespace lwpp
 #endif 
 		return err;
 	}
-    
+		
 	bool FileName::Exists(const std::string &fileName)
 	{
 		/*
-         #ifdef _WIN32
-         struct _stat stat_buf;
-         return (_stat(name, &stat_buf) == 0);
-         #else
-         struct stat stat_buf;
-         return (stat(name, &stat_buf) == 0);
-         #endif
-         */
+				 #ifdef _WIN32
+				 struct _stat stat_buf;
+				 return (_stat(name, &stat_buf) == 0);
+				 #else
+				 struct stat stat_buf;
+				 return (stat(name, &stat_buf) == 0);
+				 #endif
+				 */
 		std::fstream fin;
 		fin.open(fileName.c_str(),std::ios::in);
 		bool rc = fin.is_open();
 		fin.close();
 		return rc;
 	}
-    
+		
 	/*
 	 * Directory
 	 */
-    
+		
 	Directory::~Directory()
 	{
 		if (directory) closedir(directory);
 		directory = 0;
 	}
 	Directory::Directory(const std::string name)
-    : directory (0),
-      entry(0)
+		: directory (0),
+			entry(0)
 	{
 		directory = opendir(name.c_str());
-#ifdef _DEBUG
+#ifdef _DEBUG_LWPP
 		lwpp::dostream dout;
 		dout << "Open directory: " << name << std::endl;
 #endif 						
@@ -406,18 +405,18 @@ namespace lwpp
 	{
 		return (directory != 0);
 	}
-    
+		
 	bool isDirectory(const std::string name)
 	{
 		Stat st(name);
 		return st.isDirectory();
 	}
-    
+		
 	const char *Directory::getEntry()
 	{
 		if (exists())
 		{
-			while ((entry = readdir (directory)))
+			while ((entry = readdir (directory)) != 0)
 			{
 				if (strcmp(entry->d_name, "..") && strcmp(entry->d_name, "." ) )
 				{
@@ -427,7 +426,7 @@ namespace lwpp
 		}
 		return 0;
 	}
-    
+		
 #if defined(LWPP_PLATFORM_OSX_CFM)
 	void makeAllDirectories(const char *path)	
 	{
@@ -441,7 +440,7 @@ namespace lwpp
 			{
 				if (root) 
 				{
-                    root = false; // skip root
+										root = false; // skip root
 				}
 				else
 				{
@@ -451,10 +450,10 @@ namespace lwpp
 			*q++ = *p++;
 			*q = '\0';
 		}
-        
+				
 	}
 	
-    
+		
 	std::string getTempPath()
 	{
 		std::string result;
@@ -476,16 +475,16 @@ namespace lwpp
 		//result.setPath(QString::fromUtf8(fsRepr));
 		CFRelease(dirURL);
 		return result;
-        
-    }
+				
+		}
 	
-    
-    //! OS specific file requester
-    
+		
+		//! OS specific file requester
+		
 	OSFileRequest::OSFileRequest (const int reqType, char *title,
-                                  const char *fileType, const char *ext, const char *baseName,
-                                  const char *path,	const char *_baseDirType, int bufLen)
-    :	type(reqType)
+																	const char *fileType, const char *ext, const char *baseName,
+																	const char *path,	const char *_baseDirType, int bufLen)
+		:	type(reqType)
 	{
 		status = NavGetDefaultDialogCreationOptions(&dialogOptions);
 		dialogOptions.modality = kWindowModalityAppModal;
@@ -505,7 +504,7 @@ namespace lwpp
 	{
 		NavDialogDispose(dialog);
 	}
-    
+		
 	bool OSFileRequest::Post(void)
 	{
 		status = NavDialogRun(dialog);
@@ -515,13 +514,13 @@ namespace lwpp
 		
 		return true;
 	}
-    
+		
 	const char *OSFileRequest::getFullName(void)
 	{
 		temp_path.clear();
 		FSRef fileAsFSRef;
 		status = AEGetNthPtr(&(replyRecord.selection), 1, typeFSRef,  NULL, NULL, &fileAsFSRef, sizeof(FSRef), NULL);
-        
+				
 		CFURLRef url = CFURLCreateFromFSRef(NULL, &fileAsFSRef);
 		if (url == NULL) return 0;
 		CFStringRef  hfs_path = NULL; 
@@ -542,15 +541,15 @@ namespace lwpp
 		CFRelease(hfs_path);
 		return temp_path.c_str();	
 	}
-    
+		
 #endif
-    
+		
 	std::string stripExtension(const char *source)
 	{
 		std::string src(source);
 		return src.substr(0, src.find_last_of("."));
 	}
-    
+		
 	std::string trim(const std::string& s, const char *ws)
 	{
 		if(s.length() == 0)
@@ -562,180 +561,180 @@ namespace lwpp
 		return std::string(s, b, e - b + 1);
 	}
 
-  /*
-   * Possible file paths:
-   *
-   * D:\classic\windows\path\and\file.ext
-   * result:
-   * - D:
-   * - classic
-   * - windows
-   * - path
-   * - and
+	/*
+	 * Possible file paths:
+	 *
+	 * D:\classic\windows\path\and\file.ext
+	 * result:
+	 * - D:
+	 * - classic
+	 * - windows
+	 * - path
+	 * - and
 
-   * \\UNC\based\path\and\file.ext
-   * result:
-   * - \
-   * - UNC
-   * - based
-   * - pathb
-   * - and
+	 * \\UNC\based\path\and\file.ext
+	 * result:
+	 * - \
+	 * - UNC
+	 * - based
+	 * - pathb
+	 * - and
 
-   * /Volume/On/OSX/and/file.ext
-   * result:
-   * - ""
-   * - Volume
-   * - On
-   * - OSX
-   * - and
-   */
-  pathList splitPath(std::string sourcePath)
-  {
+	 * /Volume/On/OSX/and/file.ext
+	 * result:
+	 * - ""
+	 * - Volume
+	 * - On
+	 * - OSX
+	 * - and
+	 */
+	pathList splitPath(std::string sourcePath)
+	{
 #ifdef _DEBUG		
 		//lwpp::dostream dout;
-    //dout << "splitPath (" << sourcePath << ");\n";
+		//dout << "splitPath (" << sourcePath << ");\n";
 #endif 
-    std::deque<std::string> elements;
-    size_t pos = sourcePath.find_last_of(fSeps);
-    while (pos != std::string::npos)
-    {
-      if ((pos = sourcePath.size()-1))
-      {
-        pos = sourcePath.find_last_of(fSeps);
-      }
-      if (pos == 0)
-      {
+		std::deque<std::string> elements;
+		size_t pos = sourcePath.find_last_of(fSeps);
+		while (pos != std::string::npos)
+		{
+			if ((pos = sourcePath.size()-1) != 0)
+			{
+				pos = sourcePath.find_last_of(fSeps);
+			}
+			if (pos == 0)
+			{
 
 #ifdef LWPP_PLATFORM_OSX_UB
 #ifdef _DEBUG		
-          //dout << "\"" << sourcePath.substr(1) << "\" ->" << sourcePath << "\n";
-          //dout << "\" \"\n";
+					//dout << "\"" << sourcePath.substr(1) << "\" ->" << sourcePath << "\n";
+					//dout << "\" \"\n";
 #endif 
-        elements.push_front(sourcePath.substr(1));        
-        elements.push_front("");
+				elements.push_front(sourcePath.substr(1));        
+				elements.push_front("");
 #else
 #ifdef _DEBUG		
-        //dout << "\"" << sourcePath.substr(0,1) << "\" ->" << sourcePath << "\n";		
+				//dout << "\"" << sourcePath.substr(0,1) << "\" ->" << sourcePath << "\n";		
 #endif 
-        elements.push_front(sourcePath.substr(0,1));
+				elements.push_front(sourcePath.substr(0,1));
 #endif
-        sourcePath.erase(0);
-        pos = std::string::npos;
-      }
-      else if (pos != std::string::npos)
-      {
+				sourcePath.erase(0);
+				pos = std::string::npos;
+			}
+			else if (pos != std::string::npos)
+			{
 #ifdef _DEBUG		
-        //dout << "\"" << sourcePath.substr(pos+1) << "\" ->" << sourcePath << "\n";
+				//dout << "\"" << sourcePath.substr(pos+1) << "\" ->" << sourcePath << "\n";
 #endif 
-        if (!sourcePath.substr(pos+1).empty())
-        {
-          elements.push_front(sourcePath.substr(pos+1));
-        }
-        sourcePath.erase(pos);
-        pos = sourcePath.find_last_of(fSeps);
-      }
-    }
-    if (!sourcePath.empty()) elements.push_front(sourcePath);
-    return elements;
-  }
+				if (!sourcePath.substr(pos+1).empty())
+				{
+					elements.push_front(sourcePath.substr(pos+1));
+				}
+				sourcePath.erase(pos);
+				pos = sourcePath.find_last_of(fSeps);
+			}
+		}
+		if (!sourcePath.empty()) elements.push_front(sourcePath);
+		return elements;
+	}
 
-  pathList splitFullPath(std::string sourcePath, std::string &fileName, std::string &ext)
-  {
-    size_t pos = sourcePath.find_last_of(fSeps);
-    if (pos != std::string::npos) 
-    {
-      fileName = sourcePath.substr(pos+1);
-    }
-    else
-    {
-      fileName = sourcePath;
-      sourcePath.clear();
-    }
-    // Strip file name and extension
-    size_t ePos = fileName.find_last_of(".");
-    if (ePos != std::string::npos) 
-    {
-      ext = fileName.substr(ePos+1);
-      fileName.erase(ePos);
-    }
-    if (pos != std::string::npos) 
-    {
-      sourcePath.erase(pos);
-    }
-    return splitPath(sourcePath);
-  }
+	pathList splitFullPath(std::string sourcePath, std::string &fileName, std::string &ext)
+	{
+		size_t pos = sourcePath.find_last_of(fSeps);
+		if (pos != std::string::npos) 
+		{
+			fileName = sourcePath.substr(pos+1);
+		}
+		else
+		{
+			fileName = sourcePath;
+			sourcePath.clear();
+		}
+		// Strip file name and extension
+		size_t ePos = fileName.find_last_of(".");
+		if (ePos != std::string::npos) 
+		{
+			ext = fileName.substr(ePos+1);
+			fileName.erase(ePos);
+		}
+		if (pos != std::string::npos) 
+		{
+			sourcePath.erase(pos);
+		}
+		return splitPath(sourcePath);
+	}
 
-  std::string makeFullPath(const pathList &path)
-  {
+	std::string makeFullPath(const pathList &path)
+	{
 #ifdef _DEBUG		
 		//lwpp::dostream dout;
-    //dout << "makeFullPath ();\n";
+		//dout << "makeFullPath ();\n";
 #endif     
-    std::string fullName;
-    for (pathCIterator iter = path.begin(); iter != path.end(); ++iter)
-    {
-      fullName += *iter;
-      fullName += fSep;
+		std::string fullName;
+		for (pathCIterator iter = path.begin(); iter != path.end(); ++iter)
+		{
+			fullName += *iter;
+			fullName += fSep;
 #ifdef _DEBUG		
-      //dout << ": \"" << *iter << "\" " << fSep << "\n";
+			//dout << ": \"" << *iter << "\" " << fSep << "\n";
 #endif        
-    }
+		}
 #ifdef _DEBUG		
-    //dout << "= \"" << fullName << "\"\n";
+		//dout << "= \"" << fullName << "\"\n";
 #endif  
-    return fullName;
-  }
+		return fullName;
+	}
 
-  std::string makeFullFileName(const pathList &path, const std::string &file, const std::string &ext)
-  {
-    return makeFullPath(path) + file + "." + ext;
-  }
+	std::string makeFullFileName(const pathList &path, const std::string &file, const std::string &ext)
+	{
+		return makeFullPath(path) + file + "." + ext;
+	}
 
-  std::string makeRelativeName(pathList basePath, const std::string absFileName)
-  {
-    std::string name, ext;
-    pathList abs = splitFullPath(absFileName, name, ext);
+	std::string makeRelativeName(pathList basePath, const std::string absFileName)
+	{
+		std::string name, ext;
+		pathList abs = splitFullPath(absFileName, name, ext);
 
-    // remove common elements
-    while ((abs.begin() != abs.end()) &&
-           (basePath.begin() != basePath.end()) &&
-           (*basePath.begin() == *abs.begin()))
-    {
-      basePath.pop_front();
-      abs.pop_front();
-    }
-    if (basePath.empty())
-    {
-      return makeFullFileName(abs, name, ext);
-    }
-    else
-    {
-      return absFileName;
-    }
-  }
+		// remove common elements
+		while ((abs.begin() != abs.end()) &&
+					 (basePath.begin() != basePath.end()) &&
+					 (*basePath.begin() == *abs.begin()))
+		{
+			basePath.pop_front();
+			abs.pop_front();
+		}
+		if (basePath.empty())
+		{
+			return makeFullFileName(abs, name, ext);
+		}
+		else
+		{
+			return absFileName;
+		}
+	}
 
-  std::string makeRelativeName(const std::string basePath, const std::string absFileName)
-  {
-    pathList base = splitPath(basePath);
-    return makeRelativeName(base, absFileName);
-  }
+	std::string makeRelativeName(const std::string basePath, const std::string absFileName)
+	{
+		pathList base = splitPath(basePath);
+		return makeRelativeName(base, absFileName);
+	}
 
-  std::string makeAbsoluteName(pathList basePath, const std::string relFileName)
-  {    
-    std::string name, ext;
-    pathList rel = splitFullPath(relFileName, name, ext);
-    // append the relative path to the absolute path
-    basePath.insert(basePath.end(), rel.begin(), rel.end());
-    std::string absName = makeFullFileName(basePath, name, ext);
-    if (FileName::Exists(absName)) return absName;
-    return relFileName;
-  }
+	std::string makeAbsoluteName(pathList basePath, const std::string relFileName)
+	{    
+		std::string name, ext;
+		pathList rel = splitFullPath(relFileName, name, ext);
+		// append the relative path to the absolute path
+		basePath.insert(basePath.end(), rel.begin(), rel.end());
+		std::string absName = makeFullFileName(basePath, name, ext);
+		if (FileName::Exists(absName)) return absName;
+		return relFileName;
+	}
 
-  std::string makeAbsoluteName(const std::string basePath, const std::string relFileName)
-  {
-    pathList base = splitPath(basePath);
-    return makeAbsoluteName(base, relFileName);
-  }
+	std::string makeAbsoluteName(const std::string basePath, const std::string relFileName)
+	{
+		pathList base = splitPath(basePath);
+		return makeAbsoluteName(base, relFileName);
+	}
 	
 	struct Stat::statData
 	{

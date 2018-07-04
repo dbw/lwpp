@@ -9,64 +9,39 @@ namespace lwpp
 		node->setValue(value, colour);
 	}
 
-	int IlluminationSampler( void *data, LWItemID light, const LWDVector dir, const LWDVector color )
+	void ShadingEvaluator::operator()(const double lightColour[3], float weight)
+	{
+		colour += lwpp::Vector3d(lightColour) * weight;
+	}
+
+	/*
+	int IlluminationSampler( void *data, LWItemID light, const LWDVector dir, const double color[4])
 	{
 		ShadingEvaluator *sampler=static_cast<ShadingEvaluator *>(data);
 		if (sampler)
 		{
-			return (*sampler)(light, dir, color);
+			return (*sampler)(light, dir, color, 1.0f);
 		}
 		return 0;
 	}
+	*/
 
-  const char inFuncs[] = "NodeInputFuncs";
-	const char inFuncs2[] = "NodeInputFuncs 2";
-  const char inFuncs3[] = "NodeInputFuncs 3";
+  const char inFuncs[] = LWNODEINPUTFUNCS_GLOBAL;
+  const char outFuncs[] = LWNODEOUTPUTFUNCS_GLOBAL;
 
   IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs)
-  IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs2)
-  IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs3)
+  IMPLEMENT_NAMED_GLOBAL(LWNodeOutputFuncs, outFuncs)
 
   void LWNodeInput::init()
   {
-    if (lwpp::LightWave::isAtLeast(11, 0))
-    {
-      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs3);
-    }
-    if (lwpp::LightWave::isAtLeast(9, 5))
-    {
-      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs2);
-    }
-    else
-    {
-      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
-    }
+      if (inF == nullptr) inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
   }
   
 	LWNode::LWNode(NodeID _id)
 	: id(_id)
 	{
-    if (lwpp::LightWave::isAtLeast(11, 0))
-    {
-      inF = getTransGlobal<LWNodeInputFuncs>(inFuncs3);
-    }
-		else if (lwpp::LightWave::isAtLeast(9, 5))
-		{
-			inF = getTransGlobal<LWNodeInputFuncs>(inFuncs2);
-		}
-		else
-		{
-			inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
-		}
-
-    if (lwpp::LightWave::isAtLeast(11, 0))
-    {
-      outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs2);
-    }
-    else
-		{
-			outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
-		}
+		if (inF == nullptr) inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
+		if (outF == nullptr) outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
 	}
 
   LWNode::~LWNode()
@@ -74,22 +49,10 @@ namespace lwpp
     ;
   }
 
-  const char outFuncs[] = "NodeOutputFuncs";
-	const char outFuncs2[] = "NodeOutputFuncs 2";
-
-  IMPLEMENT_NAMED_GLOBAL(LWNodeOutputFuncs, outFuncs)
-  IMPLEMENT_NAMED_GLOBAL(LWNodeOutputFuncs, outFuncs2)
-
+  
   void LWNodeOutput::init()
   {
-    if (lwpp::LightWave::isAtLeast(11, 0))
-    {
-      outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs2);
-    }
-    else
-		{
-			outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
-		}
+		if (outF == nullptr) outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
   }
 
   LWNodeInputFuncs *LWNodeInput::inF = 0;
@@ -98,5 +61,17 @@ namespace lwpp
   LWNodeInputFuncs *LWNode::inF = 0;
   LWNodeOutputFuncs *LWNode::outF = 0;
 
+  double EvalScalarVInput(LWShadingGeometry *sg, lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp)
+  {
+    double v = vp->GetValue();
+    lwni->evaluate(sg, &v);
+    return v;
+  }
+
+  void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp)
+  {
+    if ( !lwni->isConnected() ) return vp->ID();
+    return 0;
+  }
 }
 

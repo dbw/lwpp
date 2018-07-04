@@ -6,10 +6,16 @@
 #include <cassert>
 #include <fstream>
 
+#if (_WIN32 && _DEBUG)
+#define DBG_ENTER_FUNC ::OutputDebugStringA( "Enter (" __FUNCTION__  ")\n") 
+#else
+#define DBG_ENTER_FUNC
+#endif
+
 namespace lwpp
 {
 #ifdef _DEBUG
-  #ifdef _DEBUGTOFILE
+	#ifdef _DEBUGTOFILE
 		class dostream : public std::ofstream
 		{
 			public:
@@ -18,10 +24,10 @@ namespace lwpp
 					;
 				}
 		};
-  #else
-	  #ifdef LWPP_PLATFORM_OSX_UB
-  /*
-  #ifdef NOTHING
+	#else
+		#ifdef LWPP_PLATFORM_OSX_UB
+	/*
+	#ifdef NOTHING
 	//#ifdef __MWERKS__
 // #warning Debugging OSX
 
@@ -35,7 +41,7 @@ namespace lwpp
 		};
 	#else
 */
-    //#warning Debugging OSX
+		//#warning Debugging OSX
 
 		class dostream : public std::stringstream
 		{
@@ -45,21 +51,21 @@ namespace lwpp
 					;
 				}
 
-			  virtual ~dostream()
+				virtual ~dostream()
 				{
 					sync();
 				}
 
 				virtual int sync()
 				{
-          std::cerr << str(); // << std::endl;
-          str("");    // Clear the string buffer
+					std::cerr << str(); // << std::endl;
+					str("");    // Clear the string buffer
 					return 0;
 				}
 		};
 		//#endif
 
-	  #elif defined(LWPP_PLATFORM_WIN)
+		#elif defined(LWPP_PLATFORM_WIN)
 
 		template <class CharT, class TraitsT = std::char_traits<CharT> >
 		class basic_debugbuf :  public std::basic_stringbuf<CharT, TraitsT>
@@ -97,8 +103,8 @@ namespace lwpp
 
 		typedef basic_dostream<char> dostream;
 
-	  #endif // _MSWIN
-  #endif // _DEBUGTOFILE
+		#endif // _MSWIN
+	#endif // _DEBUGTOFILE
 #endif // _DEBUG
 }
 

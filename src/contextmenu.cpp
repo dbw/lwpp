@@ -51,7 +51,7 @@ namespace lwpp
 
 	/*!
 		* @param *entry String to display
-		* @param id Id of the entry to return, this makes the ID independant of the menu position
+		* @param mID Id of the entry to return, this makes the ID independant of the menu position
 		*/
 	void DynamicContextMenu::AddEntry (const char *entry, unsigned int id)
 	{

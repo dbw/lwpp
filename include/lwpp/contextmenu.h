@@ -37,7 +37,7 @@ namespace lwpp
 		 * @param nameFn Callback to return the name of the n'th item
 		 * @param userdata User defined data to be associated with the menu (will be passed on to the Callbacks)
 		 */
-		ContextMenu(int width, size_t (*countFn)(void *), char *(*nameFn)(void *, int),void *userdata)
+		ContextMenu(int width, size_t (*countFn)(void *), const char *(*nameFn)(void *, int),void *userdata)
 			: menu(0)
 		{
 			Create(width, countFn, nameFn, userdata);
@@ -55,7 +55,7 @@ namespace lwpp
 				menu = globPtr->cmenuCreate(&description, userdata);
 			}
 		}
-		void Create(int width, size_t (*countFn)(void *), char *(*nameFn)(void *, int), void *userdata)
+		void Create(int width, size_t (*countFn)(void *), const char *(*nameFn)(void *, int), void *userdata)
 		{
 			if ( available() )
 			{

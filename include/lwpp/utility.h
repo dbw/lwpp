@@ -149,9 +149,9 @@ namespace lwpp
 
 	struct to_lower
 	{
-		int operator() ( int ch )
+		char operator() ( char ch )
 		{
-			return ::tolower ( ch );
+			return static_cast<char>(::tolower ( ch ));
 		}
 	};
 

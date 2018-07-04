@@ -12,8 +12,8 @@ namespace lwpp
 	{
 	public:
 		virtual ~PresetHandler() {}
-		virtual LWError LoadPreset(lwpp::LoadState& ss) = 0;
-		virtual LWError SavePreset(lwpp::SaveState& ls) = 0;
+		virtual LWError LoadPreset(lwpp::LoadState& ls) = 0;
+		virtual LWError SavePreset(lwpp::SaveState& ss) = 0;
 	};
 
 	class PresetEntry
@@ -52,14 +52,14 @@ namespace lwpp
   * # Initialise the SimplePreset in the constructor with the plugin type as a string as well as the plugin name
   * # Call SimplePreset::SetHandler using this in the constructor
   * # in XPanels, add a vPopCmd control for the preset, i.e. {ID_PRES, "Presets", "vPopCmd"}
-  * # During setup of the XPanel, call SimplePreset.Setup() to register the panel and control id
+  * # During setup of the XPanel, call SimplePreset.Setup() to register the panel and control mID
   */ 
 	class SimplePreset : public PopUpCallback, public PopCmdCallback<SimplePreset>
 	{
 		const char *plug_name;
 		const char *plug_type;
 		PresetHandler *handler;
-		int controlID;
+		long controlID;
 		PresetCollection Presets;
 		XPanel xpanel;
 		FileRequest2 loadReq, saveReq;
@@ -68,7 +68,6 @@ namespace lwpp
 		virtual size_t popCount(void);
 		virtual const char *popName(int n);
 		void ScanPresets(std::string path);
-		void doLoadPreset(const char *filename, bool quiet = false);
 		void doSavePreset();
 		void doDeletePreset();
 		void doSaveAsPreset();
@@ -81,8 +80,9 @@ namespace lwpp
 	public:
 		SimplePreset(const char *type, const char *name);
 		void SetHandler(PresetHandler *inst);
-		LWError Setup(XPanel& panel, int control);
+		LWError Setup(XPanel& panel, long control);
 		virtual void popCommand(int cid, int cmd);
+    bool doLoadPreset(const char *filename, bool quiet = false);
 	};
 }
 

@@ -104,6 +104,17 @@ namespace lwpp
       */
 		}
 
+		Matrix4x4(const T v[4][4])
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				m[i][0] = v[i][0];
+				m[i][1] = v[i][1];
+				m[i][2] = v[i][2];
+				m[i][3] = v[i][3];
+			}
+		}
+
 		Matrix4x4 (const Matrix4x4 &v)
 		{
 			for (int i = 0; i < 4; ++i)

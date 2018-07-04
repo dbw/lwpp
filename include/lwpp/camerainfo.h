@@ -317,9 +317,9 @@ namespace lwpp
 			return globPtr->newTime(cameraEvaluator, frame, time);
 		}
 
-		int Preview(double lpx, double lpy, LWDMatrix4 projection)
+		int Preview(double lpx, double lpy, LWCameraEye eye, LWDMatrix4 projection)
 		{
-			return globPtr->preview(cameraEvaluator,  lpx, lpy, projection);
+			return globPtr->preview(cameraEvaluator,  lpx, lpy, eye, projection);
 		}
 		LWError NewFrame()
 		{
@@ -332,19 +332,23 @@ namespace lwpp
 			Overloaded so you can use simple or complex calls
 		*/
 		/* Full Evaluation function */
-		int Evaluate(double fpx, double fpy, double lpx, double lpy, double fractime, LWCameraRay* mycamray)
+    int Evaluate(double fpx, double fpy, double lpx, double lpy, double fractime, LWCameraEye eye, LWCameraRay* mycamray)
 		{
 			if(!init) Init(LWINIT_RENDER);
 			if(!newframe) NewFrame();
-			int retValue = globPtr->evaluate(cameraEvaluator,fpx,fpy,lpx,lpy,fractime,mycamray);
+			int retValue = globPtr->evaluate(cameraEvaluator,fpx,fpy,lpx,lpy,fractime,eye, mycamray);
 			camRay = *mycamray;
 			return retValue;
 		}
+
 		/* Simple, non DOF lens, takes image position and time only */
 		inline int Evaluate(double fpx, double fpy, double fractime)
 		{
-			return Evaluate(fpx, fpy, 0.0, 0.0, fractime, &camRay);
+      return Evaluate(fpx, fpy, 0.0, 0.0, fractime, LWCAMEYE_CENTER, &camRay);
 		}
+
+
 	};
+
 }
 #endif // LWPP_CAMINFO_H

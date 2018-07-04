@@ -1,5 +1,11 @@
 #include <lwpp/image.h>
+#include <lwpp/xpanel.h>
 #include <lwpp/comring.h>
+#include <lwpp/colour_management.h>
+
+#ifndef nullptr
+#define nullptr 0
+#endif
 
 namespace lwpp
 {
@@ -124,6 +130,67 @@ namespace lwpp
     }
     return 0; // image not found
   }
+  
+  void Image::DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h)
+  {
+      if ( pan == nullptr ) return;
+    lwpp::XPanel panel(pan);
+    void *ud = panel.getUserData(cid);
+    Image *img = static_cast<Image *>(ud);
+    if ( img == nullptr ) return;
+    if ( reg == nullptr ) return;
+    img->drawXpanel(reg, w, h);
+  }
+
+  /*! @todo add colourspace support
+
+  */
+  void Image::drawXpanel(LWXPDrAreaID reg, int w, int h)
+  {
+    lwpp::XPDrawArea area(reg, w, h);
+    area.drawBox(0, 0, 0, 0, 0, w, h); // clear preview to black
+    if ( id == nullptr ) return;
+
+    int width, height;
+    size(width, height);
+
+    float sx = (float)w / (float)width; // step size
+    float sy = (float)h / (float)height;
+
+    if ( mKeepAspect )
+    {
+      float step = fmin(sx, sy); // smallest step
+      sx = step;
+      sy = step;
+    }
+    // scaled width and height
+    int sw = sx * width;
+    int sh = sy * height;
+
+    int x_offset = (w - sw) / 2;
+    int y_offset = (h - sh) / 2;
+
+    ColourManager cm(lwpp::lwcst_viewer);
+
+    int x, y;
+    float pxStep = 1.0 / sx;
+    float pyStep = 1.0 / sy;
+    float ix = 0.0;
+    for ( x = 0; x < sw; x++ )
+    {
+      float iy = 0.0;
+      for ( y = 0; y < sh; y++ )
+      {
+        LWBufferValue rgb[3];
+        RGB(ix, iy, rgb);
+        cm.convertToColourSpace(rgb);
+        area.drawPixel(rgb, x + x_offset, y + y_offset);
+        iy += pyStep;
+      }
+      ix += pxStep;
+    }
+  }
+
 
   namespace 
   {

@@ -4,18 +4,18 @@
 
 void cocOpenURL(const std::string &s)
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSURL *url = [NSURL URLWithString: [[NSString alloc] initWithCString: s.c_str()]];
-	[[NSWorkspace sharedWorkspace] openURL: url];
-	[pool release];
+    @autoreleasepool {
+		NSURL *url = [NSURL URLWithString: [[NSString alloc] initWithCString: s.c_str()]];
+		[[NSWorkspace sharedWorkspace] openURL: url];
+	}
 }
 
 std::string cocGetTempPath()
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSString *tmpPath = NSTemporaryDirectory();
 	std::string ret = [ tmpPath cStringUsingEncoding: NSUTF8StringEncoding];
-	[pool release];
+    //[pool release];
 	return ret;
 }
 

@@ -7,7 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2353314D1A371A25006D6600 /* comring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314A1A371A25006D6600 /* comring.cpp */; };
+		2353314E1A371A25006D6600 /* command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314B1A371A25006D6600 /* command.cpp */; };
+		2353314F1A371A25006D6600 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314C1A371A25006D6600 /* interface.cpp */; };
+		2376C67520E38E3700622D72 /* utility_panels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376C67420E38E3700622D72 /* utility_panels.cpp */; };
 		23B6E7C812D4C70700E58EBC /* colour_management.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EE98E712D4BAF30091E67C /* colour_management.cpp */; };
+		23BBBE3F1FFBC5F80023DA41 /* helpPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BBBE3D1FFBC5F80023DA41 /* helpPanel.cpp */; };
+		23BBBE401FFBC5F80023DA41 /* panel_tools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BBBE3E1FFBC5F80023DA41 /* panel_tools.cpp */; };
+		23CB969F2018D2DD00848E15 /* liblwpp.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = 878B761910E227BD0046A22C /* liblwpp.a */; };
 		878B75FF10E227BD0046A22C /* contextmenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1D80BFF9E4000061CB6 /* contextmenu.cpp */; };
 		878B760010E227BD0046A22C /* file_request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DA0BFF9E4000061CB6 /* file_request.cpp */; };
 		878B760110E227BD0046A22C /* global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DB0BFF9E4000061CB6 /* global.cpp */; };
@@ -32,12 +39,23 @@
 		878B762110E228230046A22C /* platform_cocoa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8760DBDA1073656300BC9B26 /* platform_cocoa.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		23CB969E2018D2CF00848E15 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/local/lib;
+			dstSubfolderSpec = 0;
+			files = (
+				23CB969F2018D2DD00848E15 /* liblwpp.a in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		2342FE7D130EB73C0043C063 /* LW95.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LW95.h; path = include/lwpp/LW95.h; sourceTree = "<group>"; };
-		2342FE7E130EB73C0043C063 /* LW96.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LW96.h; path = include/lwpp/LW96.h; sourceTree = "<group>"; };
 		2342FE7F130EB73C0043C063 /* backdropinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = backdropinfo.h; path = include/lwpp/backdropinfo.h; sourceTree = "<group>"; };
 		2342FE80130EB73C0043C063 /* camera_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = camera_handler.h; path = include/lwpp/camera_handler.h; sourceTree = "<group>"; };
 		2342FE81130EB73C0043C063 /* camerainfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = camerainfo.h; path = include/lwpp/camerainfo.h; sourceTree = "<group>"; };
@@ -94,7 +112,6 @@
 		2342FEB8130EB73C0043C063 /* presets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = presets.h; path = include/lwpp/presets.h; sourceTree = "<group>"; };
 		2342FEB9130EB73C0043C063 /* preview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = preview.h; path = include/lwpp/preview.h; sourceTree = "<group>"; };
 		2342FEBA130EB73C0043C063 /* sceneinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sceneinfo.h; path = include/lwpp/sceneinfo.h; sourceTree = "<group>"; };
-		2342FEBB130EB73C0043C063 /* shader_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shader_handler.h; path = include/lwpp/shader_handler.h; sourceTree = "<group>"; };
 		2342FEBC130EB73C0043C063 /* storeable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = storeable.h; path = include/lwpp/storeable.h; sourceTree = "<group>"; };
 		2342FEBD130EB73C0043C063 /* surface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = surface.h; path = include/lwpp/surface.h; sourceTree = "<group>"; };
 		2342FEBE130EB73C0043C063 /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texture.h; path = include/lwpp/texture.h; sourceTree = "<group>"; };
@@ -108,6 +125,12 @@
 		2342FEC7130EB73C0043C063 /* vparm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vparm.h; path = include/lwpp/vparm.h; sourceTree = "<group>"; };
 		2342FEC8130EB73C0043C063 /* wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wrapper.h; path = include/lwpp/wrapper.h; sourceTree = "<group>"; };
 		2342FEC9130EB73C0043C063 /* xpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xpanel.h; path = include/lwpp/xpanel.h; sourceTree = "<group>"; };
+		2353314A1A371A25006D6600 /* comring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = comring.cpp; path = src/comring.cpp; sourceTree = "<group>"; };
+		2353314B1A371A25006D6600 /* command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = command.cpp; path = src/command.cpp; sourceTree = "<group>"; };
+		2353314C1A371A25006D6600 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface.cpp; path = src/interface.cpp; sourceTree = "<group>"; };
+		2376C67420E38E3700622D72 /* utility_panels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utility_panels.cpp; path = src/utility_panels.cpp; sourceTree = "<group>"; };
+		23BBBE3D1FFBC5F80023DA41 /* helpPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpPanel.cpp; path = src/helpPanel.cpp; sourceTree = "<group>"; };
+		23BBBE3E1FFBC5F80023DA41 /* panel_tools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = panel_tools.cpp; path = src/panel_tools.cpp; sourceTree = "<group>"; };
 		23EE98E712D4BAF30091E67C /* colour_management.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = colour_management.cpp; path = src/colour_management.cpp; sourceTree = "<group>"; };
 		87375E270FC0829100793C29 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = image.cpp; path = src/image.cpp; sourceTree = "<group>"; };
 		874605F00C49312F000941F4 /* lw_server.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = lw_server.cpp; path = src/lw_server.cpp; sourceTree = "<group>"; };
@@ -119,7 +142,6 @@
 		878911F10D5A36D0009AB2DD /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = texture.cpp; path = src/texture.cpp; sourceTree = "<group>"; };
 		878B761910E227BD0046A22C /* liblwpp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblwpp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		87D02D9D0E7FFF490060CD0F /* sceneinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = sceneinfo.cpp; path = src/sceneinfo.cpp; sourceTree = "<group>"; };
-		87E1941E1000D63A006BE4CD /* platform_carbon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platform_carbon.cpp; path = src/platform_carbon.cpp; sourceTree = "<group>"; };
 		87EAD9FE0C7B6EC900139A8B /* plugin_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = plugin_handler.cpp; path = src/plugin_handler.cpp; sourceTree = "<group>"; };
 		87ECB1D80BFF9E4000061CB6 /* contextmenu.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = contextmenu.cpp; path = src/contextmenu.cpp; sourceTree = "<group>"; };
 		87ECB1DA0BFF9E4000061CB6 /* file_request.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = file_request.cpp; path = src/file_request.cpp; sourceTree = "<group>"; };
@@ -208,8 +230,6 @@
 		2342FE7C130EB7240043C063 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				2342FE7D130EB73C0043C063 /* LW95.h */,
-				2342FE7E130EB73C0043C063 /* LW96.h */,
 				2342FE7F130EB73C0043C063 /* backdropinfo.h */,
 				2342FE80130EB73C0043C063 /* camera_handler.h */,
 				2342FE81130EB73C0043C063 /* camerainfo.h */,
@@ -266,7 +286,6 @@
 				2342FEB8130EB73C0043C063 /* presets.h */,
 				2342FEB9130EB73C0043C063 /* preview.h */,
 				2342FEBA130EB73C0043C063 /* sceneinfo.h */,
-				2342FEBB130EB73C0043C063 /* shader_handler.h */,
 				2342FEBC130EB73C0043C063 /* storeable.h */,
 				2342FEBD130EB73C0043C063 /* surface.h */,
 				2342FEBE130EB73C0043C063 /* texture.h */,
@@ -294,6 +313,12 @@
 		87FF08F50B67DEF000FB70FE /* src */ = {
 			isa = PBXGroup;
 			children = (
+				23BBBE3D1FFBC5F80023DA41 /* helpPanel.cpp */,
+				2376C67420E38E3700622D72 /* utility_panels.cpp */,
+				23BBBE3E1FFBC5F80023DA41 /* panel_tools.cpp */,
+				2353314A1A371A25006D6600 /* comring.cpp */,
+				2353314B1A371A25006D6600 /* command.cpp */,
+				2353314C1A371A25006D6600 /* interface.cpp */,
 				23EE98E712D4BAF30091E67C /* colour_management.cpp */,
 				8760DBE3107379E400BC9B26 /* platform_cocoa.mm */,
 				8760DBDA1073656300BC9B26 /* platform_cocoa.cpp */,
@@ -318,7 +343,6 @@
 				87ECB1E20BFF9E4000061CB6 /* vparm.cpp */,
 				87ECB1E30BFF9E4100061CB6 /* wrapper.cpp */,
 				87ECB1E40BFF9E4100061CB6 /* xpanel.cpp */,
-				87E1941E1000D63A006BE4CD /* platform_carbon.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -332,6 +356,7 @@
 			buildPhases = (
 				878B75FE10E227BD0046A22C /* Sources */,
 				878B761410E227BD0046A22C /* Frameworks */,
+				23CB969E2018D2CF00848E15 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -378,11 +403,17 @@
 				23B6E7C812D4C70700E58EBC /* colour_management.cpp in Sources */,
 				878B75FF10E227BD0046A22C /* contextmenu.cpp in Sources */,
 				878B760010E227BD0046A22C /* file_request.cpp in Sources */,
+				2353314E1A371A25006D6600 /* command.cpp in Sources */,
+				2353314D1A371A25006D6600 /* comring.cpp in Sources */,
 				878B760110E227BD0046A22C /* global.cpp in Sources */,
 				878B760210E227BD0046A22C /* io.cpp in Sources */,
+				23BBBE3F1FFBC5F80023DA41 /* helpPanel.cpp in Sources */,
 				878B760310E227BD0046A22C /* item.cpp in Sources */,
 				878B760410E227BD0046A22C /* meshinfo.cpp in Sources */,
+				2353314F1A371A25006D6600 /* interface.cpp in Sources */,
+				2376C67520E38E3700622D72 /* utility_panels.cpp in Sources */,
 				878B760510E227BD0046A22C /* objectinfo.cpp in Sources */,
+				23BBBE401FFBC5F80023DA41 /* panel_tools.cpp in Sources */,
 				878B760610E227BD0046A22C /* panel.cpp in Sources */,
 				878B760710E227BD0046A22C /* presets.cpp in Sources */,
 				878B760810E227BD0046A22C /* vparm.cpp in Sources */,
@@ -407,30 +438,29 @@
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"LW_SDK=115",
 					_MACOS,
 					_DEBUG,
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"\"$(SRCROOT)/../lwsdk11.5/include\"",
-					"$(inherited)",
+					"\"$(SRCROOT)/include\"",
+					"\"$(SRCROOT)/../lwsdk2018.0.4/include\"",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -439,18 +469,16 @@
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_CHAR_IS_UNSIGNED_CHAR = NO;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"LW_SDK=115",
 					_MACOS,
 					NDEBUG,
 					"$(inherited)",
@@ -458,14 +486,14 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(HEADER_SEARCH_PATHS_QUOTED_1)",
-					"\"$(SRCROOT)/../lwsdk11.5/include\"",
-					"$(inherited)",
+					"\"$(SRCROOT)/include\"",
+					"\"$(SRCROOT)/../lwsdk2018.0.4/include\"",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -474,18 +502,12 @@
 		878B761610E227BD0046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		878B761710E227BD0046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				COMBINE_HIDPI_IMAGES = YES;
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};

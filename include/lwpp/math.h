@@ -90,7 +90,7 @@ namespace lwpp {
 	}
 
 	template<class Type>
-	Type SmoothStep(const Type value, const Type min, const Type max)
+	Type SmoothStep(Type value, const Type min, const Type max)
 	{
 		if (value >= max) return 1;
 		value = (value - min)/(max-min);
@@ -173,12 +173,12 @@ namespace lwpp {
 		return (x * (max - min) + min);
 	}
 
-  //! return true if the value is within the range, including the bounds
+	//! return true if the value is within the range, including the bounds
 	template <class Type>
 	bool inRange(const Type x, const Type min, const Type max) 
 	{
 		return (x >= min) && (x <= max);
-  }
+	}
 
 	template <class Type>
 	Type Normalize(const Type x, const Type min, const Type max) 
@@ -197,11 +197,11 @@ namespace lwpp {
 		return ((int)x) + (x > 0 && (x != (int) x));
 	}
 
-  template <class Type>
-  int Round(const double r) 
-  {
-    return (r > 0.0) ? Floor(r + 0.5) : Ceil(r - 0.5);
-  }
+	template <class Type>
+	int Round(const double r) 
+	{
+		return (r > 0.0) ? Floor(r + 0.5) : Ceil(r - 0.5);
+	}
 
 	inline int Pow2(const int n) {
 		return 1 << n;

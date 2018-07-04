@@ -16,25 +16,24 @@ namespace lwpp
 			{
 				UNUSED(type);
 				UNUSED(nid);
-        // always update by default
+				// always update by default
 				if (nevent == NIE_CONNECT) Update();
-        if (nevent == NIE_DISCONNECT) Update();        
+				if (nevent == NIE_DISCONNECT) Update();        
 				if (nevent == NIE_INPUTNODEDESTROY) Update();
 				return 1;
 			}
 
-			static int CB_NodeInputEvent ( void *userData, NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
+		public:
+			static int CB_NodeInputEvent(void *userData, NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
 			{
 				NodeHandler *plugin = static_cast<NodeHandler *>(userData);
-				return plugin->NodeInputEvent ( nid, nevent, type);
+				return plugin->NodeInputEvent(nid, nevent, type);
 			}
-
-		public:
-      /*!
-       * @name Inputs
-       * Create nodal inputs
-       */
-      //! @{
+			/*!
+			 * @name Inputs
+			 * Create nodal inputs
+			 */
+			//! @{
 			LWNodeInput *addColorInput(const std::string name = "Color") const
 			{
 				return LWNode::addColorInput(name, CB_NodeInputEvent);
@@ -59,17 +58,21 @@ namespace lwpp
 			{
 				return LWNode::addFunctionInput(name, CB_NodeInputEvent);
 			}
-			LWNodeInput *addMaterialInput(const std::string name = "Material") const
+			LWNodeInput *addBSDFInput(const std::string name = "Material") const
 			{
-				return LWNode::addMaterialInput(name, CB_NodeInputEvent);
+				return LWNode::addBSDFInput(name, CB_NodeInputEvent);
 			}
-      //! @}
+			LWNodeInput *addProjectionInput(const std::string name = "Projection") const
+			{
+				return LWNode::addProjectionInput(name, CB_NodeInputEvent);
+			}
+			//! @}
 
-      /*!
-       * @name auto_Inputs
-       * Create nodal inputs handles by a std::auto_ptr
-       */
-      //! @{
+			/*!
+			 * @name auto_Inputs
+			 * Create nodal inputs handles by a std::auto_ptr
+			 */
+			//! @{
 			auto_NodeInput autoColorInput(const std::string name = "Color") const
 			{
 				return auto_NodeInput(LWNode::addColorInput(name, CB_NodeInputEvent));
@@ -94,11 +97,11 @@ namespace lwpp
 			{
 				return auto_NodeInput(LWNode::addFunctionInput(name, CB_NodeInputEvent));
 			}
-			auto_NodeInput autoMaterialInput(const std::string name = "Material") const
+			auto_NodeInput autoBSDFInput(const std::string name = "Material") const
 			{
-				return auto_NodeInput(LWNode::addMaterialInput(name, CB_NodeInputEvent));
+				return auto_NodeInput(LWNode::addBSDFInput(name, CB_NodeInputEvent));
 			}
-      //! @}
+			//! @}
 
 			NodeHandler(void *priv, void *context, LWError *err) : InstanceHandler(priv, context, err, LWNODE_HCLASS)
 			{
@@ -106,9 +109,9 @@ namespace lwpp
 				LWNode::setID(Context);
 			}
 			virtual ~NodeHandler() {;}
-			virtual void Evaluate(LWNodalAccess* na, NodeOutputID outID, NodeValue value)
+			virtual void Evaluate(LWShadingGeometry *sg, NodeOutputID outID, NodeValue value)
 			{
-				UNUSED(na);
+				UNUSED(sg);
 				UNUSED(outID);
 				UNUSED(value);
 			}
@@ -121,61 +124,15 @@ namespace lwpp
 			{
 				return 0;
 			}
+			virtual unsigned int materialGL(LWNodeOGLMaterial* oglM)
+			{
+				return 0;
+			}
 	};
 
-	namespace LWSDK95_1
-	{
-		// Node flags. Returned by LWNodeHandler->flags
-    #define NF_TRANSP (1<<0) // This flag should be set if a material node might have transparency
-
-		// Node handler activation.
-		typedef struct st_LWNodeHandler
-    {
-			LWInstanceFuncs *inst;
-			LWItemFuncs		*item;
-			LWRenderFuncs   *rend;
-			void			(*evaluate)( LWInstance, LWNodalAccess*, NodeOutputID, NodeValue );
-			// Evaluation function receives the LWNodalAccess structure.
-			// NodeOutputID is the output belonging to this node, and which is being currently asked the value from.
-			// NodeValue is the value you need to set with the output functions when setting a value for this evaluation.
-
-			void			(*customPreview)( LWInstance, int width, int height );
-			// customPreview is called when the node has NPT_CUSTOM preview type set.
-
-			unsigned int    (*flags)( LWInstance );
-		} LWNodeHandler;
-	}
-
-  namespace LWSDK10_0
-  {
-    typedef struct LWNodeOGLTextureOutput_t {
-        LWImageID   imageID;
-        float       uv_coords[2];
-        LWFVector   val;
-    } LWNodeOGLTextureOutput;
-
-typedef struct st_LWNodeHandler {
-    LWInstanceFuncs *inst;
-    LWItemFuncs     *item;
-    LWRenderFuncs   *rend;
-
-    // Evaluation function receives the LWNodalAccess structure.
-    // NodeOutputID is the output belonging to this node, and which is being currently asked the value from.
-    // NodeValue is the value you need to set with the output functions when setting a value for this evaluation.
-    void            (*evaluate)( LWInstance, LWNodalAccess*, NodeOutputID, NodeValue );
-
-    // customPreview is called when the node has NPT_CUSTOM preview type set.
-    void            (*customPreview)( LWInstance, int width, int height );
-
-    // GLTextureEvaluate is called when OpenGL needs image map information from a node.
-    void            (*GLTextureEvaluate)( LWInstance, LWNodalAccess*, LWNodeOGLTextureOutput* ); //Private
-
-    unsigned int    (*flags)( LWInstance );
-} LWNodeHandler;
-  }
 
 	//! @ingroup Adaptor
-	template <class T, int minVersion, int maxVersion>
+	template <class T, int Version>
 	class NodeAdaptor : public InstanceAdaptor<T>, public ItemAdaptor<T>, public RenderAdaptor<T>
 	{
 		public:
@@ -186,47 +143,22 @@ typedef struct st_LWNodeHandler {
 		//! Set static callbacks for the LightWave item handler
 		static int Activate(int version, GlobalFunc *global, LWInstance inst, void *serverData)
 		{
-			if ( version > maxVersion ) return AFUNC_BADVERSION;
-			if ( version < minVersion ) return AFUNC_BADVERSION;
+			if ( version != Version ) return AFUNC_BADVERSION;
 			try
 			{
 				lwpp::SetSuperGlobal(global);
 				UNUSED(serverData);
-				if (version == 1)
-				{
-					LWNodeHandler *plugin = static_cast<LWNodeHandler *>(inst);
-					InstanceAdaptor<T>::Activate(plugin->inst);
-					RenderAdaptor<T>::Activate(plugin->rend);
-					ItemAdaptor<T>::Activate(plugin->item);
-					plugin->evaluate = NodeAdaptor::evaluate;
-					plugin->customPreview = NodeAdaptor::customPreview;
-					return AFUNC_OK;
-				}
-				else if (version == 2)
-				{
-					LWSDK95_1::LWNodeHandler *plugin = static_cast<LWSDK95_1::LWNodeHandler *>(inst);
-					InstanceAdaptor<T>::Activate(plugin->inst);
-					RenderAdaptor<T>::Activate(plugin->rend);
-					ItemAdaptor<T>::Activate(plugin->item);
-					plugin->evaluate = NodeAdaptor::evaluate;
-					plugin->customPreview = NodeAdaptor::customPreview;
-					plugin->flags = NodeAdaptor::flags;
-					return AFUNC_OK;
-				}
-				else if (version == 3)
-				{
-					LWSDK10_0::LWNodeHandler *plugin = static_cast<LWSDK10_0::LWNodeHandler *>(inst);
-					InstanceAdaptor<T>::Activate(plugin->inst);
-          plugin->inst->destroy = NodeAdaptor::vprSafeDestroy;
-					RenderAdaptor<T>::Activate(plugin->rend);
-					ItemAdaptor<T>::Activate(plugin->item);
-					plugin->evaluate = NodeAdaptor::evaluate;
-					plugin->customPreview = NodeAdaptor::customPreview;
-          plugin->GLTextureEvaluate = 0;
-					plugin->flags = NodeAdaptor::flags;
-					return AFUNC_OK;
-				}
-				return AFUNC_BADVERSION;
+
+				LWNodeHandler *plugin = static_cast<LWNodeHandler *>(inst);
+				InstanceAdaptor<T>::Activate(plugin->inst);
+				RenderAdaptor<T>::Activate(plugin->rend);
+				ItemAdaptor<T>::Activate(plugin->item);
+				plugin->evaluate = NodeAdaptor::evaluate;
+				plugin->customPreview = NodeAdaptor::customPreview;
+				plugin->flags = NodeAdaptor::flags;
+				plugin->materialGL = NodeAdaptor::materialGL;
+				return AFUNC_OK;
+			
 			}
 			catch (std::exception &e)
 			{
@@ -236,12 +168,12 @@ typedef struct st_LWNodeHandler {
 		}
 
 		private:
-    //! safe destroy that pauses VPR
+		//! safe destroy that pauses VPR
 		static void vprSafeDestroy (LWInstance instance)
 		{
 			try
 			{
-        lwpp::LimboComRing lcr;
+				lwpp::LimboComRing lcr;
 				T *plugin = static_cast<T *>(instance);
 				delete plugin;
 			}
@@ -251,14 +183,14 @@ typedef struct st_LWNodeHandler {
 			}
 		}
 
-		static void evaluate (LWInstance instance, LWNodalAccess* na, NodeOutputID outID, NodeValue value)
+		static void evaluate (LWInstance instance, LWShadingGeometry* sg, NodeOutputID outID, NodeValue value)
 		{
 			try
 			{
 				if (instance)
 				{
 					T *plugin = static_cast<T *>(instance);
-					plugin->Evaluate(na, outID, value);
+					plugin->Evaluate(sg, outID, value);
 				}
 			}
 			catch (std::exception &e)
@@ -292,6 +224,20 @@ typedef struct st_LWNodeHandler {
 				return 0;
 			}
 		}
+		static unsigned int materialGL(LWInstance instance, LWNodeOGLMaterial* oglM)
+		{
+			try
+			{
+				T *plugin = static_cast<T *>(instance);
+				return plugin->materialGL(oglM);
+			}
+			catch ( std::exception &e )
+			{
+				lwpp::LWMessage::Error("An exception occured in NodeHandler::materialGL():", e.what());
+				return 0;
+			}
+		}
+
 	};
 
 	//! @ingroup XPanelHandler
@@ -305,7 +251,7 @@ typedef struct st_LWNodeHandler {
 			virtual ~XPanelNodeHandler() {;}
 			virtual int NodeInputEvent ( NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
 			{
-				if (LW_XPanel.isValid()) LW_XPanel.ViewRefresh();
+				if (LW_XPanel.isValid()) LW_XPanel.ViewRefresh();				
 				return NodeHandler::NodeInputEvent(nid, nevent, type);
 			}
 			virtual void ChangeNotify (LWXPanelID , unsigned int , unsigned int , int event_type)
@@ -322,7 +268,7 @@ typedef struct st_LWNodeHandler {
 	};
 
 	//! @ingroup XPanelAdaptor
-	IMPLEMENT_XPANELADAPTOR(Node, LWPP_NODE_VERSION, LWPP_NODE_VERSION);
+	IMPLEMENT_XPANELADAPTOR(Node, LWNODECLASS_VERSION);
 }
 
 #endif // LWPP_NODE_HANDLER_H

@@ -1,7 +1,7 @@
 /*!
  * @file
  * @brief
- * @version $Id: texture_handler.h 72 2009-03-17 11:10:32Z mwolf $
+ * @version $Id: texture_handler.h 104 2018-05-10 11:37:12Z mwolf $
  */
 
 #ifndef LWPP_PROCEDURAL_TEXTURE_HANDLER
@@ -34,7 +34,7 @@ class TextureHandler : public InstanceHandler, public ItemHandler, public Render
 /*!
  * @ingroup Adaptor
  */
-	template <class T, int maxVersion, int minVersion>
+	template <class T, int minVersion>
 	class TextureAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>, public RenderAdaptor <T>
 	{
 		public:
@@ -46,7 +46,6 @@ class TextureHandler : public InstanceHandler, public ItemHandler, public Render
 		static int Activate (int version, GlobalFunc *global, LWInstance inst, void *serverData)
 		{
 			UNUSED(serverData);
-			if ( version > maxVersion ) return AFUNC_BADVERSION;
 			if ( version < minVersion ) return AFUNC_BADVERSION;
 		  lwpp::SetSuperGlobal(global);
 			LWTextureHandler *plugin = static_cast<LWTextureHandler *>(inst);
@@ -92,7 +91,7 @@ class TextureHandler : public InstanceHandler, public ItemHandler, public Render
 	//! @ingroup XPanelHandler
 	IMPLEMENT_XPANELHANDLER(Texture);
 	//! @ingroup XPanelAdaptor
-	IMPLEMENT_XPANELADAPTOR(Texture, LWPP_TEXTURE_VERSION, LWPP_TEXTURE_VERSION);
+	IMPLEMENT_XPANELADAPTOR(Texture, LWTEXTURE_VERSION);
 }
 
 #endif //  LWPP_PROCEDURAL_TEXTURE_HANDLER

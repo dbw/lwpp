@@ -38,6 +38,13 @@ template<> const char * GlobalBase< base >::m_globalName;
 template<> base * nGlobalBase< base, name>::globPtr = 0; \
 template<> size_t	nGlobalBase< base, name>::usage_count = 0;
 
+
+// Added for 2015
+#ifndef LWINF_MODELYEAR
+#define LWINF_MODELYEAR         0x3F000000
+#define LWINF_GETMODELYEAR(x)   ((((x) & LWINF_MODELYEAR) >> 24) + 2015)
+#endif
+
 //! LightWrap++ related classes and functions
 namespace lwpp
 {
@@ -48,14 +55,14 @@ namespace lwpp
     static unsigned int systemID;
     static unsigned int productInfo;
   public:
-    void static Init(void);
+    void static Init();
     //! Get the contex (Layout, Modeler, or LWSN)
-    unsigned int static Context(void)
+    unsigned int static Context() 
     {
       return (systemID & LWSYS_TYPEBITS);
     }
     //! Get the DongleID
-    unsigned int static DongleID(void)
+    unsigned int static DongleID()
     {
       Init();
       #define LWSYS_NEW_SERIALBITS 0x0000FFFF // redefine, this seems to be a bug in the SDK ... or modeler
@@ -63,51 +70,70 @@ namespace lwpp
       //return (systemID & LWSYS_SERIALBITS);
     }
     //! Check if we're running in Layout
-    bool static isLayout()
+    bool static isLayout() 
     {
       return (Context() == LWSYS_LAYOUT);
     }
     //! Check if we're running in Modeler
-    bool static isModeler()
+    bool static isModeler() 
     {
       return (Context() == LWSYS_MODELER);
     }
     //! Check if we're running on Screamernet
-    bool static isScreamernet()
+    bool static isScreamernet() 
     {
       return (Context() == LWSYS_SCREAMERNET);
     }
     //! Get the major version of LightWave
-    unsigned int static Major()
+    unsigned int static Major() 
     {
       return LWINF_GETMAJOR(productInfo);
     }
     //! Get the minor version of LightWave
-    unsigned int static Minor()
+    unsigned int static Minor() 
     {
       return LWINF_GETMINOR(productInfo);
     }
+    unsigned int static ModelYear() 
+    {
+      return LWINF_GETMODELYEAR(productInfo);
+    }
+    bool static isModelYear() 
+    {
+      return (Major() == 15);
+    }
     //! Get the build of LightWave.
     /*! @note The build number is different for different programs of the same release */
-    unsigned int static Build()
+    unsigned int static Build() 
     {
       return LWINF_GETBUILD(productInfo);
     }
     //! Returns true if the current version of LightWave is at least the version designated by major and minor
-    static bool isAtLeast(const unsigned int major, const unsigned int minor)
+    static bool isAtLeast(const unsigned int major, const unsigned int minor) 
     {
+      if ( isModelYear() ) return true;
       if (major < Major()) return true;
       if (major > Major()) return false;
       if (minor <= Minor()) return true;
       return false;
     }
-    static bool is(const unsigned int major, const unsigned int minor)
+    //! Returns true if the current version of LightWave is at least the version designated by the year and minor
+    static bool isAtLeastYear(const unsigned int year, const unsigned int minor)
+    {
+      if ( !isModelYear() ) return false;
+      if ( year < ModelYear() ) return true;
+      if ( year > ModelYear() ) return false;
+      if ( minor <= Minor() ) return true;
+      return false;
+    }
+    static bool is(const unsigned int major, const unsigned int minor) 
     {
       return (major == Major()) && (minor == Minor());
     }
     //! Returns true if the current version of LightWave is at least the version designated by major and minor and the build
-    static bool isAtLeast(const unsigned int major, const unsigned int minor, const unsigned build)
+    static bool isAtLeast(const unsigned int major, const unsigned int minor, const unsigned build) 
     {
+      if ( isModelYear() ) return true;
       if (isAtLeast(major, minor))
       {
         return (build >= Build());
@@ -148,14 +174,11 @@ namespace lwpp
     {
       if (usage_count < 1)
       {
-        if (_acquireGlobal())
-        {
-          usage_count++;
-        }
-        else
+        if (!_acquireGlobal())
         {
           //throw MissingGlobal(name);
         }
+				usage_count++;
       }
     }
     //! Destructor, RELEASE the global if usage counter drops to 0
@@ -321,18 +344,6 @@ namespace lwpp
     }
   };
 
-    DEFINE_GLOBAL(LWServerInfo)
-
-  class ServerInfo : public GlobalBase<LWServerInfo>
-  {
-  public:
-    const char *getPath(std::string server_class, std::string server_name)
-    {
-      if (available()) return globPtr->path(server_class.c_str(), server_name.c_str());
-      return 0;
-    }
-  };
-
   class CustomGlobal
   {
     public:
@@ -342,20 +353,9 @@ namespace lwpp
       }
   };
 
-  namespace lwsdk10 
-  {
-    //#define LWSERVERINFO_GLOBAL "LW Server Info"
-
-    typedef struct st_LWServerInfo
-    {
-        const char*  (*path)        (const char* server_class,const char* server_name);
-        const char** (*list)        (const char* server_class);
-    } LWServerInfo;
-  }
-
-    DEFINE_GLOBAL(lwsdk10::LWServerInfo)
+  DEFINE_GLOBAL(LWServerInfo)
     
-  class ServerInfo10 : public GlobalBase<lwsdk10::LWServerInfo>
+  class ServerInfo : public GlobalBase<LWServerInfo>
   {
   public:
     const char *getPath(std::string server_class, std::string server_name)
@@ -381,5 +381,10 @@ namespace lwpp
   };
 
 } // end namespace lwpp
+
+constexpr unsigned int lwID(const char id[4])
+{
+	return LWID_(id[0], id[1], id[2], id[3]);
+}
 
 #endif // LWPP_GLOBAL

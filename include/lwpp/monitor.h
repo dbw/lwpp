@@ -39,8 +39,11 @@ namespace lwpp
 		Monitor(const std::string title, unsigned int flags = LMO_IMMUPD, const char *histfile = 0)
 			:	id(0)
 		{
-			id = globPtr->create();
-			if (id)	globPtr->setup(id, const_cast<char *>(title.c_str()), flags, histfile);
+			if (globPtr)
+			{
+				id = globPtr->create();
+				if (id)	globPtr->setup(id, const_cast<char *>(title.c_str()), flags, histfile);
+			}
 		}
 
 		Monitor()

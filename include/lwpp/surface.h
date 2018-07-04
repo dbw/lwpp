@@ -113,7 +113,7 @@ namespace lwpp
 				index = GetIndex();
 			}
 		}
-		//! return id of item number idx
+		//! return mID of item number idx
 		LWSurfaceID GetIndexID (int idx)
 		{
 			if (showNone)

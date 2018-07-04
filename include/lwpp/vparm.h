@@ -7,6 +7,7 @@
 #include <lwvparm.h>
 #include <lwenvel.h>
 #include "lwpp/storeable.h"
+#include <memory>
 
 #ifndef LW_VPARM_H
 #define LW_VPARM_H
@@ -52,6 +53,11 @@ namespace lwpp
 		void			NewTime(LWTime t)
 		{
 			(*globPtr->getVal)(vparmID, t, 0, asLWVector() );
+		}
+
+		void Evaluate(LWTime t, Vector3d &val)
+		{
+			(*globPtr->getVal)(vparmID, t, 0, val.asLWVector());
 		}
 
 		void Clear()
@@ -109,6 +115,8 @@ namespace lwpp
 	};
   
   typedef std::auto_ptr<VParm> auto_VParm;
+	typedef std::shared_ptr<VParm> shared_VParm;   
+  typedef std::unique_ptr<VParm> unique_VParm;
 
 /*
   const char           *(*channelName)    ( LWChannelID chan);
@@ -140,18 +148,41 @@ namespace lwpp
 				:	groupID(0), destroy_on_exit(destroy)
 			{
 				groupID = createUniqueGroup(name, parent);
+#ifdef _DEBUG
+				lwpp::dostream dout;
+				dout << "Creating ChannelGroup : " << name << " - " << groupID << "\n";
+#endif
 			}
 
 			ChannelGroup(const char *name, ChannelGroup& parent)
 				: groupID(0), destroy_on_exit(true)
 			{
 				groupID = createUniqueGroup(name, parent.getID());
+#ifdef _DEBUG
+				lwpp::dostream dout;
+				dout << "Creating ChannelGroup : " << name << " - " << groupID << "\n";
+#endif
 			}
 
 			ChannelGroup(LWChanGroupID id)
 				: groupID(id), destroy_on_exit(false)
 			{
 				;
+			}
+
+			virtual ~ChannelGroup()
+			{
+#ifdef _DEBUG
+				lwpp::dostream dout;
+				dout << "Destroying ChannelGroup : " << groupName() << " - " << groupID << "\n";
+#endif
+				Reset();
+			}
+
+			void Delete()
+			{
+				if (groupID) envf->destroyGroup(groupID);
+				groupID = 0;
 			}
 
 			void Create(const char *name, LWChanGroupID parent, bool destroy = true)
@@ -170,17 +201,13 @@ namespace lwpp
 				}
 			}
 
-			virtual ~ChannelGroup(void)
-			{
-				Reset();
-			}
 			LWChanGroupID getID() const {return groupID;}
 			LWChanGroupID nextGroup( LWChanGroupID parent, LWChanGroupID group) {return globPtr->nextGroup(parent, group);}
 			LWChannelID  nextChannel( LWChanGroupID parent, LWChannelID chan) {return globPtr->nextChannel(parent, chan);}
 			const char  *groupName ( LWChanGroupID group) {return globPtr->groupName(group);}
 			const char  *groupName ( void ) {return globPtr->groupName(groupID);}
 			LWChanGroupID groupParent ( LWChanGroupID group) {return globPtr->groupParent(group);}
-			LWChanGroupID groupParent (void) {return globPtr->groupParent(groupID);}
+			LWChanGroupID groupParent () const {return globPtr->groupParent(groupID);}
 
 			LWChanGroupID createUniqueGroup(const char *name, LWChanGroupID parent)
 			{
@@ -199,7 +226,10 @@ namespace lwpp
 					while (!chan_found && (grp))
 					{
 						if (strcmp(channel_name, groupName(grp)) == 0)
+						{
 							chan_found = true;
+							continue;
+						}
 
 						grp = nextGroup(parent, grp);
 					}

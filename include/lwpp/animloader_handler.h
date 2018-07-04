@@ -26,7 +26,8 @@ namespace lwpp
 			fileName = (const char*) context;
 		}
     virtual ~AnimLoaderHandler() {;}
-    bool virtual isValid() = 0;
+    virtual bool isValid() = 0;
+		virtual void Cleanup() = 0; // only called if isValid() == false
     virtual int				GetFrameCount () = 0;
     virtual double		GetFrameRate  () = 0;
     virtual double		GetAspect     (int *w, int *h, double *pixAspect) = 0;
@@ -75,14 +76,16 @@ namespace lwpp
 					T *plugin = new T(priv, context, &localErr);
 					if (*localErr)
 					{
+						plugin->Cleanup();
 						delete plugin;
 						plugin = 0;
 						*err = localErr;
 					}
           if (!plugin->isValid())
           {
+						plugin->Cleanup();
             delete plugin;
-						plugin = 0;
+						plugin = 0;	
           }
 					return static_cast<LWInstance> (plugin);
 				}

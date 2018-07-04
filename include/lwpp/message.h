@@ -57,9 +57,32 @@ namespace lwpp
 		{
 			return globPtr->okCancel(t.c_str(),a.c_str(),b.c_str());
 		}
+
+		/*
+		0 - High (Even Info)
+		1 - Medium
+		2 - Low  (Errors only)
+		*/
+		bool static HideAlert(int level)
+		{
+			lwpp::InterfaceInfo ii;
+			return !(level >= ii.alertLevel());
+		}
+
+		int static OkCancel(int level, const std::string &t, const std::string &a, const std::string &b = "")
+		{
+			if (HideAlert(level)) return 1;
+			return globPtr->okCancel(t.c_str(), a.c_str(), b.c_str());
+		}
 		int static YesNo(const std::string &t, const std::string &a, const std::string &b = "")
 		{
 			return globPtr->yesNo(t.c_str(),a.c_str(),b.c_str());
+		}
+
+		int static YesNo(int level, const std::string &t, const std::string &a, const std::string &b = "")
+		{
+			if (HideAlert(level)) return 1;
+			return globPtr->yesNo(t.c_str(), a.c_str(), b.c_str());
 		}
 		int static YesNoCan(const std::string &t, const std::string &a, const std::string &b = "")
 		{
@@ -97,6 +120,36 @@ namespace lwpp
 				}
 			}
 		};
+
+		bool static Rename(const char *title, const char *ctrl_label, std::string &name)
+		{
+			enum { ID_TEXT = 0xb000 };
+			LWXPanelControl ctrl_list[] =
+			{
+				{ ID_TEXT, ctrl_label, "string" },
+			{ 0 }
+			};
+			LWXPanelDataDesc data_descrip[] = { { 0 } };
+			LWXPanelHint hint[] =
+			{
+				XpLABEL(0, title),
+				XpLEFT(ID_TEXT),
+				XpEND
+			};
+			lwpp::XPanel xpanel(LWXP_FORM, ctrl_list);
+			if (xpanel.isValid())
+			{
+				xpanel.Hint(hint);
+				xpanel.Describe(data_descrip);
+				xpanel.setForm(ID_TEXT, name);
+				if (xpanel.Post() == 1)
+				{
+					xpanel.getForm(ID_TEXT, name);
+					return true;
+				}
+			}
+			return false;
+		}
 	};
 
 }

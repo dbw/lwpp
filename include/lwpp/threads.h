@@ -11,53 +11,22 @@
 namespace lwpp 
 {
 
+	//! @ingroup Globals
+	
 	//! Mutex ids. Use these since LW only provides us with 10 mutexes
 	enum MutexID {MUTEX0 = 0, MUTEX1, MUTEX2, MUTEX3, MUTEX4, MUTEX5, MUTEX6, MUTEX7, MUTEX8, MUTEX9};
 
 	//! @ingroup Globals
-	class MTUtilBase : public GlobalBase<LWMTUtilFuncs>
-	{
-	public:
-		MTUtilBase(void) {	;	}
-		virtual ~MTUtilBase() {;}
-		virtual int Lock (const MutexID mutex) const = 0;
-		virtual int UnLock (const MutexID mutex) const = 0;
-	};
-
-	class LWMTUtil_Pre9 : public MTUtilBase
-	{
-	private:
-		LWMTUtilID	id;
-	public:
-		LWMTUtil_Pre9(void) : id(0)
-		{
-			id = globPtr->create();
-		}
-		virtual ~LWMTUtil_Pre9()
-		{
-			if (id)	globPtr->destroy(id);
-		}
-		virtual int Lock (const MutexID mutex) const
-		{
-			return globPtr->lock(id, mutex);
-		}
-		virtual int UnLock (const MutexID mutex) const
-		{
-			return globPtr->unlock(id, mutex);
-		}
-	};
-
-	//! @ingroup Globals
-	class LWMTUtil9 : public MTUtilBase
+	class LWMTUtil : public GlobalBase<LWMTUtilFuncs>
 	{
 	private:
 		LWMTGroupID mtgroup;
 	public:
-		LWMTUtil9(void) : mtgroup(0)
+		LWMTUtil(void) : mtgroup(0)
 		{
 			mtgroup = globPtr->groupCreate(1);
 		}
-		virtual ~LWMTUtil9()
+		virtual ~LWMTUtil()
 		{
 			if (mtgroup) globPtr->groupDestroy(mtgroup);
 		}
@@ -68,34 +37,6 @@ namespace lwpp
 		virtual int UnLock (const MutexID mutex) const
 		{
 			return globPtr->groupUnlockMutex(mtgroup, mutex);
-		}
-	};
-
-	//! Wrap of LWMTUtilFuncs - management of multi-thread mutexes (mutices?)
-	//! @ingroup Globals
-	class LWMTUtil
-	{
-	private:
-		MTUtilBase	*MTUtil;
-	public:
-		LWMTUtil() : MTUtil(0)
-		{
-			if (lwpp::LightWave::Major() > 8)
-				MTUtil = new LWMTUtil9;
-			else
-				MTUtil = new LWMTUtil_Pre9;
-		}
-		virtual ~LWMTUtil()
-		{
-			if (MTUtil)	delete MTUtil;
-		}
-		virtual int Lock (const MutexID mutex) const
-		{
-			return MTUtil->Lock(mutex);
-		}
-		virtual int UnLock (const MutexID mutex) const
-		{
-			return MTUtil->UnLock(mutex);
 		}
 	};
 
@@ -201,6 +142,10 @@ namespace lwpp
 		{
 			globPtr->threadSetIndex(in_index);
 		}
+    int numCPUCores()
+    {
+      return globPtr->numCPUCores();
+    }
 	};
 
 	//! @ingroup Globals
@@ -268,6 +213,75 @@ namespace lwpp
 		}
 	};
 
+  class rwLock : public GlobalBase<LWMTUtilFuncs>
+  {
+    LWMTRWLockID lock;
+  public:
+    rwLock()
+    {
+      lock = globPtr->rwlockCreate();
+    }
+    ~rwLock()
+    {
+      globPtr->rwlockDestroy(lock);
+    }
+    void ReadLock()
+    {
+      globPtr->rwlockReadLock(lock);
+    }
+    void ReadLockTimeout(unsigned int spintries)
+    {
+      globPtr->rwlockReadLockTimeout(lock, spintries);
+    }
+    void ReadUnlock()
+    {
+      globPtr->rwlockReadUnlock(lock);
+    }
+    void WriteLock()
+    {
+      globPtr->rwlockWriteLock(lock);
+    }
+    void WriteUnlock()
+    {
+      globPtr->rwlockWriteUnlock(lock);
+    }
+    void WriteToReadLock()
+    {
+      globPtr->rwlockWriteToReadLock(lock);
+    }
+
+  };
+
+  class AutoWriteLock
+  {
+    rwLock &lock;
+  public:
+    AutoWriteLock(rwLock &l)
+      : lock (l)
+    {
+      lock.WriteLock();
+    }
+    ~AutoWriteLock()
+    {
+      lock.WriteUnlock();
+    }
+  };
+
+  class AutoReadLock
+  {
+    rwLock &lock;
+  public:
+    AutoReadLock(rwLock &l)
+      : lock(l)
+    {
+      lock.ReadLock();
+    }
+    ~AutoReadLock()
+    {
+      lock.ReadUnlock();
+    }
+  };
+
 	/*!
 	@ingroup Globals
 	Cross-platform threading support is provided by the functions in the following sections.
@@ -289,7 +303,7 @@ namespace lwpp
 	public:
 		/*!
 		Threads in LightWave® are contained in, and managed by, "thread groups".
-		Each thread group can contain any number of threads, and must be created with the number of threads to be managed provided in count. 
+		Each thread group can contain any number of threads, and must be created with the number of threads to be managed provided in count.
 		*/
 		ThreadGroup(int _count)
 			: mtgrpid(0)

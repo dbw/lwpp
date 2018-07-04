@@ -10,6 +10,7 @@
 
 #include <lwpp/storeable.h>
 #include <lwpp/wrapper.h>
+#include <lwcolorspace.h>
 
 namespace lwpp
 {
@@ -111,19 +112,18 @@ namespace lwpp
     bool useDefault;
     bool Standalone;
     bool supportLUT;
-  protected:
-    //! Actual worker function to be supplied by the deriving class
-    /*!
-     * @return The number of items
-     */
-    virtual size_t popCount();
-    //! Actual worker function to be supplied by the deriving class
-    /*!
-     * @param n A item index
-     * @return The name of the item
-     */
-    virtual const char *popName(int n);
   public:
+		//! Actual worker function to be supplied by the deriving class
+		/*!
+		* @return The number of items
+		*/
+		virtual size_t popCount();
+		//! Actual worker function to be supplied by the deriving class
+		/*!
+		* @param n A item index
+		* @return The name of the item
+		*/
+		virtual const char *popName(int n);
     //! Create a new manager that depends on a LWColorSpaceType defined by LW and optionally uses that setting as a default
     ColourManager(LWColorSpaceType _type, LWColourSpaceLayer layer = lwcsl_RGB, bool _supportLUT = false);
 

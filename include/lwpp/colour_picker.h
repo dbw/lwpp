@@ -17,7 +17,7 @@ namespace lwpp
       local.red = red;
       local.green = green;
       local.blue = blue;
-      int result = (*globPtr)(LWPP_COLORPICK_VERSION, &local);
+      int result = (*globPtr)(LWCOLORPICK_VERSION, &local);
       if (result == AFUNC_OK && local.result > 0)
       {
         red = local.red;

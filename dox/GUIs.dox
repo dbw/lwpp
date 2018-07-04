@@ -1,0 +1,100 @@
+/*! @file */
+/*! @page GUIs Graphical User Interfaces with lwpp
+
+lwpp supports both LWPanels as well as XPanels based GUIs.
+
+- @subpage LWPanelControls
+- @subpage ControlCodes
+*/
+
+/*! @page LWPanelControls Controls for LW Panels
+
+lwpp supports both LWPanels as well as XPanels based GUIs.
+
+## Buttons
+@image html panelbutton.jpg "A simple button"
+@image html panelloadfilebutton.jpg "A button that opens a file requester to load a file"
+@image html panelsavefilebutton.jpg "A button that opens a file requester to save a file"
+## Values
+### Generic
+### Strings
+### Distance
+### Angle
+@image html panelangle.jpg "An angle"
+### Colour
+@image html panelrgbcolor.jpg "RGB Sliders"
+@image html panelrgbveccolor.jpg "RGB Values"
+@image html panelminirgbcolor.jpg "RGB Values (mini)"
+@image html panelminihvscolor.jpg "HSV Values (mini)"
+## Multiple Choice
+@image html panelboolean.jpg "Boolean checkboxes" @image html panelbooleanbut.jpg "Boolean buttons"
+@image html panelchoiceh.jpg "Multiple choice buttons (horizontal)"
+@image html panelchoicev.jpg "Multiple choice buttons (vertical)"
+## Lists
+### Plain
+@image html panellistbox.jpg "A list box"
+### Popup
+## Tabs
+@image html paneltabs.jpg "Tabs"
+## Drawable
+@image html panelarea.jpg "An area control"
+@image html panelcanvas.jpg "A canvas control"
+@image html panelopengl.jpg "An OpenGL control"
+## Decoration
+@image html panelborder.jpg "A border"
+## Special 
+@image html panelxpanel.jpg "A XPanel control"
+
+*/
+
+/*! @page ControlCodes Embedding control codes into controls
+
+Lightwave allows for controls codes to be used within most controls. Examples of these would be a checkmark or various arrows, which are used as icons.
+
+They also allow the adjustement of the alignment of colour.
+
+None of these are official and may change at any time.
+
+They are escaped by a prefaced "\03" in a string.
+
+An example would be "\03(i:MIMG_CHECKMARK)" which displays a checkmark.
+
+# Control Codes
+## (i:***)
+embeds an image
+Valid strings for *** are:
+- MIMG_NONE
+- MIMG_UPARROW
+- MIMG_DOWNARROW
+- MIMG_UPDARROW
+- MIMG_CHECKMARK
+- MIMG_LEFTRIGHT
+- MIMG_LEFTARROW
+- MIMG_RIGHTARROW
+- MIMG_4ARROWS
+- MIMG_CIRC_PLUS
+- MIMG_CIRC_MINUS
+- MIMG_CIRCLE
+- MIMG_TREERIGHT
+- MIMG_TREERIGHTO
+- MIMG_TREEDOWN
+- MIMG_TREEDOWNO
+- MIMG_MENU
+- MIMG_BULLET1
+- MIMG_PAN
+- MIMG_ROTATE
+- MIMG_ZOOM
+- MIMG_POPUPARROW
+- MIMG_POPOUTARROW
+- MIMG_VPEXPAND
+- MIMG_VPCOLLAPSE
+- MIMG_FLYOUT
+
+## (g:KBSHORT_GAP)
+inserts a short gap for a keyboard shortcut
+
+## (j:*)
+Justifies the following text, * may be:
+- 2 justifies to the right
+
+*/

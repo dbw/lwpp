@@ -12,8 +12,9 @@
 namespace lwpp
 {
 	class InstanceUpdate : public GlobalBase<LWInstUpdate> 
-	{
+	{		
 	public:
+		virtual ~InstanceUpdate() {}
 		static void Update (const char *className, LWInstance inst)
 		{
 			if ((globPtr) && (className))	globPtr(className, inst);
@@ -346,7 +347,7 @@ namespace lwpp
 	};
 
 	//! Base class for all plugins that use an XPanels user interface
-	class XPanelInterface
+	class XPanelInterface : public XPanelView
 	{
 	public:
 		XPanel LW_XPanel;
@@ -414,6 +415,8 @@ namespace lwpp
 
 		virtual void CreateViewXPanel(LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints = 0, bool do_destroy = false);
 
+		virtual void CreateViewXPanel(void *host, LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints = 0, bool do_destroy = false);
+
 		XPanelInterface(){;}
 
 		virtual ~XPanelInterface(){;}
@@ -452,7 +455,7 @@ namespace lwpp
 			}
 			catch (std::exception &e)
 			{
-				lwpp::LWMessage::Error("An exception occured in Xpanel::Interface():", e.what());
+				lwpp::LWMessage::Error("An exception occured in XPanelAdaptor::Interface():", e.what());
 				return AFUNC_BADAPP;
 			}
 		}
@@ -469,13 +472,13 @@ namespace lwpp
 	{	;	} \
 	}
 
-#define IMPLEMENT_XPANELADAPTOR(pluginClass, min, max) \
-	template <class T, int minV = min, int maxV = max> class XPanel##pluginClass##Adaptor : public pluginClass##Adaptor<T, minV, maxV>, public XPanelAdaptor<T> \
+#define IMPLEMENT_XPANELADAPTOR(pluginClass, vers) \
+	template <class T, int version = vers> class XPanel##pluginClass##Adaptor : public pluginClass##Adaptor<T, vers>, public XPanelAdaptor<T> \
 	{ \
 	public: \
 	XPanel##pluginClass##Adaptor(const char *name, ServerTagInfo tags[] = 0) \
 	: XPanelAdaptor<T>(name, #pluginClass "Interface", tags), \
-	pluginClass##Adaptor<T, minV, maxV>(name, tags) \
+	pluginClass##Adaptor<T, vers>(name, tags) \
 	{ ; } \
 	}
 
@@ -488,13 +491,13 @@ namespace lwpp
 	{	;	} \
 	}
 
-#define IMPLEMENT_LWPANELADAPTOR(pluginClass, min, max) \
-	template <class T, int minV = min, int maxV = max> class LWPanel##pluginClass##Adaptor : public pluginClass##Adaptor<T, minV, maxV>, public LWPanelAdaptor<T> \
+#define IMPLEMENT_LWPANELADAPTOR(pluginClass, vers) \
+	template <class T, int version = vers> class LWPanel##pluginClass##Adaptor : public pluginClass##Adaptor<T, vers>, public LWPanelAdaptor<T> \
 	{ \
 	public: \
 	LWPanel##pluginClass##Adaptor(const char *name, ServerTagInfo tags[] = 0) \
 	: LWPanelAdaptor<T>(name, #pluginClass "Interface", tags), \
-	pluginClass##Adaptor<T, minV, maxV>(name, tags) \
+	pluginClass##Adaptor<T, vers>(name, tags) \
 	{ ; } \
 	}
 

@@ -70,7 +70,7 @@ namespace lwpp
 	class CustomObjHandler : public InstanceHandler, public ItemHandler, public RenderHandler
 	{
 	protected:
-		//! Stores the id of the object wich the plugin is applied to
+		//! Stores the mID of the object wich the plugin is applied to
 		LWItemID Context;
 	public:
 		CustomObjHandler(void *g, void *context, LWError *err) : InstanceHandler(g, context, err, LWCUSTOMOBJ_HCLASS)

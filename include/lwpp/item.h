@@ -5,6 +5,7 @@
 #include <lwpp/matrix4x4.h>
 #include <lwpp/vparm.h>
 #include <lwpp/interface.h>
+#include <lwpp/command.h>
 #include <vector>
 #include "utility.h"
 #ifdef _DEBUG
@@ -101,18 +102,11 @@ namespace lwpp
     {
       return globPtr->lookAhead(i);
     }
-#if (LW_SDK >= 95)
     double	goalStrength(LWItemID i, LWTime t)
     {
       return globPtr->goalStrength(i, t);
     }
-#else
-    double	goalStrength(LWItemID i)
-    {
-      return globPtr->goalStrength(i);
-    }
-#endif
-    void			stiffness(LWItemID i, LWItemParam p, LWDVector v)
+    void stiffness(LWItemID i, LWItemParam p, LWDVector v)
     {
       globPtr->stiffness(i, p, v);
     }
@@ -131,8 +125,20 @@ namespace lwpp
     int	CountItems(LWItemType type);
     //! Get the n'th LWitem of a type
     LWItem *GetItemN(LWItemType type, int n);
+		int countServer(const char *type, const char *name, LWItemID id = 0);
     //! Find the index of a certain handler
     int findServer(const char *type, const char *name, LWItemID id = 0);
+
+		void editServer(const char *type, const char *name, LWItemID id = 0);
+
+		void addUniqueServer(const char *type, const char *name, LWItemID id = 0);
+
+		void removeServer(const char *type, const char *name, LWItemID id = 0);
+
+		int getServerFlags(const char *name, int index, LWItemID id = 0)
+		{
+			return globPtr->serverFlags(id, name, index);
+		}
   };
 
   //! @ingroup Entities
@@ -161,7 +167,7 @@ namespace lwpp
       First(t);
     }
 
-    //! Checks if the light exists
+    //! Checks if the item exists
     bool exists () const {return mId != LWITEM_NULL;}
 
     //! Checks if the LWItemInfo global is available or not
@@ -349,18 +355,10 @@ namespace lwpp
     {
       return mItemInfo.lookAhead(mId);
     }
-
-#if (LW_SDK >= 95)
     double GoalStrength(LWTime t)
     {
       return mItemInfo.goalStrength(mId, t);
     }
-#else
-    double GoalStrength(void)
-    {
-      return mItemInfo.goalStrength(mId);
-    }
-#endif
     void Stiffness (LWItemParam p , LWDVector v)
     {
       mItemInfo.stiffness(mId, p, v);
@@ -437,7 +435,7 @@ namespace lwpp
         index = mItemInfo.FindIndex(mId, mType) + 1;
       }
     }
-    //! return id of item number idx
+    //! return mID of item number idx
     LWItemID GetIndexID (int idx)
     {
       if (showNone)
@@ -526,7 +524,7 @@ namespace lwpp
         index = mItemInfo.FindIndex(mId, mType) + 1;
       }
     }
-    //! return id of item number idx
+    //! return mID of item number idx
   };
 
   //! This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks

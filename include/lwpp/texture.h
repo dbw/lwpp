@@ -81,7 +81,7 @@ namespace lwpp
 		*	will appear on the list of Input Parameters for the Gradient.
 		*	@param returntype Is the type of value returned by the texture. It can be TRT_VECTOR, TRT_COLOR, TRT_PERCENT, TRT_SCALAR, TRT_DISPLACEMENT
 		*	@param name This is the name of the texture that will appear on the Interface.
-		* @param lwtxtrcontextid The id of the texture. It can contain one or more texture layers. You obtain this with the previous function contextCreate.
+		* @param lwtxtrcontextid The mID of the texture. It can contain one or more texture layers. You obtain this with the previous function contextCreate.
 		*	Pass NULL if you do not want to create any Input Parameter.
 		*	@param userdata is your own data returned with userdata function
 		*/

@@ -4,6 +4,7 @@
 #include <lwpp/global.h>
 #include <lwpp/vparm.h>
 #include <lwnodes.h>
+#include <memory>
 
 namespace lwpp
 {
@@ -17,11 +18,12 @@ namespace lwpp
 	public:
 		/*! Perform shading here
 		 * This function is called once for every sample for the current light
-	   * I suppose the return value is 1 if the spot is lit, 0 otherwise
+		 * I suppose the return value is 1 if the spot is lit, 0 otherwise
 		 */
-		virtual int operator()(LWItemID light, const LWDVector lightDir, const LWDVector lightColour ) = 0;
+		virtual void operator()(const double lightColour[3], float weight);
+		virtual double brdf_pdf(const LWDVector lightDir) = 0;
 		lwpp::Vector3d GetShading() const {return colour;}
-		void setValue(lwpp::NodeHandler *node, NodeValue value);
+		virtual void setValue(lwpp::NodeHandler *node, NodeValue value);
 	};
 	//! Creates a callback to sample illumination
 	/*!
@@ -34,92 +36,109 @@ namespace lwpp
 
 	 * @endcode
 	 */
-	int IlluminationSampler( void *data, LWItemID light, const LWDVector dir, const LWDVector color );
-  
+	//int IlluminationSampler( void *data, LWItemID light, const LWDVector dir, const double color[4] );
+	
 	extern const char inFuncs[];
-	extern const char inFuncs2[];
-  extern const char inFuncs3[];
-  
+	extern const char outFuncs[];
 
 	//! Node Input
 	/*!
-   * This class encapsulates a single node input
-   * @ingroup Globals
-   */
+	 * This class encapsulates a single node input
+	 * @ingroup Globals
+	 */
 	class LWNodeInput // : protected GlobalBase<LWNodeInputFuncs>
 	{
 	private:
 		static LWNodeInputFuncs *inF;
-		NodeID node_id;
-		NodeInputID id;
-		bool do_destroy;
+		NodeID mNodeID = 0;
+		NodeInputID mID = 0;
+		bool do_destroy = false;
 
-		int	evaluate(LWNodalAccess*na, void* value )
-		{
-			return inF->evaluate(id, na, value);
-		}
 		void init();
 	public:
+		LWNodeInput() { init(); }
 		LWNodeInput(NodeID _id, ConnectionType type, const std::string name, NodeInputEvent* inp_event, bool _destroy = true)
 		: do_destroy(_destroy),
-			node_id(_id)
+			mNodeID(_id)
 		{
 			init();
-			id = inF->create(node_id, type, name.c_str(), inp_event);
+			mID = inF->create(mNodeID, type, name.c_str(), inp_event);
+		}
+		LWNodeInput(NodeID _id, const std::string name, LWID vendor, LWID type, NodeInputEvent* inp_event, bool _destroy = true)
+			: do_destroy(_destroy),
+			mNodeID(_id)
+		{
+			init();
+			createCustom(name.c_str(), vendor, type, inp_event);
 		}
 		LWNodeInput(NodeInputID _id, bool _destroy = false)
 		: do_destroy(_destroy),
-			node_id(0),
-			id(_id)
+			mID(_id)
 		{
 			init();
+			mNodeID = node();
 		}
 
 		~LWNodeInput()
 		{
-			if (do_destroy) inF->destroy(node_id, id);
+			if(do_destroy) inF->destroy(mID);
+			mID = 0;
 		}
 
-		NodeInputID getID(void) const {return id;}
-
-		int	evaluate(LWNodalAccess*na, LWDVector *value )
+		void destroy()
 		{
-			return evaluate(na, static_cast<void *>(value));
+			if (mID) inF->destroy(mID);
 		}
 
-		int	evaluate(LWNodalAccess*na, double *value )
+		NodeInputID getID() const {return mID;}
+
+		int	evaluate(LWShadingGeometry *sg, NodeValue value)
 		{
-			return evaluate(na, static_cast<void *>(value));
+			return inF->evaluate(mID, sg, value);
 		}
 
-		int	evaluate(LWNodalAccess*na, lwpp::Vector3d &value )
+		int	evaluate(LWShadingGeometry *sg, LWDVector *value )
 		{
-			return evaluate(na, static_cast<void *>(value.asLWVector()));
+			return evaluate(sg, static_cast<void *>(value));
 		}
 
-		int	evaluate(LWNodalAccess*na, int *value )
+		int	evaluate(LWShadingGeometry *sg, double *value )
 		{
-			return evaluate(na, static_cast<void *>(value));
+			return evaluate(sg, static_cast<void *>(value));
 		}
 
-		int	evaluate(LWNodalAccess*na, bool *value )
+		int	evaluate(LWShadingGeometry *sg, lwpp::Vector3d &value )
+		{
+			return evaluate(sg, static_cast<void *>(value.asLWVector()));
+		}
+
+		int	evaluate(LWShadingGeometry *sg, int *value )
+		{
+			return evaluate(sg, static_cast<void *>(value));
+		}
+
+		int	evaluate(LWShadingGeometry *sg, bool *value )
 		{
 			int i = *value;
-			int ret = evaluate(na, &i);
+			int ret = evaluate(sg, &i);
 			*value = (i != 0);
 			return ret;
 		}
-
-		int	evaluate(LWNodalAccess*na, lwpp::VParm *vparm)
+		
+		int	evaluate(LWShadingGeometry *sg, lwpp::VParm *vparm)
 		{
-			return evaluate(na, static_cast<void *>(vparm->asLWVector()));
+			return evaluate(sg, static_cast<void *>(vparm->asLWVector()));
+		}
+		
+		int	evaluateBSDF(LWShadingGeometry *sg, LWBSDF bsdf)
+		{
+			return evaluate(sg, static_cast<void *>(bsdf));
 		}
 
-		int	evaluate(LWNodalAccess*na, LWNodalMaterial *mat)
+		int	evaluate(LWShadingGeometry *sg, LWNodalProjection *projection)
 		{
-			return evaluate(na, static_cast<void *>(mat));
+			return evaluate(sg, static_cast<void *>(projection));
 		}
-
 		/*
 		template<class T>
 		int evaluate(LWNodalAccess &na, T *value )
@@ -127,77 +146,154 @@ namespace lwpp
 			return evaluate(&na, value);
 		}
 		*/
-
 		bool check(void)
 		{
-			return (inF->check(id) != 0);
+			return (inF->check(mID) != 0);
 		}
 		bool isConnected(void) {return check();}
-		NodeID	node(void) {return inF->node(id);}
-		void disconnect (NodeID nid) {inF->disconnect(nid, id);}
-		NodeInputID next() {return inF->next(id);}
-		NodeInputID previous() {return inF->previous(id);}
+		bool isID(NodeInputID id) const { return mID == id; }
+		NodeID node(void) {return inF->node(mID);}
+		void setNode(NodeID nID) { mNodeID = nID; }
+		void disconnect (NodeID nid) 
+		{
+			inF->disconnect(mID);
+		}
+	 void disconnect() { inF->disconnect(mID); }
 
+		NodeInputID next() {return inF->next(mID);}
+		NodeInputID previous() {return inF->previous(mID);}
+		const char *name()
+		{
+			return inF->name(mID);
+		}
+		void rename(const char *name)
+		{
+			inF->rename(mID, name);
+		}
+		ConnectionType type()
+		{
+			return inF->type(mID);
+		}
+
+		LWID vendorID() { return inF->vendorID(mID); }
+		LWID typeID() { return inF->typeID(mID); }
+		void createCustom(const char *name, LWID vendor, LWID type, NodeInputEvent* inp_event = nullptr)
+		{
+			if (mNodeID)
+			{
+				if (mID) inF->destroy(mID);
+				mID = inF->createCustom(mNodeID, NOT_CUSTOM, name, inp_event, vendor, type);
+			}
+		}
+		NodeOutputID connectedOutput() { return inF->connectedOutput(mID); }
 	};
 
-  typedef std::auto_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
-
-	extern const char outFuncs[];
-	extern const char outFuncs2[];
+	typedef std::auto_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
+	typedef std::unique_ptr<LWNodeInput> unique_NodeInput; //!< Helper declaration for node member variables
+	typedef std::shared_ptr<LWNodeInput> shared_NodeInput; //!< Helper declaration for node member variables
 
 		//! Node Input
 	//! @ingroup Globals
 	class LWNodeOutput // : protected GlobalBase<LWNodeOutputFuncs>
 	{
 	private:
-    static LWNodeOutputFuncs *outF;
-		NodeID node_id;
-		NodeOutputID id;
+		static LWNodeOutputFuncs *outF;
+		NodeID mNodeID;
+		NodeOutputID mID;
 		bool do_destroy;
 
-    void init();
+		void init();
 
 	public:
 		LWNodeOutput(NodeID _id, ConnectionType type, std::string name, bool _destroy = true)
 		: do_destroy(_destroy),
-			node_id(_id),
-			id(0)
+			mNodeID(_id),
+			mID(0)
 		{
-      init();
-			id = outF->create(node_id, type, name.c_str());
+			init();
+			mID = outF->create(mNodeID, type, name.c_str());
+		}
+
+		LWNodeOutput(NodeID _id, std::string name, LWID vendor, LWID type, bool _destroy = true)
+			: do_destroy(_destroy),
+			mNodeID(_id),
+			mID(0)
+		{
+			init();
+			createCustom(name.c_str(), vendor, type);
+		}
+
+		LWNodeOutput(NodeOutputID _id, bool _destroy = false)
+			: do_destroy(_destroy),
+			mNodeID(0),
+			mID(_id)
+		{
+			init();
 		}
 
 		~LWNodeOutput()
 		{
-			if (do_destroy) outF->destroy(node_id, id);
+			if (do_destroy)	outF->destroy(mID);
 		}
-		NodeID node(void) {return outF->node(id);}
-		NodeOutputID next(void) {return outF->next(id);}
-		NodeOutputID previous(void) {return outF->previous(id);}
-		NodeOutputID getID(void) const {return id;}
-		bool isID(const NodeOutputID _id) const {return id == _id;}
-    bool operator == (const NodeOutputID cmp)
-    {
-      return id == cmp;
-    }
+		void destroy()
+		{
+			if(mID) outF->destroy(mID);
+		}
+		NodeID node(void) {return outF->node(mID);}
+		void setNode(NodeID nID) { mNodeID = nID; }
+		NodeOutputID next(void) {return outF->next(mID);}
+		NodeOutputID previous(void) {return outF->previous(mID);}
+		NodeOutputID getID(void) const {return mID;}
+		bool isID(const NodeOutputID _id) const {return mID == _id;}
+		bool operator == (const NodeOutputID cmp)
+		{
+			return mID == cmp;
+		}
+		const char *name()
+		{
+			return outF->name(mID);
+		}
+		void rename(const char *name)
+		{
+			outF->rename(mID, name);
+		}
+		ConnectionType type()
+		{
+			return outF->type(mID);
+		}
+		LWID vendorID() { return outF->vendorID(mID); }
+		LWID typeID() { return outF->typeID(mID); }
+		void createCustom(const char *name, LWID vendor, LWID type)
+		{
+			if (mNodeID)
+			{
+				if (mID) outF->destroy(mID);
+				mID = outF->createCustom(mNodeID, NOT_CUSTOM, name, vendor, type);
+			}
+		}
 	};
 
-  typedef std::auto_ptr<LWNodeOutput> auto_NodeOutput; //!< Helper declaration for node member variables
-
+	typedef std::auto_ptr<LWNodeOutput> auto_NodeOutput; //!< Helper declaration for node member variables
+	typedef std::unique_ptr<LWNodeOutput> unique_NodeOutput; //!< Helper declaration for node member variables
+	typedef std::shared_ptr<LWNodeOutput> shared_NodeOutput; //!< Helper declaration for node member variables
 	class NodeInputHelper
 	{
 
 		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) const = 0;
 	public:
-    /*! @name Node Inputs
+		/*! @name Node Inputs
 		 *  Functions to add node inputs
-     */
-    //@{
+		 */
+		//@{
 		LWNodeInput *addColorInput(const std::string name ="Color", NodeInputEvent* inp_event = 0) const
 		{
-			return addInput(NOT_COLOR, name, inp_event);
+			return addInput(NOT_RGB, name, inp_event);
 		}
 		LWNodeInput *addColourInput(const std::string name = "Colour", NodeInputEvent* inp_event = 0) const
+		{
+			return addColorInput(name, inp_event);
+		}
+		LWNodeInput *addRGBInput(const std::string name = "Colour", NodeInputEvent* inp_event = 0) const
 		{
 			return addColorInput(name, inp_event);
 		}
@@ -217,37 +313,105 @@ namespace lwpp
 		{
 			return addInput(NOT_FUNCTION, name, inp_event);
 		}
-		LWNodeInput *addMaterialInput(const std::string name = "Material", NodeInputEvent* inp_event = 0) const
+		LWNodeInput *addProjectionInput(const std::string name = "Projection", NodeInputEvent* inp_event = 0) const
 		{
-			return addInput(NOT_MATERIAL, name, inp_event);
+			return addInput(NOT_PROJECTION, name, inp_event);
 		}
-    //@}
+		LWNodeInput *addMatrix44Input(const std::string name = "Matrix", NodeInputEvent* inp_event = 0) const
+		{
+			return addInput(NOT_MATRIX44, name, inp_event);
+		}
+		LWNodeInput *addBSDFInput(const std::string name = "Material", NodeInputEvent* inp_event = 0) const
+		{
+			return addInput(NOT_BSDF, name, inp_event);
+		}
+		//@}
+	};
+
+	typedef std::auto_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
+	typedef std::unique_ptr<LWNodeInput> unique_NodeInput; //!< Helper declaration for node member variables
+	typedef std::shared_ptr<LWNodeInput> shared_NodeInput; //!< Helper declaration for node member variables
+
+	//! Helper callbacks for node menus
+	//! @ingroup Globals
+
+	class NodeMenuBase
+	{
+	protected:
+		LWNodeMenuFuncs mFuncs;
+	public:
+		virtual ~NodeMenuBase() {}
+		virtual LWNodeMenuFuncs * getMenuFuncs() { return &mFuncs; }
+	};
+
+	template <typename T>
+	class NodeMenu : public NodeMenuBase
+	{
+	public:
+		virtual ~NodeMenu(){}
+		static int countCB(NodeMenuInputType type, void* inputdata, void* userdata)
+		{
+			if (userdata)
+			{
+				auto plug = static_cast <T *>(userdata);
+				return plug->NodeMenuCount(type, inputdata);
+			}
+			return 0;
+		}
+		static const char* nameCB(NodeMenuInputType type, void* inputdata, void* userdata, int item)
+		{
+			if (userdata)
+			{
+				auto plug = static_cast <T *>(userdata);
+				return plug->NodeMenuName(type, inputdata, item);
+			}
+			return "";
+		}
+		static void eventCB(NodeMenuInputType type, void* inputdata, void* userdata, int item)
+		{
+			if (userdata)
+			{
+				auto plug = static_cast <T *>(userdata);
+				plug->NodeMenuEvent(type, inputdata, item);
+			}
+		}
+
+		NodeMenu(T *host)
+		{
+			mFuncs.userdata = host;
+			mFuncs.countFn = countCB;
+			mFuncs.nameFn = nameCB;
+			mFuncs.eventFn = eventCB;
+		}
+
+		/*
+		virtual int NodeMenuCount(NodeMenuInputType type, void* inputdata) = 0;
+		virtual const char* NodeMenuName(NodeMenuInputType type, void* inputdata, int item) = 0;
+		virtual void  NodeMenuEvent(NodeMenuInputType type, void* inputdata, int item) = 0;
+		*/
 	};
 
 	//! LightWave Node
 	//! @ingroup Globals
 	class LWNode : private GlobalBase<LWNodeFuncs>, public NodeInputHelper
 	{
-	private:
+	protected:
 		NodeID id;
 		static LWNodeInputFuncs *inF;
 		static LWNodeOutputFuncs *outF;
 
-		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) const
+		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event = 0) const
 		{
 		 return new LWNodeInput(id, type, name.c_str(), inp_event);
 		}
-
-		LWNodeOutput *addOutput(ConnectionType type, const std::string name)
+		void setValue(NodeValue val, void *v) { outF->setValue(val, v); }
+		void disconnect(NodeInputID nid)
 		{
-			return new LWNodeOutput(id, type, name.c_str());
+			inF->disconnect(nid);
 		}
-		void setValue( NodeValue val, void *v) {outF->setValue(val, v);}
-		void disconnect (NodeInputID nid) {inF->disconnect(id, nid);}
-
 	public:
 		LWNode(NodeID _id = 0);
-    virtual ~LWNode();
+		virtual ~LWNode();
 
 		void setID(NodeID _id) {id = _id;}
 		NodeID getID(void) {return id;}
@@ -256,32 +420,56 @@ namespace lwpp
 		const char *serverUserName() const {return globPtr->serverUserName(id);}
 		LWChanGroupID chanGrp() const {return globPtr->chanGrp(id);}
 
-    //! Set the GUI colours for this node
+		//! Set the GUI colours for this node
 		void setNodeColor(int col[3]) {globPtr->setNodeColor(id, col);}
-    //! Set the GUI colours for this node
+		//! Set the GUI colours for this node
 		void setNodeColor(int r, int g, int b) {globPtr->setNodeColor3(id, r, g, b);}
 
 		void setNodePreviewType(NodePreviewType type) {globPtr->setNodePreviewType(id, type);}
 
-    //! Immediately update the preview for this node
+		//! Immediately update the preview for this node
 		void UpdateNodePreview() {globPtr->UpdateNodePreview(id);}
 
 		NodeInputID firstInput(void) {return inF->first(id);}
 		int numInputs(void) {return inF->numInputs(id);}
 		NodeInputID	inputByIndex (int n ) {return inF->byIndex(id, n);}
-		int inputGetIndex (NodeInputID nid) {return inF->getIndex(id, nid);}
+		int inputGetIndex (NodeInputID nid) 
+		{      
+			return inF->getIndex(nid);   
+		}
 
-		void disconnect (LWNodeInput *nid) {inF->disconnect(id, nid->getID());}
+		void disconnect (LWNodeInput *nid) 
+		{
+			inF->disconnect(nid->getID());
+		}
 
-    /*! @name Outputs
+		void setNodeMenuFuncs(LWNodeMenuFuncs *funcs)
+		{
+			globPtr->SetNodeMenuFuncs(id, funcs);
+		}
+
+		void setNodeMenuFuncs(NodeMenuBase &menu)
+		{
+			setNodeMenuFuncs(menu.getMenuFuncs());
+		}
+
+		/*! @name Outputs
 		 *  Adding node outputs
-     */
-    //@{
+		 */
+		//@{
+		LWNodeOutput *addOutput(ConnectionType type, const std::string name)
+		{
+			return new LWNodeOutput(id, type, name.c_str());
+		}
 		LWNodeOutput *addColorOutput(const std::string name ="Color")
 		{
-			return addOutput(NOT_COLOR, name);
+			return addOutput(NOT_RGB, name);
 		}
 		LWNodeOutput *addColourOutput(const std::string name = "Colour")
+		{
+			return addColorOutput(name);
+		}
+		LWNodeOutput *addRGBOutput(const std::string name = "Colour")
 		{
 			return addColorOutput(name);
 		}
@@ -301,55 +489,78 @@ namespace lwpp
 		{
 			return addOutput(NOT_FUNCTION, name);
 		}
-		LWNodeOutput *addMaterialOutput(const std::string name = "Material")
+		LWNodeOutput *addProjectionOutput(const std::string name = "Projection")
 		{
-			return addOutput(NOT_MATERIAL, name);
+			return addOutput(NOT_PROJECTION, name);
 		}
-    // @}
-    /*! @name auto_Outputs
+		LWNodeOutput *addMatrix44Output(const std::string name = "Matrix")
+		{
+			return addOutput(NOT_MATRIX44, name);
+		}
+		LWNodeOutput *addBSDFOutput(const std::string name = "Material")
+		{
+			return addOutput(NOT_BSDF, name);
+		}
+		// @}
+		/*! @name auto_Outputs
 		 *  Adding node outputs that are managed by std::auto_ptr
-     */
-    //@{
+		 */
+		//@{
 		auto_NodeOutput autoColorOutput(const std::string name ="Color")
 		{
-			return auto_NodeOutput(addOutput(NOT_COLOR, name));
+			return auto_NodeOutput(addColorOutput(name));
 		}
 		auto_NodeOutput autoColourOutput(const std::string name = "Colour")
 		{
 			return auto_NodeOutput(addColorOutput(name));
 		}
+		auto_NodeOutput autoRGBOutput(const std::string name = "Colour")
+		{
+			return auto_NodeOutput(addColorOutput(name));
+		}
 		auto_NodeOutput autoScalarOutput(const std::string name ="Scalar")
 		{
-			return auto_NodeOutput(addOutput(NOT_SCALAR, name));
+			return auto_NodeOutput(addScalarOutput(name));
 		}
 		auto_NodeOutput autoVectorOutput(const std::string name ="Vector")
 		{
-			return auto_NodeOutput(addOutput(NOT_VECTOR, name));
+			return auto_NodeOutput(addVectorOutput(name));
 		}
 		auto_NodeOutput autoIntegerOutput(const std::string name ="Integer")
 		{
-			return auto_NodeOutput(addOutput(NOT_INTEGER, name));
+			return auto_NodeOutput(addIntegerOutput(name));
 		}
 		auto_NodeOutput autoFunctionOutput(const std::string name ="Function")
 		{
-			return auto_NodeOutput(addOutput(NOT_FUNCTION, name));
+			return auto_NodeOutput(addFunctionOutput(name));
 		}
-		auto_NodeOutput autoMaterialOutput(const std::string name = "Material")
+		auto_NodeOutput autoProjectionOutput(const std::string name = "Projection")
 		{
-			return auto_NodeOutput(addOutput(NOT_MATERIAL, name));
+			return auto_NodeOutput(addProjectionOutput(name));
 		}
-    // @}
+		auto_NodeOutput autoMatrix44Output(const std::string name = "Matrix")
+		{
+			return auto_NodeOutput(addMatrix44Output(name));
+		}
+		auto_NodeOutput autoBSDFOutput(const std::string name = "Material")
+		{
+			return auto_NodeOutput(addBSDFOutput(name));
+		}
+		// @}
 
 		NodeOutputID firstOutput(void) {return outF->first(id);}
-		int numOutputs(void) {return outF->numInputs(id);}
-		NodeOutputID outputByIndex (int n ) {return outF->byIndex(id, n);}
-		int outputGetIndex (NodeOutputID nid) {return outF->getIndex(id, nid);}
+		int numOutputs(void) const {return outF->numInputs(id);}
+		NodeOutputID outputByIndex (int n ) const {return outF->byIndex(id, n);}
+		int outputGetIndex (NodeOutputID nid) const
+		{
+			return outF->getIndex(nid);      
+		}
 
 		ConnectionType getType( NodeValue val) {return outF->getType(val);}
-    /*! @name Returning values during the node evaluation
+		/*! @name Returning values during the node evaluation
 		 *  These functions can only be called in evaluate.
-     */
-    //@{
+		 */
+		//@{
 		void setValue(NodeValue val, double *v)
 		{
 			setValue(val, static_cast<void *>(v));
@@ -399,16 +610,11 @@ namespace lwpp
 			setValue(val, static_cast<void *>(&i));
 		}
 
-		void setValue(NodeValue val, LWNodalMaterial *material)
-		{
-			setValue(val, static_cast<void *>(material));
-		}
-
 		void setValue(NodeValue val, Vector3d &v)
 		{
 			setValue(val, v.asLWVector());
 		}
-    //@}
+		//@}
 
 		void *getValue( NodeValue val) {return outF->getValue(val);}
 	};
@@ -430,6 +636,15 @@ namespace lwpp
 		}
 	};
 
+	/*
+	Various helper functions
+	*/
+	// Return a scalar from an input/vparm combo, can be used to initialise a variable
+	double EvalScalarVInput(LWShadingGeometry *sg, lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp);
+
+	// Helps handling inputs with a matching vparm in DataGet()
+	void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp);
+	
 /*
 typedef struct	LWNodeUtilityFuncs_t {
 

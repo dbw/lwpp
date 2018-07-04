@@ -27,7 +27,7 @@ namespace lwpp
 /*!
  * @ingroup Adaptor
  */
-template <class T, int maxVersion, int minVersion, int plugType, bool noIO = false>
+template <class T, int version, int plugType, bool noIO = false>
 class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 {
 	public:
@@ -36,10 +36,9 @@ class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 			LWServer::AddPlugin(LWMASTER_HCLASS, name, Activate, tags);
 		}
 		//! Set static callbacks for a LightWave Master
-		static int Activate (int version, GlobalFunc *global, LWInstance inst, void *serverData)
+		static int Activate (int lw_version, GlobalFunc *global, LWInstance inst, void *serverData)
 		{
-			if ( version > maxVersion ) return AFUNC_BADVERSION;
-			if ( version < minVersion ) return AFUNC_BADVERSION;
+			if ( lw_version != version ) return AFUNC_BADVERSION;
 			try
 			{
 				UNUSED(serverData);
@@ -48,11 +47,11 @@ class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 				LWMasterHandler *plugin = static_cast<LWMasterHandler *>(inst);
 
 				InstanceAdaptor<T>::Activate(plugin->inst);
-        if (noIO) // cause "warning C4127: conditional expression is constant" but is fine...
-        {
-          plugin->inst->load = 0;
-          plugin->inst->save = 0;
-        }
+				if (noIO) // cause "warning C4127: conditional expression is constant" but is fine...
+				{
+					plugin->inst->load = 0;
+					plugin->inst->save = 0;
+				}
 				ItemAdaptor<T>::Activate(plugin->item);        
 				plugin->type = plugType;
 				plugin->event = Event;
@@ -104,26 +103,26 @@ class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 	IMPLEMENT_LWPANELHANDLER(Master);
 
 	//! @ingroup XPanelAdaptor
-	template <class T, int maxVersion, int minVersion, int plugType>
-	class XPanelMasterAdaptor : public MasterAdaptor<T, maxVersion, minVersion, plugType>, public XPanelAdaptor<T>
+	template <class T, int Version, int plugType>
+	class XPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType>, public XPanelAdaptor<T>
 	{
 	public:
 		XPanelMasterAdaptor(const char *name, ServerTagInfo *tags = 0)
 			: XPanelAdaptor<T>(name, LWMASTER_ICLASS, tags),
-				MasterAdaptor<T, maxVersion, minVersion, plugType>(name, tags)
+				MasterAdaptor<T, Version, plugType>(name, tags)
 		{
 			;
 		}
 	};
 
 	//! @ingroup LWPanelAdaptor
-	template <class T, int maxVersion, int minVersion, int plugType>
-	class LWPanelMasterAdaptor : public MasterAdaptor<T, maxVersion, minVersion, plugType>, public LWPanelAdaptor<T>
+	template <class T, int Version, int plugType>
+	class LWPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType>, public LWPanelAdaptor<T>
 	{
 	public:
 		LWPanelMasterAdaptor(const char *name, ServerTagInfo *tags = 0)
 			: LWPanelAdaptor<T>(name, LWMASTER_ICLASS, tags),
-				MasterAdaptor<T, maxVersion, minVersion, plugType>(name, tags)
+				MasterAdaptor<T, Version, plugType>(name, tags)
 		{
 			;
 		}

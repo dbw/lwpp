@@ -208,7 +208,7 @@ namespace lwpp
 			//! Set static callbacks for the LightWave instance handler
 			static int Activate( int version, GlobalFunc *global, void *l,  void *serverData )
 			{
-				if (version > LWPP_IMAGELOADER_VERSION) return AFUNC_BADVERSION;
+				if (version > LWIMAGELOADER_VERSION) return AFUNC_BADVERSION;
 				try
 				{
 					lwpp::SetSuperGlobal(global);
@@ -455,7 +455,7 @@ namespace lwpp
 			//! Set static callbacks for the LightWave instance handler
 			static int Activate( int version, GlobalFunc *global, void *l,  void *serverData )
 			{
-				if ((version < LWPP_IMAGESAVER_VERSION) || (version > 3)) return AFUNC_BADVERSION;
+				if (version != LWIMAGESAVER_VERSION) return AFUNC_BADVERSION;
 				try
 				{
 					lwpp::SetSuperGlobal(global);

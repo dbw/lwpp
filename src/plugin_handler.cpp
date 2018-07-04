@@ -69,10 +69,11 @@ namespace lwpp
 
 	void XPanelInterface::CreateViewXPanel(LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints, bool do_destroy)
 	{
+		CreateViewXPanel(this, controls, desc, hints, do_destroy);
+	}
+	void XPanelInterface::CreateViewXPanel(void *host, LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints, bool do_destroy)
+	{
 		LW_XPanel.Create(LWXP_VIEW, controls, do_destroy); // Don't destroy by default
-		LW_XPanel.Describe(desc, CB_DataGet, CB_DataSet);
-		LW_XPanel.ViewInst(this);
-		LW_XPanel.setUserData(this);
 		if (hints) LW_XPanel.Hint(hints);
 
 		LWXPanelHint default_hint[] =
@@ -90,6 +91,8 @@ namespace lwpp
 		{
 			LW_XPanel.Hint(destroy_hint);
 		}
+		LW_XPanel.Describe(desc, CB_DataGet, CB_DataSet);
+		LW_XPanel.ViewInst(host);
+		LW_XPanel.setUserData(host);
 	}
-
 }

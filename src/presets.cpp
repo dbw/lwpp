@@ -57,15 +57,15 @@ namespace lwpp
 				std::getline(in, line);
 				if (line[0] != '#')
 				{
-					std::string::size_type index = line.find_first_of(" ");
-					if (index == std::string::npos)
+					std::string::size_type idx = line.find_first_of(" ");
+					if (idx == std::string::npos)
 						continue;
 
-					std::string map = line.substr(0, index);
+					std::string map = line.substr(0, idx);
 					if (map.empty())
 						continue;
 
-					std::string path = line.substr(index+1, line.size() - index - 1);
+					std::string path = line.substr(idx+1, line.size() - idx - 1);
 					if (path.empty())
 						continue;
 
@@ -135,7 +135,7 @@ namespace lwpp
 
 	SimplePreset::SimplePreset(const char *type, const char *name)
 		: plug_type(type), plug_name(name), controlID(0), handler(0),
-		  loadReq(FREQ_LOAD, "Load Settings", "Settings|*.cfg"),
+			loadReq(FREQ_LOAD, "Load Settings", "Settings|*.cfg"),
 			saveReq(FREQ_SAVE, "Save Settings", "Settings|*.cfg")
 	{
 		xpanel.setAutoDestroy(false);
@@ -274,7 +274,7 @@ namespace lwpp
 		return "";
 	}
 
-	LWError SimplePreset::Setup(XPanel& panel, int control)
+	LWError SimplePreset::Setup(XPanel& panel, long control)
 	{
 		xpanel.setID(panel.getID());
 		controlID = control;
@@ -322,7 +322,7 @@ namespace lwpp
 
 	enum {ID_PSEL = 0x0800, ID_TYPE, ID_TEST};
 
-	void SimplePreset::doLoadPreset(const char *filename, bool quiet)
+	bool SimplePreset::doLoadPreset(const char *filename, bool quiet)
 	{
 		LWMessage lwm;
 		File in(filename, File::FILE_LOAD);
@@ -333,11 +333,13 @@ namespace lwpp
 			LWError err = SimplePreset::LoadPreset(ls, name);
 			if (err)
 			{
-				lwm.Error(std::string("Error loading Preset: ") + err);
-				return;
+				if (!quiet) lwm.Error(std::string("Error loading Preset: ") + filename, err);
+				return false;
 			}
 			if (!quiet) lwm.Info(std::string("Loaded Preset: ") + name);
+			return true;
 		}
+		return false;
 	}
 
 	static bool isIllegalChar(char c)
@@ -398,11 +400,20 @@ namespace lwpp
 					}
 				}
 				if (!loop)
-				{		
-			    File out(saveReq.getFullPath(), File::FILE_SAVE);
-			    lwpp::SaveState ss = out.getSaveState();
-			    SavePreset(ss, saveReq.getFullPath());
-			    LWMessage::Info(std::string("Saved Preset As: ") + saveReq.getFullPath());
+				{	
+					LWError err = 0;
+					{
+					  File out(saveReq.getFullPath(), File::FILE_SAVE);
+					  lwpp::SaveState ss = out.getSaveState();
+					  err = SavePreset(ss, saveReq.getFullPath());
+					}
+					if (err != 0)
+					{
+						LWMessage::Error(std::string("Error saving Preset: ") + err);
+						_unlink(saveReq.getFullPath());
+						return;
+					}
+					LWMessage::Info(std::string("Saved Preset As: ") + saveReq.getFullPath());
 				}
 			}
 		} 
@@ -416,7 +427,6 @@ namespace lwpp
 			doLoadPreset(loadReq.getFullPath());
 		}
 	}
-
 
 	void SimplePreset::doSavePreset()
 	{	
@@ -471,7 +481,7 @@ namespace lwpp
 						FILE *outfile = fopen(pres_file.c_str(), "r");
 						if (outfile)
 						{
-						  fclose(outfile);
+							fclose(outfile);
 							int ret = LWMessage::YesNoCan("Save Preset", "Are you sure you want to overwrite preset?", pres_file.c_str());
 							switch (ret)
 							{
@@ -493,17 +503,27 @@ namespace lwpp
 						}
 					}
 					makeAllDirectories(pres_file.c_str());
-					File out(pres_file.c_str(), File::FILE_SAVE);
-          if (out.isValid())
-          {
-            lwpp::SaveState ss = out.getSaveState();
-            SavePreset(ss, pres_name);
-            LWMessage::Info(std::string("Preset saved: ") + pres_file);
-          }
-          else
-          {
-            LWMessage::Error(std::string("An error occured saving ") + pres_file);
-          }
+					LWError err = 0;
+					{
+						File out(pres_file.c_str(), File::FILE_SAVE);
+						if (out.isValid())
+						{
+							lwpp::SaveState ss = out.getSaveState();
+							err = SavePreset(ss, pres_name);
+							LWMessage::Info(std::string("Preset saved: ") + pres_file);
+						}
+						else
+						{
+							LWMessage::Error(std::string("An error occured saving ") + pres_file);
+							return;
+						}
+					}
+					if (err != 0)
+					{
+						LWMessage::Error(std::string("An error occured saving ") + pres_file, err);
+						_unlink(pres_file.c_str());
+						return;
+					}
 				}
 			}
 		} while (loop);
@@ -543,16 +563,16 @@ namespace lwpp
 			{
 				PresetCollection::showDecorated = false;
 				// check if we're overwriting and ask...
-				int index;
-				xpan.getForm(ID_PSEL, index);
-				std::string pres_file = Presets[index].GetFileName();
+				int idx;
+				xpan.getForm(ID_PSEL, idx);
+				std::string pres_file = Presets[idx].GetFileName();
 				lwpp::InterfaceInfo ii;
 				if (ii.showWarning())
 				{
 					FILE *outfile = fopen(pres_file.c_str(), "r");
 					if (outfile)
 					{	
-						int ret = LWMessage::YesNo("Save Preset", "Are you sure you want to delete the preset?", Presets[index].GetGuiName());
+						int ret = LWMessage::YesNo("Delete Preset", "Are you sure you want to delete the preset?", Presets[index].GetGuiName());
 						switch (ret)
 						{
 							case 0: // NO
@@ -596,7 +616,7 @@ namespace lwpp
 		else
 		{
 			DirInfo di(LWFTYPE_CONTENT);
-			std::string basedir = di.GetDirectory();
+			basedir = di.GetDirectory();
 		}
 		trimTrail(basedir);
 		std::ostringstream fname;

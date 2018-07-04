@@ -61,6 +61,39 @@ namespace lwpp
 			return popName(index);
 		}
 	};
+
+	//! Template Base class for PopUpCallbacks
+	/*!
+	* Derive classes from this that use PopCount/PopName callbacks. This class provides the "static call back" -> "member function" translation to interface with LW.
+	* @note Make sure the LWInstance passed to the function is a pointer to the derived class.
+	*/
+	template <typename T, size_t(T::*count)(), const char *(T::*name)(size_t n)>
+	class tPopUpCallback
+	{
+	public:
+		//! PopCount callback for LightWave
+		static int PopCount(void *inst)
+		{
+			if (inst)
+			{
+				T *puc = static_cast<T *>(inst);
+				return (int)puc->*count();
+			}
+			return 0;
+		}
+		//! PopUpName name callback	for LightWave
+		static const char* PopName(void *inst, int n)
+		{
+			if (inst)
+			{
+				T *puc = static_cast<T *>(inst);
+				return puc->*name(n);
+			}
+			return 0;
+		}
+	};
+
+
 	//! Base class for context menus
 	/*!
 	 * Derive a class from this to get instant static callbacks, an example would be DynamicContextMenu
@@ -76,7 +109,7 @@ namespace lwpp
 			//! Static member function to be passed as a LW Callback
 			static size_t countFn (void *inst);
 			//! Static member function to be passed as a LW Callback
-			static char* nameFn (void *inst, int n);			
+			static const char* nameFn (void *inst, int n);			
 	};
 
 	template <class T>
@@ -152,7 +185,7 @@ namespace lwpp
 			if (inst)
 			{
 				T *puc = static_cast<T *>(inst);
-				return puc->popCount();
+				return static_cast<int>( puc->popCount());
 			}
 			return 0;
 		}

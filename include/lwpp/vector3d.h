@@ -50,12 +50,12 @@ namespace lwpp
 			explicit Vector3 (const T n[3]) 
 				: x(n[0]), y(n[1]), z(n[2]) {}
 			explicit Vector3 (const Point3<T> &p);
-      //! Construct from radial angles
-      Vector3 (T theta, T phi)
-        : x( -sin(theta) * cos(phi) ),
-          y( -sin(theta) * sin(phi) ),
-          z( cos(theta) )
-      {}
+			//! Construct from radial angles
+			Vector3 (T theta, T phi)
+				: x( -sin(theta) * cos(phi) ),
+					y( -sin(theta) * sin(phi) ),
+					z( cos(theta) )
+			{}
 
 			inline T *asLWVector() {return &x;}
 			//! Get the Dot product
@@ -78,13 +78,13 @@ namespace lwpp
 			/// operator ///
 			//! Compare a Vector3 
 			inline bool operator== (Vector3 b) const
-            {
-                    return (x == b.x && y == b.y && z == b.z );
-            }
-            inline bool operator!= (Vector3 b) const
-            {
-                    return !(*this==b);
-            }
+						{
+										return (x == b.x && y == b.y && z == b.z );
+						}
+						inline bool operator!= (Vector3 b) const
+						{
+										return !(*this==b);
+						}
 			//! Add a Vector3 
 			inline Vector3& operator+= (Vector3 b) {
 				x += b.x;
@@ -109,18 +109,18 @@ namespace lwpp
 			{
 				return Vector3 (x - b.x, y - b.y, z - b.z);
 			}
-            inline Vector3 operator- (const Vector3& b) const
-            {
-                return Vector3 (x - b.x, y - b.y, z - b.z);
-            }
+						inline Vector3 operator- (const Vector3& b) const
+						{
+								return Vector3 (x - b.x, y - b.y, z - b.z);
+						}
 
-			inline Vector3& operator*= (Vector3 b) {
+			inline Vector3& operator*= (const Vector3 b) {
 				x *= b.x;
 				y *= b.y;
 				z *= b.z;
 				return *this;
 			}
-			inline Vector3 operator* (Vector3 b) 
+			inline Vector3 operator* (const Vector3 b) const
 			{
 				return Vector3 (x * b.x, y * b.y, z * b.z);
 			}
@@ -132,35 +132,35 @@ namespace lwpp
 				z *= b;
 				return *this;
 			}
-			inline Vector3 operator* (double b)
+			inline Vector3 operator* (const double b) const
 			{
 				return Vector3 (x * b, y * b, z * b);
 			}
 
-			inline Vector3& operator/= (Vector3 b)
+			inline Vector3& operator/= (const Vector3 b)
 			{
 				x /= b.x;
 				y /= b.y;
 				z /= b.z;
 				return *this;
 			}
-			inline Vector3 operator/ (Vector3 b)
+			inline Vector3 operator/ (const Vector3 b) const
 			{
 				return Vector3 (x / b.x, y / b.y, z / b.z);
 			}
-			inline Vector3& operator/= (T b) {
+			inline Vector3& operator/= (const T b) {
 				T ib = 1.0 / b;
 				x *= ib;
 				y *= ib;
 				z *= ib;
 				return *this;
 			}
-			inline Vector3 operator/ (T b)
+			inline Vector3 operator/ (const T b) const
 			{
 				T ib = 1.0 / b;
 				return Vector3 (x * ib, y * ib, z * ib);
 			}
-			inline T& operator[](unsigned int index)
+			inline T& operator[](const unsigned int index)
 			{
 				if(index > 2) 
 					throw std::out_of_range("Index supplied to Vector3::operator[] is out of range.");
@@ -173,22 +173,22 @@ namespace lwpp
 				}
 			}
 
-      inline T SphericalTheta()
-      {
-        return acos(-y);
-      }
-      inline T SphericalPhi()
-      {
-        float p = atan2(x, z);
-        return (p < 0.0) ? p + TWOPI : p;
-      }
+			inline T SphericalTheta()
+			{
+				return acos(-y);
+			}
+			inline T SphericalPhi()
+			{
+				float p = atan2(x, z);
+				return (p < 0.0) ? p + TWOPI : p;
+			}
 
-      inline void Abs()
-      {
-        x = x > 0 ? x : -x;
-        y = y > 0 ? y : -y;
-        z = z > 0 ? z : -z;
-      }
+			inline void Abs()
+			{
+				x = x > 0 ? x : -x;
+				y = y > 0 ? y : -y;
+				z = z > 0 ? z : -z;
+			}
 	};
 
 	//! Cross product of two Vector3

@@ -25,6 +25,7 @@ This manual is divided into the following sections:
 - @subpage design
 - @subpage prerequesites
 - @subpage coding_standards
+- @subpage GUIs
 
 @namespace lwpp
 LightWrap++ is fully contained within the lwpp namespace.

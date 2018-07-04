@@ -10,7 +10,7 @@ namespace lwpp
 	}
 
 // #pragma optimize( "gy", off )
-	char* ContextMenuCallback::nameFn (void *inst, int n)
+	const char* ContextMenuCallback::nameFn (void *inst, int n)
 	{
 		if (!inst) return 0;			
 		ContextMenuCallback *cmc = static_cast<ContextMenuCallback *> (inst);

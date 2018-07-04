@@ -89,6 +89,18 @@
     <ClCompile Include="src\command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\comring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panel_tools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\helpPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility_panels.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lwpp\backdropinfo.h">
@@ -229,9 +241,6 @@
     <ClInclude Include="include\lwpp\sceneinfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\lwpp\shader_handler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\lwpp\storeable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -257,9 +266,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\lwpp\vector3d.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\lwpp\volumetric_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\lwpp\vparm.h">
@@ -290,6 +296,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\lwpp\lightinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\bxdf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\panel_tools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\BufferSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\helpPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\utility_panels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
