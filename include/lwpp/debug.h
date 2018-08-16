@@ -105,7 +105,12 @@ namespace lwpp
 
 		#endif // _MSWIN
 	#endif // _DEBUGTOFILE
+	
 #endif // _DEBUG
 }
+
+#ifdef _DEBUG
+extern lwpp::dostream dout;
+#endif
 
 #endif // LWPP_DEBUG_H

@@ -197,7 +197,7 @@ namespace lwpp
 
 		virtual size_t popCount(void); 
 
-		Image(LWImageID _id = 0) : id(_id) {;}
+		Image(LWImageID _id = 0) : id(_id) {_acquireGlobal();}
 
 		Image &operator= (const Image &from)
 		{
@@ -228,6 +228,11 @@ namespace lwpp
 			return globPtr->replace(id, newFile.c_str()) != 0;
 		}
 
+		bool reload()
+		{
+			return globPtr->replace(id, filename()) != 0;
+		}
+
 		LWImageID getNumImage(int n);
 
 		int getImageNum(LWImageID i);
@@ -239,8 +244,7 @@ namespace lwpp
 		bool hasAlpha (void) const 
 		{
 			return (globPtr->hasAlpha(id) != 0);
-		}
-		
+		}		
 		void size (int &w, int &h) const 
 		{
 			globPtr->size(id, &w, &h);
@@ -269,7 +273,7 @@ namespace lwpp
 #endif
 
 		void RGB (int x, int y, LWBufferValue val[3]) const 
-		{
+			{
 			globPtr->RGB(id, x, y, val);
 		}
 		void needAA ()

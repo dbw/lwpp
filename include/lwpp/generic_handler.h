@@ -147,7 +147,7 @@ namespace lwpp
 	template <class T>
 	class LayoutNonModalGenericAdaptor
 	{
-		private:
+		public:
 			static T *plugin;
 		public:
 			LayoutNonModalGenericAdaptor(const char *name, ServerTagInfo *tags = 0)

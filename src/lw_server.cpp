@@ -102,7 +102,8 @@ namespace lwpp
 		delete shutdownList();
 		delete pluginList();
 #if defined (_DEBUG) && defined (_WIN32)
-		//_CrtDumpMemoryLeaks();
+		
+		_CrtDumpMemoryLeaks();
 #endif
 	}
 }

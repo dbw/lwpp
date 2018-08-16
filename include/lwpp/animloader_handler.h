@@ -10,27 +10,45 @@
 
 namespace lwpp
 {
-
   //! @ingroup Handler
+	/*
+	Also add
+	static bool canLoad(const char *file);
+	doe the derived class
+	*/
   class AnimLoaderHandler : public InstanceHandler
   {
   protected:
     LWAnimLoaderHandler *local;
-    //SimpleMonitor monitor;
     int version;
-    std::string fileName;
+    std::string mAnimFileName;
+		int mWidth = 0, mHeight = 0, mFrameCount = 0;
+		double mPixelAspect = 1.0, mFrameRate = 24;
   public:
 		AnimLoaderHandler(void* g, void* context, LWError* err)
 			: InstanceHandler(g,context,err, LWANIMLOADER_HCLASS)
 		{
-			fileName = (const char*) context;
+			mAnimFileName = (const char*) context;
 		}
     virtual ~AnimLoaderHandler() {;}
-    virtual bool isValid() = 0;
-		virtual void Cleanup() = 0; // only called if isValid() == false
-    virtual int				GetFrameCount () = 0;
-    virtual double		GetFrameRate  () = 0;
-    virtual double		GetAspect     (int *w, int *h, double *pixAspect) = 0;
+    //virtual bool isValid() = 0;
+		//virtual void Cleanup() = 0; // only called if isValid() == false
+		virtual int				GetFrameCount()
+		{
+			return mFrameCount;
+		}
+		virtual double		GetFrameRate()
+		{
+			return mFrameRate;
+		}
+		virtual double		GetAspect(int *w, int *h, double *pixAspect)
+		{
+			*w = mWidth;
+			*h = mHeight;
+			*pixAspect = mPixelAspect;
+			if (mHeight) return mWidth * mPixelAspect / mHeight;
+			return 1.0;
+		}
     virtual void			Evaluate      (double, LWAnimFrameAccess *) = 0;
   };
 
@@ -52,7 +70,7 @@ namespace lwpp
         lwpp::SetSuperGlobal(global);
         LWAnimLoaderHandler *plugin = static_cast<LWAnimLoaderHandler *>(l);
         InstanceAdaptor<T>::Activate(plugin->inst);
-        plugin->inst->create = AnimLoaderAdaptor::Create;
+        plugin->inst->create = AnimLoaderAdaptor::Create; // create acts a bit different in this case
         plugin->frameCount = AnimLoaderAdaptor::FrameCount;
         plugin->frameRate = AnimLoaderAdaptor::FrameRate;
         plugin->aspect = AnimLoaderAdaptor::Aspect;
@@ -71,22 +89,20 @@ namespace lwpp
 			static LWInstance Create (void *priv, void *context, LWError *err)
 			{
 				try
-				{
-					LWError localErr = "\0";
-					T *plugin = new T(priv, context, &localErr);
-					if (*localErr)
+				{					
+
+#ifdef _DEBUG
+					dout << "--> AnimLoaderAdaptor context = " << (const char*)context << " ) ?\n";
+#endif					
+					T *plugin = T::Create(priv, context, err);
+					if (*err && (plugin == nullptr))
 					{
-						plugin->Cleanup();
 						delete plugin;
 						plugin = 0;
-						*err = localErr;
 					}
-          if (!plugin->isValid())
-          {
-						plugin->Cleanup();
-            delete plugin;
-						plugin = 0;	
-          }
+#ifdef _DEBUG
+					dout << "<-- AnimLoaderAdaptor context = " << (const char*)context << " ) ?\n";
+#endif					
 					return static_cast<LWInstance> (plugin);
 				}
 				catch (std::exception &e)

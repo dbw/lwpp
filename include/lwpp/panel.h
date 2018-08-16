@@ -424,7 +424,7 @@ namespace lwpp
 			return 0;
 		}
 		//! Tree Info
-		static char *cb_TreeInfo(void *userdata, void *node, int *flags)
+		static const char *cb_TreeInfo(void *userdata, void *node, int *flags)
 		{
 			auto control = static_cast<LWControlID>(userdata);
 			if ( T *eventHandler = F<T>::getHandler(control) )
