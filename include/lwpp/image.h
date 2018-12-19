@@ -8,8 +8,10 @@
 #define LWPP_IMAGE_H
 #include <lwpp/global.h>
 #include <lwimage.h>
+#include <lwnodes.h>
 #include <lwpp/wrapper.h>
 #include <lwpp/storeable.h>
+#include <lwpp/vector3d.h>
 
 #ifdef _DEBUG
 #include <lwpp/debug.h>
@@ -185,30 +187,61 @@ namespace lwpp
 		}
 	};
 
-	//! Wrapper for LWImageList
+		//! Wrapper for LWImageList
 	//! @ingroup Globals
 	class Image : public PopUpCallback, public Storeable, protected GlobalBase<LWImageList>
 	{
 	private:
-		LWImageID id;
-		bool mKeepAspect = false;
+		LWImageID id = nullptr;
+		struct
+		{
+			bool keepAspect : 1;
+		} mFlags;
 	public:
 		virtual const char *popName(int n);
 
 		virtual size_t popCount(void); 
 
-		Image(LWImageID _id = 0) : id(_id) {_acquireGlobal();}
+		Image(LWImageID _id = nullptr) : id(_id)
+		{
+			mFlags.keepAspect = true;
+			_acquireGlobal();
+			globPtr->saverNotifyAttach(this, ImageSaverCB);
+		}
+
+		Image(const Image &from)
+		{
+			id = from.id;
+			mFlags = from.mFlags;
+			_acquireGlobal();
+			globPtr->saverNotifyAttach(this, ImageSaverCB);
+		}
+
+		virtual ~Image()
+		{
+			globPtr->saverNotifyDetach(this);
+		}
+
+		LWImageID saverNotify() const { return id; }
+
+		static LWImageID ImageSaverCB(LWInstance inst)
+		{
+			if (inst == nullptr) return nullptr;
+			Image *host = static_cast<Image *>(inst);
+			return host->saverNotify();
+		}
 
 		Image &operator= (const Image &from)
 		{
 			if (this != &from)
 			{
 				id = from.id;
+				mFlags = from.mFlags;
 			}
 			return *this;
 		}
 		//! Use the image aspect ratio when drawing a xpanel preview. Fit to view otherwise 
-		void PreviewKeepAspect(const bool keep = true) { mKeepAspect = keep; }
+		void PreviewKeepAspect(const bool keep = true) { mFlags.keepAspect = keep; }
 		void SetID(LWImageID _id) {id = _id;}
 		LWImageID getID() const {return id;}
 		//! Get the value returned from a pop-up 
@@ -221,7 +254,12 @@ namespace lwpp
 		void next(void) {id = globPtr->next(id);}
 		void clear(void) {globPtr->clear(id);}
 		void load(const char *filename) {id = globPtr->load(filename);}
-		const char *name() const {return globPtr->name(id);}
+		void load(const std::string filename) { load(filename.c_str()); }
+		const char *name() const {
+			static const char none[] = "(none)";
+			if (id) return globPtr->name(id);
+			return none;
+		}
 		const char *filename(LWFrame frame = 0) const {return globPtr->filename(id, frame);}
 		bool replace (const std::string &newFile)
 		{
@@ -308,6 +346,31 @@ namespace lwpp
 			return globPtr->luma(id, x, y);
 		}
 
+		double evaluate(double u, double v,
+										double dudx, double dvdx, double dudy, double dvdy,
+										int pixelBlending, int useMip, double mipStrength,
+										LWTextureWrap uWrap, LWTextureWrap vWrap, LWDVector colour) const
+		{
+			if (id) return globPtr->evaluateImage(id, u, v, dudx, dvdx, dudy, dvdy,
+																		pixelBlending, useMip, mipStrength,
+																		uWrap, vWrap, colour);
+			return 0.0;
+		}
+
+		double evaluate(LWNodalProjection proj,
+										int pixelBlending, int useMip, double mipStrength,
+										LWTextureWrap uWrap, LWTextureWrap vWrap, LWDVector colour) const
+		{
+			if (id) return globPtr->evaluateImage(id, proj.u, proj.v, proj.dudx, proj.dvdx, proj.dudy, proj.dvdy,
+																						pixelBlending, useMip, mipStrength,
+																						uWrap, vWrap, colour);
+			return 0.0;
+		}
+
+		Vector3d evaluateBumpGradient(LWNodalProjection proj,
+																	int pixelBlending, int useMip, double mipStrength, double bumpStrength,
+																	LWTextureWrap uWrap, LWTextureWrap vWrap) const;
+
 		LWPixmapID evaluate (LWTime t)
 		{
 			return globPtr->evaluate(id, t);
@@ -324,6 +387,7 @@ namespace lwpp
 		{
 			LWError err = 0;
 			globPtr->sceneSave(ss.getState(), id);
+			//globPtr->saverNotifyMarkUsage(id);
 			return err;
 		}
 		//! 
@@ -332,6 +396,8 @@ namespace lwpp
 		void drawXpanel(LWXPDrAreaID reg, int w, int h);
 
 	};
+
+	lwpp::Vector3d ComputeBump(LWNodalProjection &proj, double dtu, double dtv, double displace, double bumpStrength);
 	
 	#define IMAGECHANGE_COMRING "lwppImageChange"
 	

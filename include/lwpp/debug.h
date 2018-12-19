@@ -8,8 +8,10 @@
 
 #if (_WIN32 && _DEBUG)
 #define DBG_ENTER_FUNC ::OutputDebugStringA( "Enter (" __FUNCTION__  ")\n") 
+#define LWPP_DBG_ENTER_FUNC DBG_ENTER_FUNC
 #else
 #define DBG_ENTER_FUNC
+#define LWPP_DBG_ENTER_FUNC
 #endif
 
 namespace lwpp

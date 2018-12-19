@@ -16,6 +16,9 @@
 namespace lwpp
 {
 
+	LWFileReqLocal FileRequest2::frloc;
+	std::vector<std::string> FileRequest2::ret;
+
 	typedef pathList::iterator pathIterator;
 	typedef pathList::const_iterator pathCIterator;
 
@@ -192,7 +195,6 @@ namespace lwpp
 		}
 		trimTrail(fullPath);
 #ifdef _DEBUG		
-		lwpp::dostream dout;
 		dout << "FileName::getPath() - " << fullPath << "\n";
 #endif         
 		return fullPath;
@@ -274,7 +276,6 @@ namespace lwpp
 	std::string FileName::getRelativeName()
 	{
 #ifdef _DEBUG
-		lwpp::dostream dout;        
 		dout << "getRelativeName (before): " << relName << "\n";
 		dout << "getRelativeName (Path): " << relativePath << "\n";
 		dout << "getRelativeName (filename): " << fileName << "\n";		
@@ -337,7 +338,6 @@ namespace lwpp
 		char loadName[1024];
 		LWLOAD_STR(ls.getState(), loadName, 1024);
 #ifdef _DEBUG
-		lwpp::dostream dout;
 		dout << "FileName::Load: " << loadName << "\n";
 #endif 
 		if (loadName[0] != '\0') // we have a valid filename
@@ -358,7 +358,6 @@ namespace lwpp
 		LWError err = 0;
 		LWSAVE_STR(ss.getState(), getRelativeName().c_str());
 #ifdef _DEBUG
-		lwpp::dostream dout;
 		dout << "FileName::Save: " << getRelativeName() << "\n";
 #endif 
 		return err;

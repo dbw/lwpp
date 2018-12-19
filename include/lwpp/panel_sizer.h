@@ -61,10 +61,10 @@ namespace lwpp
 	class Sizer
 	{
 	protected:
-		int mFlags;
-		int mWeight;
+		int mFlags = 0;
+		int mWeight = 0;
 		int padWidth = 0, padHeight = 0;
-		int top, left;
+		int top = 0, left = 0;
     Margin mMargin;
 		public:
 			Sizer(int flags, int weight = 0)
@@ -116,7 +116,7 @@ namespace lwpp
 
 	class StaticSpace : public Sizer
 	{
-		int mWidth, mHeight;
+		int mWidth = 0, mHeight = 0;
 	public:
 		StaticSpace (int w = 20, int h = 20)
 			: Sizer(0, 1), mWidth(w), mHeight(h)
@@ -149,7 +149,7 @@ namespace lwpp
 	class ControlSizer : public Sizer
 	{
 		PanelControl mControl;
-		int minWidth, minHeight;
+		int minWidth = 0, minHeight = 0;
 	public:
 		ControlSizer(PanelControl control, int flags = 0, int weight = 0)
 			: mControl(control), Sizer(flags, weight)
@@ -210,6 +210,7 @@ namespace lwpp
 		}
 		virtual void Layout(int x, int y, int w, int h, int lw)
 		{
+			auto deltaLabel = (mFlags & ALIGN_LABEL) ? lw - getLabelWidth() : 0;
 			//control.Move(x + lw - getLabelWidth() ,y);
 			int cW = minWidth;
 			int cH = minHeight;
@@ -232,10 +233,12 @@ namespace lwpp
 				}
 				else // fill
 				{
-					cW = w;
+					cW = w - deltaLabel;
 				}
 			}
-			if(mFlags & STRETCH_VERTICAL) cH = h;
+			if(mFlags & STRETCH_VERTICAL) cH = h;			
+			x += deltaLabel;
+		  
       mControl.Move(x, y);
 			top = y; left = x;
       mControl.setSize(cW - padWidth, cH - padHeight);
@@ -280,7 +283,7 @@ namespace lwpp
       }
       return sizer;
     }
-		virtual Sizer *Add(PanelControl &cnt, int flags)
+		virtual Sizer *Add(PanelControl &cnt, int flags = 0)
 		{
 			Sizer *sizer = new ControlSizer(cnt, flags);
 			return Add(sizer);
@@ -289,14 +292,19 @@ namespace lwpp
 		{
 			borderControl = border;
 		}
+		void setSpacing(int x, int y = 6)
+		{
+			spacingX = x;
+			spacingY = x;
+		}
 		virtual int getLabelWidth()
 		{
-			int w = 0;
+			int labelWidth = 0;
 			for(auto &i : childList)
 			{
-				w = lwpp::Max(w, i->getLabelWidth());
+				labelWidth = lwpp::Max(labelWidth, i->getLabelWidth());
 			}
-			return w;
+			return labelWidth;
 		}
 		virtual void panelDraw(const lwpp::LWPanel& pan, DrMode mode)
 		{
@@ -392,6 +400,11 @@ namespace lwpp
 				int minHeight = 0;
 				getMinSize(minWidth, minHeight);
 				int remWidth = w - minWidth;
+				if (mFlags & ALIGN_LABEL) 
+				{
+					remWidth -= lw;
+					x += lw;
+				}
 				int remHeight = h - minHeight;
 
 				int totalWeight = 0; // the number of childs that can be stretched
@@ -420,7 +433,7 @@ namespace lwpp
 						}
 					}
 					if(i->getFlags() & STRETCH_VERTICAL) cHeight = h;
-					i->Layout(left, top, cWidth, cHeight, lw);
+					i->Layout(left, top, cWidth, cHeight, getLabelWidth());
 					left += cWidth + spacingX;
 				}
 				top = y;
@@ -525,7 +538,7 @@ namespace lwpp
 							--remHeight;
 						}
 					}
-					i->Layout(left, top, w, cHeight, lw);
+					i->Layout(left, top, w, cHeight, getLabelWidth());
 					top += cHeight + spacingY;
 				}
 				top = y;
@@ -612,7 +625,6 @@ namespace lwpp
 
 			control.setSize(w, h);
 #ifdef _DEBUG
-			lwpp::dostream dout;
 			dout << "  Panel: " << control.getID() << " @ " << x << "," << y << " (" << w << "," << h << ")\n";
 #endif
 		}

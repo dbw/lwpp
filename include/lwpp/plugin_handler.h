@@ -2,9 +2,12 @@
 #define LWPP_HANDLER_H
 
 #include <lwfilter.h>
+#include <lwgizmo.h>
 #include "lwpp/message.h"
 #include "lwpp/lwpanel_handler.h"
+#include <lwpp/dynamicHints.h>
 #include "lwpp/item.h"
+#include "lwpp/customobject_access.h"
 
 #pragma warning( push )
 #pragma warning( disable : 4100 )
@@ -72,6 +75,7 @@ namespace lwpp
 	private:
 		static LWInstance Create (void *priv, void *context, LWError *err)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				LWError localErr = "\0";
@@ -94,6 +98,7 @@ namespace lwpp
 
 		static void Destroy (LWInstance instance)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *plugin = static_cast<T *>(instance);
@@ -107,6 +112,7 @@ namespace lwpp
 
 		static LWError Copy (LWInstance _to, LWInstance _from)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *to = (T *) _to;
@@ -122,6 +128,7 @@ namespace lwpp
 
 		static LWError Load (LWInstance instance, const LWLoadState *ls)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *plugin = static_cast<T *>(instance);
@@ -135,6 +142,7 @@ namespace lwpp
 
 		static LWError Save (LWInstance instance, const LWSaveState *ss)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *plugin = static_cast<T *>(instance);
@@ -149,6 +157,7 @@ namespace lwpp
 
 		static const char *DescLn (LWInstance instance)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *plugin = static_cast<T *>(instance);
@@ -175,6 +184,10 @@ namespace lwpp
 		{
 			ItemTracker.changeID(id_list);
 		}
+		void trackItem(LWItem &item)
+		{
+			ItemTracker.trackItem(item);
+		}
 	};
 
 	//! Wrapper for ItemHandler
@@ -197,6 +210,7 @@ namespace lwpp
 	private:
 		static const LWItemID *UseItems (LWInstance instance)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *plugin = static_cast<T *>(instance);
@@ -211,6 +225,7 @@ namespace lwpp
 
 		static void ChangeID (LWInstance instance, const LWItemID *ids)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			try
 			{
 				T *plugin = static_cast<T *>(instance);
@@ -341,6 +356,7 @@ namespace lwpp
 	private:
 		static LWError Command (LWInstance instance, const char* command)
 		{
+			LWPP_DBG_ENTER_FUNC;
 			T *plugin = (T *) instance;
 			return plugin->Command(command);
 		}
@@ -349,6 +365,9 @@ namespace lwpp
 	//! Base class for all plugins that use an XPanels user interface
 	class XPanelInterface : public XPanelView
 	{
+	protected:
+		lwpp::DynamicHints mDynaHints;
+		lwpp::DynamicControlData mDynaControl;
 	public:
 		XPanel LW_XPanel;
 
@@ -461,6 +480,163 @@ namespace lwpp
 		}
 	};
 
+	class GizmoHandler
+	{
+		LWGizmo *gizmo = nullptr;
+	public:
+		int Interface(int version, LWGizmo *global)
+		{
+			gizmo = global;
+			return AFUNC_OK;
+		}
+
+		virtual ~GizmoHandler() { ; }
+
+		virtual void gzDone() { ; }
+		virtual void gzDraw(lwpp::CustomObjAccess &access) { ; }
+		virtual const char * /* language encoded */ gzHelp(LWToolEvent *) { return ""; }
+		virtual int gzDirty() { return 0; }
+		virtual int gzCount(LWToolEvent *) { return 0; }
+		virtual int gzHandle(LWToolEvent *, int i, LWDVector pos) { return 0; }
+		virtual int gzStart(LWToolEvent *) { return 0; }
+		virtual int gzAdjust(LWToolEvent *, int i) { return 0; }
+		virtual int  gzDown(LWToolEvent *) { return 0; }
+		virtual void gzMove(LWToolEvent *) { ; }
+		virtual void gzUp(LWToolEvent *) { ; }
+		virtual void gzEvent(int code) { ; }
+		virtual LWXPanelID gzPanel(){return nullptr; }
+		virtual int gzEnd(LWToolEvent *, int i) { return 0; }
+	};
+
+	template <class T>
+	class GizmoAdaptor
+	{
+	public:
+		GizmoAdaptor(const char *name, const char *className, ServerTagInfo tags[])
+		{
+			LWServer::AddPlugin(className, name, Interface, tags);
+		}
+		static int Interface(int version, GlobalFunc *global, void *loc, void *serverdata)
+		{
+			if (version < LWINTERFACE_VERSION) return AFUNC_BADVERSION;
+			try
+			{
+				if (loc)
+				{
+					lwpp::SetSuperGlobal(global);
+					LWGizmo *local = static_cast<LWGizmo *>(loc);
+					T *plugin = static_cast<T *>(local->instance);
+					local->gizmo->done = GizmoAdaptor::cbDone;
+					local->gizmo->draw = GizmoAdaptor::cbDraw;
+					local->gizmo->help = GizmoAdaptor::cbHelp;
+					local->gizmo->dirty = GizmoAdaptor::cbDirty;
+					local->gizmo->count = GizmoAdaptor::cbCount;
+					local->gizmo->handle = GizmoAdaptor::cbHandle;
+					local->gizmo->start = GizmoAdaptor::cbStart;
+					local->gizmo->adjust = GizmoAdaptor::cbAdjust;
+					local->gizmo->down = GizmoAdaptor::cbDown;
+					local->gizmo->move = GizmoAdaptor::cbMove;
+					local->gizmo->up = GizmoAdaptor::cbUp;
+					local->gizmo->event = GizmoAdaptor::cbEvent;
+					local->gizmo->panel = GizmoAdaptor::cbPanel;
+					local->gizmo->end = GizmoAdaptor::cbEnd;
+					return plugin->Interface(version, local);
+				}
+				return AFUNC_OK;
+			}
+			catch (std::exception &e)
+			{
+				lwpp::LWMessage::Error("An exception occured in GizmoAdaptor::Interface():", e.what());
+				return AFUNC_BADAPP;
+			}
+		}
+
+		static void cbDone(LWInstance inst)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) plugin->gzDone();
+		}
+		static void cbDraw(LWInstance inst, LWCustomObjAccess *cobj)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) 
+			{
+				lwpp::CustomObjAccess custom(cobj);
+				plugin->gzDraw(custom);
+			}
+		}
+		static const char *cbHelp(LWInstance inst, LWToolEvent *event)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzHelp(event);
+			return "";
+		}
+		static int cbDirty(LWInstance inst)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzDirty();
+			return 0;
+		}
+		static int cbCount(LWInstance inst, LWToolEvent *event)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzCount(event);
+			return 0;
+		}
+		static int cbHandle(LWInstance inst, LWToolEvent *event, int i, LWDVector pos)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzHandle(event, i, pos);
+			return 0;
+		}
+		static int cbStart(LWInstance inst, LWToolEvent *event)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzStart(event);
+			return 0;
+		}
+		static int cbAdjust(LWInstance inst, LWToolEvent *event, int i)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzAdjust(event, i);
+			return 0;
+		}
+		static int cbDown(LWInstance inst, LWToolEvent *event)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzDown(event);
+			return 0;
+		}
+		static void cbMove(LWInstance inst, LWToolEvent *event)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) plugin->gzMove(event);
+		}
+		static void cbUp(LWInstance inst, LWToolEvent *event)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) plugin->gzUp(event);
+		}
+		static void cbEvent(LWInstance inst, int code)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) plugin->gzEvent(code);
+		}
+		static LWXPanelID cbPanel(LWInstance inst)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) plugin->gzPanel();
+			return nullptr;
+		}
+		static int cbEnd(LWInstance inst, LWToolEvent *event, int i)
+		{
+			T *plugin = static_cast<T *>(inst);
+			if (plugin) return plugin->gzEnd(event, i);
+			return 0;
+		}
+
+	};
+	
 	// Macros
 
 #define IMPLEMENT_XPANELHANDLER(pluginClass) \
@@ -497,6 +673,65 @@ namespace lwpp
 	public: \
 	LWPanel##pluginClass##Adaptor(const char *name, ServerTagInfo tags[] = 0) \
 	: LWPanelAdaptor<T>(name, #pluginClass "Interface", tags), \
+	pluginClass##Adaptor<T, vers>(name, tags) \
+	{ ; } \
+	}
+
+#define IMPLEMENT_GIZMOHANDLER(pluginClass) \
+	class Gizmo##pluginClass##Handler : public pluginClass##Handler,	public GizmoInterface \
+	{ \
+	public: \
+	Gizmo##pluginClass##Handler(void *g, void *context, LWError *err) \
+	: pluginClass##Handler(g, context, err) \
+	{	;	} \
+	}
+
+#define IMPLEMENT_GIZMOADAPTOR(pluginClass, vers) \
+	template <class T, int version = vers> class Gizmo##pluginClass##Adaptor : public pluginClass##Adaptor<T, vers>, public GizmoAdaptor<T> \
+	{ \
+	public: \
+	Gizmo##pluginClass##Adaptor(const char *name, ServerTagInfo tags[] = 0) \
+	: GizmoAdaptor<T>(name, #pluginClass "Gizmo", tags), \
+	pluginClass##Adaptor<T, vers>(name, tags) \
+	{ ; } \
+	}
+
+#define IMPLEMENT_GIZMO_XPANELHANDLER(pluginClass) \
+	class GizmoXPanel##pluginClass##Handler : public pluginClass##Handler, public GizmoHandler,	public XPanelInterface\
+	{ \
+	public: \
+	GizmoXPanel##pluginClass##Handler(void *g, void *context, LWError *err) \
+	: pluginClass##Handler(g, context, err) \
+	{	;	} \
+	}
+
+#define IMPLEMENT_GIZMO_XPANELADAPTOR(pluginClass, vers) \
+	template <class T, int version = vers> class GizmoXPanel##pluginClass##Adaptor : public pluginClass##Adaptor<T, vers>, public GizmoAdaptor<T>,  public XPanelAdaptor<T>\
+	{ \
+	public: \
+	GizmoXPanel##pluginClass##Adaptor(const char *name, ServerTagInfo tags[] = 0) \
+	: GizmoAdaptor<T>(name, #pluginClass "Gizmo", tags), \
+  XPanelAdaptor<T>(name, #pluginClass "Interface", tags), \
+	pluginClass##Adaptor<T, vers>(name, tags) \
+	{ ; } \
+	}
+
+#define IMPLEMENT_GIZMO_LWPANELHANDLER(pluginClass) \
+	class GizmoLWPanel##pluginClass##Handler : public pluginClass##Handler,	public GizmoHandler, public LWPanelInterface \
+	{ \
+	public: \
+	GizmoLWPanel##pluginClass##Handler(void *g, void *context, LWError *err) \
+	: pluginClass##Handler(g, context, err) \
+	{	;	} \
+	}
+
+#define IMPLEMENT_GIZMO_LWPANELADAPTOR(pluginClass, vers) \
+	template <class T, int version = vers> class GizmoLWPanel##pluginClass##Adaptor : public pluginClass##Adaptor<T, vers>, public GizmoAdaptor<T>,  public LWPanelAdaptor<T> \
+	{ \
+	public: \
+	GizmoLWPanel##pluginClass##Adaptor(const char *name, ServerTagInfo tags[] = 0) \
+	: GizmoAdaptor<T>(name, #pluginClass "Gizmo", tags), \
+  LWPanelAdaptor<T>(name, #pluginClass "Interface", tags), \
 	pluginClass##Adaptor<T, vers>(name, tags) \
 	{ ; } \
 	}

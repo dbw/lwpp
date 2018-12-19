@@ -118,8 +118,6 @@ namespace lwpp
 		{
 			ss->writeFP(ss->writeData, data, length);
 		}
-
-#if LW_SDK >= 95
 		void Write (const double data) const
 		{
 			ss->writeDP(ss->writeData, &data, 1);
@@ -129,9 +127,6 @@ namespace lwpp
 		{
 			ss->writeDP(ss->writeData, data, length);
 		}
-#endif
-
-
 		void Write (const char *data) const
 		{
 			ss->writeStr(ss->writeData, data);
@@ -252,17 +247,7 @@ namespace lwpp
 		void read(float *f, int length) const
 		{
 			rc = ls->readFP(ls->readData, f, length);
-		}
-		
-		/*void read(double &d) const
-		{
-			float f;
-			rc = ls->readFP(ls->readData, &f, 1);
-			d = (double)f;
-		}*/
-
-#if LW_SDK == 95
-		
+		}				
 		double readDouble(void) const
 		{
 			double d;
@@ -274,10 +259,6 @@ namespace lwpp
 		{
 			rc = ls->readDP(ls->readData, d, length);
 		}
-
-#endif
-
-
 		void readString(char *buffer, int max) const
 		{
 			rc = ls->readStr(ls->readData, buffer, max);
@@ -293,9 +274,7 @@ namespace lwpp
 		LWError read(lwpp::Storeable &object) const;
 		void read(bool &b) const
 		{
-			unsigned char c;
-			rc = ls->readU1(ls->readData, &c, 1);
-			b = (c == 1);
+			b = readBool();
 		}
 		void read(unsigned char &c) const
 		{

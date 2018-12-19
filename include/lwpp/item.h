@@ -6,6 +6,8 @@
 #include <lwpp/vparm.h>
 #include <lwpp/interface.h>
 #include <lwpp/command.h>
+#include "lwpp/objectinfo.h"
+#include "lwpp/colour_management.h"
 #include <vector>
 #include "utility.h"
 #ifdef _DEBUG
@@ -64,7 +66,7 @@ namespace lwpp
     }
     void		param(LWItemID i, LWItemParam p, LWTime t, LWDVector v)
     {
-      globPtr->param(i, p, t, v);
+      if (i != LWITEM_NULL) globPtr->param(i, p, t, v);
     }
     unsigned int limits(LWItemID i, LWItemParam p, LWDVector min, LWDVector max)
     {
@@ -90,7 +92,7 @@ namespace lwpp
     {
       return globPtr->serverFlags(i, s, d);
     }
-    void			controller(LWItemID i, LWItemParam p, int type[3])
+    void controller(LWItemID i, LWItemParam p, int type[3])
     {
       globPtr->controller(i, p, type);
     }
@@ -188,11 +190,24 @@ namespace lwpp
       }
       return *this;
     }
+		LWItemID GetFirstBone()
+		{
+			if (mItemInfo.isValid())
+			{
+				return mItemInfo.first(LWI_BONE, mId);
+			}
+			return 0;
+		}
     LWItem &Next(void)
     {
       mId = mItemInfo.next(mId);
       return *this;
     }
+
+		bool hasChildren(void)
+		{
+			return (mItemInfo.firstChild(mId) != LWITEM_NULL);
+		}
 
     LWItemID getFirstChild(void)
     {
@@ -391,6 +406,18 @@ namespace lwpp
     virtual LWError Save(const SaveState &ls );
   };
 
+	class PrettyItem
+	{
+		lwpp::ObjectInfo oi;
+		lwpp::InterfaceInfo ii;
+		lwpp::ColourManager cm;
+		std::ostringstream name;
+	public:
+		PrettyItem();
+		std::string format(LWItemID id, int indent = 0);
+		std::string format(lwpp::LWItem &item, int indent = 0);
+	};
+
   //! Provide callback functions for LW Items in XPanels...
   /*!
    * @ingroup Entities
@@ -400,29 +427,42 @@ namespace lwpp
   class LWItemCallback : public PopUpCallback, public LWItem
   {
   protected:
-    bool showNone;
-    const char *noneName;
+		PrettyItem pretty;
+		class itemEntry
+		{
+		public:
+			LWItemID id;
+			std::string name;
+			itemEntry(LWItemID _id, std::string _name)
+				: id(_id), name(_name)
+			{
+				;
+			}
+		};
+		std::vector<itemEntry> itemList;
+		const char *noneName;
+		bool showNone = false;
+		void buildItemTree(lwpp::LWItem parent, int indent);
+		void buildItemTree();
 
   protected:
     //! Return number of items
-    virtual size_t popCount (void)
-    {
-      return mItemInfo.CountItems(mType) + (showNone ? 1 : 0); // add one for the (none) case
-    }
+		virtual size_t popCount() override;
     //! return name of item number idx
-    virtual const char *popName (int idx)
-    {
-      if (lwpp::LightWave::isModeler()) return ("(none)"); // No items in Modeler
-      if (showNone)
-      {
-        if (idx == 0)	return noneName;
-        --idx;
-      }
-      LWItem *item = mItemInfo.GetItemN(mType, idx);
-      const char *n = item->LWItem::getName();
-      delete item;
-      return n;
-    }
+		virtual const char *popName(int idx) override;
+
+		int findID(LWItemID id)
+		{
+			if (id == LWITEM_NULL) return 0;
+			int idx = 0;
+			for (auto &i : itemList)
+			{
+				if (i.id == id)
+					return idx + (showNone ? 1 : 0);
+				++idx;
+			}
+			return 0;
+		}
   public:
     //! Constructor, default to an object and no object selected
     LWItemCallback(LWItemType t = LWI_OBJECT, LWItemID id = LWITEM_NULL, bool _showNone = true, const char *_noneName ="(none)")
@@ -430,11 +470,21 @@ namespace lwpp
       showNone(_showNone),
       noneName(_noneName)
     {
-      if (id != LWITEM_NULL)
-      {
-        index = mItemInfo.FindIndex(mId, mType) + 1;
-      }
+			index = findID(mId);
     }
+		LWItemCallback &operator = (const lwpp::LWItemCallback &from)
+		{
+			if (this != &from)
+			{
+				showNone = from.showNone;
+				noneName = from.noneName;
+				mId = from.mId;
+				mType = from.mType;
+				m_itemName = from.m_itemName;
+			}
+			return *this;
+		}
+
     //! return mID of item number idx
     LWItemID GetIndexID (int idx)
     {
@@ -447,24 +497,27 @@ namespace lwpp
         }
         --idx;
       }
-      LWItem *item = mItemInfo.GetItemN(mType, idx);
-      mId = item->GetID();
-      delete item;
+			buildItemTree();
+			if (idx < itemList.size())
+				mId = itemList[idx].id;
+			else
+				mId = LWITEM_NULL;
 
       return mId;
     }
     //! return the index of object ID
     int GetIndex ()
     {
-      index = mItemInfo.FindIndex(mId, mType) + (showNone ? 1 : 0);
-      return index;
+			buildItemTree();
+      return findID(mId);
     }
     //! XPanels compatible DataGet
     int *DataGet ()
     {
+			static int idx;
       if (lwpp::LightWave::isModeler()) return 0;
-      index = mItemInfo.FindIndex(mId, mType) + (showNone ? 1 : 0);
-      return &index;
+      idx = GetIndex();
+      return &idx;
     }
     //! XPanels compatible DataSet
     void DataSet(void *value)
@@ -474,58 +527,6 @@ namespace lwpp
     }
   };
 
-  //! Provide callback functions for LW Items in XPanels...
-  /*!
-   * @ingroup Entities
-   * This class takes care of an item, including loading and saving item references
-   * @todo turn this into a more universal wrapper, a managed variable/item or something like it...
-   */
-  class StyledItemCallback : public LWItemCallback
-  {
-  private:
-    InterfaceInfo iInfo;
-    class itemEntry
-    {
-    public:
-      std::string name;
-      LWItemID id;
-      itemEntry(LWItemID _id, std::string _name)
-        : id (_id), name(_name)
-      {;}
-    };
-    std::vector<itemEntry> itemList;
-    void addChildren (LWItem &parent, int indent, LWItemType t);
-    void buildItemList();
-  protected:
-    //! Return number of items
-    virtual size_t popCount (void)
-    {
-      buildItemList();
-      return itemList.size() + (showNone ? 1 : 0); // add one for the (none) case
-    }
-    //! return name of item number idx
-    virtual const char *popName (int idx)
-    {
-      if (lwpp::LightWave::isModeler()) return ("(none)"); // No items in Modeler
-      if (showNone)
-      {
-        if (idx == 0)	return "(none)";
-        --idx;
-      }
-      return itemList[idx].name.c_str();
-    }
-  public:
-    //! Constructor, default to an object and no object selected
-    StyledItemCallback(LWItemType t = LWI_OBJECT, LWItemID id = LWITEM_NULL, bool _showNone = true)
-    : LWItemCallback(t, id, _showNone)
-    {
-      if (id != LWITEM_NULL)
-      {
-        index = mItemInfo.FindIndex(mId, mType) + 1;
-      }
-    }
-    //! return mID of item number idx
-  };
 
   //! This class tracks the IDs of LW items, especially related to the LWItemFuncs callbacks
   /*!
@@ -551,9 +552,9 @@ namespace lwpp
   {
     private:
       std::vector<LWItem *> mTrackedItems;
-      LWItemID *mTrackedIDs;
+      LWItemID *mTrackedIDs = 0;
     public:
-      LWItemTracker (void) : mTrackedIDs(0) {;}
+      LWItemTracker (){;}
 
       ~LWItemTracker (void);
       //! Refresh the list of IDs created from the tracked Items

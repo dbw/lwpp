@@ -102,6 +102,9 @@ class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 	//! @ingroup LWPanelHandler
 	IMPLEMENT_LWPANELHANDLER(Master);
 
+	IMPLEMENT_GIZMO_XPANELHANDLER(Master);
+	IMPLEMENT_GIZMO_LWPANELHANDLER(Master);
+
 	//! @ingroup XPanelAdaptor
 	template <class T, int Version, int plugType>
 	class XPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType>, public XPanelAdaptor<T>
@@ -123,6 +126,33 @@ class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 		LWPanelMasterAdaptor(const char *name, ServerTagInfo *tags = 0)
 			: LWPanelAdaptor<T>(name, LWMASTER_ICLASS, tags),
 				MasterAdaptor<T, Version, plugType>(name, tags)
+		{
+			;
+		}
+	};
+
+	template <class T, int Version, int plugType>
+	class GizmoXPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType>, public GizmoAdaptor<T>, public XPanelAdaptor<T>
+	{
+	public:
+		GizmoXPanelMasterAdaptor(const char *name, ServerTagInfo *tags = 0)
+			: GizmoAdaptor<T>(name, LWMASTER_GCLASS, tags),
+			XPanelAdaptor<T>(name, LWMASTER_ICLASS, tags),
+			MasterAdaptor<T, Version, plugType>(name, tags)
+		{
+			;
+		}
+	};
+
+	//! @ingroup LWPanelAdaptor
+	template <class T, int Version, int plugType>
+	class GizmoLWPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType>, public GizmoAdaptor<T>, public LWPanelAdaptor<T>
+	{
+	public:
+		GizmoLWPanelMasterAdaptor(const char *name, ServerTagInfo *tags = 0)
+			: GizmoAdaptor<T>(name, LWMASTER_GCLASS, tags),
+			LWPanelAdaptor<T>(name, LWMASTER_ICLASS, tags),
+			MasterAdaptor<T, Version, plugType>(name, tags)
 		{
 			;
 		}

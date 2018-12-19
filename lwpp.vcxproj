@@ -25,7 +25,6 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
     <SccProvider>SAK</SccProvider>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -235,9 +234,11 @@
     <ClInclude Include="include\lwpp\command.h" />
     <ClInclude Include="include\lwpp\comring.h" />
     <ClInclude Include="include\lwpp\contextmenu.h" />
+    <ClInclude Include="include\lwpp\customobject_access.h" />
     <ClInclude Include="include\lwpp\customobject_handler.h" />
     <ClInclude Include="include\lwpp\debug.h" />
     <ClInclude Include="include\lwpp\displacement_handler.h" />
+    <ClInclude Include="include\lwpp\dynamicHints.h" />
     <ClInclude Include="include\lwpp\envelope.h" />
     <ClInclude Include="include\lwpp\environment_handler.h" />
     <ClInclude Include="include\lwpp\exception.h" />
@@ -284,6 +285,7 @@
     <ClInclude Include="include\lwpp\sceneinfo.h" />
     <ClInclude Include="include\lwpp\storeable.h" />
     <ClInclude Include="include\lwpp\surface.h" />
+    <ClInclude Include="include\lwpp\surfed.h" />
     <ClInclude Include="include\lwpp\texture.h" />
     <ClInclude Include="include\lwpp\texture_editor.h" />
     <ClInclude Include="include\lwpp\texture_handler.h" />

@@ -27,7 +27,7 @@ namespace lwpp
 	template <typename T>
 	class Vector3 {
 		public:
-			T x, y, z; //!< Storage for the vector components, use &x for LW compatibility
+			mutable T x, y, z; //!< Storage for the vector components, use &x for LW compatibility
 		public:
 			//! Default Constructor
 			/*!
@@ -57,7 +57,7 @@ namespace lwpp
 					z( cos(theta) )
 			{}
 
-			inline T *asLWVector() {return &x;}
+			inline T *asLWVector() const {return &x;}
 			//! Get the Dot product
 			inline T Dot(Vector3 a) const;
 			inline Vector3 Cross(Vector3 a) const;
@@ -70,49 +70,60 @@ namespace lwpp
 			T &Y() {return y;}
 			T &Z() {return z;}
 
-			inline void Translate (Vector3 dir, T distance) {
+			inline void Translate (const Vector3 dir, const T distance) {
 				x += dir.x * distance;
 				y += dir.y * distance;
 				z += dir.z * distance;
 			}
 			/// operator ///
 			//! Compare a Vector3 
-			inline bool operator== (Vector3 b) const
-						{
-										return (x == b.x && y == b.y && z == b.z );
-						}
-						inline bool operator!= (Vector3 b) const
-						{
-										return !(*this==b);
-						}
+			inline bool operator== (const Vector3 b) const
+			{
+							return (x == b.x && y == b.y && z == b.z );
+			}
+			inline bool operator!= (const Vector3 b) const
+			{
+							return !(*this==b);
+			}
 			//! Add a Vector3 
-			inline Vector3& operator+= (Vector3 b) {
+			inline Vector3& operator+= (const Vector3 b) {
 				x += b.x;
 				y += b.y;
 				z += b.z;
 				return *this;
 			}
+			inline Vector3& operator+= (const T v)
+			{
+				x += v;
+				y += v;
+				z += v;
+				return *this;
+			}
 			//! Add a Vector3
-			inline Vector3 operator+ (Vector3 b)
+			inline Vector3 operator+ (const Vector3 b) const
 			{
 				return Vector3 (x + b.x, y + b.y, z + b.z);
 			}
 			//! Subtract a Vector3
-			inline Vector3& operator-= (Vector3 b) {
+			inline Vector3& operator-= (const Vector3 b) {
 				x -= b.x;
 				y -= b.y;
 				z -= b.z;
 				return *this;
 			}
+			//! Subtract a scalar
+			inline Vector3& operator-= (const T v)
+			{
+				x -= v;
+				y -= v;
+				z -= v;
+				return *this;
+			}
 			//! Subtract a Vector3
-			inline Vector3 operator- (Vector3 b)
+			inline Vector3 operator- (const Vector3& b) const
 			{
 				return Vector3 (x - b.x, y - b.y, z - b.z);
 			}
-						inline Vector3 operator- (const Vector3& b) const
-						{
-								return Vector3 (x - b.x, y - b.y, z - b.z);
-						}
 
 			inline Vector3& operator*= (const Vector3 b) {
 				x *= b.x;
@@ -125,7 +136,7 @@ namespace lwpp
 				return Vector3 (x * b.x, y * b.y, z * b.z);
 			}
 
-			inline Vector3& operator*= (T b)
+			inline Vector3& operator*= (const T b)
 			{
 				x *= b;
 				y *= b;
@@ -162,6 +173,9 @@ namespace lwpp
 			}
 			inline T& operator[](const unsigned int index)
 			{
+
+				assert(index < 3);
+				
 				if(index > 2) 
 					throw std::out_of_range("Index supplied to Vector3::operator[] is out of range.");
 
@@ -170,14 +184,15 @@ namespace lwpp
 				case 0:	return x;
 				case 1:	return y;
 				case 2:	return z;
+				default: return x;
 				}
 			}
 
-			inline T SphericalTheta()
+			inline T SphericalTheta() const
 			{
 				return acos(-y);
 			}
-			inline T SphericalPhi()
+			inline T SphericalPhi() const
 			{
 				float p = atan2(x, z);
 				return (p < 0.0) ? p + TWOPI : p;
@@ -189,7 +204,14 @@ namespace lwpp
 				y = y > 0 ? y : -y;
 				z = z > 0 ? z : -z;
 			}
+      void doClamp(const T min = 0, const T max = 1)
+			{				
+				x = Clamp(x, min, max);
+				y = Clamp(y, min, max);
+				z = Clamp(z, min, max);
+			}
 	};
+
 
 	//! Cross product of two Vector3
 	/*!
@@ -198,7 +220,7 @@ namespace lwpp
 	 * @return the cross product
 	 */
 	template <typename T>
-	inline Vector3<T> Cross(Vector3<T> a, Vector3<T> b)
+	inline Vector3<T> Cross(const Vector3<T> a, const Vector3<T> b) 
 	{
 		return Vector3<T>(a.y * b.z - a.z * b.y,
 											a.z * b.x - a.x * b.z,
@@ -206,13 +228,13 @@ namespace lwpp
 	}
 
 	template <typename T>
-	inline T Vector3<T>::Dot(Vector3<T> a) const
+	inline T Vector3<T>::Dot(const Vector3<T> a) const
 	{
 		return (x*a.x + y*a.y + z*a.z);
 	}
 
 	template <typename T>
-	inline Vector3<T> Vector3<T>::Cross(Vector3<T> a) const
+	inline Vector3<T> Vector3<T>::Cross(const Vector3<T> a) const
 	{
 		return Vector3<T>( y*a.z - z*a.y, z*a.x - x*a.z, x*a.y - y*a.x );
 	}

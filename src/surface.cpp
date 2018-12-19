@@ -51,5 +51,17 @@ namespace lwpp
 		}
 		return ret;
 	}
+
+	LWSurface::SurfaceSet LWSurface::getAll() 
+	{
+		SurfaceSet ret;
+		LWSurface surf;
+		if (!surf.exists()) return ret;
+		do {
+			ret.insert(surf);				
+		} while (surf.next());
+
+		return ret;
+	}
 }
 

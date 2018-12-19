@@ -58,6 +58,7 @@ namespace lwpp
 
 	Matrix4x4d LWItem::getObjectToWorld(LWTime time)
 	{
+		if (mId == LWITEM_NULL) return Matrix4x4d();
 		Point3d pos;
 		Vector3d rt, up, fd;
 		Param(LWIP_RIGHT, time, rt);
@@ -318,64 +319,102 @@ namespace lwpp
 		return err;
 	}
 
-	void StyledItemCallback::addChildren (LWItem &parent, int indent, LWItemType t)
+	/*
+	* PrettyItem
+	*/
+
+	static const char *typeIcons[] = { "\03(i:160)", "\03(i:162)", "\03(i:163)", "\03(i:161)" };
+
+	PrettyItem::PrettyItem() : cm(lwpp::lwcst_viewer) {}
+	std::string PrettyItem::format(LWItemID id, int indent)
 	{
-		if (parent.GetID())
+		lwpp::LWItem item(id);
+		return format(item, indent);
+	}
+
+	std::string PrettyItem::format(lwpp::LWItem &item, int indent)
+	{
+		float rgba[4];
+		ii.getItemColour(item.GetID(), rgba);
+		//bool visible = (ii.itemVisibility(item.GetID()) == LWIVIS_VISIBLE);
+		cm.convertToColourSpace(rgba);
+		name.str("");
+		name.clear();
+		auto icon = typeIcons[item.Type()];
+		if (item.Type() == LWI_OBJECT)
 		{
-			if ((parent.Type() == t))
+			oi.setObject(item.GetID());
+			if (oi.numPoints() == 0) icon = "\03(i:190)";
+		}
+		name << "\03(g:" << indent * 12 << ")"
+			<< "\03(c: " << rgba[0] * 256 << "," << rgba[1] * 256 << "," << rgba[2] * 256 << ")"
+			<< icon
+			//<< visible ? "\03(c:Nc_LABEL) " : "\03(c:Nc_HILIGHT) "
+			<< "\03(c:Nc_LABEL) "
+			<< item.getName();
+		return name.str();
+	}
+	
+
+	/*
+	* StyledItemCallback
+	*/
+
+	void LWItemCallback::buildItemTree(lwpp::LWItem parent, int indent)
+	{
+		lwpp::LWItem item(parent.getFirstChild());
+		while (item.exists())
+		{
+			if (item.Type() == mType || mType == -1)
+			  itemList.push_back(itemEntry(item.GetID(), pretty.format(item, indent)));
+#ifdef _DEBUG
+			for (int i = 0; i < indent; ++i) dout << "  ";
+			dout << item.getName() << "\n";
+#endif
+			if (item.hasChildren())
+				buildItemTree(item, indent + 1);
+			item.NextChild(parent);
+		}
+	}
+
+	void LWItemCallback::buildItemTree()
+	{
+		for (auto t = 0; t < 3; ++t)
+		{
+			lwpp::LWItem item(t);
+			while (item.exists())
 			{
-				std::ostringstream fancyName;
-				fancyName << " \03(g:" << indent << ")" ;
-				static const char *icon[] = {"160", "159", "162", "161"};
-				if (lwpp::LightWave::isLayout())
+				if (!item.Parent().exists())
 				{
-					fancyName << "\03(i:" << icon[t] << ", " << iInfo.itemColor(parent.GetID()) << ")";
+					if (item.Type() == mType || mType == -1)
+					  itemList.push_back(itemEntry(item.GetID(), pretty.format(item)));
+#ifdef _DEBUG
+					dout << item.getName() << "\n";
+#endif
+					if (item.hasChildren())
+						buildItemTree(item, 1);
 				}
-				fancyName	<< parent.getName();
-				itemList.push_back( itemEntry( parent.GetID(), fancyName.str() ));
-			}
-			lwpp::LWItem child(parent.getFirstChild());
-			while (child.GetID())
-			{
-				addChildren(child, indent + 10, t);
-				child.NextChild(parent);
+				item.Next();
 			}
 		}
 	}
 
-	void StyledItemCallback::buildItemList()
+	size_t LWItemCallback::popCount()
 	{
 		itemList.clear();
-		LWItem root(LWI_OBJECT);
-		while (root.GetID())
+		buildItemTree();
+		return itemList.size() + (showNone ? 1 : 0); // add one for the (none) case
+	}
+
+	const char *LWItemCallback::popName(int idx)
+	{
+		if (lwpp::LightWave::isModeler()) return noneName; // No items in Modeler
+		if (showNone)
 		{
-			LWItem parent = root.Parent();
-			if (!parent.GetID())
-			{
-				addChildren(root, 0, mType);
-			}
-			root.Next();
+			if (idx == 0)	return noneName;
+			--idx;
 		}
-		root = LWItem(LWI_LIGHT);
-		while (root.GetID())
-		{
-			LWItem parent = root.Parent();
-			if (!parent.GetID())
-			{
-				addChildren(root, 0, mType);
-			}
-			root.Next();
-		}
-		root = LWItem(LWI_CAMERA);
-		while (root.GetID())
-		{
-			LWItem parent = root.Parent();
-			if (!parent.GetID())
-			{
-				addChildren(root, 0, mType);
-			}
-			root.Next();
-		}
+		return itemList[idx].name.c_str();
 	}
 
 	/*
@@ -437,7 +476,7 @@ namespace lwpp
 		return mTrackedIDs;
 	}
 
-	/*
+		/*
 	* Optionally LWITEM_NULL or LWITEM_ALL can be returned manuall instead of the return of this function
 	* @note This relies on a properly Refresh'd list.
 	*/

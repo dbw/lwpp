@@ -4,6 +4,14 @@
 
 namespace lwpp
 {
+	const char *BlendModeStrings[] =
+	{
+		"Normal", "Additive", "Subtractive", "Multiply", "Screen",
+		"Darken", "Lighten", "Difference", "Negative", "Colour Dodge", "Colour Burn",
+		"Red", "Green", "Blue",
+		0
+	};
+
   void ShadingEvaluator::setValue(lwpp::NodeHandler *node, NodeValue value)
 	{
 		node->setValue(value, colour);
@@ -70,8 +78,7 @@ namespace lwpp
 
   void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp)
   {
-    if ( !lwni->isConnected() ) return vp->ID();
-    return 0;
+    return lwni->isConnected() ? 0 : vp->ID();
   }
 }
 

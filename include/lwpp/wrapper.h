@@ -11,7 +11,7 @@ namespace lwpp
 {
 	//! Base class for PopUpCallbacks
 	/*!
-	 * Derive classes from this that use PopCount/PopName callbacks. This class provides the "static clall back" -> "member function" translation to interface with LW.
+	 * Derive classes from this that use PopCount/PopName callbacks. This class provides the "static call back" -> "member function" translation to interface with LW.
 	 * @note Make sure the LWInstance passed to the function is a pointer to the derived class.
 	 */
 	class PopUpCallback

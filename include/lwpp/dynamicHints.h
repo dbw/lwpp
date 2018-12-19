@@ -11,6 +11,7 @@ namespace lwpp
 	{
 		std::vector<LWXPanelHint> mHints;
 	public:
+		~DynamicHints() { LWPP_DBG_ENTER_FUNC;}
 		DynamicHints & operator,(LWXPanelHint hint)
 		{
 			mHints.push_back(hint);
@@ -82,6 +83,7 @@ namespace lwpp
 	public:
 		~DynamicControlData()
 		{
+			LWPP_DBG_ENTER_FUNC;
 		}
 		DynamicControlData &Add(unsigned int cid = 0, const char *label = nullptr, const char *ctrlclass = nullptr, const char *datatype = nullptr)
 		{
@@ -91,6 +93,16 @@ namespace lwpp
 			mDataDesc.push_back(desc);
 			dirty = true;
 			return *this;
+		}
+
+		void Add(LWXPanelControl ctrl[])
+		{
+			LWXPanelControl *c = ctrl;
+			while (c && c->cid)
+			{
+				Add(c->cid, c->label, c->ctrlclass);
+				c++;
+			}
 		}
 
 		void Clear()
@@ -104,6 +116,11 @@ namespace lwpp
 		{
 			createStore();
 			return &mControlStore[0];
+		}
+
+		std::vector<LWXPanelControl> &getControlStore()
+		{
+			return mControlStore;
 		}
 
 		LWXPanelDataDesc *getDataDesc()

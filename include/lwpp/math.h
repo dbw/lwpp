@@ -104,7 +104,6 @@ namespace lwpp {
 		return (value * value * (3 - 2 * value));
 	}
 
-
 	template<class Type>
 	int Mod(const Type a, const Type b)
 	{
@@ -241,6 +240,14 @@ namespace lwpp {
 	template <class T> T SignOf (const T a) 
 	{
 		return (a > static_cast<T>(0)) ? static_cast<T>(1) : static_cast<T>(-1);
+	}
+
+	// Colour
+	template <typename T>
+	T Colour2Luma(T *rgb)
+	{
+		//return  (rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722);
+		return  (rgb[0] + rgb[1] + rgb[2]) / 3.0f;
 	}
 
 } // end namespace lwpp

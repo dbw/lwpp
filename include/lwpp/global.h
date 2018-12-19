@@ -201,6 +201,8 @@ namespace lwpp
       return (globPtr != 0);
     }
 
+		const char *getGlobalName() const { return m_globalName; }
+
     //! Get the pointer to the global
     G* operator->() {return globPtr;}
 
@@ -383,6 +385,11 @@ namespace lwpp
 } // end namespace lwpp
 
 constexpr unsigned int lwID(const char id[4])
+{
+	return LWID_(id[0], id[1], id[2], id[3]);
+}
+
+constexpr unsigned int operator"" _lw(const char *id, size_t)
 {
 	return LWID_(id[0], id[1], id[2], id[3]);
 }

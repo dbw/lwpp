@@ -134,7 +134,7 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 	class FileRequest2 : public BaseFileRequest, protected GlobalBase<LWFileActivateFunc>, protected DirInfo
 	{
 		private:
-			LWFileReqLocal frloc;
+			static LWFileReqLocal frloc;
 		public:
 			/*!
 			 * @param reqType Type of file requester, FREQ_LOAD, FREQ_SAVE, FREQ_DIRECTORY or FREQ_MULTILOAD
@@ -160,7 +160,11 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 				frloc.path = new char[bufLen];
 				frloc.baseName = new char[bufLen];
 				frloc.fullName = new char[bufLen];
-				strcpy (frloc.path, path);
+				if (_baseDirType)
+				{
+					strcpy(frloc.path, DirInfo::GetDirectory());
+				}
+				else strcpy (frloc.path, path);
 				strcpy (frloc.baseName, baseName);
 				frloc.pickName = pickName;
 			}
@@ -174,10 +178,29 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 			/*!
 			 * @return True if the file selection is valid
 			 */
-			bool Post(void)
+			bool Post()
 			{
 				return ((GlobalBase<LWFileActivateFunc>::globPtr( LWFILEREQ_VERSION, &frloc ) == AFUNC_OK) && (frloc.result == 1));
 			}
+
+			static std::vector<std::string> ret;
+			static int pick() 
+			{
+				ret.push_back(frloc.fullName);
+				return 0;
+			}
+
+			std::vector<std::string> PostMulti()
+			{				
+				ret.clear();
+				frloc.reqType = FREQ_MULTILOAD;
+				frloc.pickName = pick;
+
+				if ((GlobalBase<LWFileActivateFunc>::globPtr(LWFILEREQ_VERSION, &frloc) != AFUNC_OK) || (frloc.result != 1))
+					ret.clear();
+				return ret;
+			}
+
 			//! Return the file name of the file selected in the requester
 			const char *getFullName()
 			{
@@ -269,7 +292,6 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 			{
 				if (!valid) buildFullName();
 #ifdef _DEBUG
-        lwpp::dostream dout;
         dout << "FileName::getFullName() -  " << fullName << std::endl;
 #endif
 				return fullName.c_str();

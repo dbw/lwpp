@@ -149,7 +149,6 @@ namespace lwpp
 			{
 				groupID = createUniqueGroup(name, parent);
 #ifdef _DEBUG
-				lwpp::dostream dout;
 				dout << "Creating ChannelGroup : " << name << " - " << groupID << "\n";
 #endif
 			}
@@ -159,7 +158,6 @@ namespace lwpp
 			{
 				groupID = createUniqueGroup(name, parent.getID());
 #ifdef _DEBUG
-				lwpp::dostream dout;
 				dout << "Creating ChannelGroup : " << name << " - " << groupID << "\n";
 #endif
 			}
@@ -173,7 +171,6 @@ namespace lwpp
 			virtual ~ChannelGroup()
 			{
 #ifdef _DEBUG
-				lwpp::dostream dout;
 				dout << "Destroying ChannelGroup : " << groupName() << " - " << groupID << "\n";
 #endif
 				Reset();

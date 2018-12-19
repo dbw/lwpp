@@ -41,6 +41,7 @@ namespace lwpp
 		{
 			return layoutGeneric->evaluate(layoutGeneric->data, command.c_str());
 		}
+
 		void editServer(const char *type, const char *name, LWItemID id = 0)
 		{
 			lwpp::ItemInfo ii;
@@ -65,11 +66,19 @@ namespace lwpp
 			cmd << "ApplyServer " << type << " " << name;
 			evaluate(cmd.str());
 		}
-		void addUniqueServer(const char *type, const char *name, LWItemID id = 0)
+		void addUniqueServer(const char *type, const char *name)
 		{
-			if (findServer(type, name, id) > 0) return;
+			if (findServer(type, name, 0) > 0) return;
 			std::ostringstream cmd;
 			cmd << "ApplyServer " << type << " " << name;
+			evaluate(cmd.str());
+		}
+		
+		void addUniqueServer(const char *type, const char *name, LWItem &item)
+		{
+			if (findServer(type, name, item.GetID()) > 0) return;
+			std::ostringstream cmd;
+			cmd << "ApplyServerByItemID " << std::hex << item.GetID() << " " << type << " " << name;
 			evaluate(cmd.str());
 		}
 		void removeServer(const char *type, const int index)
@@ -86,7 +95,10 @@ namespace lwpp
 			while (int index = (findServer(type, name, id)))
 			{
 				std::ostringstream cmd;
-				cmd << "RemoveServer " << type << " " << index;
+				if (id)
+					cmd << "RemoveServerByItemID " << std::hex << id << " " << type << " " << index;
+				else
+					cmd << "RemoveServer " << type << " " << index;
 				evaluate(cmd.str());
 			}
 		}

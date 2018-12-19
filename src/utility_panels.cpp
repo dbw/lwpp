@@ -17,7 +17,6 @@ namespace lwpp
 		mRaster.blitPanel(0, 0, GetID(), xs, ys, width, height);
 	}
 
-
 	void AboutPanel::UserDraw(LWControlID control, void *userdata, DrMode drawmode)
 	{
 		if (userdata)
@@ -30,6 +29,11 @@ namespace lwpp
 	AboutPanel::AboutPanel(const std::string title, const char**message, const char *_image, int w, int h)
 		: LWPanel(title), image(_image), width(w), height(h)
 	{
+		if (!mRaster.available())
+		{
+			lwpp::LWMessage::Error("Can't open panel, global doesn't exist", mRaster.getGlobalName());
+		  return;
+		}
 		if (image)
 		{
 			mRaster.create(w, h);
@@ -64,6 +68,7 @@ namespace lwpp
 
 	void AboutPanel::Open()
 	{
+		if (!mRaster.available()) return;
 		LWPanel::Open(PANF_BLOCKING);
 	}
 
@@ -99,8 +104,8 @@ namespace lwpp
 		SetWidth(minW);
 
 	}
-	void LogPanel::panelResize(const lwpp::LWPanel & pan, int w, int h)
+	void LogPanel::panelResize(const lwpp::LWPanel & pan, int width, int height)
 	{
-		mainSizer.Layout(4, 0, w - 8, h - 8 - 28, 0);
+		mainSizer.Layout(4, 0, width - 8, height - 8 - 28, 0);
 	}
 }

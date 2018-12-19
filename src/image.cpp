@@ -2,6 +2,8 @@
 #include <lwpp/xpanel.h>
 #include <lwpp/comring.h>
 #include <lwpp/colour_management.h>
+#include <lwpp/file_request.h>
+#include "lwmath.h"
 
 #ifndef nullptr
 #define nullptr 0
@@ -75,10 +77,13 @@ namespace lwpp
   */ 
   const char *Image::popName(int n)
   {
-    if (n == 0)
-      return "(none)";
-    else
-      return globPtr->name(getNumImage(n - 1));
+		if (n == 0)
+			return "(none)";
+		else if (n == 1) 
+		{
+				return "(load image)";
+		}
+    return globPtr->name(getNumImage(n - 2));
   }
 
   size_t Image::popCount(void) 
@@ -90,24 +95,40 @@ namespace lwpp
       count++;
       _id = globPtr->next(_id);
     }
-    return count + 1;	// add one for the "(none)" case
+		return count + 2;	// add two for the "(none)" and (load) cases
   }
 
   void Image::GetPopUp(int i) 
   {
-    if (i == 0)
-    {
-      SetID(0);
-    }
-    else
-    {
-      SetID(getNumImage(i-1));
-    }
+		if (i == 0)
+		{
+			SetID(0);
+		}
+		else if (i == 1)
+		{
+			// load image
+			lwpp::DirInfo di(LWFTYPE_IMAGE);
+			lwpp::FileRequest2 fr(FREQ_LOAD, "Load Image", LWFTYPE_IMAGE, "", "", LWFTYPE_IMAGE);
+			if (!fr.Post())
+			{
+				SetID(0);
+				return;
+			}
+			else
+			{
+				load(fr.getFullPath());
+				return;
+			}
+		}
+		else
+		{
+			SetID(getNumImage(i - 2));
+		}
   }
   //! Set the value for a pop-up
   int Image::SetPopUp(void) 
   {
-    if (isValid()) return getImageNum(id) + 1;
+    if (isValid()) return getImageNum(id) + 2;
     return 0;
   }
   LWImageID Image::getNumImage(int n)
@@ -133,7 +154,7 @@ namespace lwpp
   
   void Image::DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h)
   {
-      if ( pan == nullptr ) return;
+    if ( pan == nullptr ) return;
     lwpp::XPanel panel(pan);
     void *ud = panel.getUserData(cid);
     Image *img = static_cast<Image *>(ud);
@@ -148,7 +169,7 @@ namespace lwpp
   void Image::drawXpanel(LWXPDrAreaID reg, int w, int h)
   {
     lwpp::XPDrawArea area(reg, w, h);
-    area.drawBox(0, 0, 0, 0, 0, w, h); // clear preview to black
+    area.clear(); // clear preview to black
     if ( id == nullptr ) return;
 
     int width, height;
@@ -157,7 +178,7 @@ namespace lwpp
     float sx = (float)w / (float)width; // step size
     float sy = (float)h / (float)height;
 
-    if ( mKeepAspect )
+    if ( mFlags.keepAspect )
     {
       float step = fmin(sx, sy); // smallest step
       sx = step;
@@ -191,6 +212,82 @@ namespace lwpp
     }
   }
 
+	inline void normalize(LWDVector v)
+	{
+		auto mag = VLEN(v);
+		VDIVS(v, mag);
+	}
+
+	lwpp::Vector3d ComputeBump(LWNodalProjection &proj, double dtu, double dtv, double displace, double bumpStrength)
+	{
+		LWDVector rv = { 0.0, 0.0, 0.0 };
+
+		if (dtu || dtv)
+		{
+			LWDVector dndu, dndv, nn;
+			VCPY(dndu, proj.dPdu);
+			VCPY(dndv, proj.dPdv);
+			VCROSS(nn, dndu, dndv);
+			normalize(nn);
+
+			normalize(dndu);
+			normalize(dndv);
+
+			LWDVector d_dndu;
+			d_dndu[0] = dndu[0] - dtu * nn[0] + displace * dndu[0];
+			d_dndu[1] = dndu[1] - dtu * nn[1] + displace * dndu[1];
+			d_dndu[2] = dndu[2] - dtu * nn[2] + displace * dndu[2];
+
+			LWDVector d_dndv;
+			d_dndv[0] = dndv[0] - dtv * nn[0] + displace * dndv[0];
+			d_dndv[1] = dndv[1] - dtv * nn[1] + displace * dndv[1];
+			d_dndv[2] = dndv[2] - dtv * nn[2] + displace * dndv[2];
+
+			VCROSS(rv, d_dndu, d_dndv);
+			VSCL(rv, -0.05 * displace * bumpStrength);
+		}
+		return lwpp::Vector3d(rv);
+	}
+
+	Vector3d Image::evaluateBumpGradient(LWNodalProjection proj,
+																			 int pixelBlending, int useMip, double mipStrength, double bumpStrength,
+																			 LWTextureWrap uWrap, LWTextureWrap vWrap) const
+	{
+		double baseTex[4], uTex[4], vTex[4];
+		LWNodalProjection bProj = proj;
+
+		auto du = std::abs(proj.dudx) + std::abs(proj.dudy);
+		du *= 2.0; // should be 0.5f;
+		if (du == 0) du = .0005f;
+
+		auto dv = std::abs(proj.dvdx) + std::abs(proj.dvdy);
+		dv *= 2.0; // should be 0.5f;
+		if (dv == 0) dv = .0005f;
+
+		// get three samples
+		lwpp::Vector3d P(proj.P), dpdu(proj.dPdu), dpdv(proj.dPdu);
+
+		baseTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, baseTex);
+
+		auto p = P + dpdu * du;
+		for (int i = 0; i < 3; ++i)	proj.P[i] = p[i];
+		bProj.u = proj.u + du;
+		uTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, uTex);
+
+		p = P + dpdv * dv;
+		for (int i = 0; i < 3; ++i)	proj.P[i] = p[i];
+		bProj.v = proj.v + dv; bProj.u = proj.u;
+		vTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, vTex);
+
+		auto displace = Colour2Luma(baseTex);
+		auto udisplace = Colour2Luma(uTex);
+		auto vdisplace = Colour2Luma(vTex);
+
+		auto dtu = ((displace - udisplace) / du);
+		auto dtv = ((displace - vdisplace) / dv);
+
+		return lwpp::ComputeBump(proj, dtu, dtv, displace, bumpStrength);
+	}
 
   namespace 
   {

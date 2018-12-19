@@ -8,6 +8,7 @@
 
 namespace lwpp
 {
+
 	class LWSurface : public GlobalBase<LWSurfaceFuncs>
 	{
 	protected:
@@ -63,6 +64,7 @@ namespace lwpp
 		SurfaceSet byName(std::string name, std::string obj) const;
 		SurfaceSet byName(std::string name) const;
 		SurfaceSet byObject(std::string name) const;
+		static SurfaceSet getAll();
 	};
 
 		//! Provide callback functions for LW Items in XPanels...

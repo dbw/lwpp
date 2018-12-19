@@ -5,9 +5,34 @@
 void cocOpenURL(const std::string &s)
 {
     @autoreleasepool {
-		NSURL *url = [NSURL URLWithString: [[NSString alloc] initWithCString: s.c_str()]];
+        NSURL *url = [NSURL URLWithString: [[NSString alloc] initWithCString: s.c_str() encoding: NSISOLatin1StringEncoding]];
 		[[NSWorkspace sharedWorkspace] openURL: url];
 	}
+}
+
+void cocMouseLocation(int &x, int &y)
+{
+    NSRect screenRect;
+    NSArray *screenArray = [NSScreen screens];
+    unsigned screenCount = [screenArray count];
+    
+    NSPoint mouseLoc = [NSEvent mouseLocation]; //get current mouse position
+    x = mouseLoc.x;
+    y = mouseLoc.y;
+    
+    for (unsigned index = 0; index < screenCount; index++)
+    {
+        NSScreen *screen = [screenArray objectAtIndex: index];
+        //screenRect = [screen visibleFrame];
+        screenRect = [screen frame];
+        //bool inside = [screen isMousePoint];
+        //if ([screen isMousePoint point: mouseLoc rect: screenRect])
+        if (NSPointInRect(mouseLoc, screenRect))
+        {
+            y = screenRect.size.height - y;
+            return;
+        }
+    }
 }
 
 std::string cocGetTempPath()
@@ -35,8 +60,8 @@ bool cocFileRequest::Post()
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    NSString *nsExt =  [[NSString alloc] initWithCString: extension];
-    NSString *nsfName =  [[NSString alloc] initWithCString: fName];
+    NSString *nsExt =  [[NSString alloc] initWithCString: extension encoding: NSISOLatin1StringEncoding];
+    NSString *nsfName =  [[NSString alloc] initWithCString: fName encoding: NSISOLatin1StringEncoding];
     // NSURL *dirUrl = [NSURL fileURLWithPath:[[NSString alloc] initWithCString: savePath]];
     NSArray *extensions = [nsExt componentsSeparatedByString:@";"];
     nsExt = nil;
@@ -47,7 +72,7 @@ bool cocFileRequest::Post()
         {
             NSSavePanel *save;            
             save = [NSSavePanel savePanel];
-            [save setTitle: [[NSString alloc] initWithCString: title]];
+            [save setTitle: [[NSString alloc] initWithCString: title encoding: NSISOLatin1StringEncoding]];
             [save setAllowsOtherFileTypes: true];
           //[save setDirectoryURL: dirUrl];
             [save setAllowedFileTypes:extensions];
@@ -64,7 +89,7 @@ bool cocFileRequest::Post()
         {
             NSOpenPanel *open;
             open = [NSOpenPanel openPanel];
-            [open setTitle: [[NSString alloc] initWithCString: title]];
+            [open setTitle: [[NSString alloc] initWithCString: title encoding: NSISOLatin1StringEncoding]];
             [open setCanChooseFiles: true];
             [open setCanChooseDirectories: false];
             [open setAllowedFileTypes:extensions];

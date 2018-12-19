@@ -135,7 +135,6 @@
 		87375E270FC0829100793C29 /* image.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = image.cpp; path = src/image.cpp; sourceTree = "<group>"; };
 		874605F00C49312F000941F4 /* lw_server.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = lw_server.cpp; path = src/lw_server.cpp; sourceTree = "<group>"; };
 		8760DBDA1073656300BC9B26 /* platform_cocoa.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = platform_cocoa.cpp; path = src/platform_cocoa.cpp; sourceTree = "<group>"; };
-		8760DBE01073740100BC9B26 /* platform_cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform_cocoa.h; path = include/lwpp/platform_cocoa.h; sourceTree = "<group>"; };
 		8760DBE3107379E400BC9B26 /* platform_cocoa.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = platform_cocoa.mm; path = src/platform_cocoa.mm; sourceTree = "<group>"; };
 		8766711E0FD69E0C00DB9C05 /* surface.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = surface.cpp; path = src/surface.cpp; sourceTree = "<group>"; };
 		877C02480E212F3300CB3C70 /* nodes.cpp */ = {isa = PBXFileReference; fileEncoding = 12; lastKnownFileType = sourcecode.cpp.cpp; name = nodes.cpp; path = src/nodes.cpp; sourceTree = "<group>"; };
@@ -322,7 +321,6 @@
 				23EE98E712D4BAF30091E67C /* colour_management.cpp */,
 				8760DBE3107379E400BC9B26 /* platform_cocoa.mm */,
 				8760DBDA1073656300BC9B26 /* platform_cocoa.cpp */,
-				8760DBE01073740100BC9B26 /* platform_cocoa.h */,
 				878911F10D5A36D0009AB2DD /* texture.cpp */,
 				8766711E0FD69E0C00DB9C05 /* surface.cpp */,
 				87375E270FC0829100793C29 /* image.cpp */,

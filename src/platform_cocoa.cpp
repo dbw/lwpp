@@ -104,7 +104,13 @@ namespace lwpp
 		//return (milliseconds <= (GetDblTime() * 17)); // return ticks
 		return milliseconds < 800; // 0.8 seconds as a constant
 	}
-
+    
+    bool getMousePosition(int &x, int &y)
+    {
+        cocMouseLocation(x,y);
+        return true;
+    }
+    
 } // end namespace lwpp
 
 

@@ -88,7 +88,45 @@ Valid strings for *** are:
 - MIMG_POPOUTARROW
 - MIMG_VPEXPAND
 - MIMG_VPCOLLAPSE
-- MIMG_FLYOUT
+- MIMG_FLYOUT (vertical divider, right solid)
+- MIMG_VISI (visible - Eye)
+- MIMG_LOCKED
+- MIMG_UNLOCKED
+- MIMG_REMOVE
+- MIMG_CENTER
+- MIMG_CAMERASELECT (Photo camera)
+- MIMG_VIEWPORTSAVE (floppy)
+- MIMG_TREERIGHT
+- MIMG_TREERIGHTO
+- MIMG_TREEDOWN
+- MIMG_FREEZE
+- MIMG_HIERARCHY
+- MIMG_TRANSFORM
+- MIMG_ADDKEY
+- MIMG_CLAPBOARD
+- MIMG_LINK
+- MIMG_PROBE
+- MIMG_CHECKBOX_EMPTY
+- MIMG_CHECKBOX_MARKED
+- MIMG_CHECKBOX_MIXED
+
+- L_ARROW
+- R_ARROW
+
+- RAMP_ENDS
+- RAMP_MIDDLE
+- RAMP_LEFT
+- RAMP_RIGHT
+
+- BLOCK8
+
+
+- (i:181) Lock
+- (i:190) Item
+- (i:160) Object
+- (i:161) Bone
+- (i:162) Light
+- (i:163) Camera
 
 ## (g:KBSHORT_GAP)
 inserts a short gap for a keyboard shortcut

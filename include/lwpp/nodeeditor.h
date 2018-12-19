@@ -49,7 +49,6 @@ namespace lwpp
 		{
 			create(rootName.c_str(), panelTitle.c_str(), root, input, userData, parent);
 #ifdef _DEBUG
-			lwpp::dostream dout;
 			dout << "Created NodeEditor : " << mId << "\n";
 #endif
 		}
@@ -77,7 +76,6 @@ namespace lwpp
 				if (mId)
 				{
 #ifdef _DEBUG
-					lwpp::dostream dout;
 					dout << "Destroying NodeEditor : " <<mId << "\n";
 #endif
 					globPtr->destroy(mId);

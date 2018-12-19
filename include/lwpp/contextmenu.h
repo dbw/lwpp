@@ -78,7 +78,6 @@ namespace lwpp
 			if ((menu) && available())
 			{
 #ifdef _DEBUG
-	lwpp::dostream dout;
 	std::hex(dout);
 	dout << "Deploy Context Menu: 0x" << menu << "\n";	
 	dout << "  Panel: 0x" << panel << "\n";	
@@ -112,7 +111,7 @@ namespace lwpp
 				return entries[n];
 			};
 		public:
-			SimpleContextMenu (const char **_entries, int width) : entries(_entries), num_entries(0)
+			SimpleContextMenu (const char **_entries, int width = 0) : entries(_entries), num_entries(0)
 			{
 				while (_entries[num_entries]) num_entries++;
 				menu.Create(width, SimpleContextMenu::countFn, SimpleContextMenu::nameFn, this);
@@ -127,8 +126,7 @@ namespace lwpp
 	//! @ingroup Entities
 	class DynamicContextMenu : public ContextMenuCallback
 	{
-		private:
-			
+		private:			
 			class menuEntry
 			{
 			public:
@@ -146,12 +144,14 @@ namespace lwpp
 			size_t count(void);
 			const char *name(int n);
 	  public:	
-			DynamicContextMenu (int _width);
+			DynamicContextMenu (int _width = 0);
+			int Deploy(int select);
 			int Deploy(LWPanelID panel, int select);
       int Deploy(LWPanel &panel, int select);
 			//! Add a new item to the context menu
 			void AddEntry (const char *entry, unsigned int id);
       void AddEntry (std::string entry, unsigned int id);
+			void Clear();
 	};
 }
 #endif // LWPP_CONTEXMENU_H

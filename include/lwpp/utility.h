@@ -155,6 +155,9 @@ namespace lwpp
 		}
 	};
 
+    //!return the current mouse poairion, platform dependent
+	bool getMousePosition(int &x, int &y);
+
 	//! convert a string in-place to lower case
 	inline std::string &toLowercase(std::string &str)
 	{

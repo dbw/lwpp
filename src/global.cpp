@@ -67,6 +67,10 @@
 
 namespace lwpp
 {
+#ifdef _DEBUG
+	dostream dout;
+#endif
+
 	//! Initialize and store superglobal GlobalFunc
 	GlobalFunc *SuperGlobal = 0;
 
@@ -140,6 +144,7 @@ namespace lwpp
 		IMPLEMENT_GLOBAL(LWXPanelFuncs,				LWXPANELFUNCS_GLOBAL)
 		IMPLEMENT_GLOBAL(LWSceneInfo,				LWSCENEINFO_GLOBAL)
 		IMPLEMENT_GLOBAL(LWSurfaceFuncs,			LWSURFACEFUNCS_GLOBAL)
+		IMPLEMENT_GLOBAL(LWSurfEdFuncs,				LWSURFEDFUNCS_GLOBAL)
 		IMPLEMENT_GLOBAL(LWTextureFuncs,			LWTEXTUREFUNCS_GLOBAL)
 		IMPLEMENT_GLOBAL(LWTxtrEdFuncs,				LWTXTREDFUNCS_GLOBAL)
 		IMPLEMENT_GLOBAL(LWMTUtilFuncs,				LWMTUTILFUNCS_GLOBAL)

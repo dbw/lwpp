@@ -335,7 +335,6 @@ namespace lwpp
 			{
 				if (globPtr) globPtr->setItemColorCustom(item, color);
 			}
-#if (LW_SDK >= 92)
 			//! Changes the default color for draw objects on Layout's Viewports
 			/*!
        * @param[out] color will contain the colour as a float RGB triplet
@@ -400,45 +399,37 @@ namespace lwpp
 			{
 				if (globPtr) globPtr->defaultItemTypeColor(LWI_BONE, color, 0);
 			}
-#if (LW_SDK >= 96)
+
 			void getItemColour( LWItemID item, unsigned int state, float rgba[4])
 			{
 				if (globPtr) globPtr->itemColorRgba(item, state, rgba);
 			}
 			void getItemColour( LWItemID item, float rgba[4])
 			{
-				getItemColour(item, LWITEMCOL_CURRENT, rgba);
+				getItemColour(item, LWITEMCOL_NORMAL, rgba);
 			}
-#else
-			void getItemColour( LWItemID item, float rgba[4])
-			{
-				if (globPtr) globPtr->itemColorRgba(item, rgba);
-			}
-#endif
 
-#if (LW_SDK >= 96)
 			//! Gets the color of Items on it's current state on Layout's Viewports
 			//! @parameter color is an float[4] array
 			//! For example Red will be { 1.0, 0.0, 0.0}
-			void getItemsCurrentColor( LWItemID item, float rgba[4])
+			void getItemCurrentColor( LWItemID item, float rgba[4])
 			{
 				if (globPtr) globPtr->itemColorRgba(item, LWITEMCOL_CURRENT, rgba);
 			}
 			//! Gets the color of Items on it's normal state on Layout's Viewports
 			//! @parameter color is an float[4] array
 			//! For example Red will be { 1.0, 0.0, 0.0}
-			void getItemsNormalColor( LWItemID item, float rgba[4])
+			void getItemNormalColor( LWItemID item, float rgba[4])
 			{
 				if (globPtr) globPtr->itemColorRgba(item, LWITEMCOL_NORMAL, rgba);
 			}
 			//! Gets the color of Items on it's selected state on Layout's Viewports
 			//! @parameter color is an float[4] array
 			//! For example Red will be { 1.0, 0.0, 0.0}
-			void getItemsSelectedColor( LWItemID item, float rgba[4])
+			void getItemSelectedColor( LWItemID item, float rgba[4])
 			{
 				if (globPtr) globPtr->itemColorRgba(item, LWITEMCOL_SELECTED, rgba);
 			}
-#endif // LW_SDK 96+
 			//! Returns the icon scale of the Item in Layout's Viewports
 			/*!
        * It's used to size the icon of the item on them.
@@ -448,7 +439,6 @@ namespace lwpp
 				if (globPtr) return globPtr->itemIconScale(item);
         return 1.0;
 			}
-#endif
 	};
 }
 

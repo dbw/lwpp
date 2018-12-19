@@ -11,7 +11,6 @@ namespace lwpp
 	void makeAllDirectories(const char *path)
 	{
 #ifdef _DEBUG
-		lwpp::dostream dout;
 		dout << "makeAllDirectories: " << path << std::endl;
 #endif
 		char DirName[1024];
@@ -115,6 +114,18 @@ namespace lwpp
 	bool isDoubleClick(unsigned int milliseconds)
 	{
 		return (milliseconds < GetDoubleClickTime());
+	}
+
+	bool getMousePosition(int &x, int &y)
+	{
+		POINT lpPoint;
+		if (GetCursorPos(&lpPoint))
+		{
+			x = lpPoint.x;
+			y = lpPoint.y;
+			return true;
+		}
+		return false;
 	}
 
 }

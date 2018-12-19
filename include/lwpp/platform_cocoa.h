@@ -6,13 +6,17 @@
  *  Copyright 2009 db&w Bornemann und Wolf GbR. All rights reserved.
  *
  */
- 
+
+#ifndef LWPP_PLATFORM_COCOA
+#define LWPP_PLATFORM_COCOA
+
 #include <string>
 
 void cocOpenURL(const std::string &s);
 
-std::string cocGetTempPath();
+void cocMouseLocation(int &x, int &y);
 
+std::string cocGetTempPath();
 
 class cocFileRequest
 {
@@ -30,3 +34,5 @@ public:
 	bool Post();
 	const char *getFullName();
 };
+
+#endif

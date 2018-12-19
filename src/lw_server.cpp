@@ -22,19 +22,19 @@ namespace lwpp
 {
 	HandlerList *LWServer::startupList()
 	{
-		static HandlerList *startList = new HandlerList();
-		return startList;
+		static HandlerList startList;
+		return &startList;
 	}
 	HandlerList *LWServer::shutdownList()
 	{
-		static HandlerList *shutList = new HandlerList();
-		return shutList;
+		static HandlerList shutList;
+		return &shutList;
 	}
 
 	PluginList *LWServer::pluginList()
 	{
-		static PluginList *plugList = new PluginList();
-		return plugList;
+		static PluginList plugList;
+		return &plugList;
 	}
 
 	void LWServer::AddPlugin(const char *className,  const char *name, ActivateFunc *activate, ServerTagInfo  tagInfo[])
@@ -98,9 +98,6 @@ namespace lwpp
     {
       (*i)();
     }
-		delete startupList();
-		delete shutdownList();
-		delete pluginList();
 #if defined (_DEBUG) && defined (_WIN32)
 		
 		_CrtDumpMemoryLeaks();

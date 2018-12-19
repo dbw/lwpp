@@ -316,5 +316,14 @@
     <ClInclude Include="include\lwpp\utility_panels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\lwpp\surfed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\dynamicHints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\customobject_access.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

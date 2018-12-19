@@ -223,6 +223,39 @@ namespace lwpp
             return getName();
         }
     };
+		/*! @class PanelMultiTreeNode panel.h <lwpp/panel.h>
+		 *  @ingroup LWPanels
+		 * Encapsulates the information needed by the MultiTreeView to display items
+		 * This class is the base class for any item displayed in a tree control
+		 * All items need to implement getName(int column)
+		 * Items with children need to implement getChildCount() and getChild() as well.
+		 */
+		class PanelMultiTreeNode
+		{
+			int m_flags;
+		public:
+			PanelMultiTreeNode() : m_flags(NODE_FLAG_EXPND) { ; }
+			virtual ~PanelMultiTreeNode() { ; }
+			//! Returns the i'th child of the current item or 0 if there isn't one.
+			virtual PanelMultiTreeNode *getChild(int) { return 0; }
+			//! Returns the number of children of the current item
+			virtual int getChildCount() { return 0; }
+			//! Returns the name of the current item
+			virtual const char *getName(int column) = 0;
+			//! Handles the flags that LWPanels uses to track the open/close state of a branch in the tree
+			virtual const char *getInfo(int column, int *flags)
+			{
+				if (*flags)
+				{
+					m_flags = *flags;
+				}
+				else
+				{
+					*flags = m_flags;
+				}
+				return getName(column);
+			}
+		};
     
     //! @class LWDrawFuncs panel.h <lwpp/panel.h>
 	//! @ingroup LWPanels
@@ -442,6 +475,59 @@ namespace lwpp
 				eventHandler->controlTreeMove(control, (PanelTreeNode *)node, parent, i);
 			}
 		}
+		/*
+		* MultiTree
+		*/
+		//! MultiTree Count 
+		static int cb_MultiTreeCount(void *userdata, void *node)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return eventHandler->controlMultiTreeCount(control, (PanelMultiTreeNode *)node);
+			}
+			return 0;
+		}
+		//! MultiTree Leaf
+		static void *cb_MultiTreeLeaf(void *userdata, void *node, int i)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return eventHandler->controlMultiTreeLeaf(control, (PanelMultiTreeNode *)node, i);
+			}
+			return 0;
+		}
+		//! MultiTree Info
+		static const char *cb_MultiTreeInfo(void *userdata, void *node, int column, int *flags)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return const_cast<char *>(eventHandler->controlMultiTreeInfo(control, (PanelMultiTreeNode *)node, column, flags));
+			}
+			return const_cast<char *>("");
+		}
+		//! MultiTree Child Move
+		static void cb_MultiTreeMove(void *userdata, void *node, void *parent, int i)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				eventHandler->controlMultiTreeMove(control, (PanelMultiTreeNode *)node, (PanelMultiTreeNode *)parent, i);
+			}
+		}
+		//! MultiTree Column Width
+		static int cb_MultiTreeColWidth(void *userdata, int column)
+		{
+			auto control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return eventHandler->controlMultiTreeColWidth(control, column);
+			}
+			return 0;
+		}
+
 	};	
 
 	/*! @class PanelControl panel.h <lwpp/panel.h>
@@ -647,6 +733,25 @@ namespace lwpp
 			return fval.flt.value;
 		}
 
+		char *GetC_String()
+		{
+			// we need to provide a buffer
+			static char buffer[2048];
+			LWValue sval = { LWT_STRING };
+			sval.str.buf = buffer;
+			sval.str.bufLen = 2048;
+			get(CTL_VALUE, &sval);
+			return sval.str.buf;
+		}
+
+		std::string GetString()
+		{
+			auto str = GetC_String();
+			if (str) return std::string(str);
+			return "";
+		}
+
+
 		//! Set the minimum range
 		int RangeMin() {return GetInt(CTL_RANGEMIN);}
 		int RangeMax() {return GetInt(CTL_RANGEMAX);}
@@ -762,6 +867,12 @@ namespace lwpp
 		void LeftAlign(PanelControl &ref, int nudge = 0)	{
 			MoveX(ref.X() + nudge);
 		}
+		/*! Aligns a control to the left of another control
+		 *  @param &ref reference to the original control used to left align this control */
+		void LabelAlign(PanelControl &ref, int nudge = 0) {
+			MoveX(ref.X() + ref.LW() - LW() + nudge);
+		}
+
 		/*! Aligns a control to the right of another control
 		 *  @param &ref reference to the original control used to right align this control */
 		void RightAlign(PanelControl &ref, int nudge = 0)	{
@@ -2323,6 +2434,48 @@ namespace lwpp
 			desc.tree.moveFn=move;
 			return addControl("TreeControl", &desc, title);
 		}
+		//! Adds a MultiTree Control
+		template<typename T>
+		LWControl *AddMultiTree(const char *title, int width, int height, bool allowMove = false)
+		{
+			LWPanControlDesc desc;
+			desc.type = LWT_TREE;
+			desc.multiTree.width = width;
+			desc.multiTree.height = height;
+			desc.multiTree.infoFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiTreeInfo;
+			desc.multiTree.countFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiTreeCount;
+			desc.multiTree.leafFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiTreeLeaf;
+
+			if (allowMove)
+				desc.multiTree.moveFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiTreeMove;
+			else
+				desc.multiTree.moveFn = nullptr;
+
+			desc.multiTree.colWidth = PanelControlAdaptor<T, GetPanelEventHandler>::cb_MultiTreeColWidth;
+			PanelControl control = addControl("MultiTreeControl", &desc, title);
+			control.SetUserData(control.getControl());
+			return control.getControl();
+		}
+		//! Adds a Tree Control
+		LWControl *AddMultiTree(const char *title, int width, int height,			
+			int(*count)(void *data, void *node),
+			void *(*leaf)(void *data, void *node, int i),
+			const char *(*info)(void *userdata, void *node, int column, int *flags),
+			int(*colWidth)(void *, int i),
+			void(*move)(void *data, void *node, void *parentNode, int i) = 0
+		)
+		{
+			LWPanControlDesc desc;
+			desc.type = LWT_TREE;
+			desc.multiTree.width = width;
+			desc.multiTree.height = height;
+			desc.multiTree.infoFn = info;
+			desc.multiTree.countFn = count;
+			desc.multiTree.leafFn = leaf;
+			desc.multiTree.moveFn = move;
+			desc.multiTree.colWidth = colWidth;
+			return addControl("MultiTreeControl", &desc, title);
+		}
 		//@}
 		// Set
 		void Set (void *p, pTag tag)
@@ -2352,6 +2505,11 @@ namespace lwpp
 		{
 			set(tag, p);
 		}
+
+		void SetPosition(int x, int y) { Set(x, PAN_X); Set(y, PAN_Y); }
+		int GetX() const { return GetInt(PAN_X); }
+		int GetY() const { return GetInt(PAN_Y); }
+
 		//! Get panel width in pixels
 		int GetWidth() const {return GetInt(PAN_W);}
 		//! Set panel width in pixels

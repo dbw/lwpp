@@ -3,6 +3,7 @@
 
 #include <lwpp/global.h>
 #include <lwpp/vparm.h>
+#include <lwpp/matrix4x4.h>
 #include <lwnodes.h>
 #include <memory>
 
@@ -634,7 +635,25 @@ namespace lwpp
 		{
 			globPtr->NodeAutosize(id, scale, position);
 		}
-	};
+
+		static void PlanarMapping(const LWDVector pos, const LWDVector rot, const LWDVector scl,
+															int axis, int world, int utiles, int vtiles, double uoffset, double voffset,
+															const LWDMatrix4 refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)
+		{
+			globPtr->planarMapping(pos, rot, scl, axis, world, utiles, vtiles, uoffset, voffset, refMatrix, sg, proj);
+		}
+        
+        static void PlanarMapping(const lwpp::Vector3d &pos, const lwpp::Vector3d &rot, const lwpp::Vector3d &scl,
+                                  int axis, int world, int utiles, int vtiles, double uoffset, double voffset,
+                                  const lwpp::Matrix4x4d &refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)
+        {
+            LWDMatrix4 mat;
+            refMatrix.asLWMatrix(mat);
+            return PlanarMapping(pos.asLWVector(), rot.asLWVector(), scl.asLWVector(),
+                                 axis, world, utiles, vtiles, uoffset, voffset,
+                                 mat, sg, proj);
+        }
+    };
 
 	/*
 	Various helper functions
@@ -644,6 +663,8 @@ namespace lwpp
 
 	// Helps handling inputs with a matching vparm in DataGet()
 	void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp);
+
+	extern const char *BlendModeStrings[];
 	
 /*
 typedef struct	LWNodeUtilityFuncs_t {

@@ -3,6 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <LWSDK_DIR>G:\Projekte\lwsdk2018.0.5\</LWSDK_DIR>
+    <LWPP_DIR>g:\Projekte\lwpp\</LWPP_DIR>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>LWSDK_2018</_PropertySheetDisplayName>
@@ -16,6 +17,9 @@
   <ItemGroup>
     <BuildMacro Include="LWSDK_DIR">
       <Value>$(LWSDK_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LWPP_DIR">
+      <Value>$(LWPP_DIR)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

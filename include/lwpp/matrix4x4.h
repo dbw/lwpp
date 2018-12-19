@@ -16,7 +16,10 @@ namespace lwpp
 		void SetIdentity() {
 			for (int i = 0; i < 4; i++)
 				for (int j = 0; j < 4; j++)
-						m[i][j] = (i == j) ? 1.0 : 0.0;
+						m[i][j] = 0.0;
+
+			for (int i = 0; i < 4; i++)
+				m[i][i] = 1.0;
 		}
 		//! Blank Constructor, sets the identity matrix
 		Matrix4x4 () {
@@ -141,6 +144,11 @@ namespace lwpp
 			return *this;
 		}
 
+        void asLWMatrix(T mat[4][4]) const {
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    mat[i][j] = m[i][j];
+        }
 
 		inline void RotateP(T angle)
 		{
