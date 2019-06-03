@@ -74,12 +74,16 @@ namespace lwpp
 			evaluate(cmd.str());
 		}
 		
-		void addUniqueServer(const char *type, const char *name, LWItem &item)
+		void addUniqueServer(const char *type, const char *name, LWItem &item, bool open = false)
 		{
 			if (findServer(type, name, item.GetID()) > 0) return;
 			std::ostringstream cmd;
 			cmd << "ApplyServerByItemID " << std::hex << item.GetID() << " " << type << " " << name;
 			evaluate(cmd.str());
+			if (open)
+			{
+				editServer(type, name, item.GetID());
+			}
 		}
 		void removeServer(const char *type, const int index)
 		{

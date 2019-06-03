@@ -3,6 +3,7 @@
  */
 #include "lwpp/file_request.h"
 #include "lwpp/utility.h"
+#include "lwpp/platform_win.h"
 
 namespace lwpp
 {

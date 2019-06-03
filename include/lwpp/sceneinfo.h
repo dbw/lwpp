@@ -251,6 +251,11 @@ namespace lwpp
     int         calculateallnormals;  
     */
 
+		unsigned int lightSamples() const { return globPtr->lightsamples; }
+		unsigned int reflectionSamples() const { return globPtr->reflectionsamples; }
+		unsigned int refractionSamples() const { return globPtr->refractionsamples; }
+		unsigned int scatteringSamples() const { return globPtr->scatteringsamples; }
+
   };
 
   // Supporting functions
@@ -294,6 +299,7 @@ namespace lwpp
   * @return true if successfull, false if called from within Modeler
   */
   bool World2Screen(lwpp::Point3d pt, double scoord[2], LWTime time);
+
 }
 
 #endif // LWPP_SCENEINFO_H

@@ -230,7 +230,7 @@ namespace lwpp
     {
       return LWItem(mItemInfo.parent(mId));
     }
-    LWItem &ToParent(void)
+    LWItem &ToParent()
     {
       mId = mItemInfo.parent(mId);
       return *this;

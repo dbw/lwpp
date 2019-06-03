@@ -16,7 +16,7 @@
 namespace lwpp
 {
 
-	LWFileReqLocal FileRequest2::frloc;
+	LWFileReqLocal *FileRequest2::multi_frloc = nullptr;
 	std::vector<std::string> FileRequest2::ret;
 
 	typedef pathList::iterator pathIterator;

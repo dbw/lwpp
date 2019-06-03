@@ -451,7 +451,7 @@
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/../lwsdk2018.0.4/include\"",
+					"\"$(SRCROOT)/../lwsdk2018.0.5/include\"",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
@@ -485,7 +485,7 @@
 				GCC_UNROLL_LOOPS = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/include\"",
-					"\"$(SRCROOT)/../lwsdk2018.0.4/include\"",
+					"\"$(SRCROOT)/../lwsdk2018.0.5/include\"",
 				);
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;

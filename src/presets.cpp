@@ -292,8 +292,13 @@ namespace lwpp
 
 	void SimplePreset::popCommand(int cid, int i_cmd) 
 	{
-		size_t cmd(i_cmd);
 		if (cid != controlID) return;
+		doCommand(i_cmd);
+	}
+
+	void SimplePreset::doCommand(int i_cmd)
+	{
+		size_t cmd(i_cmd);
 		LWMessage lwm;
 		if (cmd < Presets.size())
 		{
@@ -305,20 +310,22 @@ namespace lwpp
 			cmd -= Presets.size();
 			switch (cmd)
 			{
-			case 1:	doSavePreset();	break;
+				case 1:	doSavePreset();	break;
 
-			case 2:	doDeletePreset();	break;
+				case 2:	doDeletePreset();	break;
 
-			case 3:
-				doLoadFromPreset();
-				break;
+				case 3:
+					doLoadFromPreset();
+					break;
 
-			case 4:	doSaveAsPreset();	break;
+				case 4:	doSaveAsPreset();	break;
 
-			default:	break;
+				default:	break;
 			}
 		}
 	}
+
+
 
 	enum {ID_PSEL = 0x0800, ID_TYPE, ID_TEST};
 

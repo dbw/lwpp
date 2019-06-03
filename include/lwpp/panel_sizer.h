@@ -72,6 +72,14 @@ namespace lwpp
 			{;}
 			virtual ~Sizer() { ; }
 			
+			virtual void Reset()
+			{
+				mFlags = 0;
+				mWeight = 0;
+				padWidth = 0; padHeight = 0;
+				top = 0; left = 0;
+			}
+
 			//! Add children
 			virtual Sizer *Add(Sizer *) = 0;
       //! Add a margin to the last child
@@ -83,6 +91,7 @@ namespace lwpp
 				padHeight = h;
 			}
       void setMargin(Margin &margin) { mMargin = margin; }
+			virtual void setVisible(const bool v) = 0;
 			//! Return the minimum size of the Sizer
 			virtual void getMinSize(int &w, int &h) = 0;
 			//! Return the maximum size of the Sizer
@@ -95,10 +104,10 @@ namespace lwpp
 			virtual void Layout(int x, int y, int w, int h, int lw) = 0;
 			//
 			int getWeight() const { return (isCollapsed() ? 0 : mWeight); }
-			void setWeight(int w) { mWeight = w; }
+			void setWeight(const int w) { mWeight = w; }
 
 			virtual int getFlags() const { return mFlags; }
-			virtual void setFlags(int flags) { mFlags = flags; }
+			virtual void setFlags(const int flags) { mFlags = flags; }
 			virtual void panelDraw(const lwpp::LWPanel&, DrMode) { ; }
 			virtual void collapse()
 			{
@@ -121,7 +130,7 @@ namespace lwpp
 		StaticSpace (int w = 20, int h = 20)
 			: Sizer(0, 1), mWidth(w), mHeight(h)
 		{}
-		virtual Sizer *Add(Sizer *) { return nullptr; }
+		virtual Sizer *Add(Sizer *) override { return nullptr; }
 		void getMinSize(int &w, int &h)
 		{
       if ( isCollapsed() )
@@ -140,6 +149,7 @@ namespace lwpp
 		void getCurrentSize(int &w, int &h) { getMinSize(w, h); }
 		//! Get the biggest label width of the Sizer
 		int getLabelWidth() { return 0; }
+		virtual void setVisible(const bool v) override {}
 		void Layout(int x, int y, int w, int h, int lw) { ; }
 	};
 
@@ -148,17 +158,21 @@ namespace lwpp
 	*/
 	class ControlSizer : public Sizer
 	{
-		PanelControl mControl;
+		PanelControl &mControl;
 		int minWidth = 0, minHeight = 0;
 	public:
-		ControlSizer(PanelControl control, int flags = 0, int weight = 0)
+		ControlSizer(PanelControl &control, int flags = 0, int weight = 0)
 			: mControl(control), Sizer(flags, weight)
 		{
 			getCurrentSize(minWidth, minHeight);
 		}
 		virtual ~ControlSizer() { ; }
 		virtual Sizer *Add(Sizer *sizer, SizerFlags) { return sizer; }
-		virtual void getMinSize(int &w, int &h)
+		virtual void setVisible(const bool v) override
+		{
+			mControl.setVisibility(v);			
+		}
+		virtual void getMinSize(int &w, int &h) override
 		{
       if ( isCollapsed() )
       {
@@ -170,7 +184,7 @@ namespace lwpp
 			h = minHeight;
       }
 		}
-		virtual void getMaxSize(int &w, int &h)
+		virtual void getMaxSize(int &w, int &h) override
 		{
       if ( isCollapsed() )
       {
@@ -182,7 +196,7 @@ namespace lwpp
         h = minHeight * 2;
       }
 		}
-		virtual void getCurrentSize(int &w, int &h)
+		virtual void getCurrentSize(int &w, int &h) override
 		{
       if ( isCollapsed() )
       {
@@ -204,11 +218,11 @@ namespace lwpp
         h += padHeight;
       }
 		}
-		virtual int getLabelWidth()
+		virtual int getLabelWidth() override
 		{
       return (isCollapsed() ? 0 : mControl.LW());
 		}
-		virtual void Layout(int x, int y, int w, int h, int lw)
+		virtual void Layout(int x, int y, int w, int h, int lw) override
 		{
 			auto deltaLabel = (mFlags & ALIGN_LABEL) ? lw - getLabelWidth() : 0;
 			//control.Move(x + lw - getLabelWidth() ,y);
@@ -243,7 +257,11 @@ namespace lwpp
 			top = y; left = x;
       mControl.setSize(cW - padWidth, cH - padHeight);
 		}
-		virtual Sizer *Add(Sizer *s) { return s; }
+		virtual Sizer *Add(Sizer *s) override { return s; }
+		virtual void panelDraw(const lwpp::LWPanel&, DrMode mode) override 
+		{
+			mControl.Draw(mode);
+		}
 	};
 
 	class DynamicSizer : public Sizer
@@ -265,6 +283,10 @@ namespace lwpp
 			}
 		}
 	public:
+		virtual void Reset() override
+		{
+			childList.clear();
+		}
 		virtual Sizer *Add(Sizer *sizer)
 		{
 			if(sizer)
@@ -297,7 +319,12 @@ namespace lwpp
 			spacingX = x;
 			spacingY = x;
 		}
-		virtual int getLabelWidth()
+		virtual void setVisible(const bool v) override
+		{
+			for (auto &i : childList)
+				i->setVisible(v);
+		}
+		virtual int getLabelWidth() override
 		{
 			int labelWidth = 0;
 			for(auto &i : childList)
@@ -308,6 +335,10 @@ namespace lwpp
 		}
 		virtual void panelDraw(const lwpp::LWPanel& pan, DrMode mode)
 		{
+			if (borderControl.getID())
+			{
+				borderControl.Draw(mode);
+			}
 			for(auto &i : childList)
 			{
 				i->panelDraw(pan, mode);
@@ -551,6 +582,119 @@ namespace lwpp
 			}
 	};
 
+	//! A sizer with components overlaying each other
+	class StackedSizer : public DynamicSizer
+	{
+		size_t mActiveStack = 0;
+		int mWidth = 0;
+		int mHeight = 0;
+	public:
+		StackedSizer(int flags = 0) : DynamicSizer(flags)
+		{
+			;
+		}
+		virtual ~StackedSizer() { ; }
+		void setActive(size_t s)
+		{
+			mActiveStack = s; 
+			int n = 0;
+			for (auto &i : childList)
+			{
+				if (mActiveStack != n) i->setVisible(false);
+				++n;
+			}
+			n = 0;
+			for (auto &i : childList)
+			{
+				if (mActiveStack == n) i->setVisible(true);
+				++n;
+			}
+		}
+		size_t getActive() const { return mActiveStack; }
+		virtual void getMinSize(int &w, int &h)
+		{
+			w = h = 0;
+			if (isCollapsed())
+				return;
+			for (auto &i : childList)
+			{
+				int tw, th;
+				i->getMinSize(tw, th);
+				h = lwpp::Max(h, th);
+				w = lwpp::Max(w, tw);
+			}
+		}
+		virtual void getMaxSize(int &w, int &h)
+		{
+			w = h = 0;
+			if (isCollapsed())
+				return;
+			for (auto &i : childList)
+			{
+				int tw, th;
+				i->getMaxSize(tw, th);
+				h = lwpp::Max(h, th);
+				w = lwpp::Max(w, tw);
+			}			
+		}
+		virtual void getCurrentSize(int &w, int &h) override
+		{
+			w = h = 0;
+			if (isCollapsed())
+				return;
+			for (auto &i : childList)
+			{
+				int tw, th;
+				i->getCurrentSize(tw, th);
+				h = lwpp::Max(h, th);
+				w = lwpp::Max(w, tw);
+			}
+		}
+		virtual void panelDraw(const lwpp::LWPanel& pan, DrMode mode) override
+		{
+			// erase everything , then draw the current stack
+			int n = 0;
+			for (auto &i : childList)
+			{
+				if (mActiveStack != n) i->panelDraw(pan, DR_ERASE);
+				++n;
+			}
+			n = 0;
+			for (auto &i : childList)
+			{
+				if (mActiveStack == n) i->panelDraw(pan, mode);
+				++n;
+			}
+
+			//pan.DrawBorder(1, left, top-4, mWidth);
+
+		}
+		/*!
+			Layout the child controls to fit into the specified box
+			@param x left start
+			@param y top start
+			@param w width
+			@param h height
+			@param lw label width
+		*/
+		virtual void Layout(int x, int y, int w, int h, int lw) override
+		{	
+			top = y;
+			left = x;
+			mWidth = w;
+			mHeight = h;
+			for (auto &i : childList)
+			  i->Layout(left, top, w, h, getLabelWidth());
+			
+			if (borderControl.getID())
+			{
+				borderControl.setPosition(x, y);
+				borderControl.setSize(w, h);
+			}
+		}
+	};
+
+
 	//! a sizer containing a single PanelControl which measures the height based on the number of lines
 	/* A LineControlSizer contains a single LWPanel control
 	*/
@@ -589,31 +733,30 @@ namespace lwpp
 		}
 		virtual ~LineControlSizer() {;}
 		virtual Sizer *Add(Sizer *sizer, SizerFlags) { return sizer; }
-		virtual void getMinSize(int &w, int &h)
+		virtual void getMinSize(int &w, int &h) override
 		{
 			w = minWidth;
 			h = minHeight;
 #ifdef _DEBUG
-			lwpp::dostream dout;
 			dout << "        Line Control Min Size: (" << w << "," << h << ")\n";
 #endif
 		}
-		virtual void getMaxSize(int &w, int &h)
+		virtual void getMaxSize(int &w, int &h) override
 		{
 			w = minWidth * 2;
 			h = minHeight * 2;
 		}
-		virtual void getCurrentSize(int &w, int &h)
+		virtual void getCurrentSize(int &w, int &h) override
 		{
 			w = control.W();
 			h = control.H();
 			h = LinesToPixels(h);
 		}
-		virtual int getLabelWidth()
+		virtual int getLabelWidth() override
 		{
 			return control.LW();
 		}
-		virtual void Layout(int x, int y, int w, int h, int lw)
+		virtual void Layout(int x, int y, int w, int h, int lw) override
 		{
 			//control.Move(x + lw - getLabelWidth() ,y);
 			control.Move(x, y);

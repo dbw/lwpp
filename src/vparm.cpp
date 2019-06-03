@@ -6,6 +6,16 @@
 
 namespace lwpp 
 {
+
+	static int VParmEventFuncCB(LWVParmID vp, void *userData,
+															en_lwvpec eventCode, void *eventData)	{
+		if (userData)
+		{
+			auto *sink = static_cast<VParmEventSink *>(userData);
+			return sink->VParmEvent(vp, eventCode, eventData);
+		}
+		return 0;
+	}
 	/*!
 	 * @param type Type of VParm 
 	 * @param *name Name of the VParm
@@ -13,11 +23,11 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @return true if the creation succeeded.
 	 */
-	bool VParm::create(int type, const std::string name, const std::string plug_name, LWChanGroupID group)
+	bool VParm::create(int type, const std::string name, const std::string plug_name, LWChanGroupID group, VParmEventSink *sink)
 	{
 		if ((globPtr) && (( vparmID = globPtr->create( type, LWVPDT_NOTXTR )) != 0)) 
 		{
-			globPtr->setup( vparmID, name.c_str(), group, 0, 0, plug_name.c_str(), 0 );
+			globPtr->setup( vparmID, name.c_str(), group, 0, (sink ? VParmEventFuncCB : nullptr), plug_name.c_str(), sink );
 			globPtr->setVal( vparmID, asLWVector() );
 			return true;
 		}
@@ -31,11 +41,11 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @param v Initial value
 	 */
-	VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, double v)
+	VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, double v, VParmEventSink *sink)
 		: vparmID(0)
 	{
 		Set(v);
-		create(type, name, plug_name, group);
+		create(type, name, plug_name, group, sink);
 	}
 
 	/*!
@@ -45,11 +55,11 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @param &v Initial value
 	 */
-	 VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, Vector3d &v)
+	 VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, const Vector3d &v, VParmEventSink *sink)
 		 : vparmID(0)
 	{
 		Set(v);
-		create(type, name, plug_name, group);
+		create(type, name, plug_name, group, sink);
 	}
 
 	/*!
@@ -59,11 +69,11 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @param v Initial value
 	 */
-	VParm::VParm(int type, const std::string name, const std::string plug_name, ChannelGroup &group, double v)
+	VParm::VParm(int type, const std::string name, const std::string plug_name, ChannelGroup &group, double v, VParmEventSink *sink)
 		:	vparmID(0)
 	{
 		Set(v);
-		create(type, name, plug_name, group.getID());
+		create(type, name, plug_name, group.getID(), sink);
 	}
 
 	/*!
@@ -73,11 +83,11 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @param &v Initial value
 	 */
-	 VParm::VParm(int type, const std::string name, const std::string plug_name, ChannelGroup &group, Vector3d &v)
+	 VParm::VParm(int type, const std::string name, const std::string plug_name, ChannelGroup &group, const Vector3d &v, VParmEventSink *sink)
 		 : vparmID(0)		 
 	{
 		Set(v);
-		create(type, name, plug_name, group.getID());
+		create(type, name, plug_name, group.getID(), sink);
 	}
 
 	VParm::~VParm(void)

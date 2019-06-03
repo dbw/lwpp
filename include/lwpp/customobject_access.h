@@ -32,6 +32,7 @@ namespace lwpp
 		void DrawQuad (double v[4][3], int csys) {access->quad(access->dispData, v[0], v[1], v[2], v[3], csys);}
 		void DrawCircle (double center[3], double radius, int csys) {access->circle(access->dispData, center, radius, csys);}
 		void DrawText (double center[3], const char *text, int just, int csys) {access->text(access->dispData, center, text, just, csys);}
+		void DrawText(double center[3], const std::string text, int just, int csys) { DrawText(center, text.c_str(), just, csys); }
 		Point3d GetViewPos() {return Point3d(access->viewPos);}
 		Vector3d GetViewDir() {return Vector3d(access->viewDir);}
 		void	SetCoordinateSystem(LWItemID item) {access->setCSysItem(access->dispData, item);}
@@ -52,6 +53,14 @@ namespace lwpp
 #if LW_SDK >= 96
 		// Todo, add part number
 #endif
+		int MeasureText (const char *text /* language encoded */, int *width, int *height, int *offset_y)
+		{
+			return access->measureText(access->dispData, text, width, height, offset_y);
+		}
+		int MeasureText(const std::string &text /* language encoded */, int *width, int *height, int *offset_y)
+		{
+			return MeasureText(text.c_str(), width, height, offset_y);
+		}
 
 	};
 

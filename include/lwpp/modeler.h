@@ -9,6 +9,11 @@
 namespace lwpp
 {
 
+#define MSEL_MODE_POINT 0
+#define MSEL_MODE_POLYGON 1
+#define MSEL_MODE_VOLUME 2
+#define MSEL_MODE_EDGE 3
+
   class ModelerState : protected GlobalBase<LWStateQueryFuncs>
   {
   public:
@@ -81,6 +86,11 @@ namespace lwpp
       return globPtr->mode(m);
     }
 
+		int getSelectionMode()
+		{
+			return globPtr->mode(LWM_MODE_SELECTION);
+		}
+
     //! Returns the name of the currently selected vertex map, and stores the LWID of the vmap in the second argument.
     /*!
      * The index can be one of the following: 
@@ -92,6 +102,13 @@ namespace lwpp
     {
       return globPtr->vmap(i, id);
     }
+
+		/*
+		int getMeshLayer(LWMeshID id)
+		{
+			return globPtr->meshLayer(id);
+		}
+		*/
 
   };
 

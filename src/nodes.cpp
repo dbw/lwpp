@@ -80,5 +80,6 @@ namespace lwpp
   {
     return lwni->isConnected() ? 0 : vp->ID();
   }
+
 }
 

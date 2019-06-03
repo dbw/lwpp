@@ -20,7 +20,8 @@ namespace lwpp
 
 			for (int i = 0; i < 4; i++)
 				m[i][i] = 1.0;
-		}
+		}		
+
 		//! Blank Constructor, sets the identity matrix
 		Matrix4x4 () {
 			SetIdentity();
@@ -278,6 +279,46 @@ namespace lwpp
 			return Matrix4x4(r);
 		}
 
+		//! Compute the product of two matrices
+		inline Matrix4x4 operator+(const Matrix4x4 &m1)
+		{
+			T r[4][4];
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					r[i][j] = m[i][j] + m1.m[i][j];
+				}
+			}
+			return Matrix4x4(r);
+		}
+		inline Matrix4x4 operator-(const Matrix4x4 &m1)
+		{
+			T r[4][4];
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					r[i][j] = m[i][j] - m1.m[i][j];
+				}
+			}
+			return Matrix4x4(r);
+		}
+
+		//! Compute the product of two matrices
+		inline Matrix4x4 operator*(const T v)
+		{
+			T r[4][4];
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					r[i][j] = m[i][j] * v;
+				}
+			}
+			return Matrix4x4(r);
+		}
+
 		//! Gauss-Jordan elimination with partial pivoting
 		Matrix4x4 &Inverse() 
 		{
@@ -415,7 +456,6 @@ namespace lwpp
 		{
 			return transform(v);
 		}
-
 	};                 
 
 	typedef Vector3<double> Vector3d;

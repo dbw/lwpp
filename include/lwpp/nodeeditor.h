@@ -230,6 +230,10 @@ namespace lwpp
 		{
 			return globPtr->connect(out, in);
 		}
+		LWError connect(LWNodeOutput &out, LWNodeInput &in)
+		{
+			return globPtr->connect(out.getID(), in.getID());
+		}
 		NodeID addNode(const char *server_name)
 		{
 			return globPtr->addNode(mId, server_name);

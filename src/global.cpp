@@ -51,6 +51,7 @@
 #include <lwscenecv.h>
 #include <lwsceneeditor.h>
 #include <lwserver.h>
+#include <lwviewportinfo.h>
 //#include <lwshader.h>
 #include <lwshelf.h>
 #include <lwsurf.h>
@@ -65,10 +66,14 @@
 #include <lwtimer.h>
 #include <lwbufferset.h>
 
+#ifdef _DEBUG
+  lwpp::dostream dout;
+#endif
+
 namespace lwpp
 {
 #ifdef _DEBUG
-	dostream dout;
+  dostream dout;
 #endif
 
 	//! Initialize and store superglobal GlobalFunc
@@ -154,6 +159,7 @@ namespace lwpp
 		IMPLEMENT_GLOBAL(LWEnvelopeFuncs,			LWENVELOPEFUNCS_GLOBAL)
 
 		IMPLEMENT_GLOBAL(LWPreviewFuncs,			LWPREVIEWFUNCS_GLOBAL)
+		IMPLEMENT_GLOBAL(LWViewportInfo,    LWVIEWPORTINFO_GLOBAL)
 		IMPLEMENT_GLOBAL(LWComRing,					LWCOMRING_GLOBAL)
 		IMPLEMENT_GLOBAL(LWServerInfo,				LWSERVERINFO_GLOBAL)
 
@@ -170,4 +176,6 @@ namespace lwpp
 		IMPLEMENT_GLOBAL(LWBSDFFuncs, LWBSDFFUNCS_GLOBAL)
 		IMPLEMENT_GLOBAL(LWBufferSetGlobal, LWBUFFERLIST_GLOBAL);
 		IMPLEMENT_GLOBAL(LWLightEvaluationFuncs, LWLIGHTEVALUATIONFUNCS_GLOBAL);
+		IMPLEMENT_GLOBAL(LWBoneInfo, LWBONEINFO_GLOBAL);
+		IMPLEMENT_GLOBAL(LWMeshFuncs, LWMESHFUNCS_GLOBAL);
 }

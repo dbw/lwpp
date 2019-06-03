@@ -99,8 +99,7 @@ namespace lwpp
 
   } LWColorSpaceFuncs;
 
-  
-  
+
   class ColourManager : public PopUpCallback, public Storeable, public GlobalBase<LWColorSpaceFuncs>
   {
     LWPixelConversionRGBFunc *toLinear, *toColourSpace;

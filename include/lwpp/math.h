@@ -105,6 +105,12 @@ namespace lwpp {
 	}
 
 	template<class Type>
+	Type Step(const Type a, const Type x)
+	{
+		return static_cast<Type>(x >= a);
+	}
+
+	template<class Type>
 	int Mod(const Type a, const Type b)
 	{
 		Type n = (int)(a/b);
@@ -115,13 +121,13 @@ namespace lwpp {
 
 	//! Degrees to radians conversion.
 	template <class Type>
-	Type Radians(const Type deg)
+	constexpr Type Radians(const Type deg)
 	{
 		return deg * static_cast<Type>(0.017453292519943295769236907684886);
 	}
 	//! Radians to degree conversion.
 	template <class Type>
-	Type Degrees(const Type rad)
+	constexpr Type Degrees(const Type rad)
 	{
 		return rad * static_cast<Type>(57.2957795130823208767981548141052);
 	}

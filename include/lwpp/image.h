@@ -196,7 +196,8 @@ namespace lwpp
 		struct
 		{
 			bool keepAspect : 1;
-		} mFlags;
+			bool checkered : 1;
+		} mFlags{ true, true };
 	public:
 		virtual const char *popName(int n);
 
@@ -204,7 +205,6 @@ namespace lwpp
 
 		Image(LWImageID _id = nullptr) : id(_id)
 		{
-			mFlags.keepAspect = true;
 			_acquireGlobal();
 			globPtr->saverNotifyAttach(this, ImageSaverCB);
 		}
@@ -242,6 +242,7 @@ namespace lwpp
 		}
 		//! Use the image aspect ratio when drawing a xpanel preview. Fit to view otherwise 
 		void PreviewKeepAspect(const bool keep = true) { mFlags.keepAspect = keep; }
+		void CheckeredBackground(const bool on = true) { mFlags.checkered = on; }
 		void SetID(LWImageID _id) {id = _id;}
 		LWImageID getID() const {return id;}
 		//! Get the value returned from a pop-up 
@@ -302,6 +303,13 @@ namespace lwpp
 			int w, h;
 			globPtr->size(id, &w, &h);
 			return h;
+		}
+
+		float getAspect() const
+		{
+			int w, h;
+			globPtr->size(id, &w, &h);
+			return static_cast<double>(w) / static_cast<double>(h);
 		}
 		
 #ifdef WIN32

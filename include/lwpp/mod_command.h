@@ -330,6 +330,12 @@ namespace lwpp
 			return 0;
 		}
 
+		EDError SetVMap(LWPntID id, LWID vmap, const char *c, int i, float *f, LWPolID pol)
+		{
+			if (pol == 0) return SetVMap(id, vmap, c, i, f);
+			else return AddDiscoVMap(id, pol, vmap, c, i, f);
+		}
+
 		//! Create a polygon. 
 		/*!
 		* If a template polygon is supplied, Modeler copies the polygon tags for the new polygon from the template.
@@ -427,11 +433,17 @@ namespace lwpp
 		* For the raw discontinuous, or per-polygon-vertex value,
 		* use pointVPGet, and for the combined value accounting for both sources, use pointVEval.
 		*/
-		bool ReadVMap (LWPntID point, float *val)
+		bool ReadVMap (LWPntID point, float *val, LWPolID polygon_id = 0)
 		{
 			assert(me!=0);
-			if (me) return (me->pointVGet (me->state, point, val) != 0);
-			return 0;
+			if (me)
+			{
+				if (polygon_id)
+					return (me->pointVPGet(me->state, point, polygon_id, val) != 0);
+				else
+					return (me->pointVGet (me->state, point, val) != 0);
+			}
+			return false;
 		}
 
 		//! Returns a tag string associated with the polygon.
@@ -711,6 +723,18 @@ namespace lwpp
 			assert(me!=0);
 			if (me) return me->polyNew (me->state, pol);
 			return 0;
+		}
+
+		void *vMapSelect(const char* name, LWID type, int dim)
+		{
+			assert(me != 0);
+			if (me) return me->vMapSelect(me->state, name, type, dim);
+		}
+
+		void vMapSet(LWPntID point_id, LWPolID polygon_id, const float *value)
+		{
+			assert(me != 0);
+			if (me)  me->vMapSet(me->state, point_id, polygon_id, value);
 		}
 
 		/*

@@ -7,8 +7,11 @@
 #include <fstream>
 
 #if (_WIN32 && _DEBUG)
-#define DBG_ENTER_FUNC ::OutputDebugStringA( "Enter (" __FUNCTION__  ")\n") 
-#define LWPP_DBG_ENTER_FUNC DBG_ENTER_FUNC
+#define S1(x) #x
+#define S2(x) S1(x)
+#define DBG_ENTER_FUNC ::OutputDebugStringA( __FILE__ "(" S2(__LINE__) "): " __FUNCSIG__ "\n") 
+//#define LWPP_DBG_ENTER_FUNC DBG_ENTER_FUNC
+#define LWPP_DBG_ENTER_FUNC
 #else
 #define DBG_ENTER_FUNC
 #define LWPP_DBG_ENTER_FUNC

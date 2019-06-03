@@ -234,6 +234,12 @@ namespace lwpp
 	}
 
 	template <typename T>
+	inline T Dot(const Vector3<T> a, const Vector3<T> b)
+	{
+		return (a.x*b.x + a.y * b.y + a.z * b.z);
+	}
+
+	template <typename T>
 	inline Vector3<T> Vector3<T>::Cross(const Vector3<T> a) const
 	{
 		return Vector3<T>( y*a.z - z*a.y, z*a.x - x*a.z, x*a.y - y*a.x );
@@ -275,6 +281,12 @@ namespace lwpp
 			*right = Cross(view, normal);
 			*forward = Cross(*right, normal);
 		}
+	}
+
+	template <typename T>
+	inline Vector3<T> Reflect(const Vector3<T> &I, const Vector3<T> &N)
+	{
+		return I - N * 2 * Dot(N, I);
 	}
 
 	typedef Vector3<double> Vector3d;

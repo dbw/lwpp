@@ -94,6 +94,13 @@ namespace lwpp
     }
     int getX() const { return mCurrentX; }
     int getY() const { return mCurrentY; }
+    void dpiScale(const float scl)
+    {
+      mCurrentX = static_cast<float>(mCurrentX) * scl;
+      mCurrentY = static_cast<float>(mCurrentY) * scl;
+      mClickedX = static_cast<float>(mClickedX) * scl;
+      mClickedY = static_cast<float>(mClickedY) * scl;
+    }
   };  
 
   /*! Wraps a control and a string stream to display status messaged */
@@ -111,7 +118,7 @@ namespace lwpp
     {
       mControl = control;
     }
-    StatusControl& operator<< (_EOL const eol)
+    StatusControl& operator<< (_EOL const _eol)
     {
       if ( mControl.getID() )
       {

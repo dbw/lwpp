@@ -42,9 +42,9 @@ namespace lwpp
 		}
 	public:
 		VParm(int type, const std::string name, std::string plug_name, LWChanGroupID group = 0, double v = 0.0, VParmEventSink *sink = nullptr);
-		VParm(int type, const std::string name, std::string plug_name, LWChanGroupID group, const Vector3d &v, VParmEventSink *sink = nullptr);
+		VParm(int type, const std::string name, std::string plug_name, LWChanGroupID group, Vector3d &v, VParmEventSink *sink = nullptr);
 		VParm(int type, const std::string name, std::string plug_name, ChannelGroup& group, double v = 0.0, VParmEventSink *sink = nullptr);
-		VParm(int type, const std::string name, std::string plug_name, ChannelGroup& group, const Vector3d &v, VParmEventSink *sink = nullptr);
+		VParm(int type, const std::string name, std::string plug_name, ChannelGroup& group, Vector3d &v, VParmEventSink *sink = nullptr);
 		virtual ~VParm();
 		//! Copy values
 		VParm &operator=(const VParm &from);

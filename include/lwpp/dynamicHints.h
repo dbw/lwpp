@@ -85,11 +85,19 @@ namespace lwpp
 		{
 			LWPP_DBG_ENTER_FUNC;
 		}
-		DynamicControlData &Add(unsigned int cid = 0, const char *label = nullptr, const char *ctrlclass = nullptr, const char *datatype = nullptr)
+		DynamicControlData &Add(unsigned int cid, const char *label, const char *ctrlclass, const char *datatype = nullptr)
 		{
 			LWXPanelControl ctrl = { cid, label, ctrlclass };
 			mControls.push_back(ctrl);
 			LWXPanelDataDesc desc = { cid, label, datatype };
+			mDataDesc.push_back(desc);
+			dirty = true;
+			return *this;
+		}
+		// add a datatype but no control
+		DynamicControlData &Add(unsigned int cid, const char *datatype)
+		{
+			LWXPanelDataDesc desc = { cid, "", datatype };
 			mDataDesc.push_back(desc);
 			dirty = true;
 			return *this;
@@ -112,6 +120,11 @@ namespace lwpp
 			dirty = true;
 		}
 
+		bool isEmpty() const
+		{
+			return (mControls.empty() && mDataDesc.empty());
+		}
+
 		LWXPanelControl *getControl()
 		{
 			createStore();
@@ -120,6 +133,7 @@ namespace lwpp
 
 		std::vector<LWXPanelControl> &getControlStore()
 		{
+			createStore();
 			return mControlStore;
 		}
 

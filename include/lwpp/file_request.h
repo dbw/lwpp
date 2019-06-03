@@ -134,7 +134,8 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 	class FileRequest2 : public BaseFileRequest, protected GlobalBase<LWFileActivateFunc>, protected DirInfo
 	{
 		private:
-			static LWFileReqLocal frloc;
+			LWFileReqLocal frloc;
+			static LWFileReqLocal *multi_frloc;
 		public:
 			/*!
 			 * @param reqType Type of file requester, FREQ_LOAD, FREQ_SAVE, FREQ_DIRECTORY or FREQ_MULTILOAD
@@ -168,11 +169,14 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 				strcpy (frloc.baseName, baseName);
 				frloc.pickName = pickName;
 			}
-			~FileRequest2 (void)
+			virtual ~FileRequest2 (void)
 			{
 				delete[] frloc.path;
 				delete[] frloc.baseName;
 				delete[] frloc.fullName;
+				frloc.path = nullptr;
+				frloc.baseName = nullptr;
+				frloc.fullName = nullptr;
 			}
 			//! Post file request and return the result
 			/*!
@@ -186,7 +190,7 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 			static std::vector<std::string> ret;
 			static int pick() 
 			{
-				ret.push_back(frloc.fullName);
+				ret.push_back(multi_frloc->fullName);
 				return 0;
 			}
 
@@ -196,8 +200,12 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 				frloc.reqType = FREQ_MULTILOAD;
 				frloc.pickName = pick;
 
+				multi_frloc = &frloc;
+
 				if ((GlobalBase<LWFileActivateFunc>::globPtr(LWFILEREQ_VERSION, &frloc) != AFUNC_OK) || (frloc.result != 1))
 					ret.clear();
+
+				multi_frloc = nullptr;
 				return ret;
 			}
 

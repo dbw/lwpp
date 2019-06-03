@@ -155,11 +155,17 @@ namespace lwpp
   void Image::DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h)
   {
     if ( pan == nullptr ) return;
+		if (reg == nullptr) return;
     lwpp::XPanel panel(pan);
     void *ud = panel.getUserData(cid);
     Image *img = static_cast<Image *>(ud);
-    if ( img == nullptr ) return;
-    if ( reg == nullptr ) return;
+
+		if (img == nullptr)
+		{
+			lwpp::XPDrawArea area(reg, w, h);
+			area.clear(); // clear preview to black
+			return;
+		}
     img->drawXpanel(reg, w, h);
   }
 
@@ -204,7 +210,20 @@ namespace lwpp
       {
         LWBufferValue rgb[3];
         RGB(ix, iy, rgb);
-        cm.convertToColourSpace(rgb);
+				if (mFlags.checkered && hasAlpha())
+				{
+					float a = alpha(ix, iy);
+					if (a < 1.0)
+					{
+						const int checkSize = 16.0;
+						auto check = (x / checkSize + y / checkSize) % 2;
+						auto col = check ? 0.1 : 0.2;
+						col *= 1 - a;
+						for (int i = 0; i < 3; ++i)
+							rgb[i] += col;
+					}
+				}
+				cm.convertToColourSpace(rgb);
         area.drawPixel(rgb, x + x_offset, y + y_offset);
         iy += pyStep;
       }
@@ -279,9 +298,9 @@ namespace lwpp
 		bProj.v = proj.v + dv; bProj.u = proj.u;
 		vTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, vTex);
 
-		auto displace = Colour2Luma(baseTex);
-		auto udisplace = Colour2Luma(uTex);
-		auto vdisplace = Colour2Luma(vTex);
+		auto displace = Colour2Luma(baseTex) * baseTex[3];
+		auto udisplace = Colour2Luma(uTex) * uTex[3];
+		auto vdisplace = Colour2Luma(vTex) * vTex[3];
 
 		auto dtu = ((displace - udisplace) / du);
 		auto dtv = ((displace - vdisplace) / dv);

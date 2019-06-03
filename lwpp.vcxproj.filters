@@ -325,5 +325,17 @@
     <ClInclude Include="include\lwpp\customobject_access.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\lwpp\viewport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\boneinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\modtool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\modeler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

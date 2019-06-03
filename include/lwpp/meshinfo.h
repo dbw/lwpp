@@ -2,6 +2,7 @@
 #define LWPP_MESHINFO_H
 
 #include <lwpp/debug.h>
+#include <lwpp/global.h>
 #include <lwmeshes.h>
 
 namespace lwpp
@@ -152,6 +153,32 @@ namespace lwpp
 			return mps->scanFunc(id);
 		}
 	};
+
+	template <typename T>
+	size_t MeshPntPolFunc (void* userdata, LWMeshID mesh, LWPntID pnt, LWPolID pol)
+	{
+		if (userdata)
+		{
+			auto host = static_cast<T *>(userdata);
+			return host->MeshPntPol(mesh, pnt, pol);
+		}
+	}
+
+	class MeshFuncs
+	{
+		LWMeshID mesh = nullptr;
+		GlobalBase<LWMeshFuncs> mf;
+	public:
+		MeshFuncs(LWMeshID m) : mesh(m) {}
+
+		template <typename T>
+		size_t foreach_vp (T *host, LWPntID pnt)
+		{
+			return mf->foreach_vp(mesh, pnt, &MeshPntPolFunc<T>, host);
+		}
+	};
 }
+
+
 
 #endif //LWPP_MESHINFO_H

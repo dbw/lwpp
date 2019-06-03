@@ -6,7 +6,7 @@
 #ifdef _DEBUG
 #ifdef _MSWIN
 #pragma warning (push,1)
-#include <Windows.h>
+//#include <Windows.h>
 #include <ostream>
 #include <sstream>
 #include <string>

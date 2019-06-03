@@ -374,12 +374,12 @@ namespace lwpp
 		//! Put data into a XPanel View
 		virtual void *DataGet(unsigned int ) 
 		{
-			return 0;
+			return nullptr;
 		}
 		//! Retrieve data fom a XPanel View
 		virtual LWXPRefreshCode DataSet(unsigned int , void *)
 		{
-			return LWXPRC_NONE;
+			return LWXPRC_DFLT;
 		}
 
 		virtual void ButtonClick(unsigned int)
@@ -431,6 +431,10 @@ namespace lwpp
 		static void LWXPanelChangeNotifyFunc (LWXPanelID panel, unsigned int cid, unsigned int vid, int event_type);
 
 		static void LWXPanelDestroyNotifyFunc(void *data);
+
+		virtual void CreateViewXPanel(lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy = false);
+
+		virtual void CreateViewXPanel(void *host, lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy = false);
 
 		virtual void CreateViewXPanel(LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints = 0, bool do_destroy = false);
 
@@ -496,16 +500,16 @@ namespace lwpp
 		virtual void gzDraw(lwpp::CustomObjAccess &access) { ; }
 		virtual const char * /* language encoded */ gzHelp(LWToolEvent *) { return ""; }
 		virtual int gzDirty() { return 0; }
-		virtual int gzCount(LWToolEvent *) { return 0; }
+		virtual int gzCount(LWToolEvent *) { return 1; }
 		virtual int gzHandle(LWToolEvent *, int i, LWDVector pos) { return 0; }
 		virtual int gzStart(LWToolEvent *) { return 0; }
 		virtual int gzAdjust(LWToolEvent *, int i) { return 0; }
-		virtual int  gzDown(LWToolEvent *) { return 0; }
+		virtual int  gzDown(LWToolEvent *) { return false; }
 		virtual void gzMove(LWToolEvent *) { ; }
 		virtual void gzUp(LWToolEvent *) { ; }
 		virtual void gzEvent(int code) { ; }
-		virtual LWXPanelID gzPanel(){return nullptr; }
-		virtual int gzEnd(LWToolEvent *, int i) { return 0; }
+		virtual LWXPanelID gzPanel() { return nullptr; }
+		virtual int gzEnd(LWToolEvent *, int i) {  return 0; }
 	};
 
 	template <class T>

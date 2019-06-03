@@ -34,6 +34,14 @@ namespace lwpp
 			 * Create nodal inputs
 			 */
 			//! @{
+			LWNodeInput *addInput(LWID vendor, LWID customType, const std::string name) const
+			{
+				return LWNode::addInput(vendor, customType, name, CB_NodeInputEvent);
+			}
+			LWNodeInput *addInput(ConnectionType type, const std::string name) const
+			{
+				return LWNode::addInput(type, name, CB_NodeInputEvent);
+			}
 			LWNodeInput *addColorInput(const std::string name = "Color") const
 			{
 				return LWNode::addColorInput(name, CB_NodeInputEvent);
@@ -251,7 +259,7 @@ namespace lwpp
 			virtual ~XPanelNodeHandler() {;}
 			virtual int NodeInputEvent ( NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
 			{
-				if (LW_XPanel.isValid()) LW_XPanel.ViewRefresh();				
+				LW_XPanel.ViewRefresh();				
 				return NodeHandler::NodeInputEvent(nid, nevent, type);
 			}
 			virtual void ChangeNotify (LWXPanelID , unsigned int , unsigned int , int event_type)

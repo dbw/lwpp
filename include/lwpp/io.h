@@ -2,6 +2,7 @@
 #define LWPP_IO_H
 #include <lwpp/global.h>
 #include <lwio.h>
+#include <lwpp/vector3d.h>
 
 namespace lwpp
 {
@@ -135,6 +136,14 @@ namespace lwpp
 		{
 			ss->writeStr(ss->writeData, data.c_str());
 		}
+		void Write(const Vector3d *data) const
+		{
+			ss->writeDP(ss->writeData, data->asLWVector(), 3);
+		}
+		void Write(const Vector3f *data) const
+		{
+			ss->writeFP(ss->writeData, data->asLWVector(), 3);
+		}
 		//! Save a single value embedded in a block
 		template <class T> void WriteBlock (const LWBlockIdent &id, T value, bool leaf = true) const
 		{
@@ -156,6 +165,20 @@ namespace lwpp
 
 	};
 
+	class SaveBlock
+	{
+		const SaveState &ss;
+	public:
+		SaveBlock(const SaveState &state, const LWBlockIdent &id, bool leaf = true)
+			: ss(state)
+		{
+			ss.Begin(id, leaf);
+		}
+		~SaveBlock()
+		{
+			ss.End();
+		}
+	};
 
 	//! Wrapper for a LW save state
 	class LoadState
@@ -237,6 +260,10 @@ namespace lwpp
 			rc = ls->readI4(ls->readData, &i, 1);
 			return i;
 		}
+		void readInt(int *i, int n) const
+		{
+			rc = ls->readI4(ls->readData, i, n);
+		}
 
 		float readFloat(void) const
 		{
@@ -258,6 +285,14 @@ namespace lwpp
 		void read(double *d, int length) const
 		{
 			rc = ls->readDP(ls->readData, d, length);
+		}
+		void read(lwpp::Vector3d *vec) const
+		{
+			rc = ls->readDP(ls->readData, vec->asLWVector(), 3);
+		}
+		void read(lwpp::Vector3f *vec) const
+		{
+			rc = ls->readFP(ls->readData, vec->asLWVector(), 3);
 		}
 		void readString(char *buffer, int max) const
 		{

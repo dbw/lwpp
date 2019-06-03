@@ -15,7 +15,7 @@ namespace lwpp
 	class ShadingEvaluator
 	{
 	protected:
-		lwpp::Vector3d colour;
+		lwpp::Vector3d colour = { 0.0, 0.0, 0.0 };
 	public:
 		/*! Perform shading here
 		 * This function is called once for every sample for the current light
@@ -58,21 +58,21 @@ namespace lwpp
 		void init();
 	public:
 		LWNodeInput() { init(); }
-		LWNodeInput(NodeID _id, ConnectionType type, const std::string name, NodeInputEvent* inp_event, bool _destroy = true)
+		LWNodeInput(const NodeID _id, ConnectionType const type, const std::string name, NodeInputEvent* inp_event, const bool _destroy = true)
 		: do_destroy(_destroy),
 			mNodeID(_id)
 		{
 			init();
 			mID = inF->create(mNodeID, type, name.c_str(), inp_event);
 		}
-		LWNodeInput(NodeID _id, const std::string name, LWID vendor, LWID type, NodeInputEvent* inp_event, bool _destroy = true)
+		LWNodeInput(const NodeID _id, const std::string name, const LWID vendor, const LWID type, NodeInputEvent* inp_event, const bool _destroy = true)
 			: do_destroy(_destroy),
 			mNodeID(_id)
 		{
 			init();
 			createCustom(name.c_str(), vendor, type, inp_event);
 		}
-		LWNodeInput(NodeInputID _id, bool _destroy = false)
+		LWNodeInput(const NodeInputID _id, const bool _destroy = false)
 		: do_destroy(_destroy),
 			mID(_id)
 		{
@@ -403,7 +403,12 @@ namespace lwpp
 
 		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event = 0) const
 		{
-		 return new LWNodeInput(id, type, name.c_str(), inp_event);
+		 return new LWNodeInput(id, type, name, inp_event);
+		}
+		// (NodeID _id, const std::string name, LWID vendor, LWID type, NodeInputEvent* inp_event, bool _destroy = true)
+		virtual LWNodeInput *addInput(const LWID vendor, const LWID type, const std::string name, NodeInputEvent* inp_event = 0) const
+		{
+			return new LWNodeInput(id, name, vendor, type, inp_event);
 		}
 		void setValue(NodeValue val, void *v) { outF->setValue(val, v); }
 		void disconnect(NodeInputID nid)
@@ -458,9 +463,13 @@ namespace lwpp
 		 *  Adding node outputs
 		 */
 		//@{
+		LWNodeOutput *addOutput(LWID vendor, LWID customType, const std::string name)
+		{
+			return new LWNodeOutput(id, name, vendor, customType);
+		}
 		LWNodeOutput *addOutput(ConnectionType type, const std::string name)
 		{
-			return new LWNodeOutput(id, type, name.c_str());
+			return new LWNodeOutput(id, type, name);
 		}
 		LWNodeOutput *addColorOutput(const std::string name ="Color")
 		{

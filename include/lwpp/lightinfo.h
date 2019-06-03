@@ -34,6 +34,12 @@ void		(*ambient)      (LWTime, LWDVector color);
     {
       ;
     }
+
+		LWLight(const LWItem &item)
+			: LWItem(item)
+		{
+			;
+		}
     void setLight(LWItemID item) {SetID(item);}
 
     int getType() {return globPtr->type(GetID());}
@@ -43,6 +49,8 @@ void		(*ambient)      (LWTime, LWDVector color);
     void getRawColour(LWTime time, LWDVector colour) {globPtr->rawColor(GetID(), time, colour);}
 
     double getIntensity(LWTime time) {return globPtr->intensity(GetID(), time);}
+
+		double getQuality(LWTime time) { return globPtr->quality(GetID(), time); }
 
     double getRange(LWTime time) {return globPtr->range(GetID(), time);}
 

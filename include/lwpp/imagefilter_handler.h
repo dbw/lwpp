@@ -202,7 +202,7 @@ protected:
 /*!
  * @ingroup Adaptor
  */
-	template <class T, int Version>
+	template <class T, int Version = LWIMAGEFILTER_VERSION>
 	class ImageFilterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 	{
 		public:

@@ -504,7 +504,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 	{
 		lwpp::XPanel xpan(panel);
 		auto plugin = xpan.getFallbackUserData<T *>(cid);
-		if (plugin) return plugin->ButtonClick(cid);
+		if (plugin) plugin->ButtonClick(cid);
 	}
 
 	template <typename T>
@@ -512,7 +512,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 	{
 		lwpp::XPanel xpan(panel);
 		auto plugin = xpan.getFallbackUserData<T *>(cid);
-		if (plugin) return plugin->PopCommand(cid, cmdid);
+		if (plugin) plugin->PopCommand(cid, cmdid);
 	}
 
 	template <typename T>
@@ -525,6 +525,79 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			XPDrawArea area(reg, xpan.getDrawFuncs(), w, h);
 			plugin->ControlDraw(cid, area);
 		}
+	}
+
+	namespace LW2019
+	{
+		typedef struct st_LWXPanelSheetColumnInfo
+		{
+			const char *title;
+			float width;
+			int justification;
+			int valueIndex;
+		} LWXPanelSheetColumnInfo;
+
+		typedef struct st_LWXPanelSheetLayoutInfo
+		{
+			LWXPanelSheetColumnInfo *column_info_array;
+			float row_height;
+			int rows_visible;
+		} LWXPanelSheetLayoutInfo, *LWXPanelSheetLayoutInfoRef;
+
+		typedef struct st_LWXPanelSheetFuncs
+		{
+			int version; // current version is: 2
+
+			// fill the column description for a specific index
+			void(*getColumn)(LWXPanelID pan, unsigned int cid, int column_index, LWXPanelSheetColumn *column); // 1+
+
+			// return the text to display for a given item and column. (NULL item (-1 index) is the header item).
+			/* Justification is specified in the row/column text */
+			const char * /* rich text utf-8 */ (*getText)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int column_index); // 1+
+
+			// Is the item expanded. (n/a for title item)
+			unsigned int(*getIsExpanded)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item); // 1+
+
+			// return the number of sub-items of a given item.
+			unsigned int(*getItemCount)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item); // 1+
+
+			// return the sub-item given its parent item and child index.
+			LWXPanelSheetItemRef(*getSubitem)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef parent_item, int child_index); // 1+
+
+			// return the type of item for a given parent and child index.
+			unsigned int(*getSubtype)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int child_index); // 1+
+
+			// respond to an item changing its parent and/or relative child index.
+			void(*handleMove)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, LWXPanelSheetItemRef new_parent_item, int new_child_index); // 1+
+
+			// set the expand state for an item (0:collpsed 1:expanded)
+			void(*handleExpandState)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int expanded); // 1+
+
+			// respond to a change in the selection state of an item
+			// (0:not selected; 1:selected; 2:toggled)
+			int(*handleSelectItem)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int state); // 1+
+
+			// respond to the start of multi-selection sequence
+			void(*handleSelectStart)(LWXPanelID pan, unsigned int cid, int state); // 1+
+
+			// respond to the end of a multi-selection sequence
+			void(*handleSelectEnd)(LWXPanelID pan, unsigned int cid); // 1+
+
+			// respond to the vertical scroll
+			void(*handleVScroll)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef top_item); // 1+
+
+			// respond to user input (events) occurring for a specific item and column index
+			// header uses item of NULL.
+			// return 1 if the input resulted in changes.
+			int(*handleEvent)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int column_index, LWXPanelSheetEvent *event); // 1+
+
+			// respond to a new primary item being selected
+			void(*handleSelectPrimaryItem)(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item); // 2+
+
+			// respond to sheet layout changes
+			void(*handleLayout)(LWXPanelID pan, unsigned int cid, LWXPanelSheetLayoutInfoRef layout); // 2+
+
+		} LWXPanelSheetFuncs;
 	}
 
 	template <typename T>
@@ -547,8 +620,11 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		virtual void handleSheetVScroll(unsigned int cid, itemRef top_item) {}
 		// return true if a change occured
 		virtual bool handleSheetEvent(unsigned int cid, itemRef item, int column_index, LWXPanelSheetEvent *event) { return 0; }
+		virtual void handleSelectPrimaryItem(unsigned int cid, LWXPanelSheetItemRef item) { return; }
+		virtual void handleLayout(unsigned int cid, LW2019::LWXPanelSheetLayoutInfoRef layout) { return; }
 	};
 
+	
 	template<typename T, typename S>
 	class XSheetServer
 	{
@@ -658,7 +734,20 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			return 0;
 		}
 
-		LWXPanelSheetFuncs sheetFuncs = {
+		static void handleSelectPrimaryItem_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item)
+		{
+			if (auto plugin = getHost(pan, cid))			
+				plugin->handleSelectPrimaryItem(cid, static_cast<S *>(item));
+		}
+
+		// respond to sheet layout changes
+		static void handleLayout_CB(LWXPanelID pan, unsigned int cid, LW2019::LWXPanelSheetLayoutInfoRef layout)
+		{
+			if (auto plugin = getHost(pan, cid))
+				plugin->handleLayout(cid, layout);
+		}
+
+		LW2019::LWXPanelSheetFuncs sheetFuncs = {
 			1,
 			getColumn_CB,
 			getText_CB,
@@ -672,11 +761,16 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			handleSelectStart_CB,
 			handleSelectEnd_CB,
 			handleSelectVScroll_CB,
-			handleEvent_CB
+			handleEvent_CB,
+			handleSelectPrimaryItem_CB,
+			handleLayout_CB
 		};
 
 	public:
-		LWXPanelSheetFuncs *getSheetFuncs() { return &sheetFuncs; }
+		void *getSheetFuncs() { 
+			if (lwpp::LightWave::isAtLeast(2019, 0)) sheetFuncs.version = 2;
+			return &sheetFuncs; 
+		}
 	};
 }
 #endif // LWPP_XPANEL_H

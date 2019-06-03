@@ -225,6 +225,7 @@
   <ItemGroup>
     <ClInclude Include="include\lwpp\animloader_handler.h" />
     <ClInclude Include="include\lwpp\backdropinfo.h" />
+    <ClInclude Include="include\lwpp\boneinfo.h" />
     <ClInclude Include="include\lwpp\BufferSet.h" />
     <ClInclude Include="include\lwpp\bxdf.h" />
     <ClInclude Include="include\lwpp\camera_handler.h" />
@@ -266,6 +267,8 @@
     <ClInclude Include="include\lwpp\matrix4x4.h" />
     <ClInclude Include="include\lwpp\meshinfo.h" />
     <ClInclude Include="include\lwpp\message.h" />
+    <ClInclude Include="include\lwpp\modeler.h" />
+    <ClInclude Include="include\lwpp\modtool.h" />
     <ClInclude Include="include\lwpp\mod_command.h" />
     <ClInclude Include="include\lwpp\monitor.h" />
     <ClInclude Include="include\lwpp\node_handler.h" />
@@ -294,6 +297,7 @@
     <ClInclude Include="include\lwpp\utility.h" />
     <ClInclude Include="include\lwpp\utility_panels.h" />
     <ClInclude Include="include\lwpp\vector3d.h" />
+    <ClInclude Include="include\lwpp\viewport.h" />
     <ClInclude Include="include\lwpp\vparm.h" />
     <ClInclude Include="include\lwpp\wrapper.h" />
     <ClInclude Include="include\lwpp\xpanel.h" />

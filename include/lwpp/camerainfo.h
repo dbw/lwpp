@@ -5,6 +5,7 @@
 #include <lwrender.h>
 #include <lwpp/lw_version.h>
 #include <lwpp/math.h>
+#include <lwpp/item.h>
 
 namespace lwpp
 {
@@ -21,8 +22,16 @@ namespace lwpp
 		CameraInfo(LWItemID _camera = LWITEM_NULL)
 			: camera(_camera)	{;}
 
+		CameraInfo(const LWItem &item)
+			: camera(item.GetID())
+		{
+			;
+		}
+
 		//! Returns the LWItemID of the camera
 		LWItemID getID() const {return camera;}
+
+		bool exists() const { return camera != LWITEM_NULL; }
 
 		/*! Changes the LWItemID of the camera to a new one so the class can be used with more than one camera
 		*   @param _camera ID of the new Camera to use
@@ -250,6 +259,9 @@ namespace lwpp
 		*   @param *rotation Pointer to double where the rotation of the diaphragm would be stored.
 		*/
 		void  diaphragm( LWTime time, int *sides, double* rotation ) { globPtr->diaphragm(camera, time, sides, rotation);}
+
+		unsigned int getMinSamples(LWTime time) const { return globPtr->minSamples(camera, time); }
+		unsigned int getMaxSamples(LWTime time) const { return globPtr->maxSamples(camera, time); }
 
 	};
 

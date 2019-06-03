@@ -55,6 +55,13 @@ namespace lwpp
 				menu = globPtr->cmenuCreate(&description, userdata);
 			}
 		}
+		//! Create a new context menu
+		/*!
+		 * @param width Width of the menu in pixels
+		 * @param countFn Callback to count the number of menu items
+		 * @param nameFn Callback to return the name of the n'th item
+		 * @param userdata User defined data to be associated with the menu (will be passed on to the Callbacks)
+		 */
 		void Create(int width, size_t (*countFn)(void *), const char *(*nameFn)(void *, int), void *userdata)
 		{
 			if ( available() )

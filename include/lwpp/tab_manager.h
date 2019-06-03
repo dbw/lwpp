@@ -74,12 +74,9 @@ namespace lwpp
      */
     void Ghost(PanelControl &control, const bool doGhost = true)
     {
-      if (!control.isValid()) return;
-#ifdef _DEBUG
-      lwpp::dostream dout;
-#endif      
+      if (!control.isValid()) return;  
 
-      int curr = mTab.GetInt();
+      //int curr = mTab.GetInt();
       for (int i = 0; i < mControls.size(); ++i)
       {
         for (SetIter iter = mControls.at(i).begin(); iter != mControls.at(i).end(); ++iter)
@@ -89,14 +86,14 @@ namespace lwpp
           {
             if (doGhost)
             {
-              ctr->Ghost((i == curr));
+              ctr->Ghost();
  #ifdef _DEBUG
               dout << "Ghost " << ctr->getID() << "\n";
 #endif
             }
             else
             {
-              ctr->UnGhost((i == curr));
+              ctr->UnGhost();
  #ifdef _DEBUG
               dout << "Unghost " << ctr->getID() << "\n";
 #endif
@@ -122,7 +119,6 @@ namespace lwpp
     {
       int curr = mTab.GetInt();
 #ifdef _DEBUG
-      lwpp::dostream dout;
       dout << "Visible tab " << curr << "\n";
 #endif      
       for (int i = 0; i < mControls.size(); ++i)
@@ -146,7 +142,7 @@ namespace lwpp
       for (SetIter iter = mControls.at(curr).begin(); iter != mControls.at(curr).end(); ++iter)
       {
         PanelControl *ctr = *iter;
-        ctr->Render();
+        ctr->Display();
 #ifdef _DEBUG
         dout << "Rendering control " << ctr->getID() << (ctr->isGhosted() ? " (ghost)\n" : "\n") ;
 #endif 

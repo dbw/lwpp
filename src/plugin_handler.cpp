@@ -67,6 +67,14 @@ namespace lwpp
 			plugin->PanelDestroyNotify();
 	}
 
+	void XPanelInterface::CreateViewXPanel(lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy)
+	{
+		CreateViewXPanel(this, controls.getControl(), controls.getDataDesc(), hints.get(), do_destroy);
+	}
+	void XPanelInterface::CreateViewXPanel(void *host, lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy)
+	{
+		CreateViewXPanel(host, controls.getControl(), controls.getDataDesc(), hints.get(), do_destroy);
+	}
 	void XPanelInterface::CreateViewXPanel(LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints, bool do_destroy)
 	{
 		CreateViewXPanel(this, controls, desc, hints, do_destroy);
@@ -74,15 +82,17 @@ namespace lwpp
 	void XPanelInterface::CreateViewXPanel(void *host, LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints, bool do_destroy)
 	{
 		LW_XPanel.Create(LWXP_VIEW, controls, do_destroy); // Don't destroy by default
+		LW_XPanel.Describe(desc, CB_DataGet, CB_DataSet);
+
 		if (hints) LW_XPanel.Hint(hints);
 
-		LWXPanelHint default_hint[] =
+		static LWXPanelHint default_hint[] =
 		{
 			XpCHGNOTIFY(LWXPanelChangeNotifyFunc),
 			XpEND
 		};
 		LW_XPanel.Hint(default_hint);
-		LWXPanelHint destroy_hint[] =
+		static LWXPanelHint destroy_hint[] =
 		{
 			XpDESTROYNOTIFY(LWXPanelDestroyNotifyFunc),
 			XpEND
@@ -90,8 +100,7 @@ namespace lwpp
 		if (do_destroy)
 		{
 			LW_XPanel.Hint(destroy_hint);
-		}
-		LW_XPanel.Describe(desc, CB_DataGet, CB_DataSet);
+		}		
 		LW_XPanel.ViewInst(host);
 		LW_XPanel.setUserData(host);
 	}

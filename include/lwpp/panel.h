@@ -7,6 +7,11 @@
 #include <lwpp/global.h>
 #include <lwpanel.h>
 #include <lwpp/math.h>
+#include <lwpp/vector3d.h>
+
+#ifndef CTLF_DPIAWARE
+#define CTLF_DPIAWARE  0x400 // (read/write) aware of dpi differences from a base dpi (currently only used for "OpenGLControl")
+#endif
 
 //! sussed out by Greg Malick
 #define LWRGB(red, green, blue) (0x01000000 | (red<<16) | (blue<<8) | green)
@@ -351,7 +356,7 @@ namespace lwpp
 	//! Helper function for callbacks
 
 	class PanelControl;
-    class LWPanel;
+  class LWPanel;
 
 	void *getPanelHandler(LWControlID control);
 	void *getControlHandler(LWControlID control);
@@ -415,6 +420,34 @@ namespace lwpp
 				return eventHandler->controlName(control, index);
 			}
 			return "";
+		}
+		//! Popup Face
+		static const char *cb_Face(void *userdata, int index)
+		{
+			LWControlID control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return eventHandler->controlFace(control, index);
+			}
+			return "";
+		}
+		//! Popup Type
+		static int cb_Type(void *userdata, int index)
+		{
+			LWControlID control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return eventHandler->controlType(control, index);
+			}
+		}
+		//! Popup SubMenu
+		static void *cb_SubMenu(void *userdata, int index)
+		{
+			LWControlID control = static_cast<LWControlID>(userdata);
+			if (T *eventHandler = F<T>::getHandler(control))
+			{
+				return eventHandler->controlSubMenu(control, index);
+			}
 		}
 		//! MultiList Name 
 		static const char *cb_MultiListName(void *userdata, int index, int column)
@@ -538,7 +571,7 @@ namespace lwpp
 	{
 	private:
 		LWControl *control; //! Pointer to the control
-		bool ghosted;
+		struct { bool ghosted : 1; bool erased : 1; } flags = { false, false };
 	protected:
 		/*! Get the control attributes, including it's value.
 		 * @param tag One of the cTag defined in lwpanel.h (line 186).
@@ -552,12 +585,11 @@ namespace lwpp
 		/*! Constructor
 		 *  @param ctl The LWControlID of the control */
 		PanelControl (LWControlID ctl = 0)
-			: ghosted(false)
 		{
 			SetControl (ctl);
 		}
-        PanelControl (const PanelControl &ctl)
-			: ghosted(ctl.ghosted)
+    PanelControl (const PanelControl &ctl)
+			: flags(ctl.flags)
 		{
 			SetControl (ctl.control);
 		}
@@ -566,7 +598,7 @@ namespace lwpp
 			if (this != &from)
 			{
 				control = from.control;
-				ghosted = from.ghosted;
+				flags = from.flags;
 			}
 			return *this;
 		}
@@ -619,54 +651,124 @@ namespace lwpp
 		bool isValid() const
 		{
 			return (control != 0);
+		}		
+
+		bool isErased() const
+		{
+			return flags.erased;
+		}
+
+		bool isGhosted() const
+		{
+			return flags.ghosted;
 		}
 
 		//! Changes the draw mode of the control
 		//! @param mode The draw mode for the control. Render by default.
-		void Draw(DrMode mode = DR_RENDER)
+		void Draw(DrMode mode = DR_REFRESH)
 		{
-			if (control) control->draw(control, mode);
+			if ((mode != DR_ERASE) && isErased())
+				return;
+			
+			if (mode == DR_GHOST)
+			{
+				if(isErased())
+				{
+					mode = DR_ERASE;
+					//if (isValid()) control->draw(control, DR_GHOST);
+					//if (isValid()) control->draw(control, DR_ERASE);					
+
+					//return;
+				}
+			}			
+
+			if (mode == DR_REFRESH)
+			{
+				if (isErased())
+					return;
+				else if (isGhosted())
+					mode = DR_GHOST;
+				else
+					mode = DR_RENDER;
+			}
+			/*
+			if (mode != DR_REFRESH)
+			{
+				if (isGhosted())
+				{
+					if (isErased())
+						return;
+					mode = DR_GHOST;
+				}
+			}
+			*/
+
+			if (isValid()) control->draw(control, mode);
 		}
 		//! Erases the control from the panel.
 		void Erase()
 		{
+			flags.erased = true;
 			Draw(DR_ERASE);
 		}
+		//! Display the control
+		void Display()
+		{
+			flags.erased = false;
+			auto ghost = isGhosted();
+			if (isValid()) control->draw(control, DR_RENDER);
+			if (ghost) Draw(DR_GHOST);
+		}
+
+		void setVisibility(const bool vis)
+		{			
+			if (vis)
+				Display();
+			else
+				Erase();			
+		}
+
 		//! Redraws the control in the panel.
+		/*
 		void Redraw() 
 		{
 			Draw (DR_REFRESH);
 		}
+		*/
 		void Refresh() 
 		{
 			Draw (DR_REFRESH);
 		}
+
+		void setGhost(bool ghost)
+		{
+			flags.ghosted = ghost;
+			auto erased = isErased();
+			//Draw(ghost ? DR_GHOST : DR_RENDER);
+			if (erased) return;
+			else
+				Draw(DR_REFRESH);
+		}
 		//! Ghost the control in the panel.
 		//! How to show to the user a 
 		//! control is deactivated.
-		void Ghost(bool render = true)
+		void Ghost()
 		{
-			ghosted = true;
-			if (render) Render();
+			setGhost(true);
 		}
-		void UnGhost(bool render = true)
+		void UnGhost()
 		{
-			ghosted = false;
-			if (render) Render();
+			setGhost(false);
 		}
+
 		//! Renders the control in the panel.
+		/*
 		void Render()
-		{      
+		{ 
+			//if (isErased()) return;
 			Draw();
-			if (ghosted)
-			{
-				Draw(DR_GHOST);
-			}
 		}
-		bool isGhosted() const
-		{
-			return ghosted;
-		}
+		*/
 		
 		/*! Template version. Sets the control attributes, including it's value.
 		 * @param val The value for the tag.
@@ -691,7 +793,7 @@ namespace lwpp
 		 * @param tag One of the TAGS defined in lwpanel.h (line 186). */
 		int GetInt(cTag tag = CTL_VALUE)
 		{
-			int v;
+			int v = 0;
 			Get (v, tag);
 			return v;
 		}
@@ -733,6 +835,37 @@ namespace lwpp
 			return fval.flt.value;
 		}
 
+		void GetVector(LWDVector vec)
+		{
+			LWValue fval = { LWT_VFLOAT };
+			get(CTL_VALUE, &fval);
+			for (int i = 0; i < 3; ++i)
+			  vec[i] = fval.fvec.val[i];			
+		}
+
+		void GetVector(LWFVector vec)
+		{
+			LWValue fval = { LWT_VFLOAT };
+			get(CTL_VALUE, &fval);
+			for (int i = 0; i < 3; ++i)
+				vec[i] = static_cast<float>(fval.fvec.val[i]);
+		}
+
+		void GetVector(Vector3f &vec)
+		{
+			LWValue fval = { LWT_VFLOAT };
+			get(CTL_VALUE, &fval);
+			for (int i = 0; i < 3; ++i)
+				vec[i] = static_cast<float>(fval.fvec.val[i]);
+		}
+		void GetVector(Vector3d &vec)
+		{
+			LWValue fval = { LWT_VFLOAT };
+			get(CTL_VALUE, &fval);
+			for (int i = 0; i < 3; ++i)
+				vec[i] = fval.fvec.val[i];
+		}
+
 		char *GetC_String()
 		{
 			// we need to provide a buffer
@@ -750,7 +883,6 @@ namespace lwpp
 			if (str) return std::string(str);
 			return "";
 		}
-
 
 		//! Set the minimum range
 		int RangeMin() {return GetInt(CTL_RANGEMIN);}
@@ -806,7 +938,7 @@ namespace lwpp
 		{
 			int cx = HotX();
 			int cy = HotY();
-			if ( lwpp::inRange(x, cx, cx + HotW()) || !lwpp::inRange(y, cy, cy + HotH()) ) return true;
+			if ( lwpp::inRange(x, cx, cx + HotW()) && lwpp::inRange(y, cy, cy + HotH()) ) return true;
 			return false;
 		}
 		//! Check if a coordinate is within the area of the control
@@ -814,7 +946,7 @@ namespace lwpp
 		{
 			int cx = X();
 			int cy = Y();
-			if ( lwpp::inRange(x, cx, cx + W()) || !lwpp::inRange(y, cy, cy + H()) ) return true;
+			if ( lwpp::inRange(x, cx, cx + W()) && lwpp::inRange(y, cy, cy + H()) ) return true;
 			return false;
 		}
 
@@ -937,6 +1069,30 @@ namespace lwpp
 		{
 			SetUserData(control);
 		}
+
+    int getFlags()
+    {
+      return GetInt(CTL_FLAGS);
+    }
+
+    void setFlags(int flag)
+    {
+      return Set(flag, CTL_FLAGS);
+    }  
+
+    bool isDpiAware()
+    {
+      return getFlags() & CTLF_DPIAWARE;
+    }
+
+    void setDpiAware (bool val)
+    {
+      auto f = getFlags();
+      if (val)
+        setFlags(f | CTLF_DPIAWARE);
+      else
+        setFlags(f & ~CTLF_DPIAWARE);
+    }
 	};
 
 	/*! @class LWPanelControlCallBacks panel.h <lwpp/panel.h>
@@ -1069,8 +1225,8 @@ namespace lwpp
 	class LWPanel : public GlobalBase<LWPanelFuncs>
 	{
 	private:
-		LWPanelID id; //!< ID of the panel
-		bool close_on_destroy; //!< bool value to indicate how to deal with the panel when it's destroyed
+		LWPanelID id = nullptr; //!< ID of the panel
+		bool close_on_destroy = false; //!< bool value to indicate how to deal with the panel when it's destroyed
 		std::string mTitle; //!< Title of the panel
 	protected:
 		//! Get a panel attribute
@@ -1106,9 +1262,7 @@ namespace lwpp
 		}
 	public:
 		//! Default Constructor
-		LWPanel ()
-			: id(0),
-				close_on_destroy(false)
+		LWPanel ()			
 		{
 			;
 		}
@@ -1139,8 +1293,8 @@ namespace lwpp
 			if (!available()) return; // in the case LWPanels aren't available - i.e. LWSN
 			if (close_on_destroy)
 			{
-				globPtr->destroy(id);
-				id = 0;
+				if (id) globPtr->destroy(id);
+				id = nullptr;
 			}
 		}
 		//! Copy constructor
@@ -1286,7 +1440,7 @@ namespace lwpp
 		 * @image html panelchoicev.jpg "A vertical choice control"
 		 * @param *title The label for the control
 		 * @param **items Pointer to a NULL terminated array for the options. i.e: static char *choices[] = { "One", "Two", "Three", NULL };
-		 * @param orientation The orientation for the control
+		 * @param horizontal The orientation for the control
 		 * @return a pointer to the created LWControl
 		 *
 		 *  How to add a AddChoice
@@ -1295,11 +1449,11 @@ namespace lwpp
 		 control = Panel.AddChoice("PopUp", choices, true);
 		 @endcode
 		 */
-		LWControl *AddChoice (const char *title, const char **items, bool orientation)
+		LWControl *AddChoice (const char *title, const char **items, bool horizontal = true)
 		{
 			LWPanControlDesc desc;
 			desc.type = LWT_CHOICE;
-			desc.choice.vertical = orientation ? MX_HCHOICE : MX_VCHOICE;
+			desc.choice.vertical = horizontal ? MX_HCHOICE : MX_VCHOICE;
 			desc.choice.items=items;
 			return addControl("ChoiceControl", &desc, title);
 		}
@@ -1622,6 +1776,8 @@ namespace lwpp
 		 *  control = Panel.AddRGBVector("RGB Vector Color");
 		 *  @param *title The label for the control */
 		LWControl *AddRGBVector (const char *title)	{	return AddVector(title,"RGBVecControl"); }
+		LWControl *AddColour(const char *title) { return AddVector(title, "ColorControl"); }
+		LWControl *AddColor(const char *title) { return AddVector(title, "ColorControl"); }
 		/*! Adds an edit field for a string of text 
 		 *  @ingroup LWPanelControls
 		 *  @image html paneltfstring.jpg "An empty edit field for a string text. 25 characters long."
@@ -1935,6 +2091,35 @@ namespace lwpp
 			desc.popup.nameFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
 			desc.popup.countFn=PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
 			PanelControl control = addControl("CustomPopupControl", &desc, title);
+			control.SetUserData(control.getControl());
+			return control.getControl();
+		}
+
+		template<typename T>
+		LWControl *AddCustomPopupExtra(const char *title, int width)
+		{
+			LWPanControlDesc desc;
+			desc.type = LWT_POPUP;
+			desc.popup.width = width;
+			desc.popup.nameFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.popup.countFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
+			desc.popup.faceFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_Face;
+			desc.popup.typeFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_Type;
+			desc.popup.subMFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_SubMenu;
+			PanelControl control = addControl("CustomPopupControlExtra", &desc, title);
+			control.SetUserData(control.getControl());
+			return control.getControl();
+		}
+
+		template<typename T>
+		LWControl *AddCustomPopdown(const char *title, int width)
+		{
+			LWPanControlDesc desc;
+			desc.type = LWT_POPUP;
+			desc.popup.width = width;
+			desc.popup.nameFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_Name;
+			desc.popup.countFn = PanelControlAdaptor<T, GetPanelEventHandler>::cb_Count;
+			PanelControl control = addControl("CustomPopdownControl", &desc, title);
 			control.SetUserData(control.getControl());
 			return control.getControl();
 		}
@@ -2616,14 +2801,14 @@ namespace lwpp
 	//! @ingroup Globals
 	class LWRaster : public GlobalBase<LWRasterFuncs>
 	{
-		LWRasterID id;
-		int lastX, lastY;
+		LWRasterID id = nullptr;
+		int lastX = -1, lastY = -1;
 	public:
-		LWRaster(int w, int h, int flags = 0) : id(0)
+		LWRaster(int w, int h, int flags = 0)
 		{
 			create(w, h, flags);
 		}
-		LWRaster() : id(0)
+		LWRaster()
 		{
 			;
 		}
@@ -2791,7 +2976,7 @@ namespace lwpp
 	{
 			if (T *instance = static_cast<T *>(userdata))
 			{
-				return instance->panelMouseButton(LWPanel(id), qualifiers, x, y);
+				instance->panelMouseButton(LWPanel(id), qualifiers, x, y);
 			}
 	}
 	//! Callback for panel mouse move
