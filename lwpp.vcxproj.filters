@@ -337,5 +337,14 @@
     <ClInclude Include="include\lwpp\modeler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\lwpp\primitive_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\gizmo_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\layout_tool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

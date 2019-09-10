@@ -80,9 +80,6 @@ namespace lwpp
 			{
 				LWError localErr = "\0";
 				T *plugin = new T(priv, context, &localErr);
-#ifdef _DEBUG
-				dout << "Created plugin instance: " << plugin << "\n";
-#endif	
 				if (*localErr)
 				{
 					delete plugin;
@@ -377,12 +374,12 @@ namespace lwpp
 		//! Put data into a XPanel View
 		virtual void *DataGet(unsigned int ) 
 		{
-			return nullptr;
+			return 0;
 		}
 		//! Retrieve data fom a XPanel View
 		virtual LWXPRefreshCode DataSet(unsigned int , void *)
 		{
-			return LWXPRC_DFLT;
+			return LWXPRC_NONE;
 		}
 
 		virtual void ButtonClick(unsigned int)
@@ -435,9 +432,7 @@ namespace lwpp
 
 		static void LWXPanelDestroyNotifyFunc(void *data);
 
-		virtual void CreateViewXPanel(lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy = false);
-
-		virtual void CreateViewXPanel(void *host, lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy = false);
+		virtual void XPanelInterface::CreateViewXPanel(lwpp::DynamicControlData &controls, lwpp::DynamicHints &hints, bool do_destroy = false);
 
 		virtual void CreateViewXPanel(LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints = 0, bool do_destroy = false);
 
@@ -491,7 +486,7 @@ namespace lwpp
 	{
 		LWGizmo *gizmo = nullptr;
 	public:
-		int gzInterface(int version, LWGizmo *global)
+		int Interface(int version, LWGizmo *global)
 		{
 			gizmo = global;
 			return AFUNC_OK;
@@ -521,9 +516,9 @@ namespace lwpp
 	public:
 		GizmoAdaptor(const char *name, const char *className, ServerTagInfo tags[])
 		{
-			LWServer::AddPlugin(className, name, Gizmo, tags);
+			LWServer::AddPlugin(className, name, Interface, tags);
 		}
-		static int Gizmo(int version, GlobalFunc *global, void *loc, void *serverdata)
+		static int Interface(int version, GlobalFunc *global, void *loc, void *serverdata)
 		{
 			if (version < LWINTERFACE_VERSION) return AFUNC_BADVERSION;
 			try
@@ -547,7 +542,7 @@ namespace lwpp
 					local->gizmo->event = GizmoAdaptor::cbEvent;
 					local->gizmo->panel = GizmoAdaptor::cbPanel;
 					local->gizmo->end = GizmoAdaptor::cbEnd;
-					return plugin->gzInterface(version, local);
+					return plugin->Interface(version, local);
 				}
 				return AFUNC_OK;
 			}

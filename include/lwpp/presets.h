@@ -81,7 +81,7 @@ namespace lwpp
 		LWError Setup(XPanel& panel, long control);
 		virtual void popCommand(int cid, int cmd);
 		void doCommand(int cmd);
-    bool doLoadPreset(const char *filename, bool quiet = false);
+        bool doLoadPreset(const char *filename, bool quiet = false);
 		virtual size_t popCount(void);
 		virtual const char *popName(int n);
 	};

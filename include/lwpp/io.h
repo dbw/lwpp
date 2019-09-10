@@ -2,7 +2,7 @@
 #define LWPP_IO_H
 #include <lwpp/global.h>
 #include <lwio.h>
-#include <lwpp/vector3d.h>
+#include <lwpp/point3d.h>
 
 namespace lwpp
 {
@@ -141,6 +141,14 @@ namespace lwpp
 			ss->writeDP(ss->writeData, data->asLWVector(), 3);
 		}
 		void Write(const Vector3f *data) const
+		{
+			ss->writeFP(ss->writeData, data->asLWVector(), 3);
+		}
+		void Write(const Point3d* data) const
+		{
+			ss->writeDP(ss->writeData, data->asLWVector(), 3);
+		}
+		void Write(const Point3f* data) const
 		{
 			ss->writeFP(ss->writeData, data->asLWVector(), 3);
 		}
@@ -291,6 +299,14 @@ namespace lwpp
 			rc = ls->readDP(ls->readData, vec->asLWVector(), 3);
 		}
 		void read(lwpp::Vector3f *vec) const
+		{
+			rc = ls->readFP(ls->readData, vec->asLWVector(), 3);
+		}
+		void read(lwpp::Point3d* vec) const
+		{
+			rc = ls->readDP(ls->readData, vec->asLWVector(), 3);
+		}
+		void read(lwpp::Point3f* vec) const
 		{
 			rc = ls->readFP(ls->readData, vec->asLWVector(), 3);
 		}

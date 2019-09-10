@@ -205,7 +205,7 @@ namespace lwpp
 
 		Image(LWImageID _id = nullptr) : id(_id)
 		{
-			_acquireGlobal();
+			updateGlobal();
 			globPtr->saverNotifyAttach(this, ImageSaverCB);
 		}
 
@@ -213,7 +213,7 @@ namespace lwpp
 		{
 			id = from.id;
 			mFlags = from.mFlags;
-			_acquireGlobal();
+			updateGlobal();
 			globPtr->saverNotifyAttach(this, ImageSaverCB);
 		}
 

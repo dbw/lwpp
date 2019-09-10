@@ -1801,6 +1801,19 @@ namespace lwpp
 		 *  @param *title The label for the control
 		 *  @param width The width in characters of the control */
 		LWControl *AddStringInfo (const char *title, int width)	{	return AddString(title, width, "InfoControl"); }
+		/*! Adds a Multi-line edit control for text, no navigation elements
+		*  @ingroup LWPanelControls 
+		*  @param *title The label for the control
+		*  @param width The width in characters of the control
+		*@param height The height in characters of the control*/
+		LWControl* AddMultiLine(const char* title, int width, int height)
+		{
+			LWPanControlDesc desc;
+			desc.type = LWT_MULTILINE;
+			desc.editor.width = width;
+			desc.editor.height = height;
+			return addControl("MultilineControl", &desc, title);
+		}
 		/*! Adds a file edit field with an arrow button to open the OS requester to select files 
 		 *  @ingroup LWPanelControls
 		 *  @image html panelfile.jpg "A file edit field with a fake file name. 25 characters long."

@@ -33,7 +33,7 @@ namespace lwpp
 	};
  
 	//! @ingroup Adaptor
-	template <class T, int min, int max>
+	template <class T, int min>
 	class ItemMotionAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T> 
 	{
 	public:
@@ -43,7 +43,7 @@ namespace lwpp
 		}
 		static int Activate (int version , GlobalFunc* global, LWInstance inst, void* serverData)
 		{
-			if(version!=LWITEMMOTION_VERSION) return AFUNC_BADVERSION;
+			if(version < LWITEMMOTION_VERSION) return AFUNC_BADVERSION;
 			lwpp::SetSuperGlobal(global);
 			
 			LWItemMotionHandler* plugin = static_cast<LWItemMotionHandler*>(inst);
@@ -73,10 +73,10 @@ namespace lwpp
 	//! @ingroup XPanelHandler
 	IMPLEMENT_XPANELHANDLER(ItemMotion);
 	//! @ingroup XPanelAdaptor
-	IMPLEMENT_XPANELADAPTOR(ItemMotion,min,max);
+	IMPLEMENT_XPANELADAPTOR(ItemMotion, LWITEMMOTION_VERSION);
 	//! @ingroup LWPanelHandler
 	IMPLEMENT_LWPANELHANDLER(ItemMotion);
 	//! @ingroup LWPanelAdaptor
-	IMPLEMENT_LWPANELADAPTOR(ItemMotion,min,max);
+	IMPLEMENT_LWPANELADAPTOR(ItemMotion, LWITEMMOTION_VERSION);
 }
 #endif //ITEMMOTION_H

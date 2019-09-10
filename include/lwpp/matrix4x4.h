@@ -3,6 +3,7 @@
 
 #include <lwpp/Point3d.h>
 #include <limits>
+#include <lwmath.h>
 
 namespace lwpp
 {
@@ -69,6 +70,39 @@ namespace lwpp
 			m[3][0] = pos.x;
 			m[3][1] = pos.y;
 			m[3][2] = pos.z;
+			m[3][3] = 1.0;
+		}
+
+		//! Construct from one axis and an angle
+		Matrix4x4(const T angle, Vector3<T> axis)
+		{
+
+			T const a = angle;
+			T const c = cos(a);
+			T const s = sin(a);
+
+			axis.Normalize();
+			auto temp = axis * (T(1) - c);
+
+			m[0][0] = c + temp[0] * axis[0];
+			m[0][1] = temp[0] * axis[1] + s * axis[2];
+			m[0][2] = temp[0] * axis[2] - s * axis[1];
+
+			m[1][0] = temp[1] * axis[0] - s * axis[2];
+			m[1][1] = c + temp[1] * axis[1];
+			m[1][2] = temp[1] * axis[2] + s * axis[0];
+
+			m[2][0] = temp[2] * axis[0] + s * axis[1];
+			m[2][1] = temp[2] * axis[1] - s * axis[0];
+			m[2][2] = c + temp[2] * axis[2];
+
+			m[3][0] = 0.0;
+			m[3][1] = 0.0;
+			m[3][2] = 0.0;
+
+			m[0][3] = 0.0;
+			m[1][3] = 0.0;
+			m[2][3] = 0.0;
 			m[3][3] = 1.0;
 		}
 
@@ -456,6 +490,121 @@ namespace lwpp
 		{
 			return transform(v);
 		}
+		inline Point3<T> transform(const Point3<T>& v) const
+		{
+			return Point3<T>(v.x * m[0][0] + v.y * m[1][0] + v.z * m[2][0],
+							  v.x * m[0][1] + v.y * m[1][1] + v.z * m[2][1],
+							  v.x * m[0][2] + v.y * m[1][2] + v.z * m[2][2]);
+		}
+
+		/** this conversion uses conventions as described on page:
+*   https://www.euclideanspace.com/maths/geometry/rotations/euler/index.htm
+*   Coordinate System: right hand
+*   Positive angle: right hand
+*   Order of euler angles: heading first, then attitude, then bank
+*   matrix row column ordering:
+*   [m00 m01 m02]
+*   [m10 m11 m12]
+*   [m20 m21 m22]*/
+		/*
+		public final void rotate(matrix  m) {
+			// Assuming the angles are in radians.
+			if (m.m10 > 0.998) { // singularity at north pole
+				heading = Math.atan2(m.m02, m.m22);
+				attitude = Math.PI / 2;
+				bank = 0;
+				return;
+			}
+			if (m.m10 < -0.998) { // singularity at south pole
+				heading = Math.atan2(m.m02, m.m22);
+				attitude = -Math.PI / 2;
+				bank = 0;
+				return;
+			}
+			heading = Math.atan2(-m.m20, m.m00);
+			bank = Math.atan2(-m.m12, m.m11);
+			attitude = Math.asin(m.m10);
+		}*/
+
+		Vector3<T> toEuler()
+		{
+			Vector3<T> ret;
+			/*
+			if (m[1][2] > 0.999)
+			{
+				ret.x = atan2(m[0][2], m[2][2]);
+				ret.y = -HALFPI;
+				ret.z = 0;
+			}
+			else if (m[1][2] < -0.999)
+			{
+				ret.x = -atan2(m[0][2], m[2][2]);
+				ret.y = HALFPI;
+				ret.z = 0;			
+			}
+			else
+			{
+				ret.x = atan2(-m[2][0], m[0][0]);
+				ret.y = -asin(m[1][2]);
+				ret.z = atan2(-m[1][2], m[1][1]);
+			}
+			*/
+			if (m[1][2] > 0.999)
+			{
+				ret.x = atan2(m[0][1], m[0][0]);
+				ret.y = -HALFPI;
+				ret.z = 0;
+			}
+			else if (m[1][2] < -0.999)
+			{
+				ret.x = -atan2(m[0][1], m[0][0]);
+				ret.y = HALFPI;
+				ret.z = 0;
+			}
+			else
+			{
+				ret.x = atan2(-m[0][0], m[2][0]);
+				ret.y = -asin(m[1][0]);
+				ret.z = atan2(-m[1][0], m[1][1]);
+			}
+			return ret;
+		}
+
+		Vector3<T> toEuler2()
+		{			
+			auto theta1 = atan2(m[1][2], m[2][2]);
+			auto c2 = sqrt(lwpp::Sqr(m[0][0]) + lwpp::Sqr(m[0][1]));
+			auto theta2 = atan2(-m[0][2], c2);
+			auto s1 = sin(theta1);
+			auto c1 = cos(theta1);
+			auto theta3 = atan2(s1 * m[2][0] - c1 * m[1][0], c1 * m[1][1] - s1 * m[2][1]);
+			return Vector3<T>(theta1, theta2, theta3);
+		}
+		
+		/*
+		Vector3<T> toEuler()
+		{
+			//assert(isRotationMatrix(R));
+			Vector3<T> ret;
+			float sy = sqrt(lwpp::Sqr(m[0][0]) + lwpp::Sqr(m[1][0]));
+
+			bool singular = sy < 1e-6; // If
+
+			if (!singular)
+			{
+				ret.x = -atan2(m[2][1], m[2][2]);
+				ret.z = atan2(-m[2][0], sy);
+				ret.y = atan2(m[1][0], m[0][0]);
+			}
+			else
+			{
+				ret.x = -atan2(-m[1][2], m[1][1]);
+				ret.z = atan2(-m[2][0], sy);
+				ret.y = 0;
+			}
+			return ret;
+		}
+		*/
 	};                 
 
 	typedef Vector3<double> Vector3d;

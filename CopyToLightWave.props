@@ -5,12 +5,15 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <PostBuildEvent>
-      <Command>copy /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2019.0.3\plugins</Command>
+      <Command>xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2019.0.3\plugins\
+xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2019.1\plugins\
+xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2019.1.1\plugins\
+xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2020.0\plugins\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <PostBuildEvent>
-      <Message>Copying $(TargetPath) to $(USERPROFILE)\.NewTek\LightWave\2019.0.3\plugins</Message>
+      <Message>Copying $(TargetPath) to $(USERPROFILE)\.NewTek\LightWave\2019.1.1\plugins</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

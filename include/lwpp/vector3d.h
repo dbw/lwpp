@@ -171,9 +171,8 @@ namespace lwpp
 				T ib = 1.0 / b;
 				return Vector3 (x * ib, y * ib, z * ib);
 			}
-			inline T& operator[](const unsigned int index)
+			inline T& operator[](const unsigned int index) const
 			{
-
 				assert(index < 3);
 				
 				if(index > 2) 
@@ -196,6 +195,40 @@ namespace lwpp
 			{
 				float p = atan2(x, z);
 				return (p < 0.0) ? p + TWOPI : p;
+			}			
+
+
+			/*
+				template <class Real>
+	Vector<3, Real> axis_angle_to_hpb(const Vector<3, Real>& axis, Real angle)
+	{
+		Vector<3, Real> hpb;
+
+		Real s = sin(angle);
+		Real c = cos(angle);
+		Real t = 1 - c;
+
+		hpb[0] = atan2(axis[0] * axis[2] * t + axis[1] * s, 1 - (axis[0] * axis[0] + axis[1] * axis[1]) * t);
+
+		Real sp = axis[0] * s - axis[1] * axis[2] * t;
+		if(sp < -1) sp = -1;
+		else if(sp > 1) sp = 1;
+		hpb[1] = asin(sp);
+
+		hpb[2] = atan2(axis[0] * axis[1] * t + axis[2] * s, 1 - (axis[0] * axis[0] + axis[2] * axis[2]) * t);
+
+		return hpb;
+	}
+
+			*/
+
+			inline Vector3 toEuler(const T bank)
+			{
+				Vector3<T> euler;
+				euler.x = HALFPI - atan2(z, x);
+				euler.y = HALFPI - acos(-y);
+				euler.z = bank;
+				return euler;
 			}
 
 			inline void Abs()
@@ -248,7 +281,8 @@ namespace lwpp
 	template <typename T>
 	inline Vector3<T> &Vector3<T>::Normalize()
 	{
-		*this /= Magnitude();
+		auto m = Magnitude();
+		if (m != 0.0) *this /= m;
 		return *this;
 	}
 

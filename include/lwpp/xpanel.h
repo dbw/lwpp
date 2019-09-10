@@ -9,7 +9,6 @@
 
 namespace lwpp
 {
-
 //! defines for the various XPanel controls
 #define XPC_STRING "string"
 #define XPC_INTEGER "integer"
@@ -278,7 +277,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		}
 		void Destroy ()
 		{
-			if (lwxpanel) globPtr->destroy(lwxpanel);
+			if (destroy_on_exit && lwxpanel) globPtr->destroy(lwxpanel);
 			lwxpanel = 0;
 		}
 		//! Initialize the class from a created panel
@@ -389,7 +388,17 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		{
 			globPtr->setData(lwxpanel, id, data);
 		}
+        
+        void setUserData(const char *data, unsigned int id = 0)
+        {
+            setUserData((void*)data, id);
+        }
 
+		void clearUserData(unsigned int id = 0)
+		{
+			setUserData((void *)nullptr, id);
+		}
+        
 		// Forms
 
 		inline void getForm (unsigned int id, void *&d)

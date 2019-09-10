@@ -97,7 +97,7 @@ namespace lwpp
 			enum {ID_TEXT = 0xb000};
 			LWXPanelControl ctrl_list[] = 
 			{
-				{ID_TEXT, "sInfo", "string"},
+				{ID_TEXT, "", "sInfo"},
 				{ 0 }
 			};
 			LWXPanelDataDesc data_descrip[] = { { 0 } };

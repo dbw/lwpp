@@ -7,8 +7,11 @@
 namespace lwpp 
 {
 
-	static int VParmEventFuncCB(LWVParmID vp, void *userData,
-															en_lwvpec eventCode, void *eventData)	{
+	static int VParmEventFuncCB(LWVParmID vp,
+								void *userData,
+								en_lwvpec eventCode,
+								void *eventData)
+	{
 		if (userData)
 		{
 			auto *sink = static_cast<VParmEventSink *>(userData);

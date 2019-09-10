@@ -20,4 +20,16 @@ namespace lwpp
 		return vecItems;
 	}
 
+	bool lwpp::InterfaceInfo::isSelected(lwpp::LWItem item) const
+	{
+		const LWItemID* id = globPtr->selItems;
+		// Loops the selection
+		for (int i = 0; id[i]; i++) {
+			if (item == lwpp::LWItem(id[i]))
+				return true;
+		}
+		return false;
+	}
+
+
 } // end namespace lwpp

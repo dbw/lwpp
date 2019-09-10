@@ -26,6 +26,10 @@ namespace lwpp
 		public:
 			static int CB_NodeInputEvent(void *userData, NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
 			{
+#ifdef _DEBUG
+				dout << "CB_NodeInputEvent - userData: " << userData << "\n";
+				return 0;
+#endif				
 				NodeHandler *plugin = static_cast<NodeHandler *>(userData);
 				return plugin->NodeInputEvent(nid, nevent, type);
 			}
@@ -113,6 +117,9 @@ namespace lwpp
 
 			NodeHandler(void *priv, void *context, LWError *err) : InstanceHandler(priv, context, err, LWNODE_HCLASS)
 			{
+#ifdef _DEBUG
+				dout << "NodeHandler() " << this << "\n";
+#endif				
 				Context = static_cast<NodeID>(context);
 				LWNode::setID(Context);
 			}
@@ -165,8 +172,7 @@ namespace lwpp
 				plugin->customPreview = NodeAdaptor::customPreview;
 				plugin->flags = NodeAdaptor::flags;
 				plugin->materialGL = NodeAdaptor::materialGL;
-				return AFUNC_OK;
-			
+				return AFUNC_OK;			
 			}
 			catch (std::exception &e)
 			{
@@ -254,6 +260,9 @@ namespace lwpp
 		public:
 			XPanelNodeHandler(void *priv, void *context, LWError *err) : NodeHandler(priv, context, err)
 			{
+#ifdef _DEBUG
+				dout << "XPanelNodeHandler() " << this << "\n";
+#endif
 				;
 			}
 			virtual ~XPanelNodeHandler() {;}

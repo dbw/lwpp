@@ -63,6 +63,10 @@ namespace lwpp
 			mNodeID(_id)
 		{
 			init();
+#ifdef _DEBUG
+			dout << "Adding Input " << name << " to Node " << mNodeID << "\n";
+#endif
+
 			mID = inF->create(mNodeID, type, name.c_str(), inp_event);
 		}
 		LWNodeInput(const NodeID _id, const std::string name, const LWID vendor, const LWID type, NodeInputEvent* inp_event, const bool _destroy = true)
@@ -623,6 +627,10 @@ namespace lwpp
 		void setValue(NodeValue val, Vector3d &v)
 		{
 			setValue(val, v.asLWVector());
+		}
+		void setValue(NodeValue val, Point3d& p)
+		{
+			setValue(val, p.asLWVector());
 		}
 		//@}
 

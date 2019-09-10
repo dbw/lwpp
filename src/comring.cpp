@@ -3,6 +3,13 @@
 namespace lwpp
 {
 
+	void sendComringMessage(const char* topic, int eventCode, void* eventData)
+	{
+		GlobalBase<LWComRing> comRing;
+		if (comRing.getGlobal()) comRing.getGlobal()->ringMessage(const_cast<char*>(topic), eventCode, eventData);
+	}
+
+
   void MultiComRingCommunicator::ComRingAttach(const char *topic)
   {
     auto crTopic = std::make_shared<comRingTopic>(topic, this);

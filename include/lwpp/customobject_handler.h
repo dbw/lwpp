@@ -33,7 +33,7 @@ namespace lwpp
 	/*!
 	* @ingroup Adaptor
 	*/
-	template <class T, int maxVersion, int minVersion>
+	template <class T, int minVersion>
 	class CustomObjAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>, public RenderAdaptor <T>
 	{
 	public:
@@ -44,8 +44,8 @@ namespace lwpp
 		//! Set static callbacks for a LightWave CustomObject
 		static int Activate (int version, GlobalFunc *global, LWInstance inst, void *serverData)
 		{
-			if ( version > maxVersion ) return AFUNC_BADVERSION;
 			if ( version < minVersion ) return AFUNC_BADVERSION;
+
 			try
 			{
 				UNUSED(serverData);
@@ -101,12 +101,12 @@ namespace lwpp
 	//! @ingroup XPanelHandler
 	IMPLEMENT_XPANELHANDLER(CustomObj);
 	//! @ingroup XPanelAdaptor
-	IMPLEMENT_XPANELADAPTOR(CustomObj, LWPP_CUSTOMOBJECT_VERSION, LWPP_CUSTOMOBJECT_VERSION );
+	IMPLEMENT_XPANELADAPTOR(CustomObj, LWCUSTOMOBJ_VERSION);
 
 	//! @ingroup LWPanelHandler
 	IMPLEMENT_LWPANELHANDLER(CustomObj);
 	//! @ingroup XPanelAdaptor
-	IMPLEMENT_LWPANELADAPTOR(CustomObj, LWPP_CUSTOMOBJECT_VERSION, LWPP_CUSTOMOBJECT_VERSION );
+	IMPLEMENT_LWPANELADAPTOR(CustomObj, LWCUSTOMOBJ_VERSION);
 
 } // end namespace
 

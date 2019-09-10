@@ -17,6 +17,7 @@ namespace lwpp
   supportLUT(_supportLUT),
   Standalone(false)
   {
+	  DBG_ENTER_FUNC;
     Update();
   }
   
@@ -32,6 +33,7 @@ namespace lwpp
   supportLUT(false),
   Standalone(true)
   {
+	  DBG_ENTER_FUNC;
     Update();
   }
   
@@ -46,6 +48,7 @@ namespace lwpp
   supportLUT(f.supportLUT),
   Standalone(f.Standalone)
   {
+	  DBG_ENTER_FUNC;
     Update();
   }  
   
@@ -107,7 +110,7 @@ namespace lwpp
     //lwpp::dostream dout;
     //dout << this << "::Update() - useDefault: " << useDefault << std::endl; 
 #endif 
-    _acquireGlobal();
+	 updateGlobal();
     if (!available()) return;
     if (useDefault)
     {

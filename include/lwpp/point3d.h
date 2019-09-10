@@ -29,7 +29,7 @@ namespace lwpp
 	template <typename T>
 	class Point3 {
     public:
-        double x, y, z; //!< Storage for the vector components, uses &x for LW compatibility
+        mutable T x, y, z; //!< Storage for the vector components, uses &x for LW compatibility
     public:
         //! Default Constructor
         /*!
@@ -50,7 +50,7 @@ namespace lwpp
         Point3 (const T n[3]) :  x(n[0]), y(n[1]), z(n[2]) {}
         //! Construct from a vector, basically describing a point in a unit sphere
         explicit Point3 (const Vector3<T> &v) :  x(v.x), y(v.y), z(v.z) {}
-        T *asLWVector() {return &x;}
+        T *asLWVector() const {return &x;}
         
         //! Compare a Point3
         inline bool operator== (const Point3<T> &b) const
@@ -61,6 +61,14 @@ namespace lwpp
         {
             return !(*this==b);
         }
+
+		Point3& operator=(const Point3<T>& p)
+		{
+			x = p.x;
+			y = p.y;
+			z = p.z;
+			return *this;
+		}
         
         //! Add a Vector3d
         Point3 operator+(const Vector3<T> &v) const
@@ -156,7 +164,7 @@ namespace lwpp
             z /= v.z;
             return *this;
         }
-        inline T& operator[](unsigned int index)
+        T& operator[](const unsigned int index)
         {
             if(index > 2)
                 throw std::out_of_range("Index supplied to Point3::operator[] is out of range.");
@@ -168,6 +176,19 @@ namespace lwpp
 				case 2:	return z;
             }
         }
+		T operator[] (const unsigned int index) const
+		{
+			if (index > 2)
+				throw std::out_of_range("Index supplied to Point3::operator[] is out of range.");
+
+			switch (index)
+			{
+				case 0:	return x;
+				case 1:	return y;
+				case 2:	return z;
+			}
+			return 0;
+		}
         inline T Magnitude() const {return sqrt(Sqr(x) + Sqr(y) + Sqr(z));}
         
 	};
@@ -181,6 +202,13 @@ namespace lwpp
 	inline T Distance(const Point3<T> &p1, const Point3<T> &p2)
 	{
 		return (p1 - p2).Magnitude();
+	}
+
+	template <typename T>
+	inline T DistanceSqr(const Point3<T>& p1, const Point3<T>& p2)
+	{
+		auto p = p1 - p2;
+		return (Sqr(p.x) + Sqr(p.y) + Sqr(p.z));
 	}
     
 	template<typename T>

@@ -48,6 +48,8 @@ namespace lwpp
 			//! Returns a std::vector<lwpp::LWItem> with 1 or multiple elements depending the selected Items in Layout
 			std::vector<lwpp::LWItem> selectedItems() const;
 
+			bool isSelected(lwpp::LWItem item) const;
+
 			//ITEM FLAGS
 			//! Returns the flags associated with the LWItemID
 			unsigned int itemFlags(LWItemID item)

@@ -16,7 +16,6 @@
 
 namespace lwpp
 {
-
 	class ChannelGroup;
 
 	class VParmEventSink
@@ -67,40 +66,45 @@ namespace lwpp
 			(*globPtr->getVal)(vparmID, t, 0, val.asLWVector());
 		}
 
+		void Evaluate(LWTime t, Point3d& val)
+		{
+			(*globPtr->getVal)(vparmID, t, 0, val.asLWVector());
+		}
+
 		void Clear()
 		{
 			(*globPtr->setState)(vparmID, 0);
 		}
 
-		void			Reset(const double d)
+		void Reset(const double d)
 		{
 			Clear();
 			x = y = z = d;
 			set();
 		}
-		void			Reset(const Vector3d &v)
+		void Reset(const Vector3d &v)
 		{
 			Clear();
 			x = v.x; y = v.y;	z = v.z;
 			set();
 		}
 		//! Set the current time Value to a new Value
-		void			Set(const double d)
+		void Set(const double d)
 		{
 			x = y = z = d;
 			set();
 		}
-		void			Set(const Vector3d &v)
+		void Set(const Vector3d& v)
 		{
 			x = v.x; y = v.y;	z = v.z;
 			set();
 		}
-		void			Set(const LWDVector v)
+		void Set(const LWDVector v)
 		{
 			x = v[0];	y = v[1];	z = v[2];
 			set();
 		}
-		void			Set(const LWFVector v)
+		void Set(const LWFVector v)
 		{
 			x = v[0];	y = v[1];	z = v[2];
 			set();
@@ -114,11 +118,14 @@ namespace lwpp
 		{
 			return static_cast<float>(x);
 		}
-    bool isEnveloped() 
-    {
-      return (globPtr->getState(vparmID) & LWVPSF_ENV) == LWVPSF_ENV;
-    }
-
+		bool isEnveloped()
+		{
+			return (globPtr->getState(vparmID) & LWVPSF_ENV) == LWVPSF_ENV;
+		}
+		void getEnv(LWEnvelopeID envlist[3])
+		{
+			globPtr->getEnv(vparmID, envlist);
+		}
 	};
   
   typedef std::auto_ptr<VParm> auto_VParm;

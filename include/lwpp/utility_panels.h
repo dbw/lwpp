@@ -49,5 +49,24 @@ namespace lwpp
 		void Open(const std::string &name);
 		void panelResize(const lwpp::LWPanel& pan, int w, int h);
 	};
+
+	//! @ingroup LWPanels
+//! An Editor panel
+	class EditPanel : private LWPanel, public LWPanelCallbacks
+	{
+		PanelControl editbox;
+		int w, h;
+		lwpp::HorizontalSizer mainSizer;
+		lwpp::VerticalSizer vSizer;
+	public:
+	public:
+		EditPanel(const std::string& title, int width = 40, int height = 20)
+			: LWPanel(title), w(width), h(height)
+		{
+			;
+		}
+		std::string Open(const std::string& content);
+		void panelResize(const lwpp::LWPanel& pan, int w, int h);
+	};
 }
 #endif // LWPP_UTILITY_PANELS_H

@@ -55,7 +55,7 @@ namespace lwpp
     }
     virtual ~comRingCommunicator()
     {
-      if(!lastTopic.empty())	ringDetach(lastTopic.c_str());
+      if(!lastTopic.empty()) ringDetach(lastTopic.c_str());
     }
     //! Attach to a ComRing to receive messages
     bool ringAttach(const char *topic)
@@ -79,8 +79,13 @@ namespace lwpp
     {
       if(comRing.getGlobal()) comRing.getGlobal()->ringMessage(const_cast<char *>(topic), eventCode, eventData);
     }
+	void ringMessage(int eventCode, void* eventData = 0)
+	{
+		ringMessage(lastTopic.c_str(), eventCode, eventData);
+	}
   };
 
+  void sendComringMessage(const char* topic, int eventCode, void* eventData = 0);
 
   //! Class to add support for the Communication Ring to plugins. This version allows for multiple ComRings
   //! @ingroup Entities
@@ -128,7 +133,7 @@ namespace lwpp
     }
 
     //! Send a message to a ComRing
-		void ringMessage(const char *topic, int eventCode, void *eventData = 0);
+	void ringMessage(const char *topic, int eventCode, void *eventData = 0);
   };
 
 

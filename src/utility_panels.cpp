@@ -108,4 +108,36 @@ namespace lwpp
 	{
 		mainSizer.Layout(4, 0, width - 8, height - 8 - 28, 0);
 	}
+
+	/*
+	* Log Panel
+	*/
+
+	std::string EditPanel::Open(const std::string& content)
+	{
+		SetUserData(this);
+		editbox = AddMultiLine("", w, h);
+		vSizer.Add(editbox, lwpp::STRETCH_VERTICAL | lwpp::STRETCH_HORIZONTAL);
+		mainSizer.Add(&vSizer);
+		lwpp::Margin margin(0, 0, 0, 16);
+		mainSizer.setMargin(margin);
+		SetCallbacks(this);
+		std::string ret = content;
+		editbox.Set(content);
+		int minW, minH;
+		mainSizer.getMinSize(minW, minH);
+		SetMinHeight(minH);
+		SetMinWidth(minW);
+		SetHeight(minH);
+		SetWidth(minW);		
+		if (LWPanel::Open(PANF_BLOCKING | PANF_RESIZE | PANF_FRAME | PANF_CANCEL))
+		{
+			ret = editbox.GetC_String();
+		}
+		return ret;
+	}
+	void EditPanel::panelResize(const lwpp::LWPanel& pan, int width, int height)
+	{
+		mainSizer.Layout(4, 0, width - 8, height - 8 - 28, 0);
+	}
 }

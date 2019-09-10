@@ -204,10 +204,10 @@ namespace lwpp
       return *this;
     }
 
-		bool hasChildren(void)
-		{
-			return (mItemInfo.firstChild(mId) != LWITEM_NULL);
-		}
+	bool hasChildren(void)
+	{
+		return (mItemInfo.firstChild(mId) != LWITEM_NULL);
+	}
 
     LWItemID getFirstChild(void)
     {
@@ -404,6 +404,10 @@ namespace lwpp
     virtual LWError Load(const LoadState &ls );
     //! Save and object, using the name
     virtual LWError Save(const SaveState &ls );
+	bool operator==(const LWItem& rhs) const
+	{
+		return mId == rhs.mId;
+	}
   };
 
 	class PrettyItem

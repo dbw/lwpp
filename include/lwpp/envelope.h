@@ -144,7 +144,7 @@ namespace lwpp
 
     void Destroy ()
     {
-      globPtr->destroy (env);
+      if (env) globPtr->destroy (env);
     }
 
     LWError Copy ( LWEnvelopeID to, LWEnvelopeID from)

@@ -14,30 +14,80 @@ namespace lwpp
 	class ViewportInfo : protected GlobalBase<LWViewportInfo>
 	{
 	protected:
-		int view = -2;
+		int mView = -2;
+		double mHoverPos[2];
 	public:
-		ViewportInfo(int v = 0) : view(v) {}
-		void setView(int v) { view = v; }
-		int getView() const { return view; }
-		int getType() { return globPtr->type(view); }
-		unsigned int getFlags() { return globPtr->flags(view); }
-		void getRect(int *left, int *top, int *width, int *height) { return globPtr->rect(view, left, top, width, height); }
+		ViewportInfo(int v = 0) : mView(v) {}
+		void setView(int v) { mView = v; }
+		int getView() const { return mView; }
+		double getHoverX() const { return mHoverPos[0]; }
+		double getHoverY() const { return mHoverPos[1]; }
+		int getType() { return globPtr->type(mView); }
+		void getViewPosition(LWDVector spot) { globPtr->pos(mView, spot); }
+		lwpp::Point3d getViewPosition() 
+		{
+			lwpp::Point3d spot;
+			getViewPosition(spot.asLWVector());
+			return spot;
+		};
+		unsigned int getFlags() { return globPtr->flags(mView); }
+		void getRect(int *left, int *top, int *width, int *height) { return globPtr->rect(mView, left, top, width, height); }
 		int getHoverIndex(double cursor_pos[2]) { return globPtr->hoverIndex(cursor_pos); }
+		int getHoverIndex()
+		{			
+			return getHoverIndex(mHoverPos);
+		}
 		bool isHover()
 		{
-			double pos[2];
-			return (getHoverIndex(pos) == view);
+			return (getHoverIndex() == mView);
 		}
 		int getActivePreview() { return globPtr->getActivePreview(); }
-		bool isActivePreview() { return getActivePreview() == view; }
+		bool isActivePreview() { return getActivePreview() == mView; }
 		double getWorldSize(double pixels, LWDVector ref)
 		{
-			return globPtr->pixelSize(view, pixels, ref);
+			return globPtr->pixelSize(mView, pixels, ref);
 		}
 		int getHandleSize()
 		{
-			return globPtr->handleSize(view);
-		}		
+			return globPtr->handleSize(mView);
+		}
+		int project(LWDVector w, double* x, double* y, double *z)
+		{
+			return globPtr->project(mView, w, x, y, z);
+		}
+		int project(lwpp::Point3d &p, double* x, double* y, double *z)
+		{
+			return globPtr->project(mView, p.asLWVector(), x, y, z);
+		}
+
+		bool unProject(double winx, double winy, double winz, LWDVector world)
+		{
+			return (globPtr->unproject(mView, winx, winy, winz, world) == 1);
+		}
+		bool unProject(double winx, double winy, double winz, lwpp::Point3d &world)
+		{			
+			return unProject(winx, winy, winz, world.asLWVector());
+		}
+
+		void getXfrm(double mat[9])
+		{
+			return globPtr->xfrm(mView, mat);
+		}
+
+		bool getProjection(LWDMatrix4 proj, LWDMatrix4 iProj)
+		{
+			return (globPtr->projection(mView, proj, iProj) == 1);
+		}
+
+		bool getModelView(LWDMatrix4 proj, LWDMatrix4 iProj)
+		{
+			return (globPtr->modelview(mView, proj, iProj) == 1);
+		}
+
+		void getClip(double *hither, double* yon)
+		{
+			globPtr->clip(mView, hither, yon);
+		}
 	};
 }
 
