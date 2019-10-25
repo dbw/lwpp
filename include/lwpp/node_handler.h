@@ -28,7 +28,7 @@ namespace lwpp
 			{
 #ifdef _DEBUG
 				dout << "CB_NodeInputEvent - userData: " << userData << "\n";
-				return 0;
+				//return 0;
 #endif				
 				NodeHandler *plugin = static_cast<NodeHandler *>(userData);
 				return plugin->NodeInputEvent(nid, nevent, type);

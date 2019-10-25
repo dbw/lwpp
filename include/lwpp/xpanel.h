@@ -389,10 +389,10 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			globPtr->setData(lwxpanel, id, data);
 		}
         
-        void setUserData(const char *data, unsigned int id = 0)
-        {
-            setUserData((void*)data, id);
-        }
+    void setUserData(const char* data, unsigned int id = 0)
+    {
+      setUserData((void*)data, id);
+    }
 
 		void clearUserData(unsigned int id = 0)
 		{
@@ -490,8 +490,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 				panel->DestroyNotify();
 			}
 		}
-	};
-
+	}; 
 
 		//! Base for classes that can handle XPanel view data
 	class XPanelView
@@ -633,8 +632,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		virtual void handleLayout(unsigned int cid, LW2019::LWXPanelSheetLayoutInfoRef layout) { return; }
 	};
 
-	
-	template<typename T, typename S>
+ 	template<typename T, typename S>
 	class XSheetServer
 	{
 		static T *getHost(LWXPanelID pan, unsigned int cid)
@@ -646,12 +644,14 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		}
 		static void getColumn_CB(LWXPanelID pan, unsigned int cid, int column_index, LWXPanelSheetColumn *column)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 				plugin->getSheetColumn(cid, column_index, column);			
 		}
 
 		static const char * getText_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int column_index)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->getSheetText(cid, static_cast<S *>(item), column_index);
@@ -661,6 +661,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static unsigned int getIsExpanded_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->getSheetIsExpanded(cid, static_cast<S *>(item));
@@ -670,6 +671,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static unsigned int getItemCount_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->getSheetItemCount(cid, static_cast<S *>(item));
@@ -679,6 +681,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static LWXPanelSheetItemRef getSubitem_CB (LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef parent_item, int child_index)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->getSheetSubitem(cid, static_cast<S *>(parent_item), child_index);
@@ -688,6 +691,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static unsigned int getSubtype_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int child_index)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->getSheetSubtype(cid, static_cast<S *>(item), child_index);
@@ -697,18 +701,21 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static void handleMove_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, LWXPanelSheetItemRef new_parent_item, int new_child_index)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))			
 				 plugin->handleSheetMove(cid, static_cast<S *>(item), static_cast<S *>(new_parent_item), new_child_index);
 		}
 
 		static void handleExpandState_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int expanded)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 				plugin->handleSheetExpandState(cid, static_cast<S *>(item), (expanded == 1));
 		}
 
 		static int handleSelectItem_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int state)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->handleSheetSelectItem(cid, static_cast<S *>(item), state);
@@ -718,24 +725,28 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static void handleSelectStart_CB(LWXPanelID pan, unsigned int cid, int state)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 				plugin->handleSheetSelectStart(cid, state);
 		}
 
 		static void handleSelectEnd_CB(LWXPanelID pan, unsigned int cid)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 				plugin->handleSheetSelectEnd(cid);
 		}
 
 		static void handleSelectVScroll_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef top_item)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 				plugin->handleSheetVScroll(cid, static_cast<S *>(top_item));
 		}
 
 		static int handleEvent_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item, int column_index, LWXPanelSheetEvent *event)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 			{
 				return plugin->handleSheetEvent(cid, static_cast<S *>(item), column_index, event);
@@ -745,6 +756,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 
 		static void handleSelectPrimaryItem_CB(LWXPanelID pan, unsigned int cid, LWXPanelSheetItemRef item)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))			
 				plugin->handleSelectPrimaryItem(cid, static_cast<S *>(item));
 		}
@@ -752,34 +764,41 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		// respond to sheet layout changes
 		static void handleLayout_CB(LWXPanelID pan, unsigned int cid, LW2019::LWXPanelSheetLayoutInfoRef layout)
 		{
+      LWPP_DBG_ENTER_FUNC;
 			if (auto plugin = getHost(pan, cid))
 				plugin->handleLayout(cid, layout);
 		}
-
-		LW2019::LWXPanelSheetFuncs sheetFuncs = {
-			1,
-			getColumn_CB,
-			getText_CB,
-			getIsExpanded_CB,
-			getItemCount_CB,
-			getSubitem_CB,
-			getSubtype_CB,
-			handleMove_CB,
-			handleExpandState_CB,
-			handleSelectItem_CB,
-			handleSelectStart_CB,
-			handleSelectEnd_CB,
-			handleSelectVScroll_CB,
-			handleEvent_CB,
-			handleSelectPrimaryItem_CB,
-			handleLayout_CB
-		};
-
-	public:
-		void *getSheetFuncs() { 
-			if (lwpp::LightWave::isAtLeast(2019, 0)) sheetFuncs.version = 2;
+    
+    static LW2019::LWXPanelSheetFuncs sheetFuncs; // this needs to be static to be used in static XPanel Hints
+  
+public:
+		void *getSheetFuncs()
+    { 
+      LWPP_DBG_ENTER_FUNC;
+      sheetFuncs.version = 1;
+      sheetFuncs.getColumn = getColumn_CB;
+      sheetFuncs.getText = getText_CB;
+      sheetFuncs.getIsExpanded = getIsExpanded_CB;
+      sheetFuncs.getItemCount = getItemCount_CB;
+      sheetFuncs.getSubitem = getSubitem_CB;
+      sheetFuncs.getSubtype = getSubtype_CB;
+      sheetFuncs.handleMove = handleMove_CB;
+      sheetFuncs.handleExpandState = handleExpandState_CB;
+      sheetFuncs.handleSelectItem = handleSelectItem_CB;
+      sheetFuncs.handleSelectStart = handleSelectStart_CB;
+      sheetFuncs.handleSelectEnd = handleSelectEnd_CB;
+      sheetFuncs.handleVScroll = handleSelectVScroll_CB;
+      sheetFuncs.handleEvent = handleEvent_CB;
+      sheetFuncs.handleSelectPrimaryItem = handleSelectPrimaryItem_CB;
+      sheetFuncs.handleLayout = handleLayout_CB;
+			if (lwpp::LightWave::isAtLeastYear(2019, 0)) sheetFuncs.version = 2;
+      dout << "sheetFuncs: " << &sheetFuncs << "\n";
 			return &sheetFuncs; 
 		}
-	};
+	};  
+
+  template<typename T, typename S>
+  LW2019::LWXPanelSheetFuncs XSheetServer<T, S>::sheetFuncs;
+
 }
 #endif // LWPP_XPANEL_H

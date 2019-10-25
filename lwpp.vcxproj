@@ -196,6 +196,7 @@
     <ClCompile Include="src\comring.cpp" />
     <ClCompile Include="src\contextmenu.cpp" />
     <ClCompile Include="src\dirent.cpp" />
+    <ClCompile Include="src\dopetrack.cpp" />
     <ClCompile Include="src\file_request.cpp" />
     <ClCompile Include="src\global.cpp" />
     <ClCompile Include="src\helpPanel.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="include\lwpp\generic_handler.h" />
     <ClInclude Include="include\lwpp\gizmo_handler.h" />
     <ClInclude Include="include\lwpp\global.h" />
+    <ClInclude Include="include\lwpp\dopetrack.h" />
     <ClInclude Include="include\lwpp\helpPanel.h" />
     <ClInclude Include="include\lwpp\image.h" />
     <ClInclude Include="include\lwpp\imagefilter_handler.h" />

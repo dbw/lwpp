@@ -9,7 +9,6 @@
 
 namespace lwpp
 {
-
 	//typedef std::set<int> BufferSet;
 	typedef std::set<std::string> BufferNameSet;
 

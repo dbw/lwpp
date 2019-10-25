@@ -164,7 +164,7 @@ namespace lwpp
 		bool _acquireGlobal()
 		{
 #ifdef _DEBUG
-			dout << "Acquire: " << m_globalName << "\n";
+			//dout << "Acquire: " << m_globalName << "\n";
 #endif 
 			globPtr = reinterpret_cast<G*> (SuperGlobal(m_globalName, GFUSE_ACQUIRE));
 			return (globPtr != nullptr);
@@ -202,7 +202,7 @@ namespace lwpp
 			if (usage_count == 0)
 			{
 #ifdef _DEBUG
-				dout << "Release: " << m_globalName << "\n";
+				//dout << "Release: " << m_globalName << "\n";
 #endif 
 				SuperGlobal(m_globalName, GFUSE_RELEASE); // release global
 			}

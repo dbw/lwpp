@@ -132,7 +132,7 @@ namespace lwpp
     //! Copy C'tor
     ColourManager(ColourManager const& f);
 
-	virtual ~ColourManager() { DBG_ENTER_FUNC; ; }
+	virtual ~ColourManager() { LWPP_DBG_ENTER_FUNC; ; }
     
     ColourManager& operator= (ColourManager const& f);
 

@@ -5,9 +5,10 @@
  */
 
 #include <lwvparm.h>
-#include <lwenvel.h>
 #include "lwpp/storeable.h"
+#include "lwpp/envelope.h"
 #include <memory>
+#include <vector>
 
 #ifndef LW_VPARM_H
 #define LW_VPARM_H
@@ -32,6 +33,7 @@ namespace lwpp
 	class VParm : protected GlobalBase<LWVParmFuncs>, public Vector3d, public Storeable
 	{
 		LWVParmID vparmID;
+		LWChanGroupID mGroup = 0;
 		bool	create(int type, const std::string name, const std::string plug_name, LWChanGroupID group, VParmEventSink *sink = nullptr);
 		VParm(const VParm &from); //! no copy constructor, since it could lead to problems
 		//! Update VParm with the currently cached values
@@ -56,19 +58,24 @@ namespace lwpp
 		//! Return the LWVParmID for the current object
 		LWVParmID	ID() {return vparmID;}
 		//! Update the current time value (which is cached for faster access)
-		void			NewTime(LWTime t)
+		void NewTime(LWTime t)
 		{
 			(*globPtr->getVal)(vparmID, t, 0, asLWVector() );
 		}
 
-		void Evaluate(LWTime t, Vector3d &val)
+		void Evaluate(const LWTime t, Vector3d &val)
 		{
 			(*globPtr->getVal)(vparmID, t, 0, val.asLWVector());
 		}
 
-		void Evaluate(LWTime t, Point3d& val)
+		void Evaluate(const LWTime t, Point3d& val)
 		{
 			(*globPtr->getVal)(vparmID, t, 0, val.asLWVector());
+		}
+
+		void Evaluate(const LWTime t, double *val)
+		{
+			(*globPtr->getVal)(vparmID, t, 0, val);
 		}
 
 		void Clear()
@@ -126,9 +133,43 @@ namespace lwpp
 		{
 			globPtr->getEnv(vparmID, envlist);
 		}
+
+		int getState() { return globPtr->getState(vparmID); };
+		void setState(int state) { globPtr->setState(vparmID, state); };
+
+		void enableEnvelopes(bool enable = true)
+		{
+			auto state = (getState() & ~LWVPSF_ENV);
+			setState(state | (enable ? LWVPSF_ENV : 0));
+		}
+
+		std::vector<Envelope> getEnv()
+		{
+			LWEnvelopeID envlist[3];
+			globPtr->getEnv(vparmID, envlist);
+			std::vector<Envelope> ret;
+			ret.reserve(3);
+			for (int i = 0; i < 3; ++i)
+				ret.push_back(envlist[i]);
+			return ret;
+		}
+
+		//! Hides all related envelopes in the graph editor
+		void hide(bool doHide = true)
+		{
+			int visible = (doHide ? 0 : 1);
+			auto envs = getEnv();
+			for (auto& e : envs)
+				e.EgSet(mGroup, LWENVTAG_VISIBLE, &visible);
+		}
+
+		void editEnv()
+		{
+			globPtr->editEnv(vparmID);
+		}
 	};
   
-  typedef std::auto_ptr<VParm> auto_VParm;
+  typedef std::unique_ptr<VParm> auto_VParm;
 	typedef std::shared_ptr<VParm> shared_VParm;   
   typedef std::unique_ptr<VParm> unique_VParm;
 
@@ -162,18 +203,12 @@ namespace lwpp
 				:	groupID(0), destroy_on_exit(destroy)
 			{
 				groupID = createUniqueGroup(name, parent);
-#ifdef _DEBUG
-				dout << "Creating ChannelGroup : " << name << " - " << groupID << "\n";
-#endif
 			}
 
 			ChannelGroup(const char *name, ChannelGroup& parent)
 				: groupID(0), destroy_on_exit(true)
 			{
 				groupID = createUniqueGroup(name, parent.getID());
-#ifdef _DEBUG
-				dout << "Creating ChannelGroup : " << name << " - " << groupID << "\n";
-#endif
 			}
 
 			ChannelGroup(LWChanGroupID id)
@@ -184,9 +219,6 @@ namespace lwpp
 
 			virtual ~ChannelGroup()
 			{
-#ifdef _DEBUG
-				dout << "Destroying ChannelGroup : " << groupName() << " - " << groupID << "\n";
-#endif
 				Reset();
 			}
 
@@ -200,7 +232,7 @@ namespace lwpp
 			{
 				Reset();
 				groupID = createUniqueGroup(name, parent);
-        destroy_on_exit = destroy;
+				destroy_on_exit = destroy;
 			}
 
 			void Reset()

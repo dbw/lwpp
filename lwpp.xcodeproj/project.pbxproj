@@ -10,6 +10,7 @@
 		2353314D1A371A25006D6600 /* comring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314A1A371A25006D6600 /* comring.cpp */; };
 		2353314E1A371A25006D6600 /* command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314B1A371A25006D6600 /* command.cpp */; };
 		2353314F1A371A25006D6600 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314C1A371A25006D6600 /* interface.cpp */; };
+		2362E74423450E1D00F96707 /* dopetrack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2362E74323450E1D00F96707 /* dopetrack.cpp */; };
 		2376C67520E38E3700622D72 /* utility_panels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2376C67420E38E3700622D72 /* utility_panels.cpp */; };
 		23B6E7C812D4C70700E58EBC /* colour_management.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EE98E712D4BAF30091E67C /* colour_management.cpp */; };
 		23BBBE3F1FFBC5F80023DA41 /* helpPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23BBBE3D1FFBC5F80023DA41 /* helpPanel.cpp */; };
@@ -128,6 +129,7 @@
 		2353314A1A371A25006D6600 /* comring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = comring.cpp; path = src/comring.cpp; sourceTree = "<group>"; };
 		2353314B1A371A25006D6600 /* command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = command.cpp; path = src/command.cpp; sourceTree = "<group>"; };
 		2353314C1A371A25006D6600 /* interface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = interface.cpp; path = src/interface.cpp; sourceTree = "<group>"; };
+		2362E74323450E1D00F96707 /* dopetrack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dopetrack.cpp; path = src/dopetrack.cpp; sourceTree = "<group>"; };
 		2376C67420E38E3700622D72 /* utility_panels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = utility_panels.cpp; path = src/utility_panels.cpp; sourceTree = "<group>"; };
 		23BBBE3D1FFBC5F80023DA41 /* helpPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helpPanel.cpp; path = src/helpPanel.cpp; sourceTree = "<group>"; };
 		23BBBE3E1FFBC5F80023DA41 /* panel_tools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = panel_tools.cpp; path = src/panel_tools.cpp; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 		87FF08F50B67DEF000FB70FE /* src */ = {
 			isa = PBXGroup;
 			children = (
+				2362E74323450E1D00F96707 /* dopetrack.cpp */,
 				23BBBE3D1FFBC5F80023DA41 /* helpPanel.cpp */,
 				2376C67420E38E3700622D72 /* utility_panels.cpp */,
 				23BBBE3E1FFBC5F80023DA41 /* panel_tools.cpp */,
@@ -415,6 +418,7 @@
 				878B760610E227BD0046A22C /* panel.cpp in Sources */,
 				878B760710E227BD0046A22C /* presets.cpp in Sources */,
 				878B760810E227BD0046A22C /* vparm.cpp in Sources */,
+				2362E74423450E1D00F96707 /* dopetrack.cpp in Sources */,
 				878B760910E227BD0046A22C /* wrapper.cpp in Sources */,
 				878B760A10E227BD0046A22C /* xpanel.cpp in Sources */,
 				878B760B10E227BD0046A22C /* lw_server.cpp in Sources */,

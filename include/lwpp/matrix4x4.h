@@ -339,6 +339,23 @@ namespace lwpp
 			return Matrix4x4(r);
 		}
 
+		inline bool operator==(const Matrix4x4& m1) const
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					if( m[i][j] != m1.m[i][j])
+						return false;
+				}
+			}
+			return true;
+		}
+		inline bool operator!=(const Matrix4x4& m1) const
+		{
+			return !(*this == m1);
+		}
+
 		//! Compute the product of two matrices
 		inline Matrix4x4 operator*(const T v)
 		{

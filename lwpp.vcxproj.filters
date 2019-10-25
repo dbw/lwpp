@@ -101,6 +101,9 @@
     <ClCompile Include="src\utility_panels.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\dopetrack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lwpp\backdropinfo.h">
@@ -344,6 +347,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\lwpp\layout_tool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\dopetrack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

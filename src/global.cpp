@@ -65,6 +65,7 @@
 #include <lwxpanel.h>
 #include <lwtimer.h>
 #include <lwbufferset.h>
+#include <lwdopetrack.h>
 
 #ifdef _DEBUG
   lwpp::dostream dout;
@@ -178,4 +179,5 @@ namespace lwpp
 		IMPLEMENT_GLOBAL(LWLightEvaluationFuncs, LWLIGHTEVALUATIONFUNCS_GLOBAL);
 		IMPLEMENT_GLOBAL(LWBoneInfo, LWBONEINFO_GLOBAL);
 		IMPLEMENT_GLOBAL(LWMeshFuncs, LWMESHFUNCS_GLOBAL);
+		IMPLEMENT_GLOBAL(LWDopetrackProxy, LWDOPETRACK_GLOBAL);		
 }

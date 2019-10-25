@@ -112,7 +112,7 @@ namespace lwpp
 			}
 			return nullptr;
 		}
-		static int  Bounds(LWInstance inst, LWPrimitiveType type, LWDVector min, LWDVector max, LWPrimitiveCoordinateSys* coordSys)
+		static int Bounds(LWInstance inst, LWPrimitiveType type, LWDVector min, LWDVector max, LWPrimitiveCoordinateSys* coordSys)
 		{
 			try
 			{

@@ -193,7 +193,7 @@ namespace lwpp
 		NodeOutputID connectedOutput() { return inF->connectedOutput(mID); }
 	};
 
-	typedef std::auto_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
+	typedef std::unique_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
 	typedef std::unique_ptr<LWNodeInput> unique_NodeInput; //!< Helper declaration for node member variables
 	typedef std::shared_ptr<LWNodeInput> shared_NodeInput; //!< Helper declaration for node member variables
 
@@ -278,7 +278,7 @@ namespace lwpp
 		}
 	};
 
-	typedef std::auto_ptr<LWNodeOutput> auto_NodeOutput; //!< Helper declaration for node member variables
+	typedef std::unique_ptr<LWNodeOutput> auto_NodeOutput; //!< Helper declaration for node member variables
 	typedef std::unique_ptr<LWNodeOutput> unique_NodeOutput; //!< Helper declaration for node member variables
 	typedef std::shared_ptr<LWNodeOutput> shared_NodeOutput; //!< Helper declaration for node member variables
 	class NodeInputHelper
@@ -333,7 +333,7 @@ namespace lwpp
 		//@}
 	};
 
-	typedef std::auto_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
+	typedef std::unique_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
 	typedef std::unique_ptr<LWNodeInput> unique_NodeInput; //!< Helper declaration for node member variables
 	typedef std::shared_ptr<LWNodeInput> shared_NodeInput; //!< Helper declaration for node member variables
 

@@ -113,7 +113,7 @@ namespace lwpp
 				if (loc)
 				{
 #ifdef _DEBUG
-					DBG_ENTER_FUNC;
+					LWPP_DBG_ENTER_FUNC;
 #endif		
 					auto local = static_cast<LWMeshEditTool *>(loc);
 					lwpp::SetSuperGlobal(global);

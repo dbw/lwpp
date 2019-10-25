@@ -175,6 +175,7 @@ namespace lwpp
 				case 1:	return y;
 				case 2:	return z;
             }
+			return x;
         }
 		T operator[] (const unsigned int index) const
 		{

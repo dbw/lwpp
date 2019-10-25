@@ -32,6 +32,7 @@ namespace lwpp
 		{
 			globPtr->setup( vparmID, name.c_str(), group, 0, (sink ? VParmEventFuncCB : nullptr), plug_name.c_str(), sink );
 			globPtr->setVal( vparmID, asLWVector() );
+			mGroup = group;
 			return true;
 		}
 		return false;

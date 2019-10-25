@@ -17,7 +17,7 @@ namespace lwpp
   supportLUT(_supportLUT),
   Standalone(false)
   {
-	  DBG_ENTER_FUNC;
+	  LWPP_DBG_ENTER_FUNC;
     Update();
   }
   
@@ -33,7 +33,7 @@ namespace lwpp
   supportLUT(false),
   Standalone(true)
   {
-	  DBG_ENTER_FUNC;
+	  LWPP_DBG_ENTER_FUNC;
     Update();
   }
   
@@ -48,7 +48,7 @@ namespace lwpp
   supportLUT(f.supportLUT),
   Standalone(f.Standalone)
   {
-	  DBG_ENTER_FUNC;
+	  LWPP_DBG_ENTER_FUNC;
     Update();
   }  
   
