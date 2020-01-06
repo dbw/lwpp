@@ -5,6 +5,8 @@
 #define LWPP_MATH_H
 
 #include <lwpp/debug.h>
+#include <sstream>
+#include <iomanip>
 
 #ifndef PI
  #define PI     (3.14159265358979324)
@@ -158,7 +160,6 @@ namespace lwpp {
 		return Min(v[0], Min(v[1], v[2]));
 	}
 
-
 	//! Minimum
 	template <class Type>
 	Type Sqr(const Type a)
@@ -176,6 +177,13 @@ namespace lwpp {
 	Type Range(const Type x, const Type min, const Type max) 
 	{
 		return (x * (max - min) + min);
+	}
+
+
+	template <class Type>
+	Type Bounds(const Type x, const Type min, const Type max)
+	{
+		return Max(Min(x, max), min);
 	}
 
 	//! return true if the value is within the range, including the bounds
@@ -255,6 +263,65 @@ namespace lwpp {
 		//return  (rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722);
 		return  (rgb[0] + rgb[1] + rgb[2]) / 3.0f;
 	}
+
+  class LengthUnits
+  {
+  public:
+    virtual std::string operator() (double value) = 0;
+  }; 
+
+  class SIUnits : LengthUnits
+  {
+    std::ostringstream stream;
+    const char* unitStr[5] = { "nm", "mm", "m", "km", "Mm" };
+  public:
+    virtual std::string operator() (double value) override
+    {
+      std::ostringstream().swap(stream);
+      int unit = 2;
+      if (fabs(value) > std::numeric_limits<double>::epsilon())
+      {
+        while ((fabs(value) < 1.0) && unit)
+        {
+          value *= 1000.0;
+          --unit;
+        }
+        while ((fabs(value) >= 1000.0) && (unit < 4))
+        {
+          value /= 1000.0;
+          ++unit;
+        }
+      }
+      stream << std::fixed;
+      std::setprecision(((unit != 2) ? 3 : 4));
+      stream << value << " " << unitStr[unit];
+      return stream.str();
+    }
+  };
+
+  class ImperialUnits : LengthUnits
+  {
+    std::ostringstream stream;
+  public:
+    virtual std::string operator() (double value) override
+    {
+      std::ostringstream().swap(stream);
+
+      auto imp = value * 3.281;
+      auto feet = lwpp::Floor(imp);
+      auto rem = imp - feet;
+      auto inches = rem * 12;
+
+      stream << std::fixed;
+      if (feet != 0.0)
+        stream << feet << "\' ";
+      stream << inches << "\" "; 
+      
+      //std::setprecision((unit != 2 ? 3 : 4));
+      //stream << value << " " << unitStr[unit];
+      return stream.str();
+    }
+  };
 
 } // end namespace lwpp
 

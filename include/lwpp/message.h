@@ -2,6 +2,7 @@
 #define LWPP_MESSAGE_H
 #include <lwpp/interface.h>
 #include <lwpp/xpanel.h>
+#include <lwpp/command.h>
 
 namespace lwpp
 {
@@ -120,6 +121,11 @@ namespace lwpp
 				}
 			}
 		};
+
+    static void Status(const std::string msg)
+    {
+      SendCommand("StatusMsg ", "%s", msg.c_str() );
+    }
 
 		bool static Rename(const char *title, const char *ctrl_label, std::string &name)
 		{

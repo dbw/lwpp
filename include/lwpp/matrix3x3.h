@@ -1,5 +1,5 @@
-#ifndef MATRIX4X4_H
-#define MATRIX4X4_H
+#ifndef MATRIX3X3_H
+#define MATRIX3X3_H
 
 #include <lwpp/Point3d.h>
 #include <limits>
@@ -22,7 +22,7 @@ namespace lwpp
 		Matrix3x3 () {
 			SetIdentity();
 		}
-		Matrix4x4 (const Matrix4x4 &v)
+		Matrix3x3 (const Matrix3x3 &v)
 		{
 			for (int i = 0; i < 3; ++i)
 			{
@@ -32,7 +32,9 @@ namespace lwpp
 			}
 		}
 
-		Matrix4x4 &operator=(const Matrix4x4 &v)
+		T* asLW() { return &m[0][0]; }
+
+		Matrix3x3& operator=(const Matrix3x3& v)
 		{
 			if (this != &v)
 			{
@@ -46,7 +48,7 @@ namespace lwpp
 			return *this;
 		}
 
-		Matrix4x4 (T m00, T m01, T m02,
+		Matrix3x3(T m00, T m01, T m02,
 							 T m10, T m11, T m12,
 							 T m20, T m21, T m22)
 		{
@@ -73,7 +75,7 @@ namespace lwpp
 		Do use the full atan2 function so that you can get values from full trigonometric circle (ie. don't just use atan).
 		*/
 
-		Matrix4x4 (T v[3][3])
+		Matrix3x3(T v[3][3])
 		{
 			for (int i = 0; i < 3; ++i)
 			{
@@ -100,75 +102,7 @@ namespace lwpp
 			return Matrix3x3(r);
 		}
 
-		//! Gauss-Jordan elimination with partial pivoting
-		Matrix4x4 &Inverse() 
-		{
-			int indxc[4], indxr[4];
-			int ipiv[4] = { 0, 0, 0, 0 };
-			Matrix4x4 minv(*this);
-			//memcpy(minv, m, 4*4*sizeof(double));
-			int j;
-			for (int i = 0; i < 4; i++) 
-			{
-				int irow = -1, icol = -1;
-				T big = 0.;
-				// Choose pivot
-				for (j = 0; j < 4; j++) 
-				{
-					if (ipiv[j] != 1) 
-					{
-						for (int k = 0; k < 4; k++) 
-						{
-							if (ipiv[k] == 0) 
-							{
-								if (abs(minv.m[j][k]) >= big) 
-								{
-									big = abs(minv.m[j][k]);
-									irow = j;
-									icol = k;
-								}
-							}
-							else if (ipiv[k] > 1) return *this; // Error("Singular matrix in MatrixInvert");
-						}
-					}	
-				}
-				++ipiv[icol];
-				// Swap rows _irow_ and _icol_ for pivot
-				if (irow != icol) 
-				{
-					for (int k = 0; k < 4; ++k) Swap(minv.m[irow][k], minv.m[icol][k]);
-				}
-				indxr[i] = irow;
-				indxc[i] = icol;
-				if (minv.m[icol][icol] == 0.)	return *this; // Error("Singular matrix in MatrixInvert");
-				// Set $m[icol][icol]$ to one by scaling row _icol_ appropriately
-				T pivinv = 1.f / minv.m[icol][icol];
-				minv.m[icol][icol] = 1.f;
-				for (j = 0; j < 4; j++) minv.m[icol][j] *= pivinv;
-				// Subtract this row from others to zero out their columns
-				for (j = 0; j < 4; j++) 
-				{
-					if (j != icol) 
-					{
-						T save = minv.m[j][icol];
-						minv.m[j][icol] = 0;
-						for (int k = 0; k < 4; k++)
-							minv.m[j][k] -= minv.m[icol][k]*save;
-					}
-				}
-			}
-			// Swap columns to reflect permutation
-			for (j = 3; j >= 0; j--) 
-			{
-				if (indxr[j] != indxc[j]) 
-				{
-					for (int k = 0; k < 4; k++)
-						Swap(minv.m[k][indxr[j]], minv.m[k][indxc[j]]);
-				}
-			}
-			*this = minv;
-			return *this;
-		}
+
 		/*!
 		* Transform a Point3d with a Matrix4x4
 		* @relates Point3d
@@ -243,7 +177,7 @@ namespace lwpp
 	typedef Vector3<double> Vector3d;
 	typedef Vector3<float> Vector3f;
 
-	typedef Matrix4x4<double> Matrix4x4d;
-	typedef Matrix4x4<float> Matrix4x4f;
+	typedef Matrix3x3<double> Matrix3x3d;
+	typedef Matrix3x3<float> Matrix3x3f;
 }                                 
-#endif // MATRIX4X4_H
+#endif // MATRIX3X3_H

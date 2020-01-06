@@ -9,7 +9,7 @@ namespace lwpp
 {
 	//! @ingroup Globals
 	/*!
-	*  Returns information about one of the existing cameras on the loaded scene
+	*  Returns information about one of the viewports in Layout
 	*/
 	class ViewportInfo : protected GlobalBase<LWViewportInfo>
 	{
@@ -24,7 +24,7 @@ namespace lwpp
 		double getHoverY() const { return mHoverPos[1]; }
 		int getType() { return globPtr->type(mView); }
 		void getViewPosition(LWDVector spot) { globPtr->pos(mView, spot); }
-		lwpp::Point3d getViewPosition() 
+		lwpp::Point3d getViewPosition()
 		{
 			lwpp::Point3d spot;
 			getViewPosition(spot.asLWVector());
@@ -43,6 +43,7 @@ namespace lwpp
 		}
 		int getActivePreview() { return globPtr->getActivePreview(); }
 		bool isActivePreview() { return getActivePreview() == mView; }
+    LWItemID getViewItem() { return globPtr->viewItem(mView); }
 		double getWorldSize(double pixels, LWDVector ref)
 		{
 			return globPtr->pixelSize(mView, pixels, ref);
@@ -59,6 +60,14 @@ namespace lwpp
 		{
 			return globPtr->project(mView, p.asLWVector(), x, y, z);
 		}
+    int project(LWDVector p, double w[])
+    {
+      return project(p, &w[0], &w[1], &w[2]);
+    }
+    int project(lwpp::Point3d& p, double w[])
+    {
+      return project(p, &w[0], &w[1], &w[2]);
+    }
 
 		bool unProject(double winx, double winy, double winz, LWDVector world)
 		{

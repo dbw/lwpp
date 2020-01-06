@@ -223,6 +223,53 @@ namespace lwpp
 		virtual G* getGlobal() { return globPtr; }
 	};
 
+  //! Template class base for any kind of global that will be AQUIREd/RELEASEd,
+  template<class G, const char *GlobalName>
+  class SimpleGlobal
+  {
+  private:
+    bool _acquireGlobal()
+    {
+#ifdef _DEBUG
+      //dout << "Acquire: " << m_globalName << "\n";
+#endif 
+      globPtr = reinterpret_cast<G*> (SuperGlobal(GlobalName, GFUSE_ACQUIRE));
+      return (globPtr != nullptr);
+    }
+  protected:
+    G* globPtr; //!< Pointer to the global functions
+  public:
+    //! Constructor, acquire the global and increase the usage counter
+    SimpleGlobal()
+    {
+      if (!_acquireGlobal())
+      {
+        //throw MissingGlobal(name);
+        return;
+      }
+    }
+    //! Destructor, RELEASE the global if usage counter drops to 0
+    virtual ~SimpleGlobal()
+    {                         
+      SuperGlobal(GlobalName, GFUSE_RELEASE); // release global     
+    }
+
+    //! Check if the global is available
+    virtual bool available() const
+    {
+      return (globPtr != 0);
+    }
+
+    const char* getGlobalName() const { return GlobalName; }
+
+    //! Get the pointer to the global
+    G* operator->() { return globPtr; }
+
+    //! Get the pointer to the global
+    virtual G* getGlobal() { return globPtr; }
+  };
+
+
 	class genericGlobal
 	{
 	public:

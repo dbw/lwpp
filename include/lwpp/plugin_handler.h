@@ -486,7 +486,7 @@ namespace lwpp
 			}
 		}
 	};
-
+   
 	class GizmoHandler
 	{
 		LWGizmo *gizmo = nullptr;
@@ -641,7 +641,6 @@ namespace lwpp
 			if (plugin) return plugin->gzEnd(event, i);
 			return 0;
 		}
-
 	};
 	
 	// Macros

@@ -13,7 +13,7 @@ namespace lwpp
 								void *eventData)
 	{
 		if (userData)
-		{
+    {
 			auto *sink = static_cast<VParmEventSink *>(userData);
 			return sink->VParmEvent(vp, eventCode, eventData);
 		}

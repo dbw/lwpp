@@ -229,6 +229,20 @@ namespace lwpp
 		lwpp::SendCommand(cmd.str());
 	}
 
+  void ItemInfo::enableServer(const char* type, const char* name, bool state, LWItemID id)
+  {
+    int index = findServer(type, name, id);
+    if (index == 0)
+      return;
+
+    std::ostringstream cmd;
+    if (id)
+      cmd << "EnableServerByItemID " << std::hex << id << " " << type << " " << index << (state ? " 1" : " 0");
+    else
+      cmd << "EnableServer " << type << " " << index << (state ? " 1" : " 0");
+    lwpp::SendCommand(cmd.str());
+  }
+
 	/** LWItemCallback **/
 
 	// defines etc. for file i/o
@@ -360,17 +374,22 @@ namespace lwpp
 	* StyledItemCallback
 	*/
 
+	bool filterAll(lwpp::LWItem& item) { return true; }
+
 	void LWItemCallback::buildItemTree(lwpp::LWItem parent, int indent)
 	{
 		lwpp::LWItem item(parent.getFirstChild());
 		while (item.exists())
 		{
-			if (mDisplayType == -1 || item.Type() == mDisplayType)
-				itemList.push_back(itemEntry(item.GetID(), pretty.format(item, indent)));
+			if (filter && (*filter)(item))
+			{
+				if (mDisplayType == -1 || item.Type() == mDisplayType)
+					itemList.push_back(itemEntry(item.GetID(), pretty.format(item, indent)));
 #ifdef _DEBUG
-			for (int i = 0; i < indent; ++i) dout << "  ";
-			dout << item.getName() << "\n";
+					for (int i = 0; i < indent; ++i) dout << "  ";
+					dout << item.getName() << "\n";
 #endif
+			}
 			if (item.hasChildren())
 				buildItemTree(item, indent + 1);
 			item.NextChild(parent);
@@ -386,11 +405,14 @@ namespace lwpp
 			{
 				if (!item.Parent().exists())
 				{
-					if (mDisplayType == -1 || item.Type() == mDisplayType)
-						itemList.push_back(itemEntry(item.GetID(), pretty.format(item)));
+					if (filter && (*filter)(item))
+					{
+						if (mDisplayType == -1 || item.Type() == mDisplayType)
+							itemList.push_back(itemEntry(item.GetID(), pretty.format(item)));
 #ifdef _DEBUG
-					dout << item.getName() << "\n";
+							dout << item.getName() << "\n";
 #endif
+					}
 					if (item.hasChildren())
 						buildItemTree(item, 1);
 				}
@@ -475,6 +497,12 @@ namespace lwpp
 		refresh();
 		return mTrackedIDs;
 	}
+
+  void LWItemTracker::clear()
+  {
+    if (mTrackedIDs != 0) delete[] mTrackedIDs;
+    mTrackedItems.clear();
+  }
 
 	/*
 * Optionally LWITEM_NULL or LWITEM_ALL can be returned manuall instead of the return of this function

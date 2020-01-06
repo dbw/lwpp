@@ -25,7 +25,7 @@ namespace lwpp
 		{
 			item = _item;
 		}
-        const LWItemID getObject(){ return item; }
+    const LWItemID getObject(){ return item; }
 		const char *filename() const {return globPtr->filename(item);}
 		int        numPoints() const {return globPtr->numPoints(item);}
 		int        numPolygons() const {return globPtr->numPolygons(item);}
@@ -53,6 +53,12 @@ namespace lwpp
 		void matteColor(LWTime time, LWDVector color)	const {globPtr->matteColor(item, time, color);}
 		double thickness(LWTime time, int type) const {return globPtr->thickness(item, time, type);}
 		double edgeZScale(LWTime time) const {return globPtr->edgeZScale(item, time);}
+    void bounds(LWDVector min, LWDVector max) { globPtr->bounds(item, min, max); }
+		LWItemInstancerID getInstancer() /* added for version 9 */
+		{
+			return globPtr->instancer(item);
+		}
+			
 	};
 
 	class SceneObjects : protected GlobalBase<LWObjectFuncs>

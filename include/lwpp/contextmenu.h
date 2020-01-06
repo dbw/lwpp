@@ -158,6 +158,7 @@ namespace lwpp
 			//! Add a new item to the context menu
 			void AddEntry (const char *entry, unsigned int id);
       void AddEntry (std::string entry, unsigned int id);
+      void AddDivider(const char* label = "");
 			void Clear();
 	};
 }

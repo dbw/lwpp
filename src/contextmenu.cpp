@@ -61,6 +61,10 @@ namespace lwpp
 	{
 		Entries.push_back(menuEntry(entry, id));
 	}
+  void DynamicContextMenu::AddDivider(const char *label)
+  {
+    Entries.push_back(menuEntry(label,  0));
+  }
 	void DynamicContextMenu::AddEntry (std::string entry, unsigned int id)
 	{
 		Entries.push_back(menuEntry(entry, id));

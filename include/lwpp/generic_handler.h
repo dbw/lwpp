@@ -107,6 +107,20 @@ namespace lwpp
 			}
 		}
 
+    void enableServer(const char* type, const char* name, bool state = true, LWItemID id = 0)
+    {
+      int index = findServer(type, name, id);
+      if (index == 0)
+        return;
+
+      std::ostringstream cmd;
+      if (id)
+        cmd << "EnableServerByItemID " << std::hex << id << " " << type << " " << index << (state ? " 1" : " 0");
+      else
+        cmd << "EnableServer " << type << " " << index << (state ? " 1" : " 0");
+      evaluate(cmd.str());
+    }
+
 	public:
 		LayoutGenericHandler()
 			: layoutGeneric(0)

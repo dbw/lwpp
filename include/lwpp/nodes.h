@@ -701,6 +701,21 @@ typedef struct	LWNodeUtilityFuncs_t {
 } LWNodeUtilityFuncs;
 */
 
-}
+  inline void copySGtoProj(LWShadingGeometry* sg, LWNodalProjection& proj)
+  {
+    proj.space = LWPROJECTION_LOCAL;
+    *proj.P = *sg->oP;
+    *proj.dPdx = *sg->dPdx;
+    *proj.dPdy = *sg->dPdy;
+    *proj.dPdu = *sg->dPdu;
+    *proj.dPdv = *sg->dPdv;
+
+    proj.dudx = sg->dudx;
+    proj.dvdx = sg->dvdx;
+    proj.dudy = sg->dudy;
+    proj.dvdy = sg->dvdy;
+  }
+
+}   
 
 #endif // LWPP_NODES_H

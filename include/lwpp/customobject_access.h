@@ -2,6 +2,7 @@
 #define CUSTOMOBJECT_ACCESS_H
 
 #include <lwcustobj.h>
+#include <lwpp/vector3d.h>
 
 namespace lwpp
 {
@@ -21,6 +22,11 @@ namespace lwpp
 			float rgba[4] = {r, g, b, a};
 			SetColor(rgba);
 		}
+    void SetColor(double col[4])
+    {
+      float rgba[4] = { static_cast<float>(col[0]), static_cast<float>(col[1]), static_cast<float>(col[2]), static_cast<float>(col[3]) };
+      SetColor(rgba);
+    }
 		void SetColorCC(const float rgba[4]) { access->setColorCC(access->dispData, (float *)(rgba)); }
 		void SetColorCC(const float r, float g, float b, float a)
 		{
@@ -35,11 +41,15 @@ namespace lwpp
 		void DrawLine (double from[3], double to[3], int csys) {access->line(access->dispData, from, to, csys);}
 		void DrawTriangle (double v1[3], double v2[3], double v3[3], int csys) {access->triangle(access->dispData, v1, v2, v3, csys);}
 		void DrawQuad (double v1[3], double v2[3], double v3[3], double v4[3], int csys) {access->quad(access->dispData, v1, v2, v3, v4, csys);}
+    void DrawQuad(lwpp::Vector3d v1, lwpp::Vector3d v2, lwpp::Vector3d  v3, lwpp::Vector3d v4, int csys) { DrawQuad(v1.asLWVector(), v2.asLWVector(), v3.asLWVector(), v4.asLWVector(), csys); }
 		void DrawQuad (double v[4][3], int csys) {DrawQuad(v[0], v[1], v[2], v[3], csys);}
 		void DrawCircle (double center[3], double radius, int csys) {access->circle(access->dispData, center, radius, csys);}
 		void DrawCircle(double center[3], int csys, double radius, int rsys) { access->circle2(access->dispData, center, csys, radius, rsys); }
 		void DrawDisk(double center[3], double radius, int csys) { access->disk(access->dispData, center, radius, csys); }
 		void DrawDisk(double center[3], int csys, double radius, int rsys) { access->disk2(access->dispData, center, csys, radius, rsys); }
+    void DrawPickCircle(double center[3], int csys, double radius, int rsys) {
+      isPicking() ? access->disk2(access->dispData, center, csys, radius, rsys) : access->circle2(access->dispData, center, csys, radius, rsys);
+    }
 
 		void DrawText (double center[3], const char *text, int just, int csys) {access->text(access->dispData, center, text, just, csys);}
 		void DrawText(double center[3], const std::string text, int just, int csys) { DrawText(center, text.c_str(), just, csys); }
@@ -55,7 +65,7 @@ namespace lwpp
 		{
 			access->polyIndexed(access->dispData, numv, verts, v, csys);
 		}
-		void SetDrawMode(unsigned int mode) {access->setDrawMode(access->dispData, mode);}
+		void SetDrawMode(unsigned int mode = 0) {access->setDrawMode(access->dispData, mode);}
 		int MeasureText (const char *text /* language encoded */, int *width, int *height, int *offset_y)
 		{
 			return access->measureText(access->dispData, text, width, height, offset_y);

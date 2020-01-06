@@ -200,6 +200,20 @@ namespace lwpp
 		return (pos != s1.end());
 	}
 
+	//! rotate within a container, can be used for re-ordering in a list / sheet control
+	template <typename T>
+	void rotateContainer(T& container, const size_t from, const size_t to)
+	{
+		if (from < to)
+		{
+			std::rotate(container.begin() + from, container.begin() + from + 1, container.begin() + to);
+		}
+		else
+		{
+			std::rotate(container.rend() - from - 1, container.rend() - from, container.rend() - to);
+		}
+	}
+
 }
 
 #endif //LWPP_UTILITY

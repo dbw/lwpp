@@ -23,7 +23,7 @@ namespace lwpp
 	{
 	public:
 		virtual int VParmEvent(LWVParmID vp, en_lwvpec eventCode, void *eventData) = 0;
-	};
+	}; 
 
 	//! The Variant Parameter Class Wrapper.
 	/*!
@@ -44,7 +44,7 @@ namespace lwpp
 	public:
 		VParm(int type, const std::string name, std::string plug_name, LWChanGroupID group = 0, double v = 0.0, VParmEventSink *sink = nullptr);
 		VParm(int type, const std::string name, std::string plug_name, LWChanGroupID group, const Vector3d &v, VParmEventSink *sink = nullptr);
-		VParm(int type, const std::string name, std::string plug_name, ChannelGroup& group, double v = 0.0, VParmEventSink *sink = nullptr);
+		VParm(int type, const std::string name, std::string plug_name, ChannelGroup& group, double v = 0.0, VParmEventSink *sink = nullptr);    
 		VParm(int type, const std::string name, std::string plug_name, ChannelGroup& group, const Vector3d &v, VParmEventSink *sink = nullptr);
 		virtual ~VParm();
 		//! Copy values
@@ -246,6 +246,7 @@ namespace lwpp
 
 			LWChanGroupID getID() const {return groupID;}
 			LWChanGroupID nextGroup( LWChanGroupID parent, LWChanGroupID group) {return globPtr->nextGroup(parent, group);}
+      LWChanGroupID nextGroup(LWChanGroupID group) { return globPtr->nextGroup(groupID, group); }
 			LWChannelID  nextChannel( LWChanGroupID parent, LWChannelID chan) {return globPtr->nextChannel(parent, chan);}
 			const char  *groupName ( LWChanGroupID group) {return globPtr->groupName(group);}
 			const char  *groupName ( void ) {return globPtr->groupName(groupID);}

@@ -28,6 +28,7 @@ namespace lwpp
     virtual void gzUp       ( LWToolEvent *){;}
     virtual void gzEvent    ( int code){;}
     virtual LWXPanelID gzPanel (){return 0;}
+    virtual int gzEnd(LWToolEvent*, int i) { ; }
 
     virtual const LWItemID* gzPickItems (const LWItemID* drawitems){return drawitems;}
     virtual const LWItemID* gzPickItems96 (const LWItemID* drawitems, const unsigned int* drawparts){return drawitems;}
@@ -73,6 +74,7 @@ namespace lwpp
           plugin->gizmo->up = GizmoAdaptor::Up;
           plugin->gizmo->event = GizmoAdaptor::Event;
           plugin->gizmo->panel = GizmoAdaptor::Panel;
+          plugin->gizmo->end = GizmoAdaptor::End;
         }
         return AFUNC_OK;
       } 
@@ -274,6 +276,19 @@ namespace lwpp
         return 0;
       }
     }
+
+    static void End(LWInstance instance, LWToolEvent*evt, int i)
+    {
+      try
+      {
+        T* plugin = (T*)instance;
+        return plugin->gzEnd(evt,i);
+      }
+      catch (std::exception & e)
+      {
+        lwpp::LWMessage::Error("An exception occured in GizmoAdaptor::End():", e.what());
+      }
+    }
   };
 
   //! Base class for Gizmos that only perform drawing
@@ -337,6 +352,7 @@ namespace lwpp
           plugin->gizmo->up = 0;
           plugin->gizmo->event = 0;
           plugin->gizmo->panel = 0;
+          plugin->gizmo->end = 0;
         }
         return AFUNC_OK;
       } 

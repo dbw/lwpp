@@ -25,6 +25,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
     <SccProvider>SAK</SccProvider>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -42,12 +43,12 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -165,7 +166,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -191,6 +192,7 @@
     <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\lwpp\instances.cpp" />
     <ClCompile Include="src\colour_management.cpp" />
     <ClCompile Include="src\command.cpp" />
     <ClCompile Include="src\comring.cpp" />
@@ -254,6 +256,7 @@
     <ClInclude Include="include\lwpp\image.h" />
     <ClInclude Include="include\lwpp\imagefilter_handler.h" />
     <ClInclude Include="include\lwpp\imageio_handler.h" />
+    <ClInclude Include="include\lwpp\instances.h" />
     <ClInclude Include="include\lwpp\interface.h" />
     <ClInclude Include="include\lwpp\io.h" />
     <ClInclude Include="include\lwpp\item.h" />
@@ -291,6 +294,7 @@
     <ClInclude Include="include\lwpp\preview.h" />
     <ClInclude Include="include\lwpp\primitive_handler.h" />
     <ClInclude Include="include\lwpp\sceneinfo.h" />
+    <ClInclude Include="include\lwpp\spatialquery.h" />
     <ClInclude Include="include\lwpp\storeable.h" />
     <ClInclude Include="include\lwpp\surface.h" />
     <ClInclude Include="include\lwpp\surfed.h" />

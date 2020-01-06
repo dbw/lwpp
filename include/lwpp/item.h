@@ -137,10 +137,13 @@ namespace lwpp
 
 		void removeServer(const char* type, const char* name, LWItemID id = 0);
 
+    void enableServer(const char* type, const char* name, bool state = true, LWItemID id = 0);
+
 		int getServerFlags(const char* name, int index, LWItemID id = 0)
 		{
 			return globPtr->serverFlags(id, name, index);
 		}
+
 	};
 
 	//! @ingroup Entities
@@ -181,6 +184,11 @@ namespace lwpp
 			mType = Type();
 		}
 		LWItemID GetID() const { return mId; }
+
+    unsigned int GetNumID() const
+    {
+      return (LWITEMID2UINT(mId) & 0xfffffff);
+    }
 		//  Standard wraps
 		LWItem& First(LWItemType t)
 		{
@@ -428,8 +436,14 @@ namespace lwpp
 	 * This class takes care of an item, including loading and saving item references
 	 * @todo turn this into a more universal wrapper, a managed variable/item or something like it...
 	 */
+
+	typedef bool (filterItemCB)(lwpp::LWItem& item);
+
+	bool filterAll(lwpp::LWItem& item);
+
 	class LWItemCallback : public PopUpCallback, public LWItem
 	{
+		filterItemCB *filter = nullptr;
 	protected:
 		PrettyItem pretty;
 		class itemEntry
@@ -470,11 +484,17 @@ namespace lwpp
 		}
 	public:
 		//! Constructor, default to an object and no object selected
-		LWItemCallback(LWItemType t = LWI_OBJECT, LWItemID id = LWITEM_NULL, bool _showNone = true, const char* _noneName = "(none)")
+		LWItemCallback(LWItemType t = LWI_OBJECT,
+			LWItemID id = LWITEM_NULL,
+			bool _showNone = true,
+			const char* _noneName = "(none)",
+			filterItemCB *filterCB=filterAll)
+
 			: LWItem(id, t),
 			mDisplayType(t),
 			showNone(_showNone),
-			noneName(_noneName)
+			noneName(_noneName),
+			filter(filterCB)
 		{
 			buildItemTree();
 			index = findID(mId);
@@ -585,6 +605,7 @@ namespace lwpp
 
 		//! should be used for LWs changeID callback.
 		void changeID(const LWItemID* idlist);
+    void clear();
 	};
 } // end of namespace lwpp
 

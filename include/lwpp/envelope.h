@@ -293,7 +293,8 @@ namespace lwpp
         }
         key = NextKey(key);
       }
-    }
+    } 
+
     void multiplyValues(const LWTime start, const LWTime end, const double mult)
     {
       LWEnvKeyframeID key = NextKey(0);

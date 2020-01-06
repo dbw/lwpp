@@ -113,6 +113,10 @@ namespace lwpp
 			{
 				return auto_NodeInput(LWNode::addBSDFInput(name, CB_NodeInputEvent));
 			}
+      auto_NodeInput autoProjectionInput(const std::string name = "Projection") const
+      {
+        return auto_NodeInput(LWNode::addProjectionInput(name, CB_NodeInputEvent));
+      }
 			//! @}
 
 			NodeHandler(void *priv, void *context, LWError *err) : InstanceHandler(priv, context, err, LWNODE_HCLASS)
@@ -286,6 +290,9 @@ namespace lwpp
 
 	//! @ingroup XPanelAdaptor
 	IMPLEMENT_XPANELADAPTOR(Node, LWNODECLASS_VERSION);
+
+	IMPLEMENT_GIZMO_XPANELHANDLER(Node);
+	IMPLEMENT_GIZMO_XPANELADAPTOR(Node, LWNODECLASS_VERSION);
 }
 
 #endif // LWPP_NODE_HANDLER_H

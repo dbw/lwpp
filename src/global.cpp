@@ -52,6 +52,8 @@
 #include <lwsceneeditor.h>
 #include <lwserver.h>
 #include <lwviewportinfo.h>
+#include <lwspatialquery.h>
+#include <lwinstancing.h>
 //#include <lwshader.h>
 #include <lwshelf.h>
 #include <lwsurf.h>
@@ -180,4 +182,7 @@ namespace lwpp
 		IMPLEMENT_GLOBAL(LWBoneInfo, LWBONEINFO_GLOBAL);
 		IMPLEMENT_GLOBAL(LWMeshFuncs, LWMESHFUNCS_GLOBAL);
 		IMPLEMENT_GLOBAL(LWDopetrackProxy, LWDOPETRACK_GLOBAL);		
+    IMPLEMENT_GLOBAL(LWSpatialQueryFuncs, LWSPATIALQUERYFUNCS_SERVICE);
+		IMPLEMENT_GLOBAL(LWItemInstancerFuncs, LWITEMINSTANCERFUNCS_GLOBAL);
+		IMPLEMENT_GLOBAL(LWItemInstanceInfo, LWITEMINSTANCEINFO_GLOBAL);
 }

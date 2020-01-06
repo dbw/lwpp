@@ -534,6 +534,15 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			plugin->ControlDraw(cid, area);
 		}
 	}
+#ifndef XPANELSHEET_FEATURE_REALTIMEDRAG
+#define XPANELSHEET_FEATURE_REALTIMEDRAG        (1<<7) /* Real-time drag */
+#endif
+#ifndef XPANELSHEET_FEATURE_ALLOWDRAG
+#define XPANELSHEET_FEATURE_ALLOWDRAG           (1<<8) /* drag/drop */
+#endif
+#ifndef XPANELSHEET_FEATURE_USEHSCROLL
+#define XPANELSHEET_FEATURE_USEHSCROLL          (1<<9) /* use a horizontal scroller */
+#endif
 
 	namespace LW2019
 	{
@@ -791,8 +800,7 @@ public:
       sheetFuncs.handleEvent = handleEvent_CB;
       sheetFuncs.handleSelectPrimaryItem = handleSelectPrimaryItem_CB;
       sheetFuncs.handleLayout = handleLayout_CB;
-			if (lwpp::LightWave::isAtLeastYear(2019, 0)) sheetFuncs.version = 2;
-      dout << "sheetFuncs: " << &sheetFuncs << "\n";
+			if (lwpp::LightWave::isAtLeastYear(2019, 0)) sheetFuncs.version = 2;      
 			return &sheetFuncs; 
 		}
 	};  

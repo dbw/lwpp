@@ -104,6 +104,9 @@
     <ClCompile Include="src\dopetrack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\lwpp\instances.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lwpp\backdropinfo.h">
@@ -350,6 +353,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\lwpp\dopetrack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\spatialquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\instances.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
