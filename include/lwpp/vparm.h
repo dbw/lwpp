@@ -235,6 +235,11 @@ namespace lwpp
 				destroy_on_exit = destroy;
 			}
 
+			void Create(const char* name, ChannelGroup& parent, bool destroy = true)
+			{
+				Create(name, parent.groupID, destroy);
+			}
+
 			void Reset()
 			{
 				if (groupID && destroy_on_exit)

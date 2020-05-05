@@ -314,7 +314,7 @@ namespace lwpp
 		}
 
 		//! Compute the product of two matrices
-		inline Matrix4x4 operator+(const Matrix4x4 &m1)
+		inline Matrix4x4 operator+(const Matrix4x4 &m1)	const
 		{
 			T r[4][4];
 			for (int i = 0; i < 4; ++i)
@@ -326,7 +326,7 @@ namespace lwpp
 			}
 			return Matrix4x4(r);
 		}
-		inline Matrix4x4 operator-(const Matrix4x4 &m1)
+		inline Matrix4x4 operator-(const Matrix4x4 &m1)	const
 		{
 			T r[4][4];
 			for (int i = 0; i < 4; ++i)
@@ -357,7 +357,7 @@ namespace lwpp
 		}
 
 		//! Compute the product of two matrices
-		inline Matrix4x4 operator*(const T v)
+		inline Matrix4x4 operator*(const T v)	 const
 		{
 			T r[4][4];
 			for (int i = 0; i < 4; ++i)
@@ -448,14 +448,14 @@ namespace lwpp
 			T xp = v.x*m[0][0] + v.y*m[1][0] + v.z*m[2][0] + m[3][0];
 			T yp = v.x*m[0][1] + v.y*m[1][1] + v.z*m[2][1] + m[3][1];
 			T zp = v.x*m[0][2] + v.y*m[1][2] + v.z*m[2][2] + m[3][2];
-/*
+
 			T wp = v.x*m[0][3] + v.y*m[1][3] + v.z*m[2][3] + m[3][3];
 
 			if (wp > std::numeric_limits<T>::denorm_min())
 			{
 				return Point3<T>(xp, yp, zp) / wp;
 			}
-			*/
+			
 			return Point3<T>(xp, yp, zp);
 		}
 
@@ -543,7 +543,7 @@ namespace lwpp
 			attitude = Math.asin(m.m10);
 		}*/
 
-		Vector3<T> toEuler()
+		Vector3<T> toEuler() const
 		{
 			Vector3<T> ret;
 			/*
@@ -587,7 +587,7 @@ namespace lwpp
 			return ret;
 		}
 
-		Vector3<T> toEuler2()
+		Vector3<T> toEuler2()	const
 		{			
 			auto theta1 = atan2(m[1][2], m[2][2]);
 			auto c2 = sqrt(lwpp::Sqr(m[0][0]) + lwpp::Sqr(m[0][1]));

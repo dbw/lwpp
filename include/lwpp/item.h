@@ -179,7 +179,7 @@ namespace lwpp
 		bool isValid() const { return mItemInfo.isValid(); }
 
 		void SetID(LWItemID _id)
-		{
+		{	
 			mId = _id;
 			mType = Type();
 		}
@@ -190,7 +190,7 @@ namespace lwpp
       return (LWITEMID2UINT(mId) & 0xfffffff);
     }
 		//  Standard wraps
-		LWItem& First(LWItemType t)
+		LWItem& First(LWItemType t)																																	  
 		{
 			if (mItemInfo.isValid())
 			{
@@ -344,7 +344,7 @@ namespace lwpp
 			mItemInfo.setTag(mId, t, tag);
 		}
 
-		LWChanGroupID ChanGroup(void)
+		LWChanGroupID ChanGroup()
 		{
 			return mItemInfo.chanGroup(mId);
 		}
@@ -584,7 +584,7 @@ namespace lwpp
 	{
 	private:
 		std::vector<LWItem*> mTrackedItems;
-		LWItemID* mTrackedIDs = 0;
+		std::vector<LWItemID> mUsedItems;
 	public:
 		LWItemTracker() { ; }
 

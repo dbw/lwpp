@@ -104,55 +104,57 @@ namespace lwpp
 	protected:
 		union
 		{
-			LWImageProtocol_V2 *protocol;
+			LWImageProtocol_V2 *protocol2;
 			LWImageProtocol_V3 *protocol3;
+			LWImageProtocol *protocol;
 		};
 		//LWImageProtocol *protocol;
-		LWImageLoaderLocal *local;
+		LWImageLoaderLocal *local = nullptr;
 		SimpleMonitor monitor;
-		int version;
+		int version = 0;
 		void SetRC(int res)	{local->result = res;}
 
 		bool Begin (LWImageType type)
 		{
-			if (version == 2)	protocol = (LWImageProtocol_V2 *)local->begin(local->priv_data, type);
+			if (version == 2)	protocol2 = (LWImageProtocol_V2 *)local->begin(local->priv_data, type);
 			else if (version == 3)	protocol3 = (LWImageProtocol_V3 *)local->begin(local->priv_data, type);
-			return (protocol != 0);
+			else if (version == LWIMAGELOADER_VERSION)	protocol = (LWImageProtocol *)local->begin(local->priv_data, type);
+			return (protocol2 != 0);
 		}
 		int Done (int rc = IPSTAT_OK)
 		{
 			int ret = 0;
-			if (protocol) ret = protocol->done ((LWImageProtocolID)protocol->priv_data, rc);
-			if (protocol) local->done(local->priv_data, (LWImageProtocolID)protocol);
-			protocol = 0;
+			if (protocol2) ret = protocol2->done ((LWImageProtocolID)protocol2->priv_data, rc);
+			if (protocol2) local->done(local->priv_data, (LWImageProtocolID)protocol2);
+			protocol2 = 0;
 			return ret;
 		}
 		void SetSize (int w, int h)
 		{
-			if (protocol) protocol->setSize(protocol->priv_data,w, h);
+			if (protocol2) protocol2->setSize(protocol2->priv_data,w, h);
 		}
 		void SetParam (LWImageParam p, int i, float f)
 		{
-			if ((version == 2) && (protocol))
+			if ((version == 2) && (protocol2))
 			{
-				protocol->setParam(protocol->priv_data,p,i,f);
+				protocol2->setParam(protocol2->priv_data,p,i,f);
 			}
 		}
 		int SendLine (int y, const LWPixelID buffer)
 		{
-			if (protocol)	return protocol->sendLine(protocol->priv_data,y,buffer);
+			if (protocol2)	return protocol2->sendLine(protocol2->priv_data,y,buffer);
 			return 0;
 		}
 		void SetMap (int index, const unsigned char colour[3] )
 		{
-			if (protocol) protocol->setMap(protocol->priv_data,index,colour);
+			if (protocol2) protocol2->setMap(protocol2->priv_data,index,colour);
 		}
 	public:
 		int SetParam (LWImageParam p, const char *c)
 		{
 			if ((version == 3) && (protocol3))
 			{
-				return protocol3->setParam(protocol->priv_data,p,c);
+				return protocol3->setParam(protocol2->priv_data,p,c);
 			}
 			return 0;
 		}
@@ -160,13 +162,14 @@ namespace lwpp
 		{
 			if ((version == 3) && (protocol3))
 			{
-				return protocol3->setParam(protocol->priv_data,p,str.c_str());
+				return protocol3->setParam(protocol2->priv_data,p,str.c_str());
 			}
 			return 0;
 		}
 		int SetParam (LWImageParam p, int i)
 		{
-			if ((version == 3) && (protocol3))
+			if (((version == 3) && (protocol3)) ||
+                ((version == LWIMAGELOADER_VERSION) && (protocol)))
 			{
 				std::ostringstream ss;
 				ss << i;
@@ -176,7 +179,8 @@ namespace lwpp
 		}
 		int SetParam (LWImageParam p, double d)
 		{
-			if ((version == 3) && (protocol3))
+			if (((version == 3) && (protocol3)) ||
+                ((version == LWIMAGELOADER_VERSION) && (protocol)))
 			{
 				std::ostringstream ss;
 				ss << d;
@@ -184,7 +188,7 @@ namespace lwpp
 			}
 			return 0;
 		}
-		ImageLoaderHandler()	: protocol(0), local(0), monitor(0), version(0) {}
+		ImageLoaderHandler()	: protocol(0) {}
 		void InitHandler(LWImageLoaderLocal *l, int ver)
 		{
 			version = ver;

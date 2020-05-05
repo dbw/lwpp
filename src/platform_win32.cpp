@@ -112,6 +112,11 @@ namespace lwpp
 		ShellExecuteA( NULL, "open", urlString.c_str(), NULL, "c:\\", SW_SHOW );
 	};
 
+	void OpenExplorer(const std::string urlString)
+	{
+		ShellExecuteA(NULL, "explore", urlString.c_str(), NULL, "c:\\", SW_SHOW);
+	};
+
 	bool isDoubleClick(unsigned int milliseconds)
 	{
 		return (milliseconds < GetDoubleClickTime());

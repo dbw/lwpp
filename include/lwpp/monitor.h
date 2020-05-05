@@ -117,9 +117,9 @@ namespace lwpp
 	class SimpleMonitor 
 	{
 		private:
-			LWMonitor *monitor;
+			LWMonitor *monitor = nullptr;
 		public:
-			SimpleMonitor(LWMonitor *mon) : monitor(mon) {}
+			SimpleMonitor(LWMonitor *mon = nullptr) : monitor(mon) {}
       SimpleMonitor(const SimpleMonitor &mon) : monitor(mon.monitor) {}
 			virtual ~SimpleMonitor() 
 			{

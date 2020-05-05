@@ -52,12 +52,13 @@ namespace lwpp
 			plugin->ButtonClick(cid);
 	}
 
-	void XPanelInterface::LWXPanelChangeNotifyFunc (LWXPanelID panel, unsigned int cid, unsigned int vid, int event_type)
+	LWXPRefreshCode XPanelInterface::LWXPanelChangeNotifyFunc (LWXPanelID panel, unsigned int cid, unsigned int vid, int event_type)
 	{
 		XPanel xpan(panel);
 		XPanelInterface *plugin = static_cast<XPanelInterface *>(xpan.getUserData());
 		if (plugin) 
-			plugin->ChangeNotify(panel, cid, vid, event_type);
+			return plugin->ChangeNotify(panel, cid, vid, event_type);
+		return LWXPRC_NONE;
 	}
 
 	void XPanelInterface::LWXPanelDestroyNotifyFunc(void *data)

@@ -5,6 +5,8 @@
 #ifndef LWPP_PLATFORM_H
 #define LWPP_PLATFORM_H
 
+#include <lwsdkver.h>
+
 /*
 __BIG_ENDIAN__ __LITTLE_ENDIAN__
 */

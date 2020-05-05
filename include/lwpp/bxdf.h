@@ -44,9 +44,13 @@ namespace lwpp
     void(*destroyBTDFVolume)(LWBTDFVolume);
 	*/
     // Add a BxDF to the BSDF. Returns the LWBxDF that was added, 0 if failed.
-	LWBxDF addBxDF (LWBSDF bsdf, LWBxDF bxdf, LWUserData data, const LWDVector weight)
+	LWBxDF addBxDF (LWBSDF bsdf, LWBxDF bxdf, LWUserData data, const LWDVector weight, double roughness = 0.0)
 	{
+#if (LWSDKVER_MAJOR < 2020)
 	  return globPtr->addBxDF(bsdf, bxdf, data, weight);
+#else
+		return globPtr->addBxDF(bsdf, bxdf, data, weight, roughness);
+#endif
 	}
 	/*
     // Only use addVolume for BxDFs returned by addBxDF and BxDFs which are BTDFs.
@@ -112,14 +116,28 @@ namespace lwpp
 	{
 		return globPtr->numBSSRDF(bsdf);
 	}
+#if (LWSDKVER_MAJOR < 2020)
     void BSSRDF_GetParameters (LWBSDF bsdf, unsigned int index, LWDVector weight, LWDVector scattering, double* distance)
 	{
+
 		globPtr->BSSRDF_GetParameters(bsdf, index, weight, scattering, distance);
 	}
     void BSSRDF_SetParameters (LWBSDF bsdf, unsigned int index, const LWDVector weight, const LWDVector scattering, double distance)	
 	{
 		globPtr->BSSRDF_SetParameters(bsdf, index, weight, scattering, distance);
 	}
+#else
+	void BSSRDF_GetParameters(LWBSDF bsdf, unsigned int index, LWDVector weight, LWDVector scattering, double* distance, double* asymmetry)
+	{
+
+		globPtr->BSSRDF_GetParameters(bsdf, index, weight, scattering, distance, asymmetry);
+	}
+	void BSSRDF_SetParameters(LWBSDF bsdf, unsigned int index, const LWDVector weight, const LWDVector scattering, double distance, double asymmetry)
+	{
+		globPtr->BSSRDF_SetParameters(bsdf, index, weight, scattering, distance, asymmetry);
+	}
+#endif
+
 	/*
     LWBSSRDF(*getBSSRDF)(LWBSDF bsdf, unsigned int index);
     LWAOVID(*BSSRDF_AOVID)(LWBSSRDF bssrdf, LWBSSRDFAOVLabelType type);
@@ -162,6 +180,7 @@ namespace lwpp
 	  {
 		  return BSDFFuncs::numBSSRDF(mBSDF);
 	  }
+#if (LWSDKVER_MAJOR < 2020)
 	  void BSSRDF_GetParameters(unsigned int index, LWDVector weight, LWDVector scattering, double* distance)
 	  {
 		  BSDFFuncs::BSSRDF_GetParameters(mBSDF, index, weight, scattering, distance);
@@ -170,6 +189,16 @@ namespace lwpp
 	  {
 		  BSDFFuncs::BSSRDF_SetParameters(mBSDF, index, weight, scattering, distance);
 	  }
+#else
+		void BSSRDF_GetParameters(unsigned int index, LWDVector weight, LWDVector scattering, double* distance, double *asymmetry)
+		{
+			BSDFFuncs::BSSRDF_GetParameters(mBSDF, index, weight, scattering, distance, asymmetry);
+		}
+		void BSSRDF_SetParameters(unsigned int index, const LWDVector weight, const LWDVector scattering, double distance, double asymmetry)
+		{
+			BSDFFuncs::BSSRDF_SetParameters(mBSDF, index, weight, scattering, distance, asymmetry);
+		}
+#endif
   };
 
 }

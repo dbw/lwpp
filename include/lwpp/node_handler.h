@@ -46,6 +46,13 @@ namespace lwpp
 			{
 				return LWNode::addInput(type, name, CB_NodeInputEvent);
 			}
+			LWNodeInput* addMatchingInput(LWNodeOutput& out)
+			{
+				if (out.type() == NOT_CUSTOM)
+					return addInput(out.vendorID(), out.typeID(), out.name());
+				else
+					return addInput(out.type(), out.name());
+			}
 			LWNodeInput *addColorInput(const std::string name = "Color") const
 			{
 				return LWNode::addColorInput(name, CB_NodeInputEvent);
@@ -151,7 +158,7 @@ namespace lwpp
 
 
 	//! @ingroup Adaptor
-	template <class T, int Version>
+	template <class T, int Version = LWNODECLASS_VERSION>
 	class NodeAdaptor : public InstanceAdaptor<T>, public ItemAdaptor<T>, public RenderAdaptor<T>
 	{
 		public:
@@ -270,12 +277,13 @@ namespace lwpp
 				;
 			}
 			virtual ~XPanelNodeHandler() {;}
-			virtual int NodeInputEvent ( NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
-			{
-				LW_XPanel.ViewRefresh();				
-				return NodeHandler::NodeInputEvent(nid, nevent, type);
+			virtual int NodeInputEvent ( NodeInputID nid, LWNodalEvent nevent, ConnectionType type) override
+			{																	
+				auto ret = NodeHandler::NodeInputEvent(nid, nevent, type);
+				LW_XPanel.ViewRefresh();
+				return ret;
 			}
-			virtual void ChangeNotify (LWXPanelID , unsigned int , unsigned int , int event_type)
+			virtual LWXPRefreshCode ChangeNotify (LWXPanelID , unsigned int , unsigned int , int event_type) override
 			{
 				if ( ( event_type == LWXPEVENT_VALUE ) || ( event_type == LWXPEVENT_HIT ) )
 				{
@@ -283,8 +291,9 @@ namespace lwpp
 				}
 				else if (event_type == LWXPEVENT_TRACK)
 				{
-					UpdateNodePreview();
+					UpdateNodePreview(); 
 				}
+				return LWXPRC_DFLT;
 			}
 	};
 

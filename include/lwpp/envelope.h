@@ -364,15 +364,16 @@ namespace lwpp
     }
   };
 
-  class Channel : public GlobalBase<LWChannelInfo>
+  class lwChannel : public GlobalBase<LWChannelInfo>
   {
-    LWChannelID chanID;
+    LWChannelID chanID = nullptr;
   public:
-    Channel (LWChannelID chan = 0)
+    lwChannel (LWChannelID chan = 0)
       : chanID(chan)
     {
       ;
     }
+    operator bool() const { return chanID != nullptr; }
     bool next(LWChanGroupID cgroup)
     {
       chanID = globPtr->nextChannel(cgroup, chanID);
@@ -385,6 +386,15 @@ namespace lwpp
     const char *getName()
     {
       return globPtr->channelName(chanID);
+    }
+    LWChanGroupID getParent()
+    {
+      return globPtr->channelParent(chanID);
+    }
+    int getType()
+    {
+      if (chanID) return globPtr->channelType(chanID);
+      return LWET_FLOAT;
     }
   };
   /*

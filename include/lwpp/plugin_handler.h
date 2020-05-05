@@ -390,9 +390,9 @@ namespace lwpp
 			;
 		}
 
-		virtual void ChangeNotify (LWXPanelID , unsigned int , unsigned int , int)
+		virtual LWXPRefreshCode ChangeNotify (LWXPanelID , unsigned int , unsigned int , int)
 		{
-			;
+			return LWXPRC_NONE;
 		}
 
 		virtual void PanelDestroyNotify(void)
@@ -431,7 +431,7 @@ namespace lwpp
 		//! Callback for XPanel button Clicks
 		static void LWXPanelBtnClickFunc (LWXPanelID panel, int cid);
 
-		static void LWXPanelChangeNotifyFunc (LWXPanelID panel, unsigned int cid, unsigned int vid, int event_type);
+		static LWXPRefreshCode LWXPanelChangeNotifyFunc (LWXPanelID panel, unsigned int cid, unsigned int vid, int event_type);
 
 		static void LWXPanelDestroyNotifyFunc(void *data);
 

@@ -69,16 +69,24 @@ namespace lwpp
   LWNodeInputFuncs *LWNode::inF = 0;
   LWNodeOutputFuncs *LWNode::outF = 0;
 
-  double EvalScalarVInput(LWShadingGeometry *sg, lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp)
+  double EvalScalarVInput(LWShadingGeometry *sg, const lwpp::unique_NodeInput &lwni, const lwpp::unique_VParm &vp)
   {
     double v = vp->GetValue();
-    lwni->evaluate(sg, &v);
+    if (lwni) lwni->evaluate(sg, &v);
+    return v;
+  }
+
+  lwpp::Vector3d EvalVectorVInput(LWShadingGeometry* sg, const lwpp::unique_NodeInput& lwni, const lwpp::unique_VParm& vp)
+  {
+    lwpp::Vector3d v = *(vp);
+    if (lwni) lwni->evaluate(sg, v);
     return v;
   }
 
   void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp)
-  {
-    return lwni->isConnected() ? 0 : vp->ID();
+  {     
+    if (!lwni) return vp->ID();
+    return (lwni->isConnected()) ? 0 : vp->ID();
   }
 
 }

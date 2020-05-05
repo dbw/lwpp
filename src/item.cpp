@@ -444,18 +444,19 @@ namespace lwpp
 	 */
 	LWItemTracker::~LWItemTracker(void)
 	{
-		if (mTrackedIDs != 0) delete[] mTrackedIDs;
+		;
 	}
 
 	void LWItemTracker::refresh()
 	{
-		if (mTrackedIDs != 0) delete[] mTrackedIDs;
-		mTrackedIDs = new LWItemID[mTrackedItems.size() + 1];
-		for (unsigned int i = 0; i < mTrackedItems.size(); ++i)
+		mUsedItems.clear();			
+		for (auto item : mTrackedItems)
 		{
-			mTrackedIDs[i] = mTrackedItems[i]->GetID();
+			if (item->exists())	 
+				mUsedItems.push_back(item->GetID());
 		}
-		mTrackedIDs[mTrackedItems.size()] = LWITEM_NULL; // last item must be null
+		mUsedItems.push_back(LWITEM_NULL);
+		mUsedItems.shrink_to_fit();
 	}
 
 	/*!
@@ -468,13 +469,13 @@ namespace lwpp
 	}
 	void LWItemTracker::trackItem(LWItem& item)
 	{
-		if (!item.exists()) return;
+		//if (!item.exists()) return;
 		mTrackedItems.push_back(&item);
 	}
 
 	void LWItemTracker::unTrackItem(LWItem& item)
 	{
-		if (!item.exists()) return;
+		//if (!item.exists()) return;
 		std::vector<LWItem*>::iterator iter = find(mTrackedItems.begin(), mTrackedItems.end(), &item);
 		if (iter != mTrackedItems.end())
 		{
@@ -495,17 +496,17 @@ namespace lwpp
 	const LWItemID* LWItemTracker::useItems()
 	{
 		refresh();
-		return mTrackedIDs;
+		return &mUsedItems[0];
 	}
 
   void LWItemTracker::clear()
   {
-    if (mTrackedIDs != 0) delete[] mTrackedIDs;
+    
     mTrackedItems.clear();
   }
 
 	/*
-* Optionally LWITEM_NULL or LWITEM_ALL can be returned manuall instead of the return of this function
+* Optionally LWITEM_NULL or LWITEM_ALL can be returned manually instead of the return of this function
 * @note This relies on a properly Refresh'd list.
 */
 	void LWItemTracker::changeID(const LWItemID* idlist)

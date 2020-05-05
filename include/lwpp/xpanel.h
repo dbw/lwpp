@@ -230,7 +230,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		{
 			drawBox(r, g, b, 0, 0, getWidth(), getHeight());
 		}
-		void clear (int c) const
+		void clearCol (int c) const
 		{
 			drawBox(c, 0, 0, getWidth(), getHeight());
 		}
@@ -500,7 +500,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			virtual void *DataGet(unsigned int vid ) = 0;
 			//! Retrieve data fom a XPanel View
 			virtual LWXPRefreshCode DataSet(unsigned int vid, void *value) = 0;
-			virtual void ChangeNotify(LWXPanelID, unsigned int, unsigned int, int) {}
+			virtual LWXPRefreshCode ChangeNotify(LWXPanelID, unsigned int, unsigned int, int) { return LWXPRC_NONE; }
 			virtual void ButtonClick(unsigned int) {}
 			virtual void PopCommand(int cid, int cmdid) {}
 	};

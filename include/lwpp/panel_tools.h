@@ -96,10 +96,10 @@ namespace lwpp
     int getY() const { return mCurrentY; }
     void dpiScale(const float scl)
     {
-      mCurrentX = static_cast<float>(mCurrentX) * scl;
-      mCurrentY = static_cast<float>(mCurrentY) * scl;
-      mClickedX = static_cast<float>(mClickedX) * scl;
-      mClickedY = static_cast<float>(mClickedY) * scl;
+      mCurrentX = static_cast<int>(static_cast<float>(mCurrentX) * scl);
+      mCurrentY = static_cast<int>(static_cast<float>(mCurrentY) * scl);
+      mClickedX = static_cast<int>(static_cast<float>(mClickedX) * scl);
+      mClickedY = static_cast<int>(static_cast<float>(mClickedY) * scl);
     }
   };  
 

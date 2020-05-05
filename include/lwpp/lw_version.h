@@ -6,7 +6,7 @@
 #include <lwsdkver.h>
 
 #ifndef LW_VERSION
-#define LW_VERSION
+#define LW_VERSION LWSDKVER_MAJOR
 
 // Disable "unreferenced formal parameter" warning in MSVC
 #pragma warning(disable: 4100)

@@ -179,7 +179,6 @@ namespace lwpp {
 		return (x * (max - min) + min);
 	}
 
-
 	template <class Type>
 	Type Bounds(const Type x, const Type min, const Type max)
 	{
@@ -224,6 +223,19 @@ namespace lwpp {
 	{
 		const double g = 1.0 - f;
 		return T( a * g + b * f  );
+	}
+
+	template <class T> T Bias(const T val, const T bias)
+	{
+		return (pow(val, log(bias) / log(0.5)));
+	}
+
+	template <class T> T Gain(const T val, const T gain)
+	{
+		if (val < 0.5)
+			return Bias(1.0 - val, 2.0 * gain) * 0.5;
+		else
+			return 1.0 - Bias(1.0 - val, 2.0 - 2.0 * gain) * 0.5;
 	}
 
 	template <class T> void Swap (T &a, T &b)
@@ -292,8 +304,7 @@ namespace lwpp {
           ++unit;
         }
       }
-      stream << std::fixed;
-      std::setprecision(((unit != 2) ? 3 : 4));
+      stream << std::fixed << std::setprecision(((unit != 2) ? 3 : 4));
       stream << value << " " << unitStr[unit];
       return stream.str();
     }

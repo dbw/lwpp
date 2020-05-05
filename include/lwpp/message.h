@@ -107,6 +107,7 @@ namespace lwpp
 				XpLABEL( 0, title),
 				XpDLOGTYPE(LWXPDLG_OKONLY),
 				XpLEFT(ID_TEXT),
+				XpALIGN_WIDTH(ID_TEXT),
 				XpEND
 			};
 			lwpp::XPanel xpanel(LWXP_FORM, ctrl_list);

@@ -1258,7 +1258,7 @@ namespace lwpp
 		 */
 		LWControl *addControl (const char *type, LWPanControlDesc *desc, const char *label)
 		{
-			return globPtr->addControl(id, const_cast<char *>(type), desc, const_cast<char *>(label));
+			return globPtr->addControl(id, const_cast<char *>(type), desc, label);
 		}
 	public:
 		//! Default Constructor

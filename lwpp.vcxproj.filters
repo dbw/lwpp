@@ -361,5 +361,14 @@
     <ClInclude Include="include\lwpp\instances.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\lwpp\mesh_modifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\attributes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\meshfuncs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -117,6 +117,11 @@ namespace lwpp
 			return evaluate(sg, static_cast<void *>(value.asLWVector()));
 		}
 
+		int	evaluate(LWShadingGeometry* sg, lwpp::Point3d& value)
+		{
+			return evaluate(sg, static_cast<void*>(value.asLWVector()));
+		}
+
 		int	evaluate(LWShadingGeometry *sg, int *value )
 		{
 			return evaluate(sg, static_cast<void *>(value));
@@ -153,6 +158,7 @@ namespace lwpp
 		*/
 		bool check(void)
 		{
+			if (mID == nullptr) return false;
 			return (inF->check(mID) != 0);
 		}
 		bool isConnected(void) {return check();}
@@ -234,6 +240,7 @@ namespace lwpp
 			mID(_id)
 		{
 			init();
+			mNodeID = outF->node(mID);
 		}
 
 		~LWNodeOutput()
@@ -336,7 +343,7 @@ namespace lwpp
 	typedef std::unique_ptr<LWNodeInput> auto_NodeInput; //!< Helper declaration for node member variables
 	typedef std::unique_ptr<LWNodeInput> unique_NodeInput; //!< Helper declaration for node member variables
 	typedef std::shared_ptr<LWNodeInput> shared_NodeInput; //!< Helper declaration for node member variables
-
+	
 	//! Helper callbacks for node menus
 	//! @ingroup Globals
 
@@ -424,7 +431,7 @@ namespace lwpp
 		virtual ~LWNode();
 
 		void setID(NodeID _id) {id = _id;}
-		NodeID getID(void) {return id;}
+		NodeID getID(void) const {return id;}
 
 		const char *nodeName() const {return globPtr->nodeName(id);}
 		const char *serverUserName() const {return globPtr->serverUserName(id);}
@@ -475,6 +482,13 @@ namespace lwpp
 		{
 			return new LWNodeOutput(id, type, name);
 		}
+    LWNodeOutput* addMatchingOutput(LWNodeOutput& out)
+    {
+      if (out.type() == NOT_CUSTOM)
+        return addOutput(out.vendorID(), out.typeID(), out.name());
+      else
+        return addOutput(out.type(), out.name());
+    }
 		LWNodeOutput *addColorOutput(const std::string name ="Color")
 		{
 			return addOutput(NOT_RGB, name);
@@ -660,23 +674,25 @@ namespace lwpp
 			globPtr->planarMapping(pos, rot, scl, axis, world, utiles, vtiles, uoffset, voffset, refMatrix, sg, proj);
 		}
         
-        static void PlanarMapping(const lwpp::Vector3d &pos, const lwpp::Vector3d &rot, const lwpp::Vector3d &scl,
-                                  int axis, int world, int utiles, int vtiles, double uoffset, double voffset,
-                                  const lwpp::Matrix4x4d &refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)
-        {
-            LWDMatrix4 mat;
-            refMatrix.asLWMatrix(mat);
-            return PlanarMapping(pos.asLWVector(), rot.asLWVector(), scl.asLWVector(),
-                                 axis, world, utiles, vtiles, uoffset, voffset,
-                                 mat, sg, proj);
-        }
+    static void PlanarMapping(const lwpp::Vector3d& pos, const lwpp::Vector3d& rot, const lwpp::Vector3d& scl,
+                              int axis, int world, int utiles, int vtiles, double uoffset, double voffset,
+                              const lwpp::Matrix4x4d& refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)
+    {
+      LWDMatrix4 mat;
+      refMatrix.asLWMatrix(mat);
+      return PlanarMapping(pos.asLWVector(), rot.asLWVector(), scl.asLWVector(),
+                           axis, world, utiles, vtiles, uoffset, voffset,
+                           mat, sg, proj);
+    }
     };
 
 	/*
 	Various helper functions
 	*/
 	// Return a scalar from an input/vparm combo, can be used to initialise a variable
-	double EvalScalarVInput(LWShadingGeometry *sg, lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp);
+	double EvalScalarVInput(LWShadingGeometry *sg, const lwpp::unique_NodeInput &lwni, const lwpp::unique_VParm &vp);
+	// Return a vector from an input/vparm combo, can be used to initialise a variable
+	lwpp::Vector3d EvalVectorVInput(LWShadingGeometry* sg, const lwpp::unique_NodeInput& lwni, const lwpp::unique_VParm& vp);
 
 	// Helps handling inputs with a matching vparm in DataGet()
 	void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp);
@@ -715,6 +731,54 @@ typedef struct	LWNodeUtilityFuncs_t {
     proj.dudy = sg->dudy;
     proj.dvdy = sg->dvdy;
   }
+	class NodeDraw : private lwpp::GlobalBase<LWNodeDrawFuncs>
+	{
+		NodeID mNode = nullptr;
+	public:
+		NodeDraw(NodeID id)
+			: mNode(id) {}
+		NodeDraw(const LWNode& node)
+			: mNode(node.getID()) {}
+		void drawPixel(int c, int x, int y)
+		{
+			if (mNode) globPtr->drawPixel(mNode, c, x, y);
+		}
+		void drawPixel(int r, int g, int b, int x, int y)
+		{
+			if (mNode) globPtr->drawRGBPixel(mNode, r, g, b, x, y);
+		}
+		void drawLine(int c, int x, int y, int x2, int y2)
+		{
+			if (mNode) globPtr->drawLine(mNode, c, x, y, x2, y2);
+		}
+		void drawBox(int c, int x, int y, int w, int h)
+		{
+			if (mNode) globPtr->drawBox(mNode, c, x, y, w, h);
+		}
+		void drawBox(int r, int g, int b, int x, int y, int w, int h)
+		{
+			if (mNode) globPtr->drawRGBBox(mNode, r, g, b, x, y, w, h);
+		}
+		int getTextWidth(const char* s)
+		{
+			if (mNode) globPtr->textWidth(mNode, s);
+			return 0;
+		}
+		int getTextHeight(const char* s)
+		{
+			if (mNode) globPtr->textHeight(mNode, s);
+			return 0;
+		}
+		void drawText(const char* s, int c, int x, int y)
+		{
+			if (mNode) globPtr->drawText(mNode, s, c, x, y);
+		}
+
+		void   blit()
+		{
+			if (mNode) globPtr->blitNode(mNode);
+		}
+	};
 
 }   
 

@@ -19,8 +19,13 @@ namespace lwpp
 	public:
 		PrimitiveHandler(void *g, void *context, LWError *err) : InstanceHandler(g, context, err, LWCUSTOMOBJ_HCLASS)
 		{
+#if (LWSDKVER_MAJOR < 2020)
 			auto id = static_cast<LWItemID *>(context);
 			Context.SetID(static_cast<LWItemID>(*id));
+#else
+			auto ctx = static_cast<LWContext*>(context);
+			Context.SetID((LWItemID)ctx->context.context);
+#endif
 		}
 		virtual ~PrimitiveHandler() {;}
 		virtual unsigned int Flags() { return 0; }

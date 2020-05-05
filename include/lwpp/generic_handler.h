@@ -40,7 +40,16 @@ namespace lwpp
 		int evaluate (const std::string &command)
 		{
 			return layoutGeneric->evaluate(layoutGeneric->data, command.c_str());
+		}			
+		const char* commandArguments()
+		{
+			return layoutGeneric->commandArguments(layoutGeneric->data);
 		}
+		
+		int parsedArguments(DynaValue** argv)
+		{
+			return layoutGeneric->parsedArguments(layoutGeneric->data, argv);
+		}																			
 
 		void editServer(const char *type, const char *name, LWItemID id = 0)
 		{
@@ -69,9 +78,7 @@ namespace lwpp
 		void addUniqueServer(const char *type, const char *name)
 		{
 			if (findServer(type, name, 0) > 0) return;
-			std::ostringstream cmd;
-			cmd << "ApplyServer " << type << " " << name;
-			evaluate(cmd.str());
+			addServer(type, name);
 		}
 		
 		void addUniqueServer(const char *type, const char *name, LWItem &item, bool open = false)

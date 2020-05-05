@@ -1,6 +1,7 @@
 .svn/
 doxygen
 Win32/
+x64/
 lib/
 *.mov
 *.zip
@@ -182,3 +183,4 @@ pip-log.txt
 # Mac crap
 .DS_Store
 include/lwpp/matrix4x4.h.sb-67ddc418-6LF8hw
+*.log
