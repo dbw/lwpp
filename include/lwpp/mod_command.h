@@ -729,12 +729,13 @@ namespace lwpp
 		{
 			assert(me != 0);
 			if (me) return me->vMapSelect(me->state, name, type, dim);
+			return nullptr;
 		}
 
 		void vMapSet(LWPntID point_id, LWPolID polygon_id, const float *value)
 		{
 			assert(me != 0);
-			if (me)  me->vMapSet(me->state, point_id, polygon_id, value);
+			if (me) me->vMapSet(me->state, point_id, polygon_id, value);
 		}
 
 		/*

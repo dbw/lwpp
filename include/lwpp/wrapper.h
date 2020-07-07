@@ -200,5 +200,30 @@ namespace lwpp
 			return 0;
 		}
 	};
+
+	template <typename T, size_t (T::*cnt)(), const char* (T::*nmn)(int n)>
+	class PopTmpl
+	{
+	public:
+		static int PopCount(void* inst)
+		{
+			if (inst)
+			{
+				T* puc = static_cast<T*>(inst);
+				return static_cast<int>((puc->*cnt)());
+			}
+			return 0;
+		}
+		static const char* PopName(void* inst, int n)
+		{
+			if (inst)
+			{
+				T* puc = static_cast<T*>(inst);
+				return (puc->*nmn)(n);
+			}
+			return 0;
+		}
+	};
+
 }
 #endif // LWPP_WRAPPER_H

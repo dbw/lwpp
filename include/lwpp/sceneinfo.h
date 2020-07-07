@@ -96,7 +96,10 @@ namespace lwpp
 
     //! Returns the playback speed of the scene in frames / second.
 
-    double framesPerSecond() const {return globPtr->framesPerSecond;}
+    double framesPerSecond() const {
+      if (isValid()) return globPtr->framesPerSecond;
+      return 30.0;
+    }
 
     //! Returns the width of the image to render in pixels.
     int frameWidth() const {return globPtr->frameWidth;}

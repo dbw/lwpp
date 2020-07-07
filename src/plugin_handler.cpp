@@ -11,7 +11,7 @@ namespace lwpp
 			plugin->PopCommand(cid, cmd);
 	}
 
-	void XPanelInterface::LWXPanelControlDrawFunc    ( LWXPanelID panel, unsigned int cid, LWXPDrAreaID reg, int w, int h )
+	void XPanelInterface::LWXPanelControlDrawFunc ( LWXPanelID panel, unsigned int cid, LWXPDrAreaID reg, int w, int h )
 	{
 		XPanel xpan(panel);
 		XPanelInterface *plugin = static_cast<XPanelInterface *>(xpan.getUserData());
@@ -19,7 +19,7 @@ namespace lwpp
 		if (plugin)
 			plugin->ControlDraw(cid, area);
 	}
-	void XPanelInterface::LWXPanelControlZoomFunc    ( LWXPanelID panel, unsigned int cid, int x, int y, int *region, int clickcount )
+	void XPanelInterface::LWXPanelControlZoomFunc ( LWXPanelID panel, unsigned int cid, int x, int y, int *region, int clickcount )
 	{
 		XPanel xpan(panel);
 		XPanelInterface *plugin = static_cast<XPanelInterface *>(xpan.getUserData(cid));

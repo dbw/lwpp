@@ -56,7 +56,7 @@ namespace lwpp
         restartDrag(code);
       }
     }
-    //! restart a drag operation - this happens if the mouse button comibnation has changed, but there are still buttons pressed
+    //! restart a drag operation - this happens if the mouse button combination has changed, but there are still buttons pressed
     void restartDrag(const int code)
     {
       mClickedY = mCurrentY;

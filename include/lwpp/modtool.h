@@ -78,6 +78,11 @@ namespace lwpp
 		virtual int tlDrawScene(int) { return 0; }
 		virtual int tlKey(LWDualKey) { return 0; }
 		virtual void tlDrawOverlay(WireDrawAccess &, int vp, int pass) { ; }
+#if (LWMESHEDITTOOL_VERSION > 6)
+    virtual void tlDrawUV(WireDrawAccess&) { ; }
+    virtual int tlDrawSceneUV(int viewport_index) { return 0; }
+    virtual void tlDrawOverlayUV(WireDrawAccess& drawer, int viewport_index, int pass) { ; }
+#endif
 	};
 
 	class ModelerTool : public Tool
@@ -91,7 +96,6 @@ namespace lwpp
 			virtual void End(int keep) { ; }
 			virtual LWError Select(MeshEditOperator &mop) { return 0; }
 	};
-
 
 #define TOOL_CB(t) local->tool->t = cb_ ## t
 
@@ -144,6 +148,11 @@ namespace lwpp
 					TOOL_CB(drawScene);
 					TOOL_CB(key);
 					TOOL_CB(drawOverlay);
+#if (LWMESHEDITTOOL_VERSION > 6)
+					TOOL_CB(drawUV);
+					TOOL_CB(drawSceneUV);
+					TOOL_CB(drawOverlayUV);
+#endif
 					return plugin->Activate(serverData);
 				}
 				return AFUNC_OK;
@@ -154,14 +163,12 @@ namespace lwpp
 				return AFUNC_BADAPP;
 			}
 		}
-
 		static int cbTest(LWInstance inst)
 		{
 			T *plugin = static_cast<T *>(inst);
 			if (plugin) return plugin->Test();
 			return LWT_TEST_NOTHING;
 		}
-
 		static LWError cbBuild(LWInstance inst, MeshEditOp* op)
 		{
 			T *plugin = static_cast<T *>(inst);
@@ -172,13 +179,11 @@ namespace lwpp
 			}
 			return nullptr;
 		}
-
 		static void cbEnd(LWInstance inst, int keep)
 		{
 			T *plugin = static_cast<T *>(inst);
 			if (plugin) plugin->End(keep);
 		}
-
 		static LWError cbSelect(LWInstance inst, MeshEditOp* op)
 		{
 			T *plugin = static_cast<T *>(inst);
@@ -189,7 +194,6 @@ namespace lwpp
 			}
 			return nullptr;
 		}
-
 		static void cb_done(LWInstance inst)
 		{
 			T *plugin = static_cast<T *>(inst);
@@ -306,6 +310,35 @@ namespace lwpp
 				plugin->tlDrawOverlay(custom, vp, pass);
 			}
 		}
+#if (LWMESHEDITTOOL_VERSION > 6)
+		static void cb_drawUV(LWInstance inst, LWWireDrawAccess* cobj)
+		{
+			T* plugin = static_cast<T*>(inst);
+			if (plugin)
+			{
+				WireDrawAccess custom(cobj);
+				plugin->tlDrawUV(custom);
+			}
+		}
+		static int cb_drawSceneUV(LWInstance inst, int vp)
+		{
+			T* plugin = static_cast<T*>(inst);
+			if (plugin)
+			{
+				return plugin->tlDrawSceneUV(vp);
+			}
+			return 0;
+		}
+		static void cb_drawOverlayUV(LWInstance inst, LWWireDrawAccess* cobj, int vp, int pass)
+		{
+			T* plugin = static_cast<T*>(inst);
+			if (plugin)
+			{
+				WireDrawAccess custom(cobj);
+				plugin->tlDrawOverlayUV(custom, vp, pass);
+			}
+		}
+#endif
 	};
 
 } // end namespace lwpp

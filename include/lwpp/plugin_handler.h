@@ -375,22 +375,22 @@ namespace lwpp
 		XPanel LW_XPanel;
 
 		//! Put data into a XPanel View
-		virtual void *DataGet(unsigned int ) 
+		virtual void *DataGet(unsigned int ) override
 		{
 			return nullptr;
 		}
 		//! Retrieve data fom a XPanel View
-		virtual LWXPRefreshCode DataSet(unsigned int , void *)
+		virtual LWXPRefreshCode DataSet(unsigned int , void *) override 
 		{
 			return LWXPRC_DFLT;
 		}
 
-		virtual void ButtonClick(unsigned int)
+		virtual void ButtonClick(unsigned int) override
 		{
 			;
 		}
 
-		virtual LWXPRefreshCode ChangeNotify (LWXPanelID , unsigned int , unsigned int , int)
+		virtual LWXPRefreshCode ChangeNotify (LWXPanelID , unsigned int , unsigned int , int) override
 		{
 			return LWXPRC_NONE;
 		}
@@ -410,7 +410,7 @@ namespace lwpp
 			;
 		}
 
-		void PopCommand (int, int)
+		virtual void PopCommand (int, int) override
 		{
 			;
 		}

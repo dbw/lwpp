@@ -63,7 +63,7 @@ namespace lwpp
 			mNodeID(_id)
 		{
 			init();
-#ifdef _DEBUG
+#ifdef LWPP_DEBUG
 			dout << "Adding Input " << name << " to Node " << mNodeID << "\n";
 #endif
 

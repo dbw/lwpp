@@ -200,13 +200,22 @@ namespace lwpp {
 
 	template <class Type>
 	int Floor(const Type x) {
-		return (static_cast<int> (x)) - (x < 0 && (x != static_cast<int>(x)));
+		return static_cast<int>(std::floor(x));
+		//return (static_cast<int> (x)) - (x < 0 && (x != static_cast<int>(x)));
 	}
 
 	template <class Type>
 	int Ceil(const Type x) 
 	{
-		return ((int)x) + (x > 0 && (x != (int) x));
+		return static_cast<int>(std::ceil(x));
+		//return ((int)x) + (x > 0 && (x != (int) x));
+	}
+
+	template <class Type>
+	Type Frac(const Type x)
+	{
+		Type i;
+		return std::modf(x, &i);
 	}
 
 	template <class Type>
