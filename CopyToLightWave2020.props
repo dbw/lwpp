@@ -5,7 +5,8 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <PostBuildEvent>
-      <Command>xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2020.0.1\plugins\
+      <Command>xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2020.0.2\plugins\
+xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2020.0.1\plugins\
 xcopy /F /Y $(TargetPath) $(USERPROFILE)\.NewTek\LightWave\2020.0\plugins\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

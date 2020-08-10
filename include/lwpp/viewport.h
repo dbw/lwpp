@@ -15,7 +15,7 @@ namespace lwpp
 	{
 	protected:
 		int mView = -2;
-		double mHoverPos[2];
+		double mHoverPos[2] = { 0.0, 0.0 };
 	public:
 		ViewportInfo(int v = 0) : mView(v) {}
 		void setView(int v) { mView = v; }
@@ -52,6 +52,10 @@ namespace lwpp
 		{
 			return globPtr->handleSize(mView);
 		}
+		double getHandleSize(LWDVector ref)
+		{
+			return getWorldSize(getHandleSize(), ref);
+		}
 		int project(LWDVector w, double* x, double* y, double *z)
 		{
 			return globPtr->project(mView, w, x, y, z);
@@ -64,6 +68,10 @@ namespace lwpp
     {
       return project(p, &w[0], &w[1], &w[2]);
     }
+		int project(lwpp::Vector3d p, lwpp::Vector3d&s)
+		{
+			return project(p.asLWVector(), &s[0], &s[1], &s[2]);
+		}
     int project(lwpp::Point3d& p, double w[])
     {
       return project(p, &w[0], &w[1], &w[2]);

@@ -64,9 +64,17 @@ namespace lwpp
 		{
 			return globPtr->name(i);
 		}
-		void		param(LWItemID i, LWItemParam p, LWTime t, LWDVector v)
+		bool selected(LWItemID i)
+		{
+			return (globPtr->selected(i) != 0);
+		}
+		void param(LWItemID i, LWItemParam p, LWTime t, LWDVector v)
 		{
 			if (i != LWITEM_NULL) globPtr->param(i, p, t, v);
+		}
+		void param(LWItemID i, LWItemParam p, LWTime t, double v[4][4])
+		{
+			if (i != LWITEM_NULL) globPtr->param(i, p, t, &v[0][0]);
 		}
 		unsigned int limits(LWItemID i, LWItemParam p, LWDVector min, LWDVector max)
 		{
@@ -177,6 +185,8 @@ namespace lwpp
 
 		//! Checks if the LWItemInfo global is available or not
 		bool isValid() const { return mItemInfo.isValid(); }
+
+		bool isSelected() { return mItemInfo.selected(mId); }
 
 		void SetID(LWItemID _id)
 		{	
@@ -322,11 +332,18 @@ namespace lwpp
 		Matrix4x4d getObjectToWorld(LWTime time);
 		Matrix4x4d getWorldTransform(LWTime time);
 		void transformToWorld(Point3d& pt, LWTime time);
+		void transformToLocal(Point3d& pt, LWTime time);
+		void transformToLocal(Vector3d& pt, LWTime time);
 		///@} 
 
 		void Param(LWItemParam p, LWTime t, Point3d& v)
 		{
 			mItemInfo.param(mId, p, t, v.asLWVector());
+		}
+
+		void Param(LWItemParam p, LWTime t, double v[4][4])
+		{
+			mItemInfo.param(mId, p, t, v);
 		}
 
 		unsigned int Limits(LWItemParam p, LWDVector min, LWDVector max)

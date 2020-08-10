@@ -61,6 +61,10 @@ namespace lwpp
 		{
 			access->polygon(access->dispData, numv, v, csys);
 		}
+		void DrawPolygon(unsigned int numv, double* p, int csys)
+		{
+			DrawPolygon(numv, (double(*)[3])p, csys);
+		}
 		void DrawPolygon(unsigned int numv, unsigned int verts[], double v[][3], int csys)
 		{
 			access->polyIndexed(access->dispData, numv, verts, v, csys);
@@ -100,11 +104,15 @@ namespace lwpp
 		}
 		void LineStrip(unsigned int numv, double *p, int csys)
 		{
-			access->lineStrip(access->dispData, numv, (double (*)[3])p, csys);
+			LineStrip(numv, (double (*)[3])p, csys);
 		}
 		void LineLoop(unsigned int numv, double p[][3], int csys)
 		{
 			access->lineLoop(access->dispData, numv, p, csys);
+		}
+		void LineLoop(unsigned int numv, double *p, int csys)
+		{
+			LineLoop(numv, (double(*)[3])p, csys);
 		}
 	};
 

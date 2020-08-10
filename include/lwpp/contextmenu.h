@@ -22,11 +22,10 @@ namespace lwpp
 	class ContextMenu : protected GlobalBase<ContextMenuFuncs>
 	{
 	private:
-		LWContextMenuID menu;
+		LWContextMenuID menu = 0;
 		LWPanPopupDesc description;
 	public:
-		ContextMenu(void)
-			: menu(0)
+		ContextMenu()				
 		{
 			;
 		}
@@ -84,14 +83,6 @@ namespace lwpp
 		{
 			if ((menu) && available())
 			{
-#ifdef _DEBUG
-	std::hex(dout);
-	dout << "Deploy Context Menu: 0x" << menu << "\n";	
-	dout << "  Panel: 0x" << panel << "\n";	
-	dout << "  Global: 0x" << globPtr << "\n";	
-	dout << "  Function: 0x" << globPtr->cmenuDeploy << "\n";	
-	dout.flush();
-#endif
 				return globPtr->cmenuDeploy( menu, panel, select);
 			}
 			else
@@ -139,8 +130,8 @@ namespace lwpp
 			public:
 				unsigned int id;
 				std::string name;
-				menuEntry(const char *_title, unsigned int _id) : name(_title), id(_id) {}
-        menuEntry(std::string _title, unsigned int _id) : name(_title), id(_id) {}
+				menuEntry(const char *_title, int _id) : name(_title), id(_id) {}
+        menuEntry(std::string _title, int _id) : name(_title), id(_id) {}
         const char *getName(void) const {return name.c_str();}
 				const int getID(void) const {return id;}
 			};
@@ -156,8 +147,8 @@ namespace lwpp
 			int Deploy(LWPanelID panel, int select);
       int Deploy(LWPanel &panel, int select);
 			//! Add a new item to the context menu
-			void AddEntry (const char *entry, unsigned int id);
-      void AddEntry (std::string entry, unsigned int id);
+			void AddEntry (const char *entry, int id = -1);
+      void AddEntry (std::string entry, int id = -1);
       void AddDivider(const char* label = "");
 			void Clear();
 	};

@@ -25,7 +25,8 @@ namespace lwpp
 		{
 			item = _item;
 		}
-    const LWItemID getObject(){ return item; }
+    const LWItemID getObject() const { return item; }
+		const LWItemID getItem() const { return item; }
 		const char *filename() const {return globPtr->filename(item);}
 		int        numPoints() const {return globPtr->numPoints(item);}
 		int        numPolygons() const {return globPtr->numPolygons(item);}

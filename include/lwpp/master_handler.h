@@ -106,13 +106,13 @@ class MasterAdaptor : public InstanceAdaptor <T>, public ItemAdaptor <T>
 	IMPLEMENT_GIZMO_LWPANELHANDLER(Master);
 
 	//! @ingroup XPanelAdaptor
-	template <class T, int Version, int plugType>
-	class XPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType>, public XPanelAdaptor<T>
+	template <class T, int Version, int plugType, bool noIO = false>
+	class XPanelMasterAdaptor : public MasterAdaptor<T, Version, plugType, noIO>, public XPanelAdaptor<T>
 	{
 	public:
 		XPanelMasterAdaptor(const char *name, ServerTagInfo *tags = 0)
 			: XPanelAdaptor<T>(name, LWMASTER_ICLASS, tags),
-				MasterAdaptor<T, Version, plugType>(name, tags)
+				MasterAdaptor<T, Version, plugType, noIO>(name, tags)
 		{
 			;
 		}

@@ -412,7 +412,14 @@ namespace lwpp
 						break;
 				}
 			}
-			bool isValid() {return (saveState != 0);}
+			bool isValid() const {
+				switch (m_type)
+				{
+					case (FILE_LOAD):	return (loadState != 0);
+					case (FILE_SAVE):	return (saveState != 0);
+					default: return false;							
+				}					
+			}
 			LWSaveState *getLWSaveState() const {return saveState;}
 			LWLoadState *getLWLoadState() const {return loadState;}
 			SaveState getSaveState() const {return SaveState(saveState);}

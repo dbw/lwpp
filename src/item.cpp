@@ -110,6 +110,58 @@ namespace lwpp
 			pt /= w;
 		}
 	}
+	void LWItem::transformToLocal(Point3d& pt, LWTime t)
+	{
+		double M[4][4];
+		LWDVector pos, rt, up, fd;
+		Param(LWIP_W_POSITION, t, pos);
+		Param(LWIP_W_RIGHT, t, rt);
+		Param(LWIP_W_UP, t, up);
+		Param(LWIP_W_FORWARD, t, fd);
+
+		for (int i = 0; i < 3; i++) {
+			M[0][i] = (float)rt[i];
+			M[1][i] = (float)up[i];
+			M[2][i] = (float)fd[i];
+			M[3][i] = (float)pos[i];
+			M[i][3] = 0.0;
+		}
+		M[3][3] = 1.0;
+
+		Point3d a(pt);
+
+		pt.x = a.x * M[0][0] + a.y * M[1][0] + a.z * M[2][0] + M[3][0];
+		pt.y = a.x * M[0][1] + a.y * M[1][1] + a.z * M[2][1] + M[3][1];
+		pt.z = a.x * M[0][2] + a.y * M[1][2] + a.z * M[2][2] + M[3][2];
+
+		double w = a.x * M[0][3] + a.y * M[1][3] + a.z * M[2][3] + M[3][3];
+
+		if (w != 0.0f)
+		{
+			pt /= w;
+		}
+	}
+
+	void LWItem::transformToLocal(Vector3d& pt, LWTime t)
+	{
+		double M[3][3];
+		LWDVector pos, rt, up, fd;
+		Param(LWIP_W_POSITION, t, pos);
+		Param(LWIP_W_RIGHT, t, rt);
+		Param(LWIP_W_UP, t, up);
+		Param(LWIP_W_FORWARD, t, fd);
+
+		for (int i = 0; i < 3; i++) {
+			M[0][i] = (float)rt[i];
+			M[1][i] = (float)up[i];
+			M[2][i] = (float)fd[i];
+		}
+		Vector3d a(pt);
+		pt.x = a.x * M[0][0] + a.y * M[1][0] + a.z * M[2][0] + M[3][0];
+		pt.y = a.x * M[0][1] + a.y * M[1][1] + a.z * M[2][1] + M[3][1];
+		pt.z = a.x * M[0][2] + a.y * M[1][2] + a.z * M[2][2] + M[3][2];
+	}
+
 	/*!
 	 * Search all LW Items for an item with this name, and return a LWItem.
 	 */
