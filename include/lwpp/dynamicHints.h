@@ -2,7 +2,8 @@
 #ifndef LWPP_DYNAMIC_HINTS
 #define LWPP_DYNAMIC_HINTS
 
-#include <lwpp/xpanel.h>
+//#include <lwpp/xpanel.h>
+#include <lwxpanel.h>
 #include <vector>
 
 namespace lwpp
@@ -42,12 +43,14 @@ namespace lwpp
 		LWXPanelHint *get()
 		{
 			if (mHints.empty()) return nullptr;
+			mHints.shrink_to_fit();
 			return &mHints[0];
 		}
 		void clear()
 		{
 			mHints.clear();
 		}
+		bool isEmpty() const { return mHints.empty(); }
 	};
 
 	struct DynControl

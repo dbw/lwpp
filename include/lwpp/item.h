@@ -20,7 +20,7 @@ namespace lwpp
 
 	//! Straight LWItemInfo function wrapper
 	//! @ingroup Globals
-	class ItemInfo : protected GlobalBase<LWItemInfo>
+	class ItemInfo : protected TransientGlobal<LWItemInfo>
 	{
 	public:
 		ItemInfo()
@@ -68,11 +68,11 @@ namespace lwpp
 		{
 			return (globPtr->selected(i) != 0);
 		}
-		void param(LWItemID i, LWItemParam p, LWTime t, LWDVector v)
+		void param(LWItemID i, LWItemParam p, LWTime t, LWDVector v) const
 		{
 			if (i != LWITEM_NULL) globPtr->param(i, p, t, v);
 		}
-		void param(LWItemID i, LWItemParam p, LWTime t, double v[4][4])
+		void param(LWItemID i, LWItemParam p, LWTime t, double v[4][4])	const
 		{
 			if (i != LWITEM_NULL) globPtr->param(i, p, t, &v[0][0]);
 		}
@@ -163,7 +163,7 @@ namespace lwpp
 		LWItemType mType;
 		std::string m_itemName; //! Used only for storing the name when loading and saving in Modeler
 	public:
-		explicit LWItem(LWItemID id = LWITEM_NULL, LWItemType t = LWI_OBJECT) : mId(id), mType(t)
+		explicit LWItem(const LWItemID id = LWITEM_NULL, const LWItemType t = LWI_OBJECT) : mId(id), mType(t)
 		{
 			;
 		}
@@ -172,8 +172,8 @@ namespace lwpp
 		{
 			mId = item.mId;
 			mType = item.mType;
-		}
-
+		}	
+        
 		LWItem(const LWItemType t)
 			: mId(LWITEM_NULL), mType(t)
 		{
@@ -208,13 +208,13 @@ namespace lwpp
 			}
 			return *this;
 		}
-		LWItemID GetFirstBone()
+		LWItem GetFirstBone()
 		{
 			if (mItemInfo.isValid())
 			{
-				return mItemInfo.first(LWI_BONE, mId);
+				return LWItem(mItemInfo.first(LWI_BONE, mId), LWI_BONE);
 			}
-			return 0;
+			return LWItem();
 		}
 		LWItem& Next(void)
 		{
@@ -277,25 +277,33 @@ namespace lwpp
 			return "(none)";
 		}
 
-		void Param(LWItemParam p, LWTime t, LWDVector v)
+		void Param(LWItemParam p, LWTime t, LWDVector v) const
 		{
 			mItemInfo.param(mId, p, t, v);
 		}
 
-		void Param(LWItemParam p, LWTime t, Vector3d& v)
+		void Param(LWItemParam p, LWTime t, Vector3d& v) const
 		{
 			mItemInfo.param(mId, p, t, v.asLWVector());
 		}
 
+		Vector3d getParam(LWItemParam p, LWTime t) const
+		{
+			LWDVector v;
+			mItemInfo.param(mId, p, t, v);
+			return lwpp::Vector3d(v);
+		}
+
+
 		//! @name Param related helper functions
 		///@{
-		Point3d getPosition(LWTime t)
+		Point3d getPosition(LWTime t)	const
 		{
 			Point3d pos;
 			Param(LWIP_POSITION, t, pos);
 			return pos;
 		}
-		Point3d getWorldPosition(LWTime t)
+		Point3d getWorldPosition(LWTime t) const
 		{
 			Point3d pos;
 			Param(LWIP_W_POSITION, t, pos);
@@ -328,20 +336,22 @@ namespace lwpp
 
 		void getItem2World(LWTime t, LWDVector toWorld[3]);
 
-		Matrix4x4d getWorld2Item(LWTime t);
+		Matrix4x4d getWorld2Item(LWTime t) const;
+		Matrix4x4d getWorld2Object(LWTime t);
 		Matrix4x4d getObjectToWorld(LWTime time);
 		Matrix4x4d getWorldTransform(LWTime time);
 		void transformToWorld(Point3d& pt, LWTime time);
+		void transformToWorld(Vector3d& pt, LWTime time);
 		void transformToLocal(Point3d& pt, LWTime time);
 		void transformToLocal(Vector3d& pt, LWTime time);
 		///@} 
 
-		void Param(LWItemParam p, LWTime t, Point3d& v)
+		void Param(LWItemParam p, LWTime t, Point3d& v)	const
 		{
 			mItemInfo.param(mId, p, t, v.asLWVector());
 		}
 
-		void Param(LWItemParam p, LWTime t, double v[4][4])
+		void Param(LWItemParam p, LWTime t, double v[4][4])	const
 		{
 			mItemInfo.param(mId, p, t, v);
 		}
@@ -434,6 +444,15 @@ namespace lwpp
 			return mId == rhs.mId;
 		}
 	};
+
+	inline bool operator!=(const LWItem& lhs, const LWItem& rhs)
+	{
+		return !(lhs == rhs);
+	}
+	inline bool operator<(const LWItem& lhs, const LWItem& rhs)
+	{
+		return (lhs.GetID() < rhs.GetID());
+	}
 
 	class PrettyItem
 	{

@@ -12,6 +12,21 @@ namespace lwpp
 	/*!
 	* @note Work in progress
 	* @ingroup Handler
+	* 
+	* 
+	* Event Processing:
+	* 
+ 	*   Down() == true // manual mouse evaluation
+	*     move()
+	*     up()
+    *   else
+	*		Count() == 0	   
+	*   		Start() // manually find the intersected handle
+	*		else
+	*			Handle() // provide handles
+	*		Adjust()
+	*		End()     
+	* 
 	*/
 	class LayoutTool
 	{

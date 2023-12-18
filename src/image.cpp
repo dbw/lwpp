@@ -169,6 +169,18 @@ namespace lwpp
     img->drawXpanel(reg, w, h);
   }
 
+  void Image::ControlZoom(LWXPanelID pan, unsigned int cid, int x, int y, int* rect, int clickcount)
+  {
+    if (pan == nullptr) return;
+    lwpp::XPanel panel(pan);
+    void* ud = panel.getUserData(cid);
+    Image* img = static_cast<Image*>(ud);
+    if (img != nullptr)
+    {
+      img->controlZoom( cid,  x,  y, rect, clickcount);
+    }
+  }
+
   /*! @todo add colourspace support
 
   */
@@ -203,14 +215,41 @@ namespace lwpp
     float pxStep = 1.0 / sx;
     float pyStep = 1.0 / sy;
     float ix = 0.0;
+    LWBufferValue rgb[3];
+    bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
     for ( x = 0; x < sw; x++ )
     {
       float iy = 0.0;
       for ( y = 0; y < sh; y++ )
-      {
-        LWBufferValue rgb[3];
+      {                              
         RGB(ix, iy, rgb);
-				if (mFlags.checkered && hasAlpha())
+
+         if (mFlags.previewMode > PRV_RGB)
+         {
+           float value;
+           switch (mFlags.previewMode)
+           {
+             case PRV_LUMA:
+               value = 0.2126f * rgb[0] + 0.7152f * rgb[1] + 0.0722f * rgb[2];
+               break;
+             case PRV_R:
+               value = rgb[0];
+               break;
+             case PRV_G:
+               value = rgb[1];
+               break;
+             case PRV_B:
+               value = rgb[2];
+               break;
+             case PRV_A:
+               value = hasAlpha() ? alpha(ix, iy) : 0.0;
+               break;
+             default: 
+               break;
+           }
+           rgb[0] = rgb[1] = rgb[2] = value;
+         }
+				if (mFlags.checkered && displayAlpha)
 				{
 					float a = alpha(ix, iy);
 					if (a < 1.0)
@@ -231,13 +270,99 @@ namespace lwpp
     }
   }
 
+  void Image::drawNodePreview(NodeDraw& nd, int w, int h)
+  {
+    nd.drawBox(0,0,0, 0, 0, w, h);
+    if (id == nullptr) return;
+
+    int width, height;
+    size(width, height);
+
+    float sx = (float)w / (float)width; // step size
+    float sy = (float)h / (float)height;
+
+    if (mFlags.keepAspect)
+    {
+      float step = fmin(sx, sy); // smallest step
+      sx = step;
+      sy = step;
+    }
+    // scaled width and height
+    int sw = sx * width;
+    int sh = sy * height;
+
+    int x_offset = (w - sw) / 2;
+    int y_offset = (h - sh) / 2;
+
+    ColourManager cm(lwpp::lwcst_viewer);
+
+    int x, y;
+    float pxStep = 1.0 / sx;
+    float pyStep = 1.0 / sy;
+    float ix = 0.0;
+    LWBufferValue rgb[3];
+    bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
+    for (x = 0; x < sw; x++)
+    {
+      float iy = 0.0;
+      for (y = 0; y < sh; y++)
+      {
+        RGB(ix, iy, rgb);
+
+        if (mFlags.previewMode > PRV_RGB)
+        {
+          float value;
+          switch (mFlags.previewMode)
+          {
+            case PRV_LUMA:
+              value = 0.2126f * rgb[0] + 0.7152f * rgb[1] + 0.0722f * rgb[2];
+              break;
+            case PRV_R:
+              value = rgb[0];
+              break;
+            case PRV_G:
+              value = rgb[1];
+              break;
+            case PRV_B:
+              value = rgb[2];
+              break;
+            case PRV_A:
+              value = hasAlpha() ? alpha(ix, iy) : 0.0;
+              break;
+            default:
+              break;
+          }
+          rgb[0] = rgb[1] = rgb[2] = value;
+        }
+        if (mFlags.checkered && displayAlpha)
+        {
+          float a = alpha(ix, iy);
+          if (a < 1.0)
+          {
+            const int checkSize = 16.0;
+            auto check = (x / checkSize + y / checkSize) % 2;
+            auto col = check ? 0.1 : 0.2;
+            col *= 1 - a;
+            for (int i = 0; i < 3; ++i)
+              rgb[i] += col;
+          }
+        }
+        cm.convertToColourSpace(rgb);
+        nd.drawPixel(rgb[0] * 255.0, rgb[1] * 255.0, rgb[2] * 255.0, x + x_offset, y + y_offset);
+        iy += pyStep;
+      }
+      ix += pxStep;
+    }
+    nd.blit();
+  }
+
 	inline void normalize(LWDVector v)
 	{
 		auto mag = VLEN(v);
 		VDIVS(v, mag);
 	}
 
-	lwpp::Vector3d ComputeBump(LWNodalProjection &proj, double dtu, double dtv, double displace, double bumpStrength)
+	lwpp::Vector3d ComputeBump(const LWNodalProjection &proj, double dtu, double dtv, double displace, double bumpStrength)
 	{
 		LWDVector rv = { 0.0, 0.0, 0.0 };
 
@@ -268,33 +393,34 @@ namespace lwpp
 		return lwpp::Vector3d(rv);
 	}
 
-	Vector3d Image::evaluateBumpGradient(LWNodalProjection proj,
-																			 int pixelBlending, int useMip, double mipStrength, double bumpStrength,
-																			 LWTextureWrap uWrap, LWTextureWrap vWrap) const
-	{
+	Vector3d Image::evaluateBumpGradient(const LWNodalProjection& proj,
+                                       int pixelBlending, int useMip, double mipStrength, double bumpStrength,
+                                       LWTextureWrap uWrap, LWTextureWrap vWrap) const
+  {
+    const double delta = 2.0;    // should be 0.5f;
 		double baseTex[4], uTex[4], vTex[4];
 		LWNodalProjection bProj = proj;
 
 		auto du = std::abs(proj.dudx) + std::abs(proj.dudy);
-		du *= 2.0; // should be 0.5f;
+		du *= delta; // should be 0.5f;
 		if (du == 0) du = .0005f;
 
 		auto dv = std::abs(proj.dvdx) + std::abs(proj.dvdy);
-		dv *= 2.0; // should be 0.5f;
+		dv *= delta; // should be 0.5f;
 		if (dv == 0) dv = .0005f;
 
 		// get three samples
-		lwpp::Vector3d P(proj.P), dpdu(proj.dPdu), dpdv(proj.dPdu);
+		lwpp::Vector3d P(proj.P), dpdu(proj.dPdu), dpdv(proj.dPdv);
 
 		baseTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, baseTex);
 
 		auto p = P + dpdu * du;
-		for (int i = 0; i < 3; ++i)	proj.P[i] = p[i];
+		for (int i = 0; i < 3; ++i)	bProj.P[i] = p[i];
 		bProj.u = proj.u + du;
 		uTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, uTex);
 
 		p = P + dpdv * dv;
-		for (int i = 0; i < 3; ++i)	proj.P[i] = p[i];
+		for (int i = 0; i < 3; ++i)	bProj.P[i] = p[i];
 		bProj.v = proj.v + dv; bProj.u = proj.u;
 		vTex[3] = evaluate(bProj, pixelBlending, useMip, mipStrength, uWrap, vWrap, vTex);
 

@@ -77,7 +77,7 @@ namespace lwpp
 		std::string grabPresetName(std::string filename, std::string name);
 	public:
 		SimplePreset(const char *type, const char *name);
-		void SetHandler(PresetHandler *inst);
+		void SetHandler(PresetHandler *inst, bool loadDefault = true);
 		LWError Setup(XPanel& panel, long control);
 		virtual void popCommand(int cid, int cmd);
 		void doCommand(int cmd);

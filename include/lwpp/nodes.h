@@ -50,9 +50,10 @@ namespace lwpp
 	class LWNodeInput // : protected GlobalBase<LWNodeInputFuncs>
 	{
 	private:
-		static LWNodeInputFuncs *inF;
-		NodeID mNodeID = 0;
-		NodeInputID mID = 0;
+		//static LWNodeInputFuncs *inF;
+		TransientGlobal<LWNodeInputFuncs> inF;
+		NodeID mNodeID = nullptr;
+		NodeInputID mID = nullptr;
 		bool do_destroy = false;
 
 		void init();
@@ -181,6 +182,10 @@ namespace lwpp
 		{
 			inF->rename(mID, name);
 		}
+		void rename(const std::string &name)
+		{
+			rename(name.c_str());
+		}
 		ConnectionType type()
 		{
 			return inF->type(mID);
@@ -208,10 +213,11 @@ namespace lwpp
 	class LWNodeOutput // : protected GlobalBase<LWNodeOutputFuncs>
 	{
 	private:
-		static LWNodeOutputFuncs *outF;
-		NodeID mNodeID;
-		NodeOutputID mID;
-		bool do_destroy;
+		//static LWNodeOutputFuncs *outF;
+		TransientGlobal<LWNodeOutputFuncs> outF;
+		NodeID mNodeID = nullptr;
+		NodeOutputID mID = nullptr;
+		bool do_destroy = false;
 
 		void init();
 
@@ -292,6 +298,7 @@ namespace lwpp
 	{
 
 		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event) const = 0;
+		virtual LWNodeInput* addInput(const LWID vendor, const LWID type, const std::string name, NodeInputEvent* inp_event = 0) const = 0;
 	public:
 		/*! @name Node Inputs
 		 *  Functions to add node inputs
@@ -337,6 +344,10 @@ namespace lwpp
 		{
 			return addInput(NOT_BSDF, name, inp_event);
 		}
+		LWNodeInput* addCustomInput(const std::string name, const LWID vendor, const LWID nType,  NodeInputEvent* inp_event = 0) const
+		{
+			return addInput(vendor, nType, name, inp_event);
+		}
 		//@}
 	};
 
@@ -352,7 +363,7 @@ namespace lwpp
 	protected:
 		LWNodeMenuFuncs mFuncs;
 	public:
-		virtual ~NodeMenuBase() {}
+		virtual ~NodeMenuBase() = default;
 		virtual LWNodeMenuFuncs * getMenuFuncs() { return &mFuncs; }
 	};
 
@@ -360,7 +371,7 @@ namespace lwpp
 	class NodeMenu : public NodeMenuBase
 	{
 	public:
-		virtual ~NodeMenu(){}
+		virtual ~NodeMenu() = default;
 		static int countCB(NodeMenuInputType type, void* inputdata, void* userdata)
 		{
 			if (userdata)
@@ -405,19 +416,21 @@ namespace lwpp
 
 	//! LightWave Node
 	//! @ingroup Globals
-	class LWNode : private GlobalBase<LWNodeFuncs>, public NodeInputHelper
+	class LWNode : private TransientGlobal<LWNodeFuncs>, public NodeInputHelper
 	{
 	protected:
 		NodeID id;
-		static LWNodeInputFuncs *inF;
-		static LWNodeOutputFuncs *outF;
+		TransientGlobal<LWNodeInputFuncs> inF;
+		TransientGlobal<LWNodeOutputFuncs> outF;
+		//static LWNodeInputFuncs *inF;
+		//static LWNodeOutputFuncs *outF;
 
-		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event = 0) const
+		virtual LWNodeInput *addInput(ConnectionType type, const std::string name, NodeInputEvent* inp_event = 0) const override
 		{
 		 return new LWNodeInput(id, type, name, inp_event);
 		}
 		// (NodeID _id, const std::string name, LWID vendor, LWID type, NodeInputEvent* inp_event, bool _destroy = true)
-		virtual LWNodeInput *addInput(const LWID vendor, const LWID type, const std::string name, NodeInputEvent* inp_event = 0) const
+		virtual LWNodeInput *addInput(const LWID vendor, const LWID type, const std::string name, NodeInputEvent* inp_event = 0) const override
 		{
 			return new LWNodeInput(id, name, vendor, type, inp_event);
 		}
@@ -577,9 +590,9 @@ namespace lwpp
 		// @}
 
 		NodeOutputID firstOutput(void) {return outF->first(id);}
-		int numOutputs(void) const {return outF->numInputs(id);}
-		NodeOutputID outputByIndex (int n ) const {return outF->byIndex(id, n);}
-		int outputGetIndex (NodeOutputID nid) const
+		int numOutputs(void) {return outF->numInputs(id);}
+		NodeOutputID outputByIndex (int n ) {return outF->byIndex(id, n);}
+		int outputGetIndex (NodeOutputID nid) 
 		{
 			return outF->getIndex(nid);      
 		}
@@ -648,35 +661,37 @@ namespace lwpp
 		}
 		//@}
 
-		void *getValue( NodeValue val) {return outF->getValue(val);}
+		void *getValue( NodeValue val) {return outF->getValue(val);}		
 	};
 
 	//! Utility class for nodes
 	//! @ingroup Globals
-	class LWNodeUtility : protected GlobalBase<LWNodeUtilityFuncs>
+	class LWNodeUtility 
 	{
+	protected:
+		TransientGlobal<LWNodeUtilityFuncs> globPtr;
 	public:
 		LWNodeUtility ()
 		{;}
-		static void Blend ( LWDVector result, LWDVector bg, LWDVector fg, double alpha, BlendingMode mode)
+		void Blend ( LWDVector result, LWDVector bg, LWDVector fg, double alpha, BlendingMode mode)
 		{
 			globPtr->Blend(result, bg, fg, alpha, mode);
 		}
-		static void	NodeAutosize( NodeID id, LWDVector scale, LWDVector position )
+		void	NodeAutosize( NodeID id, LWDVector scale, LWDVector position )
 		{
 			globPtr->NodeAutosize(id, scale, position);
 		}
 
-		static void PlanarMapping(const LWDVector pos, const LWDVector rot, const LWDVector scl,
+		void PlanarMapping(const LWDVector pos, const LWDVector rot, const LWDVector scl,
 															int axis, int world, int utiles, int vtiles, double uoffset, double voffset,
-															const LWDMatrix4 refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)
+															const LWDMatrix4 refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)	const
 		{
 			globPtr->planarMapping(pos, rot, scl, axis, world, utiles, vtiles, uoffset, voffset, refMatrix, sg, proj);
 		}
         
-    static void PlanarMapping(const lwpp::Vector3d& pos, const lwpp::Vector3d& rot, const lwpp::Vector3d& scl,
+    void PlanarMapping(const lwpp::Vector3d& pos, const lwpp::Vector3d& rot, const lwpp::Vector3d& scl,
                               int axis, int world, int utiles, int vtiles, double uoffset, double voffset,
-                              const lwpp::Matrix4x4d& refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj)
+                              const lwpp::Matrix4x4d& refMatrix, const LWShadingGeometry* sg, LWNodalProjection* proj) const
     {
       LWDMatrix4 mat;
       refMatrix.asLWMatrix(mat);
@@ -720,11 +735,18 @@ typedef struct	LWNodeUtilityFuncs_t {
   inline void copySGtoProj(LWShadingGeometry* sg, LWNodalProjection& proj)
   {
     proj.space = LWPROJECTION_LOCAL;
-    *proj.P = *sg->oP;
-    *proj.dPdx = *sg->dPdx;
-    *proj.dPdy = *sg->dPdy;
-    *proj.dPdu = *sg->dPdu;
-    *proj.dPdv = *sg->dPdv;
+		for (int i = 0; i < 4; ++i)
+			for (int j = 0; j < 4; ++j)
+				proj.matrix[i][j] = sg->toLocal[i][j];
+
+		VCPY(proj.P, sg->oP);
+		VCPY(proj.dPdx, sg->dPdx );
+		VCPY(proj.dPdy, sg->dPdy);     
+		VCPY(proj.dPdu, sg->dPdu);
+		VCPY(proj.dPdv, sg->dPdv);
+
+		proj.u = sg->u;
+		proj.v = sg->v;
 
     proj.dudx = sg->dudx;
     proj.dvdx = sg->dvdx;
@@ -774,7 +796,7 @@ typedef struct	LWNodeUtilityFuncs_t {
 			if (mNode) globPtr->drawText(mNode, s, c, x, y);
 		}
 
-		void   blit()
+		void blit()
 		{
 			if (mNode) globPtr->blitNode(mNode);
 		}

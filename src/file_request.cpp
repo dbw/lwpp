@@ -374,11 +374,16 @@ namespace lwpp
 				 return (stat(name, &stat_buf) == 0);
 				 #endif
 				 */
+
+		/*
 		std::fstream fin;
 		fin.open(fileName.c_str(),std::ios::in);
 		bool rc = fin.is_open();
 		fin.close();
 		return rc;
+		*/
+		Stat st(fileName);
+		return st.exists();
 	}
 		
 	/*
@@ -718,21 +723,21 @@ namespace lwpp
 		return makeRelativeName(base, absFileName);
 	}
 
-	std::string makeAbsoluteName(pathList basePath, const std::string relFileName)
+	std::string makeAbsoluteName(pathList basePath, const std::string relFileName, bool exist)
 	{    
 		std::string name, ext;
 		pathList rel = splitFullPath(relFileName, name, ext);
 		// append the relative path to the absolute path
 		basePath.insert(basePath.end(), rel.begin(), rel.end());
 		std::string absName = makeFullFileName(basePath, name, ext);
-		if (FileName::Exists(absName)) return absName;
-		return relFileName;
+		if (exist && FileName::Exists(absName)) return absName;
+		return (exist ? relFileName : absName);
 	}
 
-	std::string makeAbsoluteName(const std::string basePath, const std::string relFileName)
+	std::string makeAbsoluteName(const std::string basePath, const std::string relFileName, bool exist)
 	{
 		pathList base = splitPath(basePath);
-		return makeAbsoluteName(base, relFileName);
+		return makeAbsoluteName(base, relFileName, exist);
 	}
 	
 	struct Stat::statData
@@ -741,10 +746,16 @@ namespace lwpp
 		int result;
 	};
 
-	Stat::Stat(const std::string fName)
+	Stat::Stat(const std::string &fName)
 		: d (new statData)
 	{
 		d->result = _stat(fName.c_str(), &d->buf);
+	}
+
+	Stat::Stat(const char * fName)
+		: d(new statData)
+	{
+		d->result = _stat(fName, &d->buf);
 	}
 
 	Stat::~Stat()

@@ -8,11 +8,11 @@
 
 namespace lwpp
 {
-	class NodeEditor : protected lwpp::GlobalBase<LWNodeEditorFuncs>, public lwpp::Storeable
+	class NodeEditor : protected TransientGlobal<LWNodeEditorFuncs>, public lwpp::Storeable
 	{
 	protected:
-		lwpp::GlobalBase<LWNodeInputFuncs> nodeInFuncs;
-		lwpp::GlobalBase<LWNodeOutputFuncs> nodeOutFuncs;
+		TransientGlobal<LWNodeInputFuncs> nodeInFuncs;
+		TransientGlobal<LWNodeOutputFuncs> nodeOutFuncs;
 
 		NodeEditorID mId = nullptr;
 		bool do_destroy = false;

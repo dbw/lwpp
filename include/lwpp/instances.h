@@ -12,22 +12,24 @@ namespace lwpp {
 
   class InstanceInfo;
 
-  class ItemInstancer : protected GlobalBase<LWItemInstancerFuncs>
+  class ItemInstancer : protected TransientGlobal<LWItemInstancerFuncs>
   {
-    LWItemInstancerID mID;
+    LWItemInstancerID mID = nullptr;
   public:
-    ItemInstancer(LWItemInstancerID id):
+    ItemInstancer(LWItemInstancerID id = nullptr) :
       mID(id)
     {}
 
-    void setID(LWItemInstancerID id)
+    void setID(LWItemInstancerID id = nullptr)
     {
       mID = id;
     }
 
+    bool isValid() const { return mID != nullptr; }
+
     LWItemInstancerID getID() const { return mID; }
 
-    unsigned int numInstances() 
+    unsigned int numInstances()
     {
       return globPtr->numInstances(mID);
     }
@@ -36,10 +38,14 @@ namespace lwpp {
     LWItemInstanceID instanceByIndexID(unsigned int index) {
       return globPtr->instanceByIndex(mID, index);
     }
+    /*
+    * idx is not changed if the id is not found
+    */
+    bool findIndexID(LWItemInstanceID id, unsigned int* idx);
 
   };
 
-  class InstanceInfo :  protected GlobalBase<LWItemInstanceInfo>
+  class InstanceInfo : protected TransientGlobal<LWItemInstanceInfo>
   {
     LWItemInstanceID mInst;
   public:
@@ -81,12 +87,26 @@ namespace lwpp {
     }    
   };
 
-  inline InstanceInfo lwpp::ItemInstancer::instanceByIndex(unsigned int index)
+  inline InstanceInfo ItemInstancer::instanceByIndex(unsigned int index)
   {
     return InstanceInfo(globPtr->instanceByIndex(mID, index));
   }
+
+  inline bool ItemInstancer::findIndexID(LWItemInstanceID id, unsigned int *idx)
+  {
+    if (id == nullptr)
+      return false;
+    auto num = numInstances();    
+    for (auto i = 0; i < num; ++i)
+    {
+      if (instanceByIndexID(i) == id)
+      {
+        *idx = i;
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
-
 #endif LWPP_INSTANCES_H
-

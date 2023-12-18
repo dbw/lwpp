@@ -12,8 +12,6 @@
 
 namespace lwpp
 {
-
-
 	//! Base class for MeshDeformer plugins
 	/*!
 	 * @note Work in progress
@@ -25,7 +23,7 @@ namespace lwpp
 		//! Stores the mID of the object wich the plugin is applied to
 		LWItem Context;
 	public:
-		MeshDeformerHandler(void* g, void* context, LWError* err) : InstanceHandler(g, context, err, LWDISPLACEMENT_HCLASS)
+		MeshDeformerHandler(void* g, void* context, LWError* err) : InstanceHandler(g, context, err, LWMESHDEFORMER_HCLASS)
 		{
 			//Context.SetID((LWItemID)context);
 #if (LWSDKVER_MAJOR < 2020)
@@ -46,7 +44,7 @@ namespace lwpp
 		virtual void            End(LWMeshDeformerAccess*) { ; }
 	};
 
-	//! Wrapper for an DisplacementHandler
+	//! Wrapper for an MeshDeformer
 	/*!
 	 * @ingroup Adaptor
 	 */
@@ -151,6 +149,11 @@ namespace lwpp
 	IMPLEMENT_LWPANELHANDLER(MeshDeformer);
 	//! @ingroup LWPanelAdaptor
 	IMPLEMENT_LWPANELADAPTOR(MeshDeformer, LWMESHDEFORMER_VERSION);
+
+	IMPLEMENT_GIZMO_XPANELHANDLER(MeshDeformer);
+	IMPLEMENT_GIZMO_XPANELADAPTOR(MeshDeformer, LWMESHDEFORMER_VERSION);
+	IMPLEMENT_GIZMO_LWPANELHANDLER(MeshDeformer);
+	IMPLEMENT_GIZMO_LWPANELADAPTOR(MeshDeformer, LWMESHDEFORMER_VERSION);
 
 }
 #endif

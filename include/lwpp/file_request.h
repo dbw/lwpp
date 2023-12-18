@@ -373,9 +373,8 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 	std::string trim(const std::string& s, const char *ws=" \t\r");
 
   //! Return the file name in relation to base
-  std::string makeRelativeName(const std::string basePath, const std::string absFileName);
-  
-  std::string makeAbsoluteName(const std::string basePath, const std::string relFileName);
+  std::string makeRelativeName(const std::string basePath, const std::string absFileName);									   
+  std::string makeAbsoluteName(const std::string basePath, const std::string relFileName, bool exist = true);
 
   typedef std::deque<std::string> pathList;
   std::string makeRelativeName(pathList basePath, const std::string absFileName);
@@ -383,9 +382,7 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
   pathList splitFullPath(std::string sourcePath, std::string &fileName, std::string &ext);
   std::string makeFullFileName(const pathList &path, const std::string &file, const std::string &ext);
   std::string makeFullPath(const pathList &path);
-
-  std::string makeAbsoluteName(pathList basePath, const std::string relFileName);
-  std::string makeAbsoluteName(const std::string basePath, const std::string relFileName);
+	std::string makeAbsoluteName(pathList basePath, const std::string relFileName, bool exist = true);
 
   //! Wrapper to extract stats from a file
 	class Stat
@@ -394,7 +391,8 @@ class DirInfo	: protected GlobalBase<LWDirInfoFunc>
 		statData *d;
 	public:
     //! Construct the class with the full file name
-		Stat(const std::string fName);
+		Stat(const std::string &fName);
+		Stat(const char *fName);
 		~Stat();
     //! Check if the file is a directory
 		bool isDirectory() const;

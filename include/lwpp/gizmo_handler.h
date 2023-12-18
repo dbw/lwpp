@@ -23,7 +23,7 @@ namespace lwpp
     virtual int  gzHandle (LWToolEvent *, int i, LWDVector pos){return 0;}
     virtual int  gzStart  (LWToolEvent *){return 0;}
     virtual int  gzAdjust   ( LWToolEvent *, int i){return 0;}
-    virtual bool gzDown     ( LWToolEvent *){return false;}
+    virtual int gzDown     ( LWToolEvent *){return false;}
     virtual void gzMove     ( LWToolEvent *){;}
     virtual void gzUp       ( LWToolEvent *){;}
     virtual void gzEvent    ( int code){;}

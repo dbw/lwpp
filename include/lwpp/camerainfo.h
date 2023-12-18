@@ -84,7 +84,14 @@ namespace lwpp
 		bool isRightEye ()  {return (flags() & LWCAMF_EYE) != 0;}
 
 		//! Returns a boolean value indicating if the camera has a Limited Region active
-		bool hasLimitedRegion ()  {return (flags() & LWCAMF_LIMITED_REGION) != 0;}
+		bool hasLimitedRegion() { return (flags() & LWCAMF_LIMITED_REGION) != 0; }
+
+		//! Get limited region position
+		
+		void getLimitedRegion(int &out_x0, int &out_y0, int &out_x1, int &out_y1)
+		{
+			globPtr->regionLimits (camera, &out_x0, &out_y0, &out_x1, &out_y1);
+		}
 
 		//! Returns a boolean value indicating if the camera has a Mask active
 		bool hasMask ()  {return (flags() & LWCAMF_MASK) != 0;}
@@ -118,6 +125,12 @@ namespace lwpp
 		*   @param *h Pointer to int where the vertical resolution would be stored
 		*/
 		void   resolution(int *w, int *h) {globPtr->resolution(camera, w, h);}
+
+		/*! Returns the resolution multiplier for the current camera */
+		double resolutionmultiplier()
+		{
+			return globPtr->resolutionmultiplier(camera);
+		};
 
 		/*! Returns the pixel aspect ratio: Image Width / Image Height at an specified time
 		*   If the returned value is greater than 1.0, the pixels are short wide.

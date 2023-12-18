@@ -27,6 +27,14 @@ namespace lwpp
 			plugin->ControlZoom(cid, x, y, region, clickcount);
 	}
 
+	void XPanelInterface::LWXPanelZoomFunc(LWXPanelID panel, unsigned int cid, int x, int y, int* region, int clickcount)
+	{
+		XPanel xpan(panel);
+		XPanelInterface* plugin = static_cast<XPanelInterface*>(xpan.getUserData());
+		if (plugin)
+			plugin->ControlZoom(cid, x, y, region, clickcount);
+	}
+
 	//! Put data into a XPanel View
 	void *XPanelInterface::CB_DataGet(LWInstance inst, unsigned int vid ) 
 	{
@@ -82,17 +90,17 @@ namespace lwpp
 	}
 	void XPanelInterface::CreateViewXPanel(void *host, LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints, bool do_destroy)
 	{
-		LW_XPanel.Create(LWXP_VIEW, controls, do_destroy); // Don't destroy by default
-		LW_XPanel.Describe(desc, CB_DataGet, CB_DataSet);
+		GetXPanel().Create(LWXP_VIEW, controls, do_destroy); // Don't destroy by default
+		GetXPanel().Describe(desc, CB_DataGet, CB_DataSet);
 
-		if (hints) LW_XPanel.Hint(hints);
+		if (hints) GetXPanel().Hint(hints);
 
 		static LWXPanelHint default_hint[] =
 		{
 			XpCHGNOTIFY(LWXPanelChangeNotifyFunc),
 			XpEND
 		};
-		LW_XPanel.Hint(default_hint);
+		GetXPanel().Hint(default_hint);
 		static LWXPanelHint destroy_hint[] =
 		{
 			XpDESTROYNOTIFY(LWXPanelDestroyNotifyFunc),
@@ -100,9 +108,9 @@ namespace lwpp
 		};
 		if (do_destroy)
 		{
-			LW_XPanel.Hint(destroy_hint);
+			GetXPanel().Hint(destroy_hint);
 		}		
-		LW_XPanel.ViewInst(host);
-		LW_XPanel.setUserData(host);
+		GetXPanel().ViewInst(host);
+		GetXPanel().setUserData(host);
 	}
 }

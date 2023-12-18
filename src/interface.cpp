@@ -20,6 +20,17 @@ namespace lwpp
 		return vecItems;
 	}
 
+	std::set<lwpp::LWItem> InterfaceInfo::selectedItemsSet() const
+	{
+		std::set<LWItem> vecItems;
+		const LWItemID* id = globPtr->selItems;
+		// Loops the selection
+		for (int i = 0; id[i]; i++) {
+			vecItems.insert(lwpp::LWItem(id[i]));
+		}
+		return vecItems;
+	}
+
 	bool lwpp::InterfaceInfo::isSelected(lwpp::LWItem item) const
 	{
 		const LWItemID* id = globPtr->selItems;

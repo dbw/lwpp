@@ -45,8 +45,7 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @param v Initial value
 	 */
-	VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, double v, VParmEventSink *sink)
-		: vparmID(0)
+	VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, double v, VParmEventSink *sink)		
 	{
 		Set(v);
 		create(type, name, plug_name, group, sink);
@@ -59,8 +58,7 @@ namespace lwpp
 	 * @param group Group to create this VParm in, may be 0
 	 * @param &v Initial value
 	 */
-	 VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, const Vector3d &v, VParmEventSink *sink)
-		 : vparmID(0)
+	 VParm::VParm(int type, const std::string name, const std::string plug_name, LWChanGroupID group, const Vector3d &v, VParmEventSink *sink)		
 	{
 		Set(v);
 		create(type, name, plug_name, group, sink);
@@ -74,7 +72,6 @@ namespace lwpp
 	 * @param v Initial value
 	 */
 	VParm::VParm(int type, const std::string name, const std::string plug_name, ChannelGroup &group, double v, VParmEventSink *sink)
-		:	vparmID(0)
 	{
 		Set(v);
 		create(type, name, plug_name, group.getID(), sink);
@@ -88,7 +85,6 @@ namespace lwpp
 	 * @param &v Initial value
 	 */
 	 VParm::VParm(int type, const std::string name, const std::string plug_name, ChannelGroup &group, const Vector3d &v, VParmEventSink *sink)
-		 : vparmID(0)		 
 	{
 		Set(v);
 		create(type, name, plug_name, group.getID(), sink);
@@ -96,7 +92,7 @@ namespace lwpp
 
 	VParm::~VParm(void)
 	{
-		(*globPtr->destroy)(vparmID);
+		if(vparmID) (*globPtr->destroy)(vparmID);
 	}
 
 	LWError	VParm::Load(const lwpp::LoadState &ls)
@@ -107,6 +103,38 @@ namespace lwpp
 	LWError	VParm::Save(const lwpp::SaveState &ss)
 	{
 		return (*globPtr->save)( vparmID, ss.getState());
+	}
+
+	void VParm::enableEnvelopes(bool enable)
+	{
+		auto state = (getState() & ~LWVPSF_ENV);
+		setState(state | (enable ? LWVPSF_ENV : 0));
+	}
+
+	std::vector<Envelope> VParm::getEnv()
+	{
+		LWEnvelopeID envlist[3] = { nullptr, nullptr,nullptr };
+		globPtr->getEnv(vparmID, envlist);
+		std::vector<Envelope> ret;
+		ret.reserve(3);
+		for (int i = 0; i < 3; ++i)
+			ret.push_back(envlist[i]);
+		return ret;
+	}
+
+	//! Hides all related envelopes in the graph editor
+
+	void VParm::hide(bool doHide)
+	{
+		int visible = (doHide ? 0 : 1);
+		auto envs = getEnv();
+		for (auto& e : envs)
+			e.EgSet(mGroup, LWENVTAG_VISIBLE, &visible);
+	}
+
+	void VParm::editEnv()
+	{
+		globPtr->editEnv(vparmID);
 	}
 
 	VParm &VParm::operator=(const VParm &from)

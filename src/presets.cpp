@@ -142,13 +142,14 @@ namespace lwpp
 		pathMap.Load();
 	}
 
-	void SimplePreset::SetHandler(PresetHandler *inst)
+	void SimplePreset::SetHandler(PresetHandler *inst, bool loadDefault)
 	{
 		handler = inst;
 		for (PathMap::iterator i = pathMap.begin(); i != pathMap.end(); ++i)
 		{
 			ScanPresets(i->first);
 		}
+		if (!loadDefault) return;
 		const std::string def("default");
 		for (PresetCollection::iterator i = Presets.begin(); i != Presets.end(); ++i)
 		{
@@ -266,7 +267,6 @@ namespace lwpp
 		case 4:
 			return "\03(c:Nc_HILIGHT)Save Settings to File...";
 			break;
-
 
 		default:
 			break;
@@ -525,7 +525,7 @@ namespace lwpp
 							return;
 						}
 					}
-					if (err != 0)
+					if (err != 0 && strlen(err))
 					{
 						LWMessage::Error(std::string("An error occured saving ") + pres_file, err);
 						_unlink(pres_file.c_str());

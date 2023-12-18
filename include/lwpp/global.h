@@ -38,6 +38,9 @@ template<> const char * GlobalBase< base >::m_globalName;
 template<> base * nGlobalBase< base, name>::globPtr = 0; \
 template<> size_t	nGlobalBase< base, name>::usage_count = 0;
 
+#define IMPLEMENT_TRANSIENT_GLOBAL(base, name) \
+/*template<> base * TransientGlobal< base>::globPtr = 0;*/ \
+template<> const char * TransientGlobal< base >::m_globalName = name;
 
 // Added for 2015
 #ifndef LWINF_MODELYEAR
@@ -163,10 +166,10 @@ namespace lwpp
 		static size_t	usage_count; //!< Usage count for the global
 		bool _acquireGlobal()
 		{
-#ifdef _DEBUG
-			//dout << "Acquire: " << m_globalName << "\n";
-#endif 
 			globPtr = reinterpret_cast<G*> (SuperGlobal(m_globalName, GFUSE_ACQUIRE));
+#ifdef LWPP_DEBUG
+			dout << "Aquire: " << m_globalName << " - 0x" << globPtr << "\n";
+#endif 
 			return (globPtr != nullptr);
 		}
 	protected:
@@ -201,8 +204,8 @@ namespace lwpp
 			usage_count--;
 			if (usage_count == 0)
 			{
-#ifdef _DEBUG
-				//dout << "Release: " << m_globalName << "\n";
+#ifdef LWPP_DEBUG
+				dout << "Release: " << m_globalName << " - 0x" << globPtr <<  "\n";
 #endif 
 				SuperGlobal(m_globalName, GFUSE_RELEASE); // release global
 			}
@@ -217,7 +220,7 @@ namespace lwpp
 		const char* getGlobalName() const { return m_globalName; }
 
 		//! Get the pointer to the global
-		G* operator->() { return globPtr; }
+		G* operator->() const { return globPtr; }
 
 		//! Get the pointer to the global
 		virtual G* getGlobal() { return globPtr; }
@@ -263,10 +266,10 @@ namespace lwpp
     const char* getGlobalName() const { return GlobalName; }
 
     //! Get the pointer to the global
-    G* operator->() { return globPtr; }
+    G* operator->() const { return globPtr; }
 
     //! Get the pointer to the global
-    virtual G* getGlobal() { return globPtr; }
+    virtual G* getGlobal() const { return globPtr; }
   };
 
 
@@ -325,25 +328,33 @@ namespace lwpp
 		virtual G* getGlobal() { return globPtr; }
 	};
 
+	template <class G>
+	G* getTransGlobal(const char* globalName)
+	{
+		if (!SuperGlobal) return 0;
+		return reinterpret_cast<G*> (SuperGlobal(globalName, GFUSE_TRANSIENT));
+	}
 	//! Template class base for any TRANSIENT global
-	template<class T>
-	class	TransientGlobalBase
+	template<class G>
+	class	TransientGlobal
 	{
 	protected:
-		static T* globPtr;
+		//static G* globPtr;
+		mutable G* globPtr = nullptr;
+		static const char* m_globalName; //!< Name of the global, should probably be static too		
 	public:
-		//! Constructor
-		explicit TransientGlobalBase(const char* global_name)
-		{
-			globPtr = static_cast<T*> (SuperGlobal(global_name, GFUSE_TRANSIENT));
-		}
-	};
 
-	template <class T>
-	T* getTransGlobal(const char* globalName)
-	{
-		return static_cast<T*> (SuperGlobal(globalName, GFUSE_TRANSIENT));
-	}
+		//! Constructor
+		TransientGlobal()	{	init();	}
+		void init() const { if (globPtr == nullptr) globPtr = getTransGlobal<G>(m_globalName); }
+		//! Check if the global is available
+		bool available() const { init(); return (globPtr != 0); }
+		//! Get the pointer to the global
+		G* operator->() const {	init();	return globPtr;	}
+		//! Get the pointer to the global
+		G* getGlobal() const { init();  return globPtr; }
+		const char* getGlobalName() const { return m_globalName; }
+	};
 
 	DEFINE_GLOBAL(LWGlobalPool)
 

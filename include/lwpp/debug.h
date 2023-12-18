@@ -19,12 +19,23 @@
 
 namespace lwpp
 {
+#ifdef _DEBUGTOFILE
+	class dfstream : public std::ofstream
+	{
+	public:
+		dfstream() : std::ofstream("c:\\lwpp.log", std::ios::out | std::ios::app)
+		{
+			;
+		}
+	};
+#endif
+
 #ifdef _DEBUG
 	#ifdef _DEBUGTOFILE
 		class dostream : public std::ofstream
 		{
 			public:
-				dostream() : std::ofstream("lwpp.log", std::ios::out | std::ios::app)
+				dostream() : std::ofstream("c:\\lwpp.log", std::ios::out | std::ios::app)
 				{
 					;
 				}

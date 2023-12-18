@@ -49,6 +49,9 @@ namespace lwpp
 			 */
 			explicit Vector3 (const T n[3]) 
 				: x(n[0]), y(n[1]), z(n[2]) {}
+			template <typename S>
+			explicit Vector3(const Vector3<S> &v)
+				: x(v.x), y(v.y), z(v.z) {}
 			explicit Vector3 (const Point3<T> &p);
 			//! Construct from radial angles
 			Vector3 (T theta, T phi)
@@ -65,6 +68,7 @@ namespace lwpp
 			inline T Magnitude() const {return sqrt(Sqr(x) + Sqr(y) + Sqr(z));}
 			//! Normalize the Vector3
 			inline Vector3 &Normalize();
+			inline Vector3 getNormalized();
 
 			T &X() {return x;}
 			T &Y() {return y;}
@@ -100,12 +104,17 @@ namespace lwpp
 				return *this;
 			}
 			//! Add a Vector3
-			inline Vector3 operator+ (const Vector3 b) const
+			inline Vector3 operator+ (const Vector3& b) const
 			{
 				return Vector3 (x + b.x, y + b.y, z + b.z);
 			}
+			inline Vector3 operator+ (const T b) const
+			{
+				return Vector3(x + b, y + b, z + b);
+			}
+
 			//! Subtract a Vector3
-			inline Vector3& operator-= (const Vector3 b) {
+			inline Vector3& operator-= (const Vector3& b) {
 				x -= b.x;
 				y -= b.y;
 				z -= b.z;
@@ -125,13 +134,18 @@ namespace lwpp
 				return Vector3 (x - b.x, y - b.y, z - b.z);
 			}
 
-			inline Vector3& operator*= (const Vector3 b) {
+			inline Vector3 operator- (const T b) const
+			{
+				return Vector3(x - b, y - b, z - b);
+			}
+
+			inline Vector3& operator*= (const Vector3 &b) {
 				x *= b.x;
 				y *= b.y;
 				z *= b.z;
 				return *this;
 			}
-			inline Vector3 operator* (const Vector3 b) const
+			inline Vector3 operator* (const Vector3 &b) const
 			{
 				return Vector3 (x * b.x, y * b.y, z * b.z);
 			}
@@ -148,14 +162,14 @@ namespace lwpp
 				return Vector3 (x * b, y * b, z * b);
 			}
 
-			inline Vector3& operator/= (const Vector3 b)
+			inline Vector3& operator/= (const Vector3 &b)
 			{
 				x /= b.x;
 				y /= b.y;
 				z /= b.z;
 				return *this;
 			}
-			inline Vector3 operator/ (const Vector3 b) const
+			inline Vector3 operator/ (const Vector3 &b) const
 			{
 				return Vector3 (x / b.x, y / b.y, z / b.z);
 			}
@@ -237,12 +251,20 @@ namespace lwpp
 				y = y > 0 ? y : -y;
 				z = z > 0 ? z : -z;
 			}
-      void doClamp(const T min = 0, const T max = 1)
+      inline void doClamp(const T min = 0, const T max = 1)
 			{				
-				x = Clamp(x, min, max);
-				y = Clamp(y, min, max);
-				z = Clamp(z, min, max);
+				x = lwpp::Clamp(x, min, max);
+				y = lwpp::Clamp(y, min, max);
+				z = lwpp::Clamp(z, min, max);
 			}
+			inline Vector3 Clamp(const T min = 0, const T max = 1)
+			{
+				x = lwpp::Clamp(x, min, max);
+				y = lwpp::Clamp(y, min, max);
+				z = lwpp::Clamp(z, min, max);
+				return *this;
+			}
+
 	};
 
 
@@ -284,6 +306,14 @@ namespace lwpp
 		auto m = Magnitude();
 		if (m != 0.0) *this /= m;
 		return *this;
+	}
+
+	template <typename T>
+	inline Vector3<T> Vector3<T>::getNormalized()
+	{
+		Vector3<T> v(*this);
+		v.Normalize();
+		return v;
 	}
 
 	//! Create a coordinate system out of one vector

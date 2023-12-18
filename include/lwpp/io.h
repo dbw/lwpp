@@ -365,7 +365,7 @@ namespace lwpp
 	};
 
 	//! @ingroup Globals
-	class File : protected GlobalBase<LWFileIOFuncs>
+	class File : protected TransientGlobal<LWFileIOFuncs>
 	{
 		public:
 			enum ioType {FILE_LOAD, FILE_SAVE};

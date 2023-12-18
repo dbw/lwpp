@@ -26,8 +26,9 @@ namespace lwpp
 
 //! Wrapped LWMessageFuncs
     DEFINE_GLOBAL(LWMessageFuncs)
-	class LWMessage : protected GlobalBase<LWMessageFuncs>
+	class LWMessage  
 	{
+		static TransientGlobal<LWMessageFuncs> globPtr;
 	public:
 		LWMessage() {;}
 		void static Info(const std::string &a)

@@ -1222,7 +1222,7 @@ namespace lwpp
 	 *  Wrapper for LWPanelFuncs
 	 *	The functions associated with the panel.
 	 */
-	class LWPanel : public GlobalBase<LWPanelFuncs>
+	class LWPanel : public TransientGlobal<LWPanelFuncs>
 	{
 	private:
 		LWPanelID id = nullptr; //!< ID of the panel
@@ -2189,7 +2189,7 @@ namespace lwpp
 				static LWXPanelDataDesc xpDesc[];
 
 				//Add a function to your class to get the XPanel
-				LWXPanelID getXPanel();
+				LWXPanelID GetXPanel();
 
 				// Constructor & Destructor
 				yourclass (void *priv, void *context, LWError *err);
@@ -2234,14 +2234,14 @@ namespace lwpp
 			// Destructor
 			yourclass::~yourclass(){ ; }
 			
-			LWXPanelID yourclass::getXPanel()
+			LWXPanelID yourclass::GetXPanel()
 			{
-				if (!LW_XPanel.isValid())
+				if (!GetXPanel.isValid())
 				{
 					// Create the View for the XPanel
 					CreateViewXPanel(xpCtrl,xpDesc,xpHint);
 				}
-				return LW_XPanel.getID();
+				return GetXPanel.getID();
 			}
 
 			// LWPANEL CREATION
@@ -2251,7 +2251,7 @@ namespace lwpp
 				Panel.Create("Your Panel Title Here");
 
 				// ADD THE CONTROLS
-				control = Panel.AddXPanel("Xpanel", getXPanel());
+				control = Panel.AddXPanel("Xpanel", GetXPanel());
 
 				// Opens a NON Modal Panel
 				Panel.Open(PANF_FRAME | PANF_NOBUTT | PANF_RESIZE);
@@ -2812,7 +2812,7 @@ namespace lwpp
 	};
 
 	//! @ingroup Globals
-	class LWRaster : public GlobalBase<LWRasterFuncs>
+	class LWRaster : public TransientGlobal<LWRasterFuncs>
 	{
 		LWRasterID id = nullptr;
 		int lastX = -1, lastY = -1;

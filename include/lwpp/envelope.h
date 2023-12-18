@@ -8,7 +8,7 @@
 namespace lwpp
 {
   //! @ingroup Globals
-  class Envelopes : public GlobalBase<LWEnvelopeFuncs>
+  class Envelopes : public TransientGlobal<LWEnvelopeFuncs>
   {
   public:
     Envelopes( )  {;}
@@ -115,7 +115,7 @@ namespace lwpp
 
 
   //! @ingroup Entities
-  class Envelope : public GlobalBase<LWEnvelopeFuncs>
+  class Envelope : public TransientGlobal<LWEnvelopeFuncs>
   {
     LWEnvelopeID env;
     bool close_on_destroy;
@@ -264,6 +264,11 @@ namespace lwpp
       KeySet(key, LWKEY_PARAM_3, &envkey.p3);
     }
 
+    void Set(LWEnvKeyframeID key, double val, LWKeyTag tag = LWKEY_VALUE)
+    {
+        KeySet(key, tag, val);
+    }
+
     int SetEnvEvent ( LWEnvEventFunc  ev, void *data)
     {
       return globPtr->setEnvEvent(env, ev, data);
@@ -364,72 +369,6 @@ namespace lwpp
     }
   };
 
-  class lwChannel : public GlobalBase<LWChannelInfo>
-  {
-    LWChannelID chanID = nullptr;
-  public:
-    lwChannel (LWChannelID chan = 0)
-      : chanID(chan)
-    {
-      ;
-    }
-    operator bool() const { return chanID != nullptr; }
-    bool next(LWChanGroupID cgroup)
-    {
-      chanID = globPtr->nextChannel(cgroup, chanID);
-      return (chanID != 0);
-    }
-    Envelope getEnvelope()
-    {
-      return Envelope(globPtr->channelEnvelope(chanID));
-    }
-    const char *getName()
-    {
-      return globPtr->channelName(chanID);
-    }
-    LWChanGroupID getParent()
-    {
-      return globPtr->channelParent(chanID);
-    }
-    int getType()
-    {
-      if (chanID) return globPtr->channelType(chanID);
-      return LWET_FLOAT;
-    }
-  };
-  /*
-typedef struct st_LWChannelInfo {
-  // next group, first on NULL in parent group or root on NULL
-  LWChanGroupID        (*nextGroup)       ( LWChanGroupID parent,
-                                            LWChanGroupID group);
-  // next channel, first on NULL in parent group or root on NULL
-  LWChannelID          (*nextChannel)     ( LWChanGroupID parent,
-                                            LWChannelID chan);
-  const char           *(*groupName)      ( LWChanGroupID group);
-  const char           *(*channelName)    ( LWChannelID chan);
-  LWChanGroupID        (*groupParent)     ( LWChanGroupID group);
-  LWChanGroupID        (*channelParent)   ( LWChannelID chan);
-  int                  (*channelType)     ( LWChannelID chan);
-  double               (*channelEvaluate) ( LWChannelID chan, LWTime chantime);
-  LWEnvelopeID         (*channelEnvelope) ( LWChannelID chan);
-  int                  (*setChannelEvent) ( LWChannelID chan,
-                                            LWChanEventFunc ev, void *data );
-  const char           *(*server)         ( LWChannelID chan,
-                                            const char *cls, int idx );
-
-  // Version 2 additions, all index arg.s are 1-based, matching layout
-  unsigned int         (*serverFlags)     ( LWChannelID chan,
-                                          const char *cls, int idx );
-  LWInstance           (*serverInstance)  ( LWChannelID chan,
-                                          const char *cls, int idx );
-  //  Return 1-based index, or 0 on failure
-  int                  (*serverApply)     ( LWChannelID chan, const char *cls,
-                                          const char *name, int flags );
-  void                 (*serverRemove)    ( LWChannelID chan, const char *cls,
-                                          const char *name, LWInstance inst );
-} LWChannelInfo;
-
-  */
 }
 
 #endif // LWPP_ENVELOPE_H

@@ -32,6 +32,16 @@ namespace lwpp
 			}
 		}
 
+		Matrix3x3(const Vector3<T>& a, const Vector3<T>& b, const Vector3<T>& c)
+		{
+			for (int i = 0; i < 3; ++i)
+			{
+				m[0][i] = a[i];
+				m[1][i] = b[i];
+				m[2][i] = c[i];
+			}
+		}
+
 		T* asLW() { return &m[0][0]; }
 
 		Matrix3x3& operator=(const Matrix3x3& v)
@@ -102,6 +112,18 @@ namespace lwpp
 			return Matrix3x3(r);
 		}
 
+		inline Matrix3x3 getTransposed()
+		{
+			Matrix3x3 ret;
+			for (int i = 0; i < 3; ++i)
+			{
+				for (int j = 0; j < 3; ++j)
+				{
+					ret.m[i][j] = m[j][i];
+				}
+			}
+			return ret;
+		}
 
 		/*!
 		* Transform a Point3d with a Matrix4x4
@@ -158,7 +180,7 @@ namespace lwpp
 			return w;
 		}
 		/*!
-		* Transform a Vector3d with a Matrix4x4
+		* Transform a Vector3d with a Matrix3x3
 		* @relates Vector3d
 		*/
 		inline Vector3<T> transform(const Vector3<T> &v) const
@@ -171,6 +193,8 @@ namespace lwpp
 		{
 			return transform(v);
 		}
+
+
 
 	};                 
 

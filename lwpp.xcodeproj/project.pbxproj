@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		231531732624FCC000717AE2 /* liblwpp2020.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2341DECD24532F3C00F6E6A0 /* liblwpp2020.a */; };
 		2341DEA924532F3C00F6E6A0 /* colour_management.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23EE98E712D4BAF30091E67C /* colour_management.cpp */; };
 		2341DEAA24532F3C00F6E6A0 /* contextmenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1D80BFF9E4000061CB6 /* contextmenu.cpp */; };
 		2341DEAB24532F3C00F6E6A0 /* file_request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87ECB1DA0BFF9E4000061CB6 /* file_request.cpp */; };
@@ -37,7 +38,6 @@
 		2341DEC424532F3C00F6E6A0 /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8766711E0FD69E0C00DB9C05 /* surface.cpp */; };
 		2341DEC524532F3C00F6E6A0 /* platform_cocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8760DBE3107379E400BC9B26 /* platform_cocoa.mm */; };
 		2341DEC624532F3C00F6E6A0 /* platform_cocoa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8760DBDA1073656300BC9B26 /* platform_cocoa.cpp */; };
-		2341DEC924532F3C00F6E6A0 /* liblwpp.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = 878B761910E227BD0046A22C /* liblwpp.a */; };
 		2353314D1A371A25006D6600 /* comring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314A1A371A25006D6600 /* comring.cpp */; };
 		2353314E1A371A25006D6600 /* command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314B1A371A25006D6600 /* command.cpp */; };
 		2353314F1A371A25006D6600 /* interface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2353314C1A371A25006D6600 /* interface.cpp */; };
@@ -78,7 +78,7 @@
 			dstPath = /usr/local/lib;
 			dstSubfolderSpec = 0;
 			files = (
-				2341DEC924532F3C00F6E6A0 /* liblwpp.a in CopyFiles */,
+				231531732624FCC000717AE2 /* liblwpp2020.a in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,7 +441,8 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "lwpp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -545,6 +546,7 @@
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = x86_64;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -579,10 +581,10 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx10.11;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -591,6 +593,7 @@
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = x86_64;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -627,9 +630,10 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = lwpp;
-				SDKROOT = macosx10.11;
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};

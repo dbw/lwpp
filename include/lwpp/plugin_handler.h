@@ -14,13 +14,16 @@
 
 namespace lwpp
 {
-	class InstanceUpdate : public GlobalBase<LWInstUpdate> 
+	class InstanceUpdate 
 	{		
+		static TransientGlobal<LWInstUpdate> globPtr;
 	public:
-		virtual ~InstanceUpdate() {}
+		virtual ~InstanceUpdate() {
+			globPtr.init();
+		}
 		static void Update (const char *className, LWInstance inst)
 		{
-			if ((globPtr) && (className))	globPtr(className, inst);
+			if ((globPtr.available()) && (className))	globPtr.getGlobal()(className, inst);
 		}
 	};
 
@@ -40,14 +43,21 @@ namespace lwpp
 			UNUSED(err);
 			return;
 		}
-		virtual ~InstanceHandler() {;}
+		virtual ~InstanceHandler() = default;
 		virtual const char *DescLn() {return m_description.c_str();}
 		void SetName(const char *n) {m_pluginName = n;}
 		void SetClassName(const char *n) {m_className = n;}
 		void SetDescription(const char *n) {m_description = n;}
 		void SetDescription(const std::string& s) {m_description = s;}
-		void Update () {m_update.Update(m_className, this);}
+		void Update () {
+#ifdef _DEBUG
+			dout << "Update: " << this << " (" << m_className <<  ")\n";
+#endif	
+			m_update.Update(m_className, this);
+		}
 		void Update (const char *cName) {m_update.Update(cName, this);}
+		void Update(void *inst) { m_update.Update(m_className, inst); }
+		void Update(const char* cName, void* inst) { m_update.Update(cName, inst); }
 	};
 
 	//! Wrapper for InstanceHandler
@@ -179,6 +189,7 @@ namespace lwpp
 	protected:
 		lwpp::LWItemTracker ItemTracker;
 	public:	
+		virtual ~ItemHandler() = default;
 		virtual const LWItemID *UseItems()
 		{
 			return ItemTracker.useItems();
@@ -256,12 +267,13 @@ namespace lwpp
 		LWTime currentTime;
 		int renderMode;
 	public:
-		RenderHandler(void) : currentFrame(0), currentTime(0), renderMode(LWINIT_NONE) {;}
+		RenderHandler() : currentFrame(0), currentTime(0), renderMode(LWINIT_NONE) {;}
+		virtual ~RenderHandler() = default;
 
 		virtual LWError Init(int mode)
 		{
 			renderMode = mode;
-			return 0;
+			return nullptr;
 		}
 		virtual void Cleanup()
 		{
@@ -272,7 +284,7 @@ namespace lwpp
 		{
 			currentFrame = frame;
 			currentTime = time;
-			return 0;
+			return nullptr;
 		}
 	};
 
@@ -294,7 +306,7 @@ namespace lwpp
 				inst->newTime = RenderAdaptor::NewTime;
 			}
 		}
-	private:
+	private:		
 		static LWError Init (LWInstance instance, int mode)
 		{
 			try
@@ -365,14 +377,30 @@ namespace lwpp
 		}
 	};
 
+//#define XPAN_STAT virtual lwpp::XPanel& GetXPanel() override {static lwpp::XPanel pan; return pan;}
+#define XPAN_STAT 
+
 	//! Base class for all plugins that use an XPanels user interface
 	class XPanelInterface : public XPanelView
 	{
-	protected:
-		lwpp::DynamicHints mDynaHints;
-		lwpp::DynamicControlData mDynaControl;
 	public:
 		XPanel LW_XPanel;
+		//virtual XPanel &GetXPanel() = 0;
+		XPanel& GetXPanel() { return LW_XPanel; }
+	protected:
+		DynamicHints mDynaHints;
+		DynamicControlData mDynaControl;
+	public:
+		XPanelInterface() = default;
+		virtual ~XPanelInterface()
+		{				
+			if (!mDynaControl.isEmpty())
+			{
+				// make sure a panel is destroyed if there's dynamic control data
+				GetXPanel().setAutoDestroy(true);
+			}			
+			GetXPanel().Destroy();
+		}
 
 		//! Put data into a XPanel View
 		virtual void *DataGet(unsigned int ) override
@@ -397,20 +425,20 @@ namespace lwpp
 
 		virtual void PanelDestroyNotify(void)
 		{
-			LW_XPanel.setID(0); // just set the ID to 0 and don't actually close the XPanel
-			LW_XPanel.DestroyOnExit(false); // let LW handle this now
+			GetXPanel().setID(0); // just set the ID to 0 and don't actually close the XPanel
+			GetXPanel().DestroyOnExit(false); // let LW handle this now
 		}
 
 		virtual void ControlDraw ( unsigned int , XPDrawArea &)
 		{
 			;
 		}
-		virtual void ControlZoom ( unsigned int , int , int , int *, int )
+		virtual void ControlZoom ( unsigned int cid, int x, int y, int *rect, int clickcount )
 		{
 			;
 		}
 
-		virtual void PopCommand (int, int) override
+		virtual void PopCommand (int cid, int i_cmd) override
 		{
 			;
 		}
@@ -421,6 +449,7 @@ namespace lwpp
 		static void LWXPanelControlDrawFunc (LWXPanelID panel, unsigned int cid, LWXPDrAreaID reg, int w, int h );
 
 		static void LWXPanelControlZoomFunc (LWXPanelID panel, unsigned int cid, int x, int y, int *region, int clickcount );
+		static void LWXPanelZoomFunc(LWXPanelID panel, unsigned int cid, int x, int y, int* region, int clickcount);
 
 		//! Put data into a XPanel View
 		static void *CB_DataGet(LWInstance inst, unsigned int vid );
@@ -442,10 +471,6 @@ namespace lwpp
 		virtual void CreateViewXPanel(LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints = 0, bool do_destroy = false);
 
 		virtual void CreateViewXPanel(void *host, LWXPanelControl *controls, LWXPanelDataDesc *desc, LWXPanelHint *hints = 0, bool do_destroy = false);
-
-		XPanelInterface(){;}
-
-		virtual ~XPanelInterface(){;}
 
 		virtual int Interface (int version, LWInterface *local, void *serverdata)
 		{
@@ -497,7 +522,7 @@ namespace lwpp
 			return AFUNC_OK;
 		}
 
-		virtual ~GizmoHandler() { ; }
+		virtual ~GizmoHandler() = default;
 
 		virtual void gzDone() { ; }
 		virtual void gzDraw(lwpp::CustomObjAccess &access) { ; }
@@ -525,7 +550,7 @@ namespace lwpp
 		}
 		static int Gizmo(int version, GlobalFunc *global, void *loc, void *serverdata)
 		{
-			if (version < LWINTERFACE_VERSION) return AFUNC_BADVERSION;
+			if (version < LWGIZMO_VERSION) return AFUNC_BADVERSION;
 			try
 			{
 				if (loc)
@@ -684,7 +709,7 @@ namespace lwpp
 	}
 
 #define IMPLEMENT_GIZMOHANDLER(pluginClass) \
-	class Gizmo##pluginClass##Handler : public pluginClass##Handler,	public GizmoInterface \
+	class Gizmo##pluginClass##Handler : public pluginClass##Handler,	public GizmoHandler \
 	{ \
 	public: \
 	Gizmo##pluginClass##Handler(void *g, void *context, LWError *err) \

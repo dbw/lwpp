@@ -12,6 +12,8 @@
 #include <lwpp/wrapper.h>
 #include <lwpp/storeable.h>
 #include <lwpp/vector3d.h>
+#include <lwpp/command.h>
+#include <lwpp/nodes.h>
 
 #ifdef _DEBUG
 #include <lwpp/debug.h>
@@ -191,14 +193,18 @@ namespace lwpp
 	//! @ingroup Globals
 	class Image : public PopUpCallback, public Storeable, protected GlobalBase<LWImageList>
 	{
+	public:
+		enum { PRV_RGBA, PRV_RGB, PRV_LUMA, PRV_R, PRV_G, PRV_B, PRV_A };
 	private:
 		LWImageID id = nullptr;
 		struct
 		{
 			bool keepAspect : 1;
 			bool checkered : 1;
-		} mFlags{ true, true };
-	public:
+			unsigned int previewMode : 3;
+		} mFlags{ true, true, PRV_RGBA };
+	public:		
+
 		virtual const char *popName(int n);
 
 		virtual size_t popCount(void); 
@@ -223,6 +229,11 @@ namespace lwpp
 		}
 
 		LWImageID saverNotify() const { return id; }
+
+		void setPreviewMode(int m)
+		{
+			mFlags.previewMode = m;
+		}
 
 		static LWImageID ImageSaverCB(LWInstance inst)
 		{
@@ -261,7 +272,15 @@ namespace lwpp
 			if (id) return globPtr->name(id);
 			return none;
 		}
-		const char *filename(LWFrame frame = 0) const {return globPtr->filename(id, frame);}
+		const char *imagename(const char *alt = "") const
+		{
+			if (id) return globPtr->name(id);
+			return alt;
+		}
+		const char *filename(LWFrame frame = 0) const {
+			if (id) return globPtr->filename(id, frame);
+			return "";
+		}
 		bool replace (const std::string &newFile)
 		{
 			return globPtr->replace(id, newFile.c_str()) != 0;
@@ -278,38 +297,42 @@ namespace lwpp
 
 		bool isColor (void) const
 		{
-			return (globPtr->isColor(id) != 0);
+			if (id) return (globPtr->isColor(id) != 0);
+			return false;
 		}
 		bool hasAlpha (void) const 
 		{
-			return (globPtr->hasAlpha(id) != 0);
+			if (id) return (globPtr->hasAlpha(id) != 0);
+			return false;
 		}		
 		void size (int &w, int &h) const 
 		{
-			globPtr->size(id, &w, &h);
+			if (id) globPtr->size(id, &w, &h);
 		}
 		void GetSize(int &w, int &h) const
 		{
-			globPtr->size(id, &w, &h);
+			if (id) globPtr->size(id, &w, &h);
 		}
 		int getWidth (void) const 
 		{
-			int w, h;
-			globPtr->size(id, &w, &h);
+			int w = 0, h = 0;
+			GetSize(w, h);
 			return w;
 		}
 		int getHeight (void) const 
 		{
-			int w, h;
-			globPtr->size(id, &w, &h);
+			int w = 0, h = 0;
+			GetSize(w, h);
 			return h;
 		}
 
 		float getAspect() const
 		{
-			int w, h;
-			globPtr->size(id, &w, &h);
-			return static_cast<double>(w) / static_cast<double>(h);
+			int w = 0, h = 0;
+			GetSize(w, h);
+
+			if (h != 0) return static_cast<double>(w) / static_cast<double>(h);
+			return 1.0;
 		}
 		
 #ifdef WIN32
@@ -320,7 +343,7 @@ namespace lwpp
 
 		void RGB (int x, int y, LWBufferValue val[3]) const 
 			{
-			globPtr->RGB(id, x, y, val);
+			if (id) globPtr->RGB(id, x, y, val);
 		}
 		void needAA ()
 		{
@@ -346,12 +369,13 @@ namespace lwpp
 
 		LWBufferValue alpha (int x, int y) const 
 		{
-			return globPtr->alpha(id, x, y);
+			if (id) return globPtr->alpha(id, x, y);
+			return 0.0;
 		}
 		
 		LWBufferValue luma (int x, int y) const 
 		{
-			return globPtr->luma(id, x, y);
+			if (id) return globPtr->luma(id, x, y);
 		}
 
 		double evaluate(double u, double v,
@@ -365,23 +389,23 @@ namespace lwpp
 			return 0.0;
 		}
 
-		double evaluate(LWNodalProjection proj,
+		double evaluate(const LWNodalProjection &proj,
 										int pixelBlending, int useMip, double mipStrength,
 										LWTextureWrap uWrap, LWTextureWrap vWrap, LWDVector colour) const
 		{
-			if (id) return globPtr->evaluateImage(id, proj.u, proj.v, proj.dudx, proj.dvdx, proj.dudy, proj.dvdy,
+			return evaluate(proj.u, proj.v, proj.dudx, proj.dvdx, proj.dudy, proj.dvdy,
 																						pixelBlending, useMip, mipStrength,
 																						uWrap, vWrap, colour);
-			return 0.0;
 		}
 
-		Vector3d evaluateBumpGradient(LWNodalProjection proj,
+		Vector3d evaluateBumpGradient(const LWNodalProjection &proj,
 																	int pixelBlending, int useMip, double mipStrength, double bumpStrength,
 																	LWTextureWrap uWrap, LWTextureWrap vWrap) const;
 
 		LWPixmapID evaluate (LWTime t)
 		{
-			return globPtr->evaluate(id, t);
+			if (id) return globPtr->evaluate(id, t);
+			return nullptr;
 		}
 
 		virtual LWError Load(const LoadState &ls )
@@ -402,10 +426,20 @@ namespace lwpp
 		static void DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h);
 		//! Draws the image into an XPanel control
 		void drawXpanel(LWXPDrAreaID reg, int w, int h);
+		void drawNodePreview(NodeDraw& nd, int width, int height);
+		// Double click to view in the image viewer
+		static void ControlZoom(LWXPanelID pan, unsigned int cid, int x, int y, int* rect, int clickcount);
+		void controlZoom(unsigned int cid, int x, int y, int* rect, int clickcount)
+		{
+			if (id == nullptr)
+				return;
+			if (clickcount == 2) 
+					lwpp::SendCommand("SendImageToIView", " \"%s\" \"%s\"", filename(), name());			
+		}
 
 	};
 
-	lwpp::Vector3d ComputeBump(LWNodalProjection &proj, double dtu, double dtv, double displace, double bumpStrength);
+	lwpp::Vector3d ComputeBump(const LWNodalProjection &proj, double dtu, double dtv, double displace, double bumpStrength);
 	
 	#define IMAGECHANGE_COMRING "lwppImageChange"
 	

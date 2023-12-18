@@ -6,6 +6,7 @@
 #define LWPP_XPANEL_H
 #include <lwxpanel.h>
 #include <lwpp/global.h>
+#include <lwpp/dynamicHints.h>
 
 namespace lwpp
 {
@@ -58,52 +59,52 @@ namespace lwpp
 #define XPC_TIME "time"
 #define XPC_TIME_ENV "time-env"
 
-
   //! Use any RGB value as a LW pen colour
   #define LW_COLOUR(red, green, blue) (0x01000000 | (red<<16) | (blue<<8) | green)
-DEFINE_GLOBAL(LWXPanelFuncs)
+	DEFINE_GLOBAL(LWXPanelFuncs)
  
 	//! Wrapper for LWXPanelFuncs
-	class XPanelFuncs : public GlobalBase<LWXPanelFuncs>
+	class XPanelFuncs  
+	: public TransientGlobal<LWXPanelFuncs>
 	{
 	public:
 		XPanelFuncs()
 		{
 			;
 		}
-		static LWXPanelID Create (int type, LWXPanelControl *ctrlDesc = 0)
+		LWXPanelID Create (int type, LWXPanelControl *ctrlDesc = 0)
 		{
 			return globPtr->create(type, ctrlDesc);
 		}
 		void Destroy (LWXPanelID lwxpanel)
 		{
-			if (lwxpanel)  globPtr->destroy(lwxpanel);
+			if (lwxpanel) globPtr->destroy(lwxpanel);
 		}
-		static void Describe(LWXPanelID lwxpanel, LWXPanelDataDesc *ddesc, LWXPanelGetFunc *getf = 0, LWXPanelSetFunc *setf = 0)
+		void Describe(LWXPanelID lwxpanel, LWXPanelDataDesc *ddesc, LWXPanelGetFunc *getf = 0, LWXPanelSetFunc *setf = 0)
 		{
 			globPtr->describe(lwxpanel, ddesc, getf, setf);
 		}
-		static void Hint(LWXPanelID lwxpanel,LWXPanelHint *hint, unsigned int ctl = 0)
+		void Hint(LWXPanelID lwxpanel,LWXPanelHint *hint, unsigned int ctl = 0)
 		{
 			globPtr->hint(lwxpanel, ctl, hint);
 		}
-		static int Post(LWXPanelID lwxpanel)
+		int Post(LWXPanelID lwxpanel)
 		{
 #ifdef _DEBUG
-		std::hex(dout);
-		dout << "Opening XPanel: " << lwxpanel << " (Post)\n";	
+		//std::hex(dout);
+		//dout << "Opening XPanel: " << lwxpanel << " (Post)\n";	
 #endif
 			return globPtr->post(lwxpanel);
 		}
-		static int Open(LWXPanelID lwxpanel)
+		int Open(LWXPanelID lwxpanel)
 		{
 			return globPtr->open(lwxpanel);
 		}
-		static void ViewInst(LWXPanelID lwxpanel,void *inst)
+		void ViewInst(LWXPanelID lwxpanel,void *inst)
 		{
 			globPtr->viewInst(lwxpanel, inst);
 		}
-		static void ViewRefresh(LWXPanelID lwxpanel)
+		void ViewRefresh(LWXPanelID lwxpanel)
 		{
 			globPtr->viewRefresh(lwxpanel);
 		}
@@ -114,7 +115,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		 * @param mID ID of the control or 0 for the panel
 		 * @return The user data
 		 */
-		static void *getUserData(LWXPanelID lwxpanel,unsigned int id = 0)
+		void *getUserData(LWXPanelID lwxpanel,unsigned int id = 0)
 		{
 			return globPtr->getData(lwxpanel, id);
 		}
@@ -124,53 +125,53 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		 * @param *data The user data
 		 * @param mID ID of the control or 0 for the panel
 		 */
-		static void setUserData(LWXPanelID lwxpanel, void *data, unsigned int id = 0)
+		void setUserData(LWXPanelID lwxpanel, void *data, unsigned int id = 0)
 		{
 			globPtr->setData(lwxpanel, id, data);
 		}
 
 		// Forms
-		static void *formGet(LWXPanelID lwxpanel,unsigned int id)
+		void *formGet(LWXPanelID lwxpanel,unsigned int id)
 		{
 			return globPtr->formGet(lwxpanel, id);
 		}
-		static char *getFormString (LWXPanelID lwxpanel,unsigned int id)
+		char *getFormString (LWXPanelID lwxpanel,unsigned int id)
 		{
 			return (char *) formGet(lwxpanel, id);
 		}
-		static int getFormInt (LWXPanelID lwxpanel,unsigned int id)
+		int getFormInt (LWXPanelID lwxpanel,unsigned int id)
 		{
 			return *((int *) formGet(lwxpanel, id));
 		}
-		static float getFormFloat (LWXPanelID lwxpanel,unsigned int id)
+		float getFormFloat (LWXPanelID lwxpanel,unsigned int id)
 		{
 			return *((float *) formGet(lwxpanel, id));
 		}
-		static void formSet(LWXPanelID lwxpanel,unsigned int id, void* data)
+		void formSet(LWXPanelID lwxpanel,unsigned int id, void* data)
 		{
 			globPtr->formSet(lwxpanel, id, data);
 		}
-		static void setForm(LWXPanelID lwxpanel,unsigned int id, int data)
+		void setForm(LWXPanelID lwxpanel,unsigned int id, int data)
 		{
 			formSet(lwxpanel, id, &data);
 		}
-		static void setForm(LWXPanelID lwxpanel,unsigned int id, float data)
+		void setForm(LWXPanelID lwxpanel,unsigned int id, float data)
 		{
 			formSet(lwxpanel, id, &data);
 		}
-		static void setForm(LWXPanelID lwxpanel,unsigned int id, char *data)
+		void setForm(LWXPanelID lwxpanel,unsigned int id, char *data)
 		{
 			formSet(lwxpanel, id, (void *)data);
 		}
-		static void setForm(LWXPanelID lwxpanel,unsigned int id, const char *data)
+		void setForm(LWXPanelID lwxpanel,unsigned int id, const char *data)
 		{
 			formSet(lwxpanel, id, (void *)data);
 		}
-		static int getVersion() 
+		int getVersion() 
 		{
 			return globPtr->version;
 		}
-		static LWXPDrawFuncs *getDrawFuncs() 
+		LWXPDrawFuncs *getDrawFuncs() 
 		{
 			return globPtr->drawf;
 		}
@@ -277,6 +278,9 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		}
 		void Destroy ()
 		{
+#ifdef _DEBUG
+			dout << "XPanel.Destroy() id: " << lwxpanel << " Destroy on Exit: " << destroy_on_exit << "\n";
+#endif
 			if (destroy_on_exit && lwxpanel) globPtr->destroy(lwxpanel);
 			lwxpanel = 0;
 		}
@@ -317,6 +321,10 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		{
 			if (lwxpanel)	globPtr->hint(lwxpanel, ctl, hint);
 		}
+		void Hint(DynamicHints &hints, unsigned int ctl = 0)
+		{
+			Hint(hints.get(), ctl);
+		}
 		LWXPanelID getID() const
 		{
 			return lwxpanel;
@@ -350,7 +358,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 		{
 			if (lwxpanel) globPtr->viewRebuild(lwxpanel);
 		}
-		static void ViewRefresh(LWXPanelID panel)
+		void ViewRefresh(LWXPanelID panel)
 		{
 			if (panel) globPtr->viewRefresh(panel);
 		}
@@ -474,15 +482,15 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 			formSet(id, (void *)data.c_str());
 		}
 
-		static int getVersion() 
+		int getVersion() 
 		{
 			return globPtr->version;
 		}
-		static LWXPDrawFuncs *getDrawFuncs() 
+		LWXPDrawFuncs *getDrawFuncs() 
 		{
 			return globPtr->drawf;
 		}
-		static void DestroyNotifyCB(void *panData)
+		void DestroyNotifyCB(void *panData)
 		{
 			if (panData)
 			{
@@ -510,7 +518,7 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 	template <typename T>
 	void LWXPanelBtnClickFunc (LWXPanelID panel, int cid)
 	{
-		lwpp::XPanel xpan(panel);
+		XPanel xpan(panel);
 		auto plugin = xpan.getFallbackUserData<T *>(cid);
 		if (plugin) plugin->ButtonClick(cid);
 	}
@@ -518,21 +526,59 @@ DEFINE_GLOBAL(LWXPanelFuncs)
 	template <typename T>
 	void LWXPanelPopCmdFunc(LWXPanelID panel, int cid, int cmdid)
 	{
-		lwpp::XPanel xpan(panel);
+		XPanel xpan(panel);
 		auto plugin = xpan.getFallbackUserData<T *>(cid);
 		if (plugin) plugin->PopCommand(cid, cmdid);
 	}
 
 	template <typename T>
+	int  LWXPanelPopCntFunc(void *inst)
+	{
+		if (inst)
+		{
+			T *puc = static_cast<T *>(inst);
+			return (int)puc->PopCount();
+		}
+		return 0;
+	}
+
+	template <typename T>
+	const char *LWXPanelPopNameFunc(void *inst, int n)
+	{
+		if (inst)
+		{
+			T *puc = static_cast<T *>(inst);
+			return puc->PopName(n);
+		}
+		return nullptr;
+	}
+
+	template <typename T>
 	void LWXPanelControlDrawFunc(LWXPanelID panel, unsigned int cid, LWXPDrAreaID reg, int w, int h)
 	{
-		lwpp::XPanel xpan(panel);
+		XPanel xpan(panel);
 		auto plugin = xpan.getFallbackUserData<T *>(cid);		
 		if (plugin)
 		{
 			XPDrawArea area(reg, xpan.getDrawFuncs(), w, h);
 			plugin->ControlDraw(cid, area);
 		}
+	}
+	template <typename T>
+	void LWXPanelControlZoomFunc(LWXPanelID panel, unsigned int cid, int x, int y, int* region, int clickcount)
+	{
+		XPanel xpan(panel);
+		auto plugin = xpan.getFallbackUserData<T*>(cid);
+		if (plugin)		
+			plugin->ControlZoom(cid, x, y, region, clickcount);		
+	}
+	template <typename T>
+	void LWXPanelItemZoomFunc(LWXPanelID panel, unsigned int cid, int x, int y, int* region, int clickcount)
+	{
+		XPanel xpan(panel);
+		auto plugin = xpan.getUserData<T*>(cid);
+		if (plugin)
+			plugin->ControlZoom(cid, x, y, region, clickcount);
 	}
 #ifndef XPANELSHEET_FEATURE_REALTIMEDRAG
 #define XPANELSHEET_FEATURE_REALTIMEDRAG        (1<<7) /* Real-time drag */

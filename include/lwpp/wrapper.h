@@ -175,6 +175,20 @@ namespace lwpp
 			}
 	};
 
+	template<class T>
+	class ControlZoomCallback
+	{
+	public:
+		static void ControlZoomFunc(LWXPanelID pan, unsigned int cid, int x, int y, int* region, int clickcount)
+		{
+			XPanelFuncs xpf;
+			T* pcc = static_cast<T*>(xpf.getUserData(pan, cid));
+			if (!pcc)	pcc = static_cast<T*>(xpf.getUserData(pan));
+			if (pcc) pcc->ControlZoomFunc(cid, x, y, region, clickcount);
+		}
+	};
+
+
 	//! PopCount callback for LightWave
 	template <typename T>
 	class doPop

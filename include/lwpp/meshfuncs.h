@@ -4,6 +4,7 @@
 #include <lwpp/debug.h>
 #include <lwpp/global.h>
 #include <lwmeshes.h>
+#include <lwpp/objectinfo.h>
 
 namespace lwpp
 {
@@ -42,6 +43,12 @@ namespace lwpp
 		}
 	}
 
+	template <typename T>
+	size_t DeformableMeshPntFunc(void *userdata, LWDeformableMeshID mesh, LWPntID pnt)
+	{
+		T plugin = static_cast<T>(userdata);
+		return plugin->DeformableMeshPnt(mesh, pnt);
+	}
 
 	//! Wrapper for a LWMeshInfo
 	//! @ingroup Globals
@@ -76,14 +83,31 @@ namespace lwpp
 			;
 		}
 
+		int getCapability(unsigned int capability, void *val = nullptr)
+		{
+			return mFuncs->capability(mesh, capability, val);
+		}
+
 		bool hasVertices()
 		{
 			return (mFuncs->have_vertices(mesh) != 0);
 		}
 
-		bool getPosition(LWPntID pnt, LWFVector pos)
+		unsigned int getVertexCount()
+		{
+			return mFuncs->num_vertices(mesh);
+		}
+
+		bool getPosition(LWPntID pnt, LWFVector pos) const
 		{
 			return(mFuncs->position(mesh, pnt, pos) != 0);
+		}
+
+		lwpp::Vector3f getPosition(LWPntID pnt) const
+		{
+			LWFVector pos;
+			if (getPosition(pnt, pos)) return lwpp::Vector3f(pos);
+			return lwpp::Vector3f();
 		}
 
 		size_t foreach(PointVisitor &pv)
@@ -107,10 +131,56 @@ namespace lwpp
 			return (mFuncs->have_polygons(mesh) != 0);
 		}
 
+		LWVMapID vMapLookup(LWID vmap_type, const char * vmap_name)
+		{
+			return mFuncs->vmap_lookup(mesh, vmap_type, vmap_name);
+		}
+		LWVMapID vMapLookup(const VMapCallbacks &vmp)
+		{
+			return mFuncs->vmap_lookup(mesh, vmp.getType(), vmp.getName());
+		}
+		int vMapDimention(LWVMapID vmap)
+		{
+			return mFuncs->vmap_dimension(mesh, vmap);
+		}
+		int vMapGet(LWVMapID vmap, LWPntID pnt, LWPolID pol, float *value) const
+		{
+			return mFuncs->vmap_get(mesh, vmap, pnt, pol, value);			
+		}
+
+		int vMapGet(LWVMapID vmap, LWPntID pnt, float *value) const
+		{
+			return mFuncs->vmap_get(mesh, vmap, pnt, nullptr, value);
+		}
+
+		int vMapGetPosition(LWVMapID vmap, LWPntID pnt, lwpp::Vector3f &pos) const
+		{
+			if (vmap)
+				return vMapGet(vmap, pnt, pos.asLWVector());
+			else
+				return getPosition(pnt, pos.asLWVector());
+		}
+		int vMapGetRelPosition(LWVMapID vmap, LWPntID pnt, lwpp::Vector3f &pos) const
+		{
+			if (vmap)
+				return vMapGet(vmap, pnt, pos.asLWVector());
+			else
+				return 1;
+		}
+
+		int setPosition(LWMeshDeformID dmesh, LWPntID pnt, const LWFVector pos)
+		{
+			return mFuncs->set_position(dmesh, pnt, pos);
+		}
+
+		template<typename T>
+		size_t foreach_v_deform(LWMeshDeformID mesh, void *host)
+		{
+			auto f = &lwpp::DeformableMeshPntFunc <T *>;
+			return mFuncs->foreach_v_deform(mesh, f, host);
+		}
+
 	};
-
 }
-
-
 
 #endif //LWPP_MESHFUNCS_H

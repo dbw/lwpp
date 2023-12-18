@@ -16,8 +16,8 @@ namespace lwpp
    */
   class comRingCommunicator  // needs to be declared as a global properly in global.cpp
   {
-    GlobalBase<LWComRing> comRing;
   protected:
+    TransientGlobal<LWComRing> comRing;
     std::string lastTopic;
     //! Receive an event in the ComRing
     /*!
@@ -113,7 +113,7 @@ namespace lwpp
       }
     };
     std::vector <std::shared_ptr<comRingTopic> > topics;
-    GlobalBase<LWComRing> comRing;
+    TransientGlobal<LWComRing> comRing;
 
   protected:
   public:

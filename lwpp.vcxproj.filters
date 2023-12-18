@@ -370,5 +370,11 @@
     <ClInclude Include="include\lwpp\meshfuncs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\aixlog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lwpp\compinfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

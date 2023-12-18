@@ -6,6 +6,7 @@
 #include <lwenvel.h>
 #include <lwxpanel.h>
 #include <algorithm>
+#include <vector>
 
 namespace lwpp
 {
@@ -213,6 +214,30 @@ namespace lwpp
 			std::rotate(container.rend() - from - 1, container.rend() - from, container.rend() - to);
 		}
 	}
+
+	inline std::vector<std::string> tokenize(std::string const &text, std::string const &separator)
+	{
+		std::vector<std::string> result;
+		std::string tmp = text;
+
+		size_t first_pos = 0;
+		size_t second_pos = tmp.find(separator);
+
+		while (second_pos != std::string::npos)
+		{
+			if (first_pos != second_pos)
+			{
+				auto word = tmp.substr(first_pos, second_pos - first_pos);
+				result.push_back(word);
+			}
+			tmp = tmp.substr(second_pos + separator.length());
+			second_pos = tmp.find(separator);
+		}
+		result.push_back(tmp);
+
+		return result;
+	}
+
 
 }
 

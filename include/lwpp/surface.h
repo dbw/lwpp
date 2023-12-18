@@ -8,6 +8,7 @@
 
 namespace lwpp
 {
+	DEFINE_GLOBAL(LWSurfaceFuncs)
 
 	class LWSurface : public GlobalBase<LWSurfaceFuncs>
 	{

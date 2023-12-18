@@ -2,13 +2,14 @@
 #define LWPP_OBJECTINFO_H
 
 #include <lwpp/surface.h>
+#include <lwpp/storeable.h>
 
 namespace lwpp
 {
 
 	//! Wrapper for LWObjectInfo
 	//! @ingroup Globals
-	class ObjectInfo  : protected GlobalBase<LWObjectInfo>
+	class ObjectInfo  : protected TransientGlobal<LWObjectInfo>
 	{
 		LWItemID item;
 	public:
@@ -57,12 +58,13 @@ namespace lwpp
     void bounds(LWDVector min, LWDVector max) { globPtr->bounds(item, min, max); }
 		LWItemInstancerID getInstancer() /* added for version 9 */
 		{
-			return globPtr->instancer(item);
+			if (item)	return globPtr->instancer(item);
+			return nullptr;
 		}
 			
 	};
 
-	class SceneObjects : protected GlobalBase<LWObjectFuncs>
+	class SceneObjects : protected TransientGlobal<LWObjectFuncs>
 	{
 	public:
 		SceneObjects() {;}
@@ -143,13 +145,39 @@ namespace lwpp
 		}
 	};
 
-	class VMapCallbacks : public PopUpCallback
+	class VMapCallbacks : public PopUpCallback, public Storeable
 	{
 	private:
+		std::string name;
+		std::string none_name = "(none)";
 		LWID type; // VMap ID
 		SceneObjects so;
 		bool showNone;
 	protected:
+		int getIndex()
+		{
+			auto n = so.numVMaps(type);
+			for (auto i = 0; i < n; ++i)
+			{
+				if (name == so.vmapName(type, i))
+				{
+					if (showNone) ++i;
+					return i;
+				}
+			}
+			return 0;
+		}
+		void getIndexID(int idx)
+		{
+			if (showNone) --idx;
+			auto n = so.vmapName(type, idx);
+			if (n) name = n;
+			else name.clear();
+		}
+
+	public:
+		VMapCallbacks (LWID _type, bool _showNone = true) : type(_type), showNone(_showNone) {;}
+		virtual ~VMapCallbacks() {;}
 		virtual size_t popCount(void)
 		{
 			return so.numVMaps(type) + (showNone ? 1 : 0);
@@ -158,14 +186,29 @@ namespace lwpp
 		{
 			if (showNone)
 			{
-				if (n == 0) return "(none)";
+				if (n == 0) return none_name.c_str();
 				--n;
 			}
-			return so.vmapName(type, n );
+			return so.vmapName(type, n);
 		}
-	public:
-		VMapCallbacks (LWID _type, bool _showNone = true) : type(_type), showNone(_showNone) {;}
-		virtual ~VMapCallbacks() {;}
+		int *DataGet()
+		{
+			static int idx;
+			idx = getIndex();
+			return &idx;
+		}
+		//! XPanels compatible DataSet
+		void DataSet(void *value)
+		{
+			index = *((int *)value);
+			getIndexID(index);
+		}
+		virtual LWError Load(const LoadState &ls) override { ls.read(name); return ""; }
+		virtual LWError Save(const SaveState &ss) override { ss.Write(name); return ""; }
+		LWID getType() const { return type; }
+		const char *getName() const { return name.c_str(); }
+		void setNoneName(const std::string &n) { none_name = n; }
+
 	};
 }
 #endif //LWPP_OBJECTINFO_H

@@ -40,6 +40,45 @@ namespace lwpp
 		}
 	};
 
+	class SimpleMutex : public GlobalBase<LWMTUtilFuncs>
+	{
+		LWMTUtilID mMutex = nullptr;
+	public:
+		SimpleMutex()
+		{
+			mMutex = globPtr->create();
+		}
+		~SimpleMutex()
+		{ 
+			if (mMutex) globPtr->destroy(mMutex);
+		}
+		void lock(int id)
+		{
+			globPtr->lock(mMutex, id);
+		}
+    void unlock(int id)
+    {
+      globPtr->unlock(mMutex, id);
+    }
+  };
+
+	class SimpleAutoMutex 
+	{
+		SimpleMutex &mMutex;
+		int mId = 0;
+	public:
+		SimpleAutoMutex(SimpleMutex& mx, int m)
+			: mMutex(mx), mId(m)
+		{
+			mMutex.lock(mId);
+		}
+		~SimpleAutoMutex()
+		{
+			mMutex.unlock(mId);
+		}
+
+	};
+
 	//! Automatic mutex to protect a complete function. Should get created and destroyed on the heap
 	//! @ingroup Globals
 	class AutoMutex {

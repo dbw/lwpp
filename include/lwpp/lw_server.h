@@ -16,7 +16,7 @@ namespace lwpp
 
 	class LWServer
 	{
-		static PluginList *pluginList();
+		static PluginList &pluginList();
 		static HandlerList *startupList();
 		static HandlerList *shutdownList();
 	public:

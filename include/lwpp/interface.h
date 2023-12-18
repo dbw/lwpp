@@ -8,6 +8,7 @@
 
 // Standard C++ Library includes
 #include <vector>
+#include <set>
 
 namespace lwpp
 {
@@ -47,6 +48,7 @@ namespace lwpp
 
 			//! Returns a std::vector<lwpp::LWItem> with 1 or multiple elements depending the selected Items in Layout
 			std::vector<lwpp::LWItem> selectedItems() const;
+			std::set<lwpp::LWItem> selectedItemsSet() const;
 
 			bool isSelected(lwpp::LWItem item) const;
 
@@ -115,9 +117,16 @@ namespace lwpp
 				}
 				return Point3d();
 			}
+			/*! Item Flags
+			*/
+			unsigned int getItemFlags(LWItemID item)
+			{
+				if (globPtr) return globPtr->itemFlags(item);
+				return 0;
+			}
 
 			// ITEM DISPLAY
-			//! Retirns an int indicating one of the eight
+			//! Returns an int indicating one of the eight
 			//! possible shading states of an Item
 			int itemVisibility(LWItemID item)
 			{
@@ -408,7 +417,12 @@ namespace lwpp
 			}
 			void getItemColour( LWItemID item, float rgba[4])
 			{
-				getItemColour(item, LWITEMCOL_NORMAL, rgba);
+				getItemNormalColor(item, rgba);
+			}
+			int getItemColour(LWItemID item)
+			{
+				if (globPtr) return globPtr->itemColor(item);
+				return 0;
 			}
 
 			//! Gets the color of Items on it's current state on Layout's Viewports

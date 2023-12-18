@@ -4,16 +4,17 @@
  * @version $Id: LW_texture.cpp 83 2006-04-19 23:43:07Z mwolf $
  */
 
+#ifndef LW_VPARM_H
+#define LW_VPARM_H
+
 #include <lwvparm.h>
 #include "lwpp/storeable.h"
 #include "lwpp/envelope.h"
 #include <memory>
 #include <vector>
-
-#ifndef LW_VPARM_H
-#define LW_VPARM_H
-
-#include <lwpp/Vector3d.h>
+#include <string>
+#include <lwpp/utility.h>
+#include <lwpp/vector3d.h>
 
 namespace lwpp
 {
@@ -30,11 +31,11 @@ namespace lwpp
 	 * The actual value is stored in a Vector3d, and you can treat the VParm as such.
 	 * @note Since the values are cached in the Vector3d, make sure to VParm::NewTime
 	 */
-	class VParm : protected GlobalBase<LWVParmFuncs>, public Vector3d, public Storeable
+	class VParm : protected TransientGlobal<LWVParmFuncs>, public Vector3d, public Storeable
 	{
-		LWVParmID vparmID;
-		LWChanGroupID mGroup = 0;
-		bool	create(int type, const std::string name, const std::string plug_name, LWChanGroupID group, VParmEventSink *sink = nullptr);
+		LWVParmID vparmID = nullptr;
+		LWChanGroupID mGroup = nullptr;
+		bool create(int type, const std::string name, const std::string plug_name, LWChanGroupID group, VParmEventSink *sink = nullptr);
 		VParm(const VParm &from); //! no copy constructor, since it could lead to problems
 		//! Update VParm with the currently cached values
 		void set()
@@ -137,36 +138,14 @@ namespace lwpp
 		int getState() { return globPtr->getState(vparmID); };
 		void setState(int state) { globPtr->setState(vparmID, state); };
 
-		void enableEnvelopes(bool enable = true)
-		{
-			auto state = (getState() & ~LWVPSF_ENV);
-			setState(state | (enable ? LWVPSF_ENV : 0));
-		}
+		void enableEnvelopes(bool enable = true);
 
-		std::vector<Envelope> getEnv()
-		{
-			LWEnvelopeID envlist[3];
-			globPtr->getEnv(vparmID, envlist);
-			std::vector<Envelope> ret;
-			ret.reserve(3);
-			for (int i = 0; i < 3; ++i)
-				ret.push_back(envlist[i]);
-			return ret;
-		}
+		std::vector<Envelope> getEnv();
 
 		//! Hides all related envelopes in the graph editor
-		void hide(bool doHide = true)
-		{
-			int visible = (doHide ? 0 : 1);
-			auto envs = getEnv();
-			for (auto& e : envs)
-				e.EgSet(mGroup, LWENVTAG_VISIBLE, &visible);
-		}
-
-		void editEnv()
-		{
-			globPtr->editEnv(vparmID);
-		}
+		void hide(bool doHide = true);
+		//! Open the graph editor showing this envelope
+		void editEnv();
 	};
   
   typedef std::unique_ptr<VParm> auto_VParm;
@@ -187,10 +166,10 @@ namespace lwpp
   void                 (*serverRemove)    ( LWChannelID chan, const char *cls, const char *name, LWInstance inst );
 */
 
-	class ChannelGroup : protected GlobalBase<LWChannelInfo>
+	class ChannelGroup : protected TransientGlobal<LWChannelInfo>
 	{
 			LWChanGroupID groupID;
-			GlobalBase<LWEnvelopeFuncs> envf;
+			TransientGlobal<LWEnvelopeFuncs> envf;
 			bool destroy_on_exit;
 		public:
 			ChannelGroup()
@@ -199,23 +178,32 @@ namespace lwpp
 			{
 				;
 			}
-			ChannelGroup(const char *name, LWChanGroupID parent = 0, bool destroy = true)
+			ChannelGroup(const char *name, LWChanGroupID parent = 0, bool destroy = false)
 				:	groupID(0), destroy_on_exit(destroy)
 			{
 				groupID = createUniqueGroup(name, parent);
 			}
-
+        /*
 			ChannelGroup(const char *name, ChannelGroup& parent)
 				: groupID(0), destroy_on_exit(true)
 			{
 				groupID = createUniqueGroup(name, parent.getID());
 			}
+         */
+        
+      ChannelGroup(const char *name, ChannelGroup parent)
+          : groupID(0), destroy_on_exit(false)
+      {
+          groupID = createUniqueGroup(name, parent.getID());
+      }
 
 			ChannelGroup(LWChanGroupID id)
 				: groupID(id), destroy_on_exit(false)
 			{
 				;
 			}
+
+			operator bool() const { return groupID != nullptr; }
 
 			virtual ~ChannelGroup()
 			{
@@ -250,13 +238,52 @@ namespace lwpp
 			}
 
 			LWChanGroupID getID() const {return groupID;}
+			void setID(LWChanGroupID id) { groupID = id; }
 			LWChanGroupID nextGroup( LWChanGroupID parent, LWChanGroupID group) {return globPtr->nextGroup(parent, group);}
       LWChanGroupID nextGroup(LWChanGroupID group) { return globPtr->nextGroup(groupID, group); }
 			LWChannelID  nextChannel( LWChanGroupID parent, LWChannelID chan) {return globPtr->nextChannel(parent, chan);}
+			LWChannelID  nextChannel(LWChannelID chan) { return globPtr->nextChannel(groupID, chan); }
+			LWChannelID  findChannel(const std::string &name) { 
+				LWChannelID chan = nullptr;
+#ifdef _DEBUG
+				dout << "Find " << name << " in " << groupName() << "\n";
+#endif
+				while (chan = nextChannel(chan))
+				{
+#ifdef _DEBUG
+					dout << globPtr->channelName(chan) << "\n";
+#endif
+
+					if (name == globPtr->channelName(chan))
+					{
+#ifdef _DEBUG
+						dout <<"Found!\n";
+#endif
+						return chan;
+					}
+				}
+				return nullptr;
+			}
+
 			const char  *groupName ( LWChanGroupID group) {return globPtr->groupName(group);}
-			const char  *groupName ( void ) {return globPtr->groupName(groupID);}
+			const char *groupName(void) { if (groupID) return globPtr->groupName(groupID); else return ""; }
+			std::string pathName()
+			{
+				std::string ret = groupName();		
+				auto g = groupID;
+				while (g = groupParent(g))
+				{
+					ChannelGroup grp(g);
+					if (grp.groupParent())
+						ret = std::string(grp.groupName()) + '/' + ret;
+				}
+				return ret;
+			}
 			LWChanGroupID groupParent ( LWChanGroupID group) {return globPtr->groupParent(group);}
 			LWChanGroupID groupParent () const {return globPtr->groupParent(groupID);}
+
+			bool next() { return ((groupID = nextGroup(groupParent(), groupID)) != nullptr); }
+			bool firstSub() {return ((groupID = nextGroup(groupID, NULL)) != nullptr); }
 
 			LWChanGroupID createUniqueGroup(const char *name, LWChanGroupID parent)
 			{
@@ -311,5 +338,152 @@ namespace lwpp
    }
 
 	};
+
+	class lwChannel : public TransientGlobal<LWChannelInfo>
+	{
+		LWChannelID chanID = nullptr;
+	public:
+		lwChannel(LWChannelID chan = 0)
+			: chanID(chan)
+		{
+			;
+		}
+		operator bool() const { return chanID != nullptr; }
+
+		void setID(LWChannelID id)
+		{ chanID = id; }
+
+		LWChannelID getID() const
+		{ return chanID; }
+
+		void first()
+		{
+			chanID = globPtr->nextChannel(getParent(), nullptr);
+		}
+		bool first(LWChanGroupID cgroup)
+		{
+			chanID = globPtr->nextChannel(cgroup, chanID);
+		}
+
+		bool next(LWChanGroupID cgroup)
+		{
+			chanID = globPtr->nextChannel(cgroup, chanID);
+			return (chanID != 0);
+		}
+		bool next()
+		{
+			chanID = globPtr->nextChannel(getParent(), chanID);
+			return (chanID != 0);
+		}
+		Envelope getEnvelope()
+		{
+			if (chanID) return Envelope(globPtr->channelEnvelope(chanID));
+			return Envelope();
+		}
+		const char *getName()
+		{
+			if (chanID) return globPtr->channelName(chanID);
+			return "";
+		}
+		LWChanGroupID getParent()
+		{
+			if (chanID) return globPtr->channelParent(chanID);
+			return nullptr;
+		}
+		int getType()
+		{
+			if (chanID) return globPtr->channelType(chanID);
+			return LWET_FLOAT;
+		}
+
+		double evaluate(LWTime time)
+		{
+			if (chanID) return globPtr->channelEvaluate(chanID, time);
+			return 0.0;
+		}
+		int setEvent(LWChanEventFunc ev, void *data)
+		{
+			if (chanID) return globPtr->setChannelEvent(chanID, ev, data);
+			return 0;
+		}
+		void clearEvent()
+		{
+			setEvent(nullptr, nullptr);
+		}
+		bool findChannel(std::string path, std::string name)
+		{
+			auto paths = lwpp::tokenize(path, "//");
+			lwpp::ChannelGroup group;
+			group.nextGroup(nullptr);
+			group.firstSub();
+
+			for (auto p : paths)
+			{
+				bool found = false;
+				while (group)
+				{
+#ifdef _DEBUG
+					dout << group.groupName() << "\n";
+#endif
+					if (p == group.groupName())
+					{
+#ifdef _DEBUG
+						dout << "Group Found: " << p << "\n";
+#endif
+						found = true;
+						break;
+					}
+					group.next();
+				}
+				if (!found)
+					return false;
+				/*
+				{
+					group.firstSub();
+				}
+				else 
+					return false;
+				*/
+			}
+
+			lwChannel chan;
+			chanID = group.findChannel(name);
+			return (chanID != nullptr);
+		}
+	};
+	/*
+typedef struct st_LWChannelInfo {
+	// next group, first on NULL in parent group or root on NULL
+	LWChanGroupID        (*nextGroup)       ( LWChanGroupID parent,
+																						LWChanGroupID group);
+	// next channel, first on NULL in parent group or root on NULL
+	LWChannelID          (*nextChannel)     ( LWChanGroupID parent,
+																						LWChannelID chan);
+	const char           *(*groupName)      ( LWChanGroupID group);
+	const char           *(*channelName)    ( LWChannelID chan);
+	LWChanGroupID        (*groupParent)     ( LWChanGroupID group);
+	LWChanGroupID        (*channelParent)   ( LWChannelID chan);
+	int                  (*channelType)     ( LWChannelID chan);
+	double               (*channelEvaluate) ( LWChannelID chan, LWTime chantime);
+	LWEnvelopeID         (*channelEnvelope) ( LWChannelID chan);
+	int                  (*setChannelEvent) ( LWChannelID chan,
+																						LWChanEventFunc ev, void *data );
+	const char           *(*server)         ( LWChannelID chan,
+																						const char *cls, int idx );
+
+	// Version 2 additions, all index arg.s are 1-based, matching layout
+	unsigned int         (*serverFlags)     ( LWChannelID chan,
+																					const char *cls, int idx );
+	LWInstance           (*serverInstance)  ( LWChannelID chan,
+																					const char *cls, int idx );
+	//  Return 1-based index, or 0 on failure
+	int                  (*serverApply)     ( LWChannelID chan, const char *cls,
+																					const char *name, int flags );
+	void                 (*serverRemove)    ( LWChannelID chan, const char *cls,
+																					const char *name, LWInstance inst );
+} LWChannelInfo;
+
+	*/
+
 }
 #endif // LW_VPARM_H

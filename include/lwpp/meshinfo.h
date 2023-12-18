@@ -100,10 +100,10 @@ namespace lwpp
 		/*!
 		 * return 0 to stop the scan, anything else to continue
 		 */
-		virtual int scanFunc(LWPntID id) = 0;
+		virtual size_t scanFunc(LWPntID id) = 0;
 	public:
 		MeshPointScan (MeshInfo *_mi) : mi(_mi) {;}
-		static int LWPntScanFunc (void *userData, LWPntID id)
+		static size_t LWPntScanFunc (void *userData, LWPntID id)
 		{
 			MeshPointScan *mps = static_cast<MeshPointScan *>(userData);
 			return mps->scanFunc(id);
@@ -153,7 +153,7 @@ namespace lwpp
 			return mps->scanFunc(id);
 		}
 	};
-
+	/*
 	template <typename T>
 	size_t MeshPntPolFunc (void* userdata, LWMeshID mesh, LWPntID pnt, LWPolID pol)
 	{
@@ -163,7 +163,7 @@ namespace lwpp
 			return host->MeshPntPol(mesh, pnt, pol);
 		}
 	}
-
+  
 	class MeshFuncs
 	{
 		LWMeshID mesh = nullptr;
@@ -177,6 +177,7 @@ namespace lwpp
 			return mf->foreach_vp(mesh, pnt, &MeshPntPolFunc<T>, host);
 		}
 	};
+	*/
 }
 
 

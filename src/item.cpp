@@ -38,7 +38,19 @@ namespace lwpp
 		return atoi(name.substr(dStart + 1, dEnd - dStart).c_str());
 	}
 
-	Matrix4x4d LWItem::getWorld2Item(LWTime t)
+	Matrix4x4d LWItem::getWorld2Item(LWTime t) const
+	{
+		Point3d p;
+		Vector3d r, u, f;
+		//Param(LWIP_W_POSITION, t, p);
+		Param(LWIP_W_RIGHT, t, r);
+		Param(LWIP_W_UP, t, u);
+		Param(LWIP_W_FORWARD, t, f);
+		//return Matrix4x4d(r, u, f, p);
+		return Matrix4x4d(r, u, f);
+	}
+
+	Matrix4x4d LWItem::getWorld2Object(LWTime t)
 	{
 		Point3d p;
 		Vector3d r, u, f;
@@ -64,7 +76,7 @@ namespace lwpp
 		Param(LWIP_RIGHT, time, rt);
 		Param(LWIP_UP, time, up);
 		Param(LWIP_FORWARD, time, fd);
-		Param(LWIP_POSITION, time, pos);
+		Param(LWIP_W_POSITION, time, pos);
 		return Matrix4x4d(rt, up, fd, pos);
 	}
 
@@ -110,14 +122,15 @@ namespace lwpp
 			pt /= w;
 		}
 	}
-	void LWItem::transformToLocal(Point3d& pt, LWTime t)
+
+	void LWItem::transformToWorld(Vector3d& pt, LWTime t)
 	{
 		double M[4][4];
 		LWDVector pos, rt, up, fd;
-		Param(LWIP_W_POSITION, t, pos);
-		Param(LWIP_W_RIGHT, t, rt);
-		Param(LWIP_W_UP, t, up);
-		Param(LWIP_W_FORWARD, t, fd);
+		Param(LWIP_POSITION, t, pos);
+		Param(LWIP_RIGHT, t, rt);
+		Param(LWIP_UP, t, up);
+		Param(LWIP_FORWARD, t, fd);
 
 		for (int i = 0; i < 3; i++) {
 			M[0][i] = (float)rt[i];
@@ -142,11 +155,12 @@ namespace lwpp
 		}
 	}
 
-	void LWItem::transformToLocal(Vector3d& pt, LWTime t)
+
+	void LWItem::transformToLocal(Point3d& pt, LWTime t)
 	{
-		double M[3][3];
-		LWDVector pos, rt, up, fd;
-		Param(LWIP_W_POSITION, t, pos);
+		double M[4][4];
+		LWDVector pos, rt, up, fd, piv;
+		//Param(LWIP_W_POSITION, t, pos);
 		Param(LWIP_W_RIGHT, t, rt);
 		Param(LWIP_W_UP, t, up);
 		Param(LWIP_W_FORWARD, t, fd);
@@ -155,6 +169,32 @@ namespace lwpp
 			M[0][i] = (float)rt[i];
 			M[1][i] = (float)up[i];
 			M[2][i] = (float)fd[i];
+			M[3][i] = (float)pos[i];
+			M[i][3] = 0.0;
+		}
+		M[3][3] = 1.0;
+
+		Vector3d a(pt);
+
+		pt.x = a.x * M[0][0] + a.y * M[1][0] + a.z * M[2][0] + M[3][0];
+		pt.y = a.x * M[0][1] + a.y * M[1][1] + a.z * M[2][1] + M[3][1];
+		pt.z = a.x * M[0][2] + a.y * M[1][2] + a.z * M[2][2] + M[3][2];
+	}
+
+	void LWItem::transformToLocal(Vector3d& pt, LWTime t)
+	{
+		double M[4][4];
+		LWDVector pos, rt, up, fd;
+		//Param(LWIP_W_POSITION, t, pos);
+		Param(LWIP_W_RIGHT, t, rt);
+		Param(LWIP_W_UP, t, up);
+		Param(LWIP_W_FORWARD, t, fd);
+
+		for (int i = 0; i < 3; i++) {
+			M[0][i] = (float)rt[i];
+			M[1][i] = (float)up[i];
+			M[2][i] = (float)fd[i];
+			M[3][i] = 0.0f;
 		}
 		Vector3d a(pt);
 		pt.x = a.x * M[0][0] + a.y * M[1][0] + a.z * M[2][0] + M[3][0];
@@ -438,8 +478,8 @@ namespace lwpp
 				if (mDisplayType == -1 || item.Type() == mDisplayType)
 					itemList.push_back(itemEntry(item.GetID(), pretty.format(item, indent)));
 #ifdef _DEBUG
-					for (int i = 0; i < indent; ++i) dout << "  ";
-					dout << item.getName() << "\n";
+					//for (int i = 0; i < indent; ++i) dout << "  ";
+					//dout << item.getName() << "\n";
 #endif
 			}
 			if (item.hasChildren())
@@ -462,7 +502,7 @@ namespace lwpp
 						if (mDisplayType == -1 || item.Type() == mDisplayType)
 							itemList.push_back(itemEntry(item.GetID(), pretty.format(item)));
 #ifdef _DEBUG
-							dout << item.getName() << "\n";
+							//dout << item.getName() << "\n";
 #endif
 					}
 					if (item.hasChildren())
@@ -488,6 +528,7 @@ namespace lwpp
 			if (idx == 0)	return noneName;
 			--idx;
 		}
+		if (idx >= itemList.size()) return "";
 		return itemList[idx].name.c_str();
 	}
 

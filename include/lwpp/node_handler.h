@@ -11,13 +11,44 @@ namespace lwpp
 	class NodeHandler : public InstanceHandler, public virtual ItemHandler, public virtual RenderHandler, public LWNode
 	{
 		protected:
-			NodeID Context;
+			NodeID Context = nullptr;
+			struct 
+			{
+				bool DiscardIncompatibleInputs : 1;
+			} nodeFlags = {false};
 			virtual int NodeInputEvent ( NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
 			{
-				UNUSED(type);
-				UNUSED(nid);
 				// always update by default
-				if (nevent == NIE_CONNECT) Update();
+				if (nevent == NIE_CONNECT) 
+				{
+					if (nodeFlags.DiscardIncompatibleInputs)
+					{
+						lwpp::LWNodeInput ni(nid);
+#if LWSDKVER_MAJOR >= 2020
+						auto incompatible =
+							((ni.type() == NOT_CUSTOM) && (type != NOT_CUSTOM)) ||
+							((ni.type() == NOT_MATRIX44) && (type != NOT_MATRIX44)) ||
+							((ni.type() == NOT_FUNCTION) && (type != NOT_FUNCTION)) ||
+							((ni.type() == NOT_BSDF) && (type != NOT_BSDF)) ||
+							((ni.type() == NOT_FRESNEL) && (type != NOT_FRESNEL)) ||
+							((ni.type() == NOT_VOLUME) && (type != NOT_VOLUME)) ||
+							((ni.type() == NOT_PROJECTION) && (type != NOT_PROJECTION));
+#else
+						auto incompatible =
+							((ni.type() == NOT_CUSTOM) && (type != NOT_CUSTOM)) ||
+							((ni.type() == NOT_MATRIX44) && (type != NOT_MATRIX44)) ||
+							((ni.type() == NOT_FUNCTION) && (type != NOT_FUNCTION)) ||
+							((ni.type() == NOT_BSDF) && (type != NOT_BSDF)) ||
+							((ni.type() == NOT_PROJECTION) && (type != NOT_PROJECTION));
+#endif
+						if (incompatible)
+						{
+							lwpp::LWMessage::Error("Incompatible Connection");
+							ni.disconnect();
+						}
+					}
+					Update();
+				}
 				if (nevent == NIE_DISCONNECT) Update();        
 				if (nevent == NIE_INPUTNODEDESTROY) Update();
 				return 1;
@@ -27,7 +58,7 @@ namespace lwpp
 			static int CB_NodeInputEvent(void *userData, NodeInputID nid, LWNodalEvent nevent, ConnectionType type)
 			{
 #ifdef _DEBUG
-				dout << "CB_NodeInputEvent - userData: " << userData << "\n";
+				//dout << "CB_NodeInputEvent - userData: " << userData << "\n";
 				//return 0;
 #endif				
 				NodeHandler *plugin = static_cast<NodeHandler *>(userData);
@@ -134,7 +165,7 @@ namespace lwpp
 				Context = static_cast<NodeID>(context);
 				LWNode::setID(Context);
 			}
-			virtual ~NodeHandler() {;}
+			virtual ~NodeHandler() = default;
 			virtual void Evaluate(LWShadingGeometry *sg, NodeOutputID outID, NodeValue value)
 			{
 				UNUSED(sg);
@@ -262,7 +293,6 @@ namespace lwpp
 				return 0;
 			}
 		}
-
 	};
 
 	//! @ingroup XPanelHandler
@@ -276,11 +306,11 @@ namespace lwpp
 #endif
 				;
 			}
-			virtual ~XPanelNodeHandler() {;}
+			virtual ~XPanelNodeHandler() = default;
 			virtual int NodeInputEvent ( NodeInputID nid, LWNodalEvent nevent, ConnectionType type) override
 			{																	
 				auto ret = NodeHandler::NodeInputEvent(nid, nevent, type);
-				LW_XPanel.ViewRefresh();
+				GetXPanel().ViewRefresh();
 				return ret;
 			}
 			virtual LWXPRefreshCode ChangeNotify (LWXPanelID , unsigned int , unsigned int , int event_type) override

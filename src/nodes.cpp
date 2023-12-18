@@ -39,17 +39,17 @@ namespace lwpp
 
   IMPLEMENT_NAMED_GLOBAL(LWNodeInputFuncs, inFuncs)
   IMPLEMENT_NAMED_GLOBAL(LWNodeOutputFuncs, outFuncs)
-
+  
   void LWNodeInput::init()
   {
-      if (inF == nullptr) inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
+      //if (inF == nullptr) inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
   }
   
 	LWNode::LWNode(NodeID _id)
 	: id(_id)
 	{
-		if (inF == nullptr) inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
-		if (outF == nullptr) outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
+		//if (inF == nullptr) inF = getTransGlobal<LWNodeInputFuncs>(inFuncs);
+		//if (outF == nullptr) outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
 	}
 
   LWNode::~LWNode()
@@ -60,14 +60,14 @@ namespace lwpp
   
   void LWNodeOutput::init()
   {
-		if (outF == nullptr) outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
+		//if (outF == nullptr) outF = getTransGlobal<LWNodeOutputFuncs>(outFuncs);
   }
 
-  LWNodeInputFuncs *LWNodeInput::inF = 0;
-  LWNodeOutputFuncs *LWNodeOutput::outF = 0;
+  //LWNodeInputFuncs *LWNodeInput::inF = 0;
+  //LWNodeOutputFuncs *LWNodeOutput::outF = 0;
 
-  LWNodeInputFuncs *LWNode::inF = 0;
-  LWNodeOutputFuncs *LWNode::outF = 0;
+  //LWNodeInputFuncs *LWNode::inF = 0;
+  //LWNodeOutputFuncs *LWNode::outF = 0;
 
   double EvalScalarVInput(LWShadingGeometry *sg, const lwpp::unique_NodeInput &lwni, const lwpp::unique_VParm &vp)
   {

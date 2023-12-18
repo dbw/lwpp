@@ -81,7 +81,7 @@ namespace lwpp
 			globPtr->setSaveFormat(mID, name);
 		}
 		const char *getColourSpace()
-		{
+		{																																					 
 			return globPtr->getColorSpace(mID);
 		}
 		void setColourSpace(const char *name)
@@ -183,7 +183,7 @@ namespace lwpp
 
 		BufferRecord findBufferRecord(const char *name)
 		{
-            return findBufferRecord(std::string(name));
+			return findBufferRecord(std::string(name));
 		}
 
 		BufferRecord findBufferRecord(const std::string &name)
@@ -216,7 +216,6 @@ namespace lwpp
 		{
 			return globPtr->groupName(mID, group);
 		}
-
 
 		int clearBufferEvent()
 		{

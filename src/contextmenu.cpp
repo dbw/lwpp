@@ -69,8 +69,15 @@ namespace lwpp
 	{
 		Entries.push_back(menuEntry(entry, id));
 	}
+	const char* DynamicContextMenu::GetEntry(const int idx)
+	{
+		if (idx < Entries.size())
+			return Entries.at(idx).getName();
+		return nullptr;
+	}
 	void DynamicContextMenu::Clear()
 	{
 		Entries.clear();
 	}
+
 }

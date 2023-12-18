@@ -1,7 +1,7 @@
 #ifndef Point3_H
 #define Point3_H
 
-#include <lwpp/Vector3d.h>
+#include "lwpp/Vector3d.h"
 
 #ifdef _DEBUG
 #ifdef _MSWIN
@@ -82,6 +82,10 @@ namespace lwpp
             z += v.z;
             return *this;
         }
+        Point3 operator+(const T v) const
+        {
+          return Point3(x + v, y + v, z + v);
+        }
         //! Subtract a Vector3d
         Point3 operator-(const Vector3<T> &v) const
         {
@@ -141,6 +145,11 @@ namespace lwpp
         Point3 operator*(const Point3 &p) const
         {
             return Point3(x*p.x, y*p.y, z*p.z);
+        }
+
+        Point3 operator*(const Vector3<T>& v) const
+        {
+          return Point3(x * v.x, y * v.y, z * v.z);
         }
         
         Point3 operator/(const T d) const
@@ -214,6 +223,14 @@ namespace lwpp
     
 	template<typename T>
 	inline Vector3<T>::Vector3 (const Point3<T> &p) :  x(p.x), y(p.y), z(p.z) {}
+
+    // compute the intersection of a plane and a line, the plane is defined by a point and a normal, the line by a position and a mDirection
+    template<typename T>
+    Point3<T> Intersect(lwpp::Point3<T> pPos, lwpp::Vector3<T> pNorm, lwpp::Point3<T> lPos, lwpp::Vector3<T> lDir)
+    {
+        auto s = pNorm.Dot(pPos - lPos) / pNorm.Dot(lDir);
+        return lPos + lDir * s;
+    }
 }
 
 

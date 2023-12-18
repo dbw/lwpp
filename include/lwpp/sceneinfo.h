@@ -9,7 +9,7 @@
 namespace lwpp
 {
   //! @ingroup Globals
-  class TimeInfo : public GlobalBase<LWTimeInfo>
+  class TimeInfo : public TransientGlobal<LWTimeInfo>
   {
   public:
     TimeInfo() {	;	}
@@ -41,7 +41,7 @@ namespace lwpp
   /*!
    *	@ingroup Globals
    */
-  class SceneInfo  : protected GlobalBase<LWSceneInfo>
+  class SceneInfo  : protected TransientGlobal<LWSceneInfo>
   {
     static const char *filterNames[];
   public:
