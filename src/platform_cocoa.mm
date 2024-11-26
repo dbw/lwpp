@@ -1,4 +1,4 @@
-#include "platform_cocoa.h"
+#include "lwpp/platform_cocoa.h"
 #include "lwdialog.h"
 #include <Cocoa/Cocoa.h>
 

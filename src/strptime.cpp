@@ -27,6 +27,7 @@ static int date_get_num(const char **pp,
     return val;
 }
 
+#ifndef __APPLE__
 /* small strptime for ffmpeg */
 const char *strptime(const char *p, const char *fmt, struct tm *dt)
 {
@@ -96,3 +97,4 @@ const char *strptime(const char *p, const char *fmt, struct tm *dt)
     }
     return p;
 }
+#endif

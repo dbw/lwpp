@@ -95,8 +95,8 @@ namespace lwpp
 		protected:
 				int sync()
 				{
-						::OutputDebugStringA(str().c_str());
-						str(std::basic_string<CharT>());    // Clear the string buffer
+						::OutputDebugStringA(basic_debugbuf::str().c_str());
+						basic_debugbuf::str(std::basic_string<CharT>());    // Clear the string buffer
 						return 0;
 				}
 		};
@@ -109,11 +109,11 @@ namespace lwpp
 				basic_dostream()
 					: std::basic_ostream<CharT, TraitsT>(new basic_debugbuf<CharT, TraitsT>())
 				{
-					setf(std::ios::unitbuf);
+					basic_dostream::setf(std::ios::unitbuf);
 				}
 				~basic_dostream()
 				{
-						delete rdbuf();
+						delete basic_dostream::rdbuf();
 				}
 		};
 
