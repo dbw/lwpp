@@ -203,30 +203,30 @@ namespace lwpp
       sy = step;
     }
     // scaled width and height
-    int sw = sx * width;
-    int sh = sy * height;
+    const int sw = sx * width;
+    const int sh = sy * height;
 
-    int x_offset = (w - sw) / 2;
-    int y_offset = (h - sh) / 2;
+    const int x_offset = (w - sw) / 2;
+    const int y_offset = (h - sh) / 2;
 
     ColourManager cm(lwpp::lwcst_viewer);
 
-    int x, y;
-    float pxStep = 1.0 / sx;
-    float pyStep = 1.0 / sy;
+    const float pxStep = 1.0 / sx;
+    const float pyStep = 1.0 / sy;
     float ix = 0.0;
-    LWBufferValue rgb[3];
-    bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
-    for ( x = 0; x < sw; x++ )
+    
+    const bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
+    for ( int x = 0; x < sw; x++ )
     {
       float iy = 0.0;
-      for ( y = 0; y < sh; y++ )
+      for ( int y = 0; y < sh; y++ )
       {                              
+        LWBufferValue rgb[3];
         RGB(ix, iy, rgb);
 
          if (mFlags.previewMode > PRV_RGB)
          {
-           float value;
+           float value = 0.f;
            switch (mFlags.previewMode)
            {
              case PRV_LUMA:
@@ -251,7 +251,7 @@ namespace lwpp
          }
 				if (mFlags.checkered && displayAlpha)
 				{
-					float a = alpha(ix, iy);
+					const float a = alpha(ix, iy);
 					if (a < 1.0)
 					{
 						const int checkSize = 16.0;
@@ -263,6 +263,94 @@ namespace lwpp
 					}
 				}
 				cm.convertToColourSpace(rgb);
+        area.drawPixel(rgb, x + x_offset, y + y_offset);
+        iy += pyStep;
+      }
+      ix += pxStep;
+    }
+  }
+
+  void Image::drawXpanelZoom(LWXPDrAreaID reg, int w, int h, const unsigned int left, const unsigned int top,
+                             const unsigned int right, const unsigned int bottom)
+  {
+    lwpp::XPDrawArea area(reg, w, h);
+    area.clear(); // clear preview to black
+    if (id == nullptr) return;
+
+    int width, height;
+    size(width, height);
+    auto zoom_width = right - left+1;
+    auto zoom_height = bottom - top+1;
+
+    float sx = (float)w / (float)zoom_width; // step size
+    float sy = (float)h / (float)zoom_height;
+
+    if (mFlags.keepAspect)
+    {
+      float step = fmin(sx, sy); // smallest step
+      sx = step;
+      sy = step;
+    }
+    // scaled width and height
+    const int sw = sx * zoom_width;
+    const int sh = sy * zoom_height;
+
+    const int x_offset = (w - sw) / 2;
+    const int y_offset = (h - sh) / 2;
+
+    ColourManager cm(lwpp::lwcst_viewer);
+
+    const float pxStep = 1.0 / sx;
+    const float pyStep = 1.0 / sy;
+    float ix = left;
+    const bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
+    for (int x = 0; x < sw; x++)
+    {
+      float iy = top;
+      for (int y = 0; y < sh; y++)
+      {
+        LWBufferValue rgb[3];
+        RGB(ix, iy, rgb);
+
+        if (mFlags.previewMode > PRV_RGB)
+        {
+          float value = 0.0f;
+          switch (mFlags.previewMode)
+          {
+            case PRV_LUMA:
+              value = 0.2126f * rgb[0] + 0.7152f * rgb[1] + 0.0722f * rgb[2];
+              break;
+            case PRV_R:
+              value = rgb[0];
+              break;
+            case PRV_G:
+              value = rgb[1];
+              break;
+            case PRV_B:
+              value = rgb[2];
+              break;
+            case PRV_A:
+              value = hasAlpha() ? alpha(ix, iy) : 0.0;
+              break;
+            default:
+              break;
+          }
+          rgb[0] = rgb[1] = rgb[2] = value;
+        }
+        if (mFlags.checkered && displayAlpha)
+        {
+          const float a = alpha(ix, iy);
+          if (a < 1.0)
+          {
+            const int checkSize = 16.0;
+            auto check = (x / checkSize + y / checkSize) % 2;
+            auto col = check ? 0.1 : 0.2;
+            col *= 1 - a;
+            for (int i = 0; i < 3; ++i)
+              rgb[i] += col;
+          }
+        }
+        cm.convertToColourSpace(rgb);
         area.drawPixel(rgb, x + x_offset, y + y_offset);
         iy += pyStep;
       }

@@ -1,7 +1,7 @@
 #ifndef Point3_H
 #define Point3_H
 
-#include "lwpp/Vector3d.h"
+#include "lwpp/vector3d.h"
 
 #ifdef _DEBUG
 #ifdef _MSWIN

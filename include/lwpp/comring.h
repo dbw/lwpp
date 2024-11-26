@@ -26,15 +26,15 @@ namespace lwpp
      * @param int eventCode
      * @param void *eventData
      */
-    virtual void RingEvent(void *portData, int eventCode, void *eventData)
+    virtual void RingEvent(void* portData, int eventCode, void* eventData)
     {
       return;
     }
     //! The static callback for LightWave
-    static void RingEventCB(void *clientData, void *portData, int eventCode, void *eventData)
+    static void RingEventCB(void* clientData, void* portData, int eventCode, void* eventData)
     {
       // cast the instance back to the base class 
-      comRingCommunicator *plugin = static_cast<comRingCommunicator *>(clientData);
+      comRingCommunicator* plugin = static_cast<comRingCommunicator*>(clientData);
       // pass through the remaining arguments to the function
       plugin->RingEvent(portData, eventCode, eventData);
     }
@@ -43,11 +43,11 @@ namespace lwpp
     /*!
      * @param[in] topic The name/topic of the ComRing to attach to
      */
-    comRingCommunicator(const char *topic)
+    comRingCommunicator(const char* topic)
     {
-      if(comRing.available())
+      if (comRing.available())
       {
-        if(ringAttach(topic))
+        if (ringAttach(topic))
         {
           ;
         }
@@ -55,12 +55,12 @@ namespace lwpp
     }
     virtual ~comRingCommunicator()
     {
-      if(!lastTopic.empty()) ringDetach(lastTopic.c_str());
+      if (!lastTopic.empty()) ringDetach(lastTopic.c_str());
     }
     //! Attach to a ComRing to receive messages
-    bool ringAttach(const char *topic)
+    bool ringAttach(const char* topic)
     {
-      if(comRing.getGlobal()->ringAttach(const_cast<char *>(topic), this, RingEventCB))
+      if (comRing.getGlobal()->ringAttach(const_cast<char*>(topic), this, RingEventCB))
       {
         lastTopic = topic;
         return true;
@@ -69,20 +69,20 @@ namespace lwpp
     }
 
     //! Detach from a comring to stop receiving messages
-    void ringDetach(const char *topic)
+    void ringDetach(const char* topic)
     {
-      comRing.getGlobal()->ringDetach(const_cast<char *>(topic), this);
+      comRing.getGlobal()->ringDetach(const_cast<char*>(topic), this);
     }
 
     //! Send a message to a ComRing
-    void ringMessage(const char *topic, int eventCode, void *eventData = 0)
+    void ringMessage(const char* topic, int eventCode, void* eventData = 0)
     {
-      if(comRing.getGlobal()) comRing.getGlobal()->ringMessage(const_cast<char *>(topic), eventCode, eventData);
+      if (comRing.getGlobal()) comRing.getGlobal()->ringMessage(const_cast<char*>(topic), eventCode, eventData);
     }
-	void ringMessage(int eventCode, void* eventData = 0)
-	{
-		ringMessage(lastTopic.c_str(), eventCode, eventData);
-	}
+    void ringMessage(int eventCode, void* eventData = 0)
+    {
+      ringMessage(lastTopic.c_str(), eventCode, eventData);
+    }
   };
 
   void sendComringMessage(const char* topic, int eventCode, void* eventData = 0);
@@ -96,14 +96,14 @@ namespace lwpp
   {
     class comRingTopic : public comRingCommunicator
     {
-      MultiComRingCommunicator *communicator;
+      MultiComRingCommunicator* communicator;
     protected:
-      virtual void RingEvent(void *portData, int eventCode, void *eventData)
+      virtual void RingEvent(void* portData, int eventCode, void* eventData)
       {
         communicator->MultiRingEvent(lastTopic, portData, eventCode, eventData);
       }
     public:
-      comRingTopic(const char *topic, MultiComRingCommunicator *multiCom)
+      comRingTopic(const char* topic, MultiComRingCommunicator* multiCom)
         : comRingCommunicator(topic), communicator(multiCom)
       {
       }
@@ -125,15 +125,15 @@ namespace lwpp
     {
       ;
     }
-    void ComRingAttach(const char *topic);
+    void ComRingAttach(const char* topic);
 
-    virtual void MultiRingEvent(const std::string &topic, void *portData, int eventCode, void *eventData)
+    virtual void MultiRingEvent(const std::string& topic, void* portData, int eventCode, void* eventData)
     {
       return;
     }
 
     //! Send a message to a ComRing
-	void ringMessage(const char *topic, int eventCode, void *eventData = 0);
+    void ringMessage(const char* topic, int eventCode, void* eventData = 0);
   };
 
 
@@ -154,12 +154,13 @@ namespace lwpp
   {
   public:
     LimboComRing()
+      : comRingCommunicator(LW_PLUGIN_LIMBO_STATES)
     {
-      ringMessage(LW_PLUGIN_LIMBO_STATES, LW_LIMBO_START);
+      ringMessage(LW_LIMBO_START);
     }
     ~LimboComRing()
     {
-      ringMessage(LW_PLUGIN_LIMBO_STATES, LW_LIMBO_END);
+      ringMessage(LW_LIMBO_END);
     }
   };
 

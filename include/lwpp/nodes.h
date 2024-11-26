@@ -434,7 +434,6 @@ namespace lwpp
 		{
 			return new LWNodeInput(id, name, vendor, type, inp_event);
 		}
-		void setValue(NodeValue val, void *v) { outF->setValue(val, v); }
 		void disconnect(NodeInputID nid)
 		{
 			inF->disconnect(nid);
@@ -459,6 +458,9 @@ namespace lwpp
 
 		//! Immediately update the preview for this node
 		void UpdateNodePreview() {globPtr->UpdateNodePreview(id);}
+
+		//! @brief set the node value, only to be called from within evaluate
+		void setValue(NodeValue val, void* v) { outF->setValue(val, v); }
 
 		NodeInputID firstInput(void) {return inF->first(id);}
 		int numInputs(void) {return inF->numInputs(id);}
@@ -711,6 +713,13 @@ namespace lwpp
 
 	// Helps handling inputs with a matching vparm in DataGet()
 	void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp);
+	// Template based
+	template <typename T>
+	void* GetVInput(lwpp::unique_NodeInput& lwni, T& var)
+	{
+		if (!lwni) return &var;
+		return lwni->isConnected() ? nullptr : &var;
+	}
 
 	extern const char *BlendModeStrings[];
 	

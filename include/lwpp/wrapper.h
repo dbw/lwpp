@@ -188,6 +188,23 @@ namespace lwpp
 		}
 	};
 
+	template<class T>
+	class ControlDrawCallback
+	{
+	public:
+		static void ControlDrawFunc(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h)
+		{
+			XPanelFuncs xpf;
+			T* pcc = static_cast<T*>(xpf.getUserData(pan, cid));
+			if (!pcc)	pcc = static_cast<T*>(xpf.getUserData(pan));
+			{
+				lwpp::XPDrawArea area(reg, w, h);
+				area.clear(); // clear preview to black
+				if (pcc) pcc->ControlDrawFunc(area, cid, w, h);
+			}
+		}
+	};
+
 
 	//! PopCount callback for LightWave
 	template <typename T>

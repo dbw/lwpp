@@ -22,7 +22,7 @@ namespace lwpp
 #define XPC_AXIS "axis"
 #define XPC_POPCHOICE "iPopChoice"
 #define XPC_POPCMD "vPopCmd"
-#define XPC_PRESET_TEST "vPresetText"
+#define XPC_PRESET_TEXT "sPresetText"
 #define XPC_FILENAME "sFileName"
 #define XPC_CHOICE_XF "iChoTransform"
 #define XPC_POPCHOICE_XF "iPopTransform"
@@ -57,7 +57,7 @@ namespace lwpp
 #define XPC_COLOR_ENV XPC_COLOUR_ENV
 
 #define XPC_TIME "time"
-#define XPC_TIME_ENV "time-env"
+// #define XPC_TIME_ENV "time-env"
 
   //! Use any RGB value as a LW pen colour
   #define LW_COLOUR(red, green, blue) (0x01000000 | (red<<16) | (blue<<8) | green)

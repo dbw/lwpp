@@ -116,6 +116,38 @@ namespace lwpp
 		{
 			LineLoop(numv, (double(*)[3])p, csys);
 		}
+		//! @brief Draw an icon in a viewport using a 32x32 bitmap texture
+		//! @param pos The position of the icon in the viewport
+		//! @param uv a position in UV space
+		//! @param tex the image texture to use
+		//! @param enabled When set to false, the icon will be ghosted (half transparency)
+		//! @param iconSize The size of the icon 
+		//! @param uvSize The size of the icon within the texture
+		//! @param texSize The size of the icon within the texture
+		void DrawIcon(LWDVector pos, LWDVector uv, unsigned char* tex, bool enabled = true, double iconSize = 16.0, double	uvSize = 0.5, int texSize = 32)
+		{
+			double UVs[4][2] =
+			{
+				{0.0 + uv[0], 0.0 + uv[1]},
+				{uvSize + uv[0], 0.0 + uv[1]},
+				{uvSize + uv[0],uvSize + uv[1]},
+				{0.0 + uv[0], uvSize + uv[1]}
+			};
+
+			double q[4][3] =
+			{
+				{pos[0], pos[1], 0.0},
+				{pos[0] + iconSize, pos[1], 0.0},
+				{pos[0] + iconSize , pos[1] + iconSize, 0.0},
+				{pos[0], pos[1] + iconSize, 0.0},
+			};
+			SetDrawMode();
+			SetColor(1.0, 1.0, 1.0, enabled ? 1.0 : 0.5);
+			SetTexture(texSize, tex);
+			SetUVs(UVs);
+			DrawQuad(q, LWCSYS_VIEWPORT);
+			SetTexture(texSize, nullptr);
+		}
 	};
 
 } // end namespace

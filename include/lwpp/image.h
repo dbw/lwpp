@@ -261,7 +261,7 @@ namespace lwpp
 		//! Set the value for a pop-up
 		int SetPopUp();
 
-		bool isValid() {return id != 0;}
+		bool isValid() const {return id != 0;}
 		void first(void) {id = globPtr->first();}
 		void next(void) {id = globPtr->next(id);}
 		void clear(void) {globPtr->clear(id);}
@@ -426,6 +426,17 @@ namespace lwpp
 		static void DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h);
 		//! Draws the image into an XPanel control
 		void drawXpanel(LWXPDrAreaID reg, int w, int h);
+		//! @brief  Draw a part of the image into an XPanel control
+		//! @param reg 
+		//! @param w 
+		//! @param h 
+		//! @param left 
+		//! @param top 
+		//! @param right 
+		//! @param bottom 
+		void drawXpanelZoom(LWXPDrAreaID reg, int w, int h,
+												const unsigned int left, const unsigned int top, 
+												const unsigned int right, const unsigned int bottom);
 		void drawNodePreview(NodeDraw& nd, int width, int height);
 		// Double click to view in the image viewer
 		static void ControlZoom(LWXPanelID pan, unsigned int cid, int x, int y, int* rect, int clickcount);

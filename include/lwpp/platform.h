@@ -46,6 +46,8 @@ __BIG_ENDIAN__ __LITTLE_ENDIAN__
 			#define LWPP_PLATFORM_NAME "MacOS-PPC"
 		#elif __i386__
 			#define LWPP_PLATFORM_NAME "OSX-x86"
+        #elif __aarch64__
+            #define LWPP_PLATFORM_NAME "OSX-ARM64"
 		#else
 			#error No valid OSX platform 
 		#endif

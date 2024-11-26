@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -546,7 +546,6 @@
 		1DEB922308733DC00010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = x86_64;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -582,7 +581,6 @@
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = lwpp;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -593,7 +591,6 @@
 		1DEB922408733DC00010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = x86_64;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -631,7 +628,6 @@
 				HEADER_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/include\"";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = lwpp;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -658,6 +654,7 @@
 		878B761610E227BD0046A22C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = x86_64;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../lwsdk2018.0.5/include\"";
 			};
 			name = Debug;
@@ -665,6 +662,7 @@
 		878B761710E227BD0046A22C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = x86_64;
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../lwsdk2018.0.5/include\"";
 			};
 			name = Release;

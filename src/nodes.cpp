@@ -86,7 +86,7 @@ namespace lwpp
   void *GetVInput(lwpp::unique_NodeInput &lwni, lwpp::unique_VParm &vp)
   {     
     if (!lwni) return vp->ID();
-    return (lwni->isConnected()) ? 0 : vp->ID();
+    return (lwni->isConnected()) ? nullptr : vp->ID();
   }
 
 }
