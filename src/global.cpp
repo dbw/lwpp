@@ -112,8 +112,8 @@ namespace lwpp
 	void LightWave::Init()
 	{
 		//systemID = (unsigned int)(unsigned long) (SuperGlobal (LWPP_SYSTEMID_GLOBAL, GFUSE_TRANSIENT));
-		systemID = (unsigned int) (unsigned long) (SuperGlobal (LWSYSTEMID_GLOBAL, GFUSE_ACQUIRE));
-		productInfo = ( unsigned int ) (unsigned long) SuperGlobal( LWPRODUCTINFO_GLOBAL, GFUSE_TRANSIENT );
+		systemID = (unsigned int) (uintptr_t) (SuperGlobal (LWSYSTEMID_GLOBAL, GFUSE_ACQUIRE));
+		productInfo = ( unsigned int ) (uintptr_t) SuperGlobal( LWPRODUCTINFO_GLOBAL, GFUSE_TRANSIENT );
 	}
 
 	int LightWave::GetNumCores()

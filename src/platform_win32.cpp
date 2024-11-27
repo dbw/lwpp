@@ -37,7 +37,7 @@ namespace lwpp
 
 	std::string getTempPath()
 	{
-		DWORD result = ::GetTempPath(0, "");
+		DWORD result = ::GetTempPath(0, const_cast<LPSTR>("") );
 		if(result == 0) 
 		{
 			throw std::runtime_error("Could not get system temp path");

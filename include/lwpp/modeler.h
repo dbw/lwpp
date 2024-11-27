@@ -14,7 +14,7 @@ namespace lwpp
 #define MSEL_MODE_VOLUME 2
 #define MSEL_MODE_EDGE 3
 
-  class ModelerState : protected GlobalBase<LWStateQueryFuncs>
+  class ModelerState : public GlobalBase<LWStateQueryFuncs>
   {
   public:
 
