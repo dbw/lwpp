@@ -611,7 +611,7 @@ namespace lwpp
 			}
 		}
 		size_t getActive() const { return mActiveStack; }
-		virtual void getMinSize(int &w, int &h)
+		virtual void getMinSize(int &w, int &h) override
 		{
 			w = h = 0;
 			if (isCollapsed())
@@ -624,7 +624,7 @@ namespace lwpp
 				w = lwpp::Max(w, tw);
 			}
 		}
-		virtual void getMaxSize(int &w, int &h)
+		virtual void getMaxSize(int &w, int &h) override
 		{
 			w = h = 0;
 			if (isCollapsed())

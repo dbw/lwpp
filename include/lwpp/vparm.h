@@ -248,7 +248,7 @@ namespace lwpp
 #ifdef _DEBUG
 				dout << "Find " << name << " in " << groupName() << "\n";
 #endif
-				while (chan = nextChannel(chan))
+				while ((chan = nextChannel(chan)))
 				{
 #ifdef _DEBUG
 					dout << globPtr->channelName(chan) << "\n";
@@ -271,7 +271,7 @@ namespace lwpp
 			{
 				std::string ret = groupName();		
 				auto g = groupID;
-				while (g = groupParent(g))
+				while ((g = groupParent(g)))
 				{
 					ChannelGroup grp(g);
 					if (grp.groupParent())

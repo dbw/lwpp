@@ -178,11 +178,11 @@ namespace lwpp
 	public:
 		VMapCallbacks (LWID _type, bool _showNone = true) : type(_type), showNone(_showNone) {;}
 		virtual ~VMapCallbacks() {;}
-		virtual size_t popCount(void)
+		virtual size_t popCount(void) override
 		{
 			return so.numVMaps(type) + (showNone ? 1 : 0);
 		}
-		virtual const char *popName(int n)
+		virtual const char *popName(int n) override
 		{
 			if (showNone)
 			{

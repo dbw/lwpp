@@ -23,7 +23,7 @@ namespace lwpp
 	{
 	private:
 		LWContextMenuID menu = 0;
-		LWPanPopupDesc description;
+		LWPanPopupDesc description = { LWT_POPUP , 80, nullptr, nullptr, nullptr, nullptr};
 	public:
 		ContextMenu()				
 		{
@@ -66,7 +66,7 @@ namespace lwpp
 			if ( available() )
 			{
 				if (menu) globPtr->cmenuDestroy(menu);
-				description.type = LWT_POPUP;
+				//description.type = LWT_POPUP;
 				description.width = width;
 				description.countFn = (int (*)(void *))countFn;
 				description.nameFn = nameFn;
@@ -114,6 +114,7 @@ namespace lwpp
 				while (_entries[num_entries]) num_entries++;
 				menu.Create(width, SimpleContextMenu::countFn, SimpleContextMenu::nameFn, this);
 			}
+            virtual ~SimpleContextMenu(){};
 			int Deploy(LWPanelID panel, int select)
 			{
 				return menu.Deploy(panel, select);
@@ -143,6 +144,7 @@ namespace lwpp
 			const char *name(int n);
 	  public:	
 			DynamicContextMenu (int _width = 0);
+        virtual ~DynamicContextMenu() {};
 			int Deploy(int select);
 			int Deploy(LWPanelID panel, int select);
       int Deploy(LWPanel &panel, int select);

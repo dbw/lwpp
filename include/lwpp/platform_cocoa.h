@@ -13,6 +13,7 @@
 #include <string>
 
 void cocOpenURL(const std::string &s);
+void cocOpenExplorer(const std::string &s);
 
 void cocMouseLocation(int &x, int &y);
 

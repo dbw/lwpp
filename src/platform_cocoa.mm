@@ -5,9 +5,27 @@
 void cocOpenURL(const std::string &s)
 {
     @autoreleasepool {
-        NSURL *url = [NSURL URLWithString: [[NSString alloc] initWithCString: s.c_str() encoding: NSISOLatin1StringEncoding]];
+        NSURL *url = [NSURL fileURLWithPath: [[NSString alloc] initWithCString: s.c_str() encoding: NSISOLatin1StringEncoding]];
 		[[NSWorkspace sharedWorkspace] openURL: url];
 	}
+}
+
+void cocOpenExplorer(const std::string &s)
+{
+    @autoreleasepool {
+        //NSURL *url = [NSURL URLWithString: [[NSString alloc] initWithCString: s.c_str() encoding: NSISOLatin1StringEncoding]];
+        NSURL *url = [NSURL fileURLWithPath: [[NSString alloc] initWithCString: s.c_str() encoding: NSISOLatin1StringEncoding]];
+        if (@available(macOS 10.6, *))
+        {
+            //NSArray *fileURLs = [NSArray arrayWithObjects:url, nil];
+            [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs: @[ url ]];
+            // [[NSWorkspace sharedWorkspace] openURL: url];
+        }
+        else
+        {
+            [[NSWorkspace sharedWorkspace] openURL: url];
+        }
+    }
 }
 
 void cocMouseLocation(int &x, int &y)
@@ -97,7 +115,7 @@ bool cocFileRequest::Post()
             
           //[open setDirectoryURL: dirUrl];            
             runResult = [open runModalForDirectory:NSHomeDirectory() file:nsfName];
-            if (runResult == NSFileHandlingPanelOKButton)
+            if (runResult == NSModalResponseOK)
             {
                 NSArray *URLs = [open URLs];
                 retValue = [[[URLs objectAtIndex:0 ] path] cStringUsingEncoding: NSUTF8StringEncoding];
@@ -111,7 +129,7 @@ bool cocFileRequest::Post()
 			
 	} 
     [pool release];
-	return (runResult == NSFileHandlingPanelOKButton);
+    return (runResult == NSModalResponseOK);
 }
 const char *cocFileRequest::getFullName()
 {

@@ -130,6 +130,7 @@ namespace lwpp
 
 	//! Open a URL in the default application, usually a browser
 	void OpenURL(const std::string urlString);
+	void OpenExplorer(const std::string urlString);
 	/*
 	{
 		// Thanks to Willard Myers, on the qt-interest mailing list.

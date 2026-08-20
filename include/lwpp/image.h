@@ -21,16 +21,58 @@
 
 namespace lwpp
 {
+	class ImageUtil;
+
+	class ImagePreview 
+	{
+	public:
+		enum { PRV_RGBA, PRV_RGB, PRV_LUMA, PRV_R, PRV_G, PRV_B, PRV_A };
+	protected:																														 		
+		struct
+		{
+			bool keepAspect : 1;
+			bool checkered : 1;
+      bool smooth : 1;
+			unsigned int previewMode : 3;
+		} mFlags{ true, true, false, PRV_RGBA };
+		void drawXpanelScaled(ImageUtil &image, XPDrawArea& area, int w, int h);
+	public:
+		virtual ~ImagePreview() {}
+		ImagePreview() {}
+		ImagePreview(const ImagePreview& from)
+			: mFlags(from.mFlags)
+		{
+		}
+		ImagePreview& operator=(const ImagePreview& from)
+		{
+			if (this != &from)
+			{
+				mFlags = from.mFlags;
+			}
+			return *this;
+		}
+
+		void PreviewKeepAspect(const bool keep = true) { mFlags.keepAspect = keep; }
+		void CheckeredBackground(const bool on = true) { mFlags.checkered = on; }
+		void SmoothScale(const bool on = true) { mFlags.smooth = on; }
+		virtual void drawXpanel(XPDrawArea &area, int w, int h) = 0;
+		virtual bool hasAlpha() const = 0;
+	};
+
 	//! Wrapper for LWImageUtil
 	//! @ingroup Entities
-	class ImageUtil : public PopUpCallback, protected GlobalBase<LWImageUtil>, public Storeable
+  class ImageUtil :
+		public PopUpCallback,
+		protected GlobalBase<LWImageUtil>,
+		public Storeable,
+		public ImagePreview
 	{
 	private:
 		LWPixmapID pixmap;
 		bool doDestroy;
 	public:
-		ImageUtil(LWPixmapID _pixmap = 0) 
-			: pixmap(_pixmap), doDestroy(false)
+		ImageUtil(LWPixmapID _pixmap = 0, bool destroy = false) 
+			: pixmap(_pixmap), doDestroy(destroy)
 		{;}
 		//! Optional Constructor
 		/*!
@@ -50,6 +92,7 @@ namespace lwpp
 		}
 
 		ImageUtil(const ImageUtil &iu)
+      : ImagePreview(iu)
 		{
 			pixmap = iu.pixmap;
 			doDestroy = iu.doDestroy;
@@ -61,6 +104,7 @@ namespace lwpp
 			{
 				if ((pixmap != 0) && doDestroy) globPtr->destroy(pixmap);
 				pixmap = iu.pixmap;
+				ImagePreview::operator=(iu);
 			}
 			return *this;
 		}
@@ -79,7 +123,7 @@ namespace lwpp
 			doDestroy = destroy;
 		}
 		//! check if we have a valid pixmap
-		bool isValid()
+		bool isValid() const
 		{
 			return pixmap != 0;
 		}
@@ -113,7 +157,7 @@ namespace lwpp
 		 * @param *h Height
 		 * @param *type Type of Bitmap
 		 */
-		void getInfo(int *w, int *h, int *type)
+		void getInfo(int *w, int *h, int *type) const
 		{
 			globPtr->getInfo(pixmap, w, h, type);
 		}
@@ -121,11 +165,15 @@ namespace lwpp
 		{
 			globPtr->getInfo(id, w, h, type);
 		}
-
-		LWPixmapID  resample(int w, int h, int mode )
+		LWPixmapID resample(int w, int h, int mode )
 		{
 			return globPtr->resample(pixmap, w, h, mode);
 		}
+
+    ImageUtil getResampled(int w, int h, int mode = LWISM_BICUBIC)
+    {
+      return ImageUtil(resample(w, h, mode), true);
+    }
 
 		void setPixelTyped(int x, int y, int type, void *pix )
 		{
@@ -135,18 +183,44 @@ namespace lwpp
 		{
 			globPtr->getPixelTyped(pixmap, x, y, type, pix);
 		}
-		int  getIndex8Map( LWPixelRGB24 *map )
+		int getIndex8Map( LWPixelRGB24 *map )
 		{
 			return globPtr->getIndex8Map(pixmap, map);
 		}
-		int  getAttr ( LWImageParam tag, void* data )
+		int getAttr ( LWImageParam tag, void* data )
 		{
 			return globPtr->getAttr(pixmap, tag, data);
 		}
-		int  getMakerNote ( LWMakerNote tag, void* data )
+		int getMakerNote ( LWMakerNote tag, void* data )
 		{
 			return globPtr->getMakerNote(pixmap, tag, data);
 		}
+
+    template <typename T>
+		int setAttr(LWImageParam tag, T data)
+		{
+			return globPtr->setAttr(pixmap, tag, &data);
+		}
+
+		int setAttr(LWImageParam tag, void* data)
+		{
+			return globPtr->setAttr(pixmap, tag, data);
+		}
+		int  setMakerNote(LWMakerNote tag, const char *note)
+		{
+			return globPtr->setMakerNote(pixmap, tag, note);
+		}
+
+    int setLineTyped(int y, int type, void* pix)
+    {
+      return globPtr->setLineTyped(pixmap, y, type, pix);
+    }
+
+    int getLineTyped(int y, int type, void* pix)
+    {
+      return globPtr->getLineTyped(pixmap, y, type, pix);
+    }
+
 		//! Save the current pixmap
 		void save(int saver, const std::string name)
 		{
@@ -172,10 +246,17 @@ namespace lwpp
 			return globPtr->saverName(n);
 		}
 		
-		std::string getSaverExtension(int n);
+		static std::string getSaverExtension(int n);
 
-		int findSaver(std::string name);
+		static int findSaver(const std::string_view &name);
 
+		void static DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h);
+		/*
+    * ! Draw the pixmap in an XPanel
+		*/
+		virtual void drawXpanel(lwpp::XPDrawArea& area, int w, int h) override;
+
+		virtual bool hasAlpha() const override;
 
 	protected:
 		virtual const char *popName(int n)
@@ -191,18 +272,15 @@ namespace lwpp
 
 		//! Wrapper for LWImageList
 	//! @ingroup Globals
-	class Image : public PopUpCallback, public Storeable, protected GlobalBase<LWImageList>
-	{
-	public:
-		enum { PRV_RGBA, PRV_RGB, PRV_LUMA, PRV_R, PRV_G, PRV_B, PRV_A };
+	class Image :
+		public PopUpCallback,
+		public Storeable,
+		protected GlobalBase<LWImageList>	,
+		public ImagePreview
+	{		
 	private:
 		LWImageID id = nullptr;
-		struct
-		{
-			bool keepAspect : 1;
-			bool checkered : 1;
-			unsigned int previewMode : 3;
-		} mFlags{ true, true, PRV_RGBA };
+	
 	public:		
 
 		virtual const char *popName(int n);
@@ -213,6 +291,12 @@ namespace lwpp
 		{
 			updateGlobal();
 			globPtr->saverNotifyAttach(this, ImageSaverCB);
+		}
+
+		Image(const std::string &file) : id(0)
+		{
+			updateGlobal();
+      load(file);
 		}
 
 		Image(const Image &from)
@@ -247,7 +331,7 @@ namespace lwpp
 			if (this != &from)
 			{
 				id = from.id;
-				mFlags = from.mFlags;
+				ImagePreview::operator=(from);
 			}
 			return *this;
 		}
@@ -266,7 +350,7 @@ namespace lwpp
 		void next(void) {id = globPtr->next(id);}
 		void clear(void) {globPtr->clear(id);}
 		void load(const char *filename) {id = globPtr->load(filename);}
-		void load(const std::string filename) { load(filename.c_str()); }
+		void load(const std::string &filename) { load(filename.c_str()); }
 		const char *name() const {
 			static const char none[] = "(none)";
 			if (id) return globPtr->name(id);
@@ -300,7 +384,7 @@ namespace lwpp
 			if (id) return (globPtr->isColor(id) != 0);
 			return false;
 		}
-		bool hasAlpha (void) const 
+		bool hasAlpha() const override
 		{
 			if (id) return (globPtr->hasAlpha(id) != 0);
 			return false;
@@ -331,8 +415,8 @@ namespace lwpp
 			int w = 0, h = 0;
 			GetSize(w, h);
 
-			if (h != 0) return static_cast<double>(w) / static_cast<double>(h);
-			return 1.0;
+			if (h != 0) return static_cast<float>(w) / static_cast<float>(h);
+			return 1.0f;
 		}
 		
 #ifdef WIN32
@@ -408,6 +492,19 @@ namespace lwpp
 			return nullptr;
 		}
 
+		LWImageID getSelection(int index = -1)
+    {
+      return globPtr->getSelection(index);
+    }
+
+    static Image& selectedImage(int index = -1)
+    {
+			Image image;
+      auto id = image.getSelection(index);
+      image.SetID(id);
+			return image;
+    }
+
 		virtual LWError Load(const LoadState &ls )
 		{
 			LWError err = 0;
@@ -425,7 +522,7 @@ namespace lwpp
 		//! 
 		static void DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h);
 		//! Draws the image into an XPanel control
-		void drawXpanel(LWXPDrAreaID reg, int w, int h);
+		virtual void drawXpanel(lwpp::XPDrawArea& area, int w, int h) override;
 		//! @brief  Draw a part of the image into an XPanel control
 		//! @param reg 
 		//! @param w 
@@ -434,7 +531,7 @@ namespace lwpp
 		//! @param top 
 		//! @param right 
 		//! @param bottom 
-		void drawXpanelZoom(LWXPDrAreaID reg, int w, int h,
+		void drawXpanelZoom(lwpp::XPDrawArea& area, int w, int h,
 												const unsigned int left, const unsigned int top, 
 												const unsigned int right, const unsigned int bottom);
 		void drawNodePreview(NodeDraw& nd, int width, int height);

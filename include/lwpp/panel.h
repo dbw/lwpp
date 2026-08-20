@@ -602,6 +602,7 @@ namespace lwpp
 			}
 			return *this;
 		}
+
 		/*! Set the mID of LWControl managed by this PanelControl
 		 *  @param ctl The LWControlID of the control */
 		void SetControl(LWControlID ctl)
@@ -633,10 +634,18 @@ namespace lwpp
 		{
 			return (control == static_cast<LWControl *>(ctl));
 		}
+		bool operator!=(const LWControlID ctl)
+		{
+			return (control != static_cast<LWControl*>(ctl));
+		}
 		//! Equal operator
 		bool operator==(const PanelControl ctl)
 		{
 			return (getID() == ctl.getID());
+		}
+		bool operator!=(const PanelControl ctl)
+		{
+			return (getID() != ctl.getID());
 		}
 		bool operator<(const PanelControl ctl) const
 		{
@@ -826,6 +835,12 @@ namespace lwpp
 			LWValue ival = {LWT_POINTER};
 			get(tag, &ival);
 			return ival.ptr.ptr;
+		}
+		void* GetAddress(cTag tag = CTL_VALUE)
+		{
+			LWValue pval = { LWT_POINTER };
+			get(tag, &pval);
+			return pval.ptr.ptr;
 		}
 		//! Gets a double value of a control.
 		double GetFloat()

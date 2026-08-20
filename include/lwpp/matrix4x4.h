@@ -1,7 +1,7 @@
 #ifndef MATRIX4X4_H
 #define MATRIX4X4_H
 
-#include <lwpp/Point3d.h>
+#include <lwpp/point3d.h>
 #include <limits>
 #include <lwmath.h>
 

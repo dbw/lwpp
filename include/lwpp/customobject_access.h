@@ -142,7 +142,7 @@ namespace lwpp
 				{pos[0], pos[1] + iconSize, 0.0},
 			};
 			SetDrawMode();
-			SetColor(1.0, 1.0, 1.0, enabled ? 1.0 : 0.5);
+			SetColor(1.0f, 1.0f, 1.0f, enabled ? 1.0f : 0.5f);
 			SetTexture(texSize, tex);
 			SetUVs(UVs);
 			DrawQuad(q, LWCSYS_VIEWPORT);

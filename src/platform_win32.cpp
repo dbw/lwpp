@@ -114,8 +114,21 @@ namespace lwpp
 
 	void OpenExplorer(const std::string urlString)
 	{
-		ShellExecuteA(NULL, "explore", urlString.c_str(), NULL, "c:\\", SW_SHOW);
+		//ShellExecuteA(NULL, "explore", urlString.c_str(), NULL, "c:\\", SW_SHOW);
+    std::string url = "/select,";
+    url += urlString;
+		ShellExecuteA(NULL,"open", "explorer.exe", url.c_str(),"c:\\", SW_NORMAL);
+		//ShellExecuteA(NULL, "explorer.exe", url.c_str(), NULL, "c:\\", SW_SHOW);
 	};
+
+	/*
+	* 
+  ShellExecute(Handle, 'OPEN', 
+    pchar('explorer.exe'), 
+    pchar('/select, "' + FileName + '"'), 
+    nil, 
+    SW_NORMAL);
+	*/
 
 	bool isDoubleClick(unsigned int milliseconds)
 	{

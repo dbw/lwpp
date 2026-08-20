@@ -11,7 +11,89 @@
 
 namespace lwpp
 {
-  int ImageUtil::findSaver(std::string name)
+  void ImagePreview::drawXpanelScaled(ImageUtil& image, lwpp::XPDrawArea& area, int w, int h)
+  {
+    if (!image.isValid()) return;
+
+    int width, height, type;
+    image.getInfo(&width, &height, &type);
+
+    float sx = (float)w / (float)width; // step size
+    float sy = (float)h / (float)height;
+
+    if (mFlags.keepAspect)
+    {
+      float step = fmin(sx, sy); // smallest step
+      sx = step;
+      sy = step;
+    }
+    // scaled width and height
+    const int sw = sx * width;
+    const int sh = sy * height;
+
+    auto sampled = image.getResampled(sw,sh,
+                                      ((sx > 1.0) ? LWISM_BICUBIC : LWISM_MEDIAN));
+
+    const int x_offset = (w - sw) / 2;
+    const int y_offset = (h - sh) / 2;
+
+    //ColourManager cm(lwpp::lwcst_viewer);
+
+    const bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
+    for (int x = 0; x < sw; x++)
+    {
+      for (int y = 0; y < sh; y++)
+      {
+        LWPixelRGBAFP rgba;
+        sampled.getPixelTyped(x, y, LWIMTYP_RGBAFP, &rgba.r);
+
+        if (mFlags.previewMode > PRV_RGB)
+        {
+          float value = 0.f;
+          switch (mFlags.previewMode)
+          {
+            case PRV_LUMA:
+              value = 0.2126f * rgba.g + 0.7152f * rgba.g + 0.0722f * rgba.b;
+              break;
+            case PRV_R:
+              value = rgba.r;
+              break;
+            case PRV_G:
+              value = rgba.g;
+              break;
+            case PRV_B:
+              value = rgba.b;
+              break;
+            case PRV_A:
+              value = rgba.a;
+              break;
+            default:
+              break;
+          }
+          rgba.r = rgba.g = rgba.b = value;
+        }
+        
+        if (mFlags.checkered && displayAlpha)
+        {
+          if (rgba.a < 1.0)
+          {
+            const int checkSize = 16.0;
+            auto check = (x / checkSize + y / checkSize) % 2;
+            auto col = check ? 0.1 : 0.2;
+            col *= 1 - rgba.a;
+            rgba.r += col;
+            rgba.g += col;
+            rgba.b += col;
+          }
+        }        
+        //cm.convertToColourSpace(rgb);
+        area.drawPixel(&rgba.r, x + x_offset, y + y_offset);
+      }
+    }
+  }
+
+
+  int ImageUtil::findSaver(const std::string_view &name)
   {
     for (int i = 0; i < saverCount(); ++i)
     {
@@ -70,6 +152,132 @@ namespace lwpp
       }
     }
     return ext;			
+  }
+
+  void ImageUtil::DrawImage(LWXPanelID pan, unsigned int cid, LWXPDrAreaID reg, int w, int h)
+  {
+    if (pan == nullptr) return;
+    if (reg == nullptr) return;
+    lwpp::XPanel panel(pan);
+    void* ud = panel.getUserData(cid);
+    ImageUtil* img = static_cast<ImageUtil*>(ud);
+
+    lwpp::XPDrawArea area(reg, w, h);
+    area.clear(); // clear preview to black
+    if (img)          
+      img->drawXpanel(area, w, h);
+  }
+
+  void ImageUtil::drawXpanel(lwpp::XPDrawArea& area, int w, int h)
+  {
+    if (!isValid()) return;
+
+    if (mFlags.smooth)
+    {
+      drawXpanelScaled(*this, area, w, h);
+      return;
+    }
+
+    int width, height, type;
+    getInfo(&width, &height, &type);
+
+    float sx = (float)w / (float)width; // step size
+    float sy = (float)h / (float)height;
+
+    if (mFlags.keepAspect)
+    {
+      float step = fmin(sx, sy); // smallest step
+      sx = step;
+      sy = step;
+    }
+    // scaled width and height
+    const int sw = sx * width;
+    const int sh = sy * height;
+
+    const int x_offset = (w - sw) / 2;
+    const int y_offset = (h - sh) / 2;
+
+    ColourManager cm(lwpp::lwcst_viewer);
+
+    const float pxStep = 1.0 / sx;
+    const float pyStep = 1.0 / sy;
+    float ix = 0.0;
+
+    //const bool displayAlpha = (hasAlpha() && mFlags.previewMode == PRV_RGBA);
+    for (int x = 0; x < sw; x++)
+    {
+      float iy = 0.0;
+      for (int y = 0; y < sh; y++)
+      {
+        LWPixelRGBAFP rgb;
+        getPixelTyped(ix, iy, LWIMTYP_RGBFP, &rgb.r);
+
+        if (mFlags.previewMode > PRV_RGB)
+        {
+          float value = 0.f;
+          switch (mFlags.previewMode)
+          {
+            case PRV_LUMA:
+              value = 0.2126f * rgb.g + 0.7152f * rgb.g + 0.0722f * rgb.b;
+              break;
+            case PRV_R:
+              value = rgb.r;
+              break;
+            case PRV_G:
+              value = rgb.g;
+              break;
+            case PRV_B:
+              value = rgb.b;
+              break;
+            case PRV_A:
+              //value = hasAlpha() ? alpha(ix, iy) : 0.0;
+              break;
+            default:
+              break;
+          }
+          rgb.r = rgb.g = rgb.b = value;
+        }
+        /*
+        if (mFlags.checkered && displayAlpha)
+        {
+          const float a = alpha(ix, iy);
+          if (a < 1.0)
+          {
+            const int checkSize = 16.0;
+            auto check = (x / checkSize + y / checkSize) % 2;
+            auto col = check ? 0.1 : 0.2;
+            col *= 1 - a;
+            for (int i = 0; i < 3; ++i)
+              rgb[i] += col;
+          }
+        }
+        */
+        //cm.convertToColourSpace(rgb);
+        area.drawPixel(&rgb.r, x + x_offset, y + y_offset);
+        iy += pyStep;
+      }
+      ix += pxStep;
+    }
+  }
+
+  bool ImageUtil::hasAlpha() const
+  {
+    if (!isValid()) return false;
+    int w, h, type;
+    getInfo(&w, &h, &type);
+    switch (type)
+    {
+      case LWIMTYP_BGRA32:
+      case LWIMTYP_RGBA32:
+      case LWIMTYP_RGBAINT:
+      case LWIMTYP_RGBAFP:
+      case LWIMTYP_RGBADBL:
+        return true;
+
+      default:
+        return false;
+    }
+    return false;
   }
 
   /*
@@ -160,13 +368,12 @@ namespace lwpp
     void *ud = panel.getUserData(cid);
     Image *img = static_cast<Image *>(ud);
 
+    lwpp::XPDrawArea area(reg, w, h);
+    area.clear(); // clear preview to black
 		if (img == nullptr)
-		{
-			lwpp::XPDrawArea area(reg, w, h);
-			area.clear(); // clear preview to black
 			return;
-		}
-    img->drawXpanel(reg, w, h);
+		
+    img->drawXpanel(area, w, h);
   }
 
   void Image::ControlZoom(LWXPanelID pan, unsigned int cid, int x, int y, int* rect, int clickcount)
@@ -184,10 +391,8 @@ namespace lwpp
   /*! @todo add colourspace support
 
   */
-  void Image::drawXpanel(LWXPDrAreaID reg, int w, int h)
+  void Image::drawXpanel(lwpp::XPDrawArea& area, int w, int h)
   {
-    lwpp::XPDrawArea area(reg, w, h);
-    area.clear(); // clear preview to black
     if ( id == nullptr ) return;
 
     int width, height;
@@ -270,11 +475,9 @@ namespace lwpp
     }
   }
 
-  void Image::drawXpanelZoom(LWXPDrAreaID reg, int w, int h, const unsigned int left, const unsigned int top,
+  void Image::drawXpanelZoom(lwpp::XPDrawArea& area, int w, int h, const unsigned int left, const unsigned int top,
                              const unsigned int right, const unsigned int bottom)
   {
-    lwpp::XPDrawArea area(reg, w, h);
-    area.clear(); // clear preview to black
     if (id == nullptr) return;
 
     int width, height;

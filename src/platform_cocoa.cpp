@@ -98,6 +98,11 @@ namespace lwpp
 	{
 		cocOpenURL(urlString);
 	}
+
+    void OpenExplorer(const std::string urlString)
+    {
+        cocOpenExplorer(urlString);
+    }
 	
 	bool isDoubleClick(unsigned int milliseconds)
 	{

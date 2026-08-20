@@ -97,7 +97,7 @@ namespace lwpp {
     if (id == nullptr)
       return false;
     auto num = numInstances();    
-    for (auto i = 0; i < num; ++i)
+    for (unsigned int i = 0; i < num; ++i)
     {
       if (instanceByIndexID(i) == id)
       {

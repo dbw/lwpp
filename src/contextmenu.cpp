@@ -25,7 +25,7 @@ namespace lwpp
 
 	int DynamicContextMenu::Deploy(int select)
 	{
-		return Deploy(0, select);
+		return Deploy(nullptr, select);
 	}
 
   int DynamicContextMenu::Deploy(LWPanel &panel, int select)
