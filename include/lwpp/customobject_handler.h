@@ -74,7 +74,8 @@ namespace lwpp
 			try
 			{
 				T *plugin = (T *) instance;
-				plugin->Evaluate(CustomObjAccess(lw_coa));
+				auto ca = CustomObjAccess(lw_coa);
+				plugin->Evaluate(ca);
 			}
 			catch (std::exception &e)
 			{
