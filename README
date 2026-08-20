@@ -11,4 +11,4 @@ lwpp was designed with the following goals in mind:
 - Compatibility across a range of LW SDK versions (since commercial plugins usually need to be compatible for a longer time).
 - This version is explicitly designed for version 2018 of LightWave 3D
 
-Doxygen documentation is available here: http://dbw.github.com/lwpp/
+Doxygen documentation is available here: http://dbw.github.com/lwpp/ or here https://dbw.github.io/lwpp/

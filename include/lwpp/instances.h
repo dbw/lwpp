@@ -109,4 +109,4 @@ namespace lwpp {
   }
 }
 
-#endif LWPP_INSTANCES_H
+#endif // LWPP_INSTANCES_H
